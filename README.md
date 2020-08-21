@@ -1,2 +1,2 @@
 # WetDanger
- I am afraid of the moisture which is coming.
+ I am afraid of the wetness which is coming.
