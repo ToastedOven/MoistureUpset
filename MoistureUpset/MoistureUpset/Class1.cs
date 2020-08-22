@@ -18,10 +18,10 @@ namespace MoistureUpset
         public void Awake()
         {
             Assets.PopulateAssets();
+
+            SoundAssets.RegisterSoundEvents();
             
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
-
-            On.RoR2.Stats.StatManager.OnDamageDealt += StatManager_OnDamageDealt;
             
             On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
             {
@@ -29,23 +29,7 @@ namespace MoistureUpset
             };
         }
 
-        private void StatManager_OnDamageDealt(On.RoR2.Stats.StatManager.orig_OnDamageDealt orig, DamageReport damageReport)
-        {
-            orig(damageReport);
 
-            var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-
-            if (damageReport.victim.body == mainBody)
-            {
-                AkSoundEngine.PostEvent("MinecraftHurt", mainBody.gameObject);
-
-                if (damageReport.isFallDamage)
-                {
-                    AkSoundEngine.PostEvent("MinecraftCrunch", mainBody.gameObject);
-                }
-            }
-
-        }
 
         private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
         {
