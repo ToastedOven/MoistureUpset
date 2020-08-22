@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using R2API.Utils;
 using RoR2;
 using R2API;
 using R2API.MiscHelpers;
@@ -21,6 +22,12 @@ namespace MoistureUpset
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
             On.RoR2.Stats.StatManager.OnDamageDealt += StatManager_OnDamageDealt;
+            
+            On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
+            {
+                Util.PlaySound("EDeath", self.outer.gameObject);
+                Chat.AddMessage("died");
+            };
         }
 
         private void StatManager_OnDamageDealt(On.RoR2.Stats.StatManager.orig_OnDamageDealt orig, DamageReport damageReport)
@@ -38,6 +45,7 @@ namespace MoistureUpset
                     AkSoundEngine.PostEvent("MinecraftCrunch", mainBody.gameObject);
                 }
             }
+
         }
 
         private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
