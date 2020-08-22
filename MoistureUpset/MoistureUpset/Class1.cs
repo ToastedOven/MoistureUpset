@@ -22,7 +22,8 @@ namespace Nunchuck
             }
             On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
             {
-                Util.PlaySound("EDeath", base.gameObject);
+                Util.PlaySound("EDeath", self.outer.gameObject);
+                Chat.AddMessage("died");
             };
         }
     }
