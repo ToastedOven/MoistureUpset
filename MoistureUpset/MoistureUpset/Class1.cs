@@ -1,33 +1,56 @@
 ﻿using BepInEx;
 using RoR2;
+using R2API;
+using R2API.MiscHelpers;
+using R2API.Utils;
 using System.Reflection;
 using static R2API.SoundAPI;
 
-namespace Nunchuck
+namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
     //Change these
     [BepInPlugin("com.WetBoys.WetGamers", "We are really wet.", "0.6.9")]
+    [R2APISubmoduleDependency("SoundAPI")]
     public class BigTest : BaseUnityPlugin
     {
         public void Awake()
         {
-            using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ImMoist.bnk"))
+            Assets.PopulateAssets();
+            
+            On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
+
+            On.RoR2.Stats.StatManager.OnDamageDealt += StatManager_OnDamageDealt;
+        }
+
+        private void StatManager_OnDamageDealt(On.RoR2.Stats.StatManager.orig_OnDamageDealt orig, DamageReport damageReport)
+        {
+            orig(damageReport);
+
+            var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+
+            if (damageReport.victim.body == mainBody)
             {
-                var bytes = new byte[bankStream.Length];
-                bankStream.Read(bytes, 0, bytes.Length);
-                SoundBanks.Add(bytes);
+                AkSoundEngine.PostEvent("MinecraftHurt", mainBody.gameObject);
+
+                if (damageReport.isFallDamage)
+                {
+                    AkSoundEngine.PostEvent("MinecraftCrunch", mainBody.gameObject);
+                }
             }
-            On.RoR2.DamageNumberManager.SpawnDamageNumber += (orig, self, amount, position, crit, teamIndex, DamageColorIndex) =>
+        }
+
+        private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
+        {
+            self.selectedSurvivorIndex = survivor;
+
+            if (survivor == SurvivorIndex.Commando)
             {
-                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                orig(self, amount, position, crit, teamIndex, DamageColorIndex);
-                Util.PlaySound("YourMother", mainBody.gameObject);
-                //Util.PlaySound("maybejapanese", mainBody.gameObject);
-                //AkSoundEngine.PostEvent(EntityStates.Commando.CommandoWeapon.FireBarrage.fireBarrageSoundString, mainBody.gameObject);
-                Util.PlaySound(EntityStates.Huntress.HuntressWeapon.ThrowGlaive.attackSoundString, mainBody.gameObject);
-                Chat.AddMessage($"played {EntityStates.Huntress.HuntressWeapon.ThrowGlaive.attackSoundString}");
-            };
+                Chat.AddMessage("Commando Selected");
+                Chat.AddMessage($"{self.characterDisplayPads[0].displayInstance.gameObject}");
+                AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
+
+            }
         }
     }
 }
