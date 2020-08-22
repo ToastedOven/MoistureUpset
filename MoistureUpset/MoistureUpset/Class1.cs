@@ -3,7 +3,6 @@ using R2API.Utils;
 using RoR2;
 using R2API;
 using R2API.MiscHelpers;
-using R2API.Utils;
 using System.Reflection;
 using static R2API.SoundAPI;
 
@@ -22,11 +21,8 @@ namespace MoistureUpset
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
             On.RoR2.Stats.StatManager.OnDamageDealt += StatManager_OnDamageDealt;
-            
-            On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
-            {
-                Util.PlaySound("EDeath", self.outer.gameObject);
-            };
+
+            BigToasterClass.DeathSound();
         }
 
         private void StatManager_OnDamageDealt(On.RoR2.Stats.StatManager.orig_OnDamageDealt orig, DamageReport damageReport)
