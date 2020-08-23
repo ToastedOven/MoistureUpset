@@ -17,5 +17,12 @@ namespace MoistureUpset
                 Util.PlaySound("EDeath", self.outer.gameObject);
             };
         }
+        public static void DropRewards()
+        {
+            On.RoR2.BossGroup.DropRewards += (orig, self) =>
+            {
+
+            };
+        }
     }
 }
