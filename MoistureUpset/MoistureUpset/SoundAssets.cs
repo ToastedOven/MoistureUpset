@@ -1,4 +1,6 @@
 ﻿using RoR2;
+using System;
+using UnityEngine;
 
 namespace MoistureUpset
 {
@@ -36,23 +38,30 @@ namespace MoistureUpset
         private static void GlobalEventManager_ClientDamageNotified(On.RoR2.GlobalEventManager.orig_ClientDamageNotified orig, DamageDealtMessage damageDealtMessage)
         {
             orig(damageDealtMessage);
-
-            var playerList = NetworkUser.readOnlyLocalPlayersList;
-
-            if (playerList == null)
+            try
             {
-                return;
-            }
+                var playerList = NetworkUser.readOnlyLocalPlayersList;
 
-            foreach (var item in playerList)
-            {
-                var mainBody = item.master?.GetBody();
-
-                if (mainBody.gameObject == damageDealtMessage.victim)
+                if (playerList == null)
                 {
-                    AkSoundEngine.PostEvent("MinecraftHurt", mainBody.gameObject);
+                    return;
+                }
+
+                foreach (var item in playerList)
+                {
+                    var mainBody = item.master?.GetBody();
+
+                    if (mainBody.gameObject == damageDealtMessage.victim)
+                    {
+                        AkSoundEngine.PostEvent("MinecraftHurt", mainBody.gameObject);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+
+            }
+
         }
     }
 }
