@@ -33,10 +33,7 @@ namespace MoistureUpset
 
             if (survivor == SurvivorIndex.Commando)
             {
-                Chat.AddMessage("Commando Selected");
-                Chat.AddMessage($"{self.characterDisplayPads[0].displayInstance.gameObject}");
                 AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
-
             }
         }
     }
