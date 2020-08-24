@@ -5,6 +5,8 @@ using R2API;
 using R2API.MiscHelpers;
 using System.Reflection;
 using static R2API.SoundAPI;
+using UnityEngine;
+using System;
 
 namespace MoistureUpset
 {
@@ -16,6 +18,15 @@ namespace MoistureUpset
     {
         public void Awake()
         {
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.tf8"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+                //This string value will be used as a part of resource path. Prefferably it shoudl be mod name
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
+            }
+            SkinTest.SkinTest.AddLumberJackSkin();
+
+
             Assets.PopulateAssets();
 
             SoundAssets.RegisterSoundEvents();
@@ -28,7 +39,7 @@ namespace MoistureUpset
             
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
-            BigToasterClass.DeathSound();
+            BigToasterClass.RunAll();
         }
 
 
