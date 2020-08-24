@@ -58,8 +58,7 @@ namespace MoistureUpset
             }
         }
 
-        [ConCommand(commandName = "debuglog_on_all", flags = ConVarFlags.ExecuteOnServer, helpText = "Logs a network message to all connected people")]
-        private static void CCNetworkLog(ConCommandArgs args)
+        public static void playSound(string soundIDString, NetworkIdentity identity)
         {
             if (NetworkServer.active)
             {
@@ -69,9 +68,14 @@ namespace MoistureUpset
                     NetworkServer.Spawn(_centralNetworkObjectSpawned);
                 }
 
-                foreach (NetworkUser user in NetworkUser.readOnlyInstancesList)
+                if (users == null)
                 {
-                    NetworkedSoundComponent.Invoke(user, string.Join(" ", args.userArgs));
+                    users = NetworkUser.readOnlyInstancesList.ToArray();
+                }
+
+                foreach (var user in users)
+                {
+                    NetworkedSoundComponent.Invoke(user, soundIDString, identity);
                 }
             }
         }
@@ -89,20 +93,13 @@ internal class NetworkedSoundComponent : NetworkBehaviour
         _instance = this;
     }
 
-    public static void Invoke(NetworkUser user, string msg)
-    {
-        _instance.TargetLog(user.connectionToClient, msg);
-    }
-
     public static void Invoke(NetworkUser user, string soundIDString, int playerIndex)
     {
         _instance.TargetPlaySound(user.connectionToClient, soundIDString, playerIndex);
     }
-
-    [TargetRpc]
-    private void TargetLog(NetworkConnection target, string msg)
+    public static void Invoke(NetworkUser user, string soundIDString, NetworkIdentity identity)
     {
-        Debug.Log(msg);
+        _instance.TargetPlaySoundNetworkIdentity(user.connectionToClient, soundIDString, identity);
     }
 
     [TargetRpc]
@@ -114,5 +111,11 @@ internal class NetworkedSoundComponent : NetworkBehaviour
         }
 
         AkSoundEngine.PostEvent(soundIDString, users[playerIndex].master.GetBody().gameObject);
+    }
+
+    [TargetRpc]
+    private void TargetPlaySoundNetworkIdentity(NetworkConnection target, string soundIDString, NetworkIdentity identity)
+    {
+        AkSoundEngine.PostEvent(soundIDString, identity.gameObject);
     }
 }

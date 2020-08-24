@@ -12,6 +12,14 @@ namespace MoistureUpset
         {
             On.RoR2.GlobalEventManager.OnCharacterHitGround += GlobalEventManager_OnCharacterHitGround;
             On.RoR2.GlobalEventManager.ServerDamageDealt += GlobalEventManager_ServerDamageDealt;
+            On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
+        }
+
+        private static void GlobalEventManager_OnCharacterDeath(On.RoR2.GlobalEventManager.orig_OnCharacterDeath orig, GlobalEventManager self, DamageReport damageReport)
+        {
+            orig(self, damageReport);
+
+            //SoundNetworkAssistant.playSound("EDeath", damageReport.victimBody.networkIdentity);
         }
 
         private static void GlobalEventManager_ServerDamageDealt(On.RoR2.GlobalEventManager.orig_ServerDamageDealt orig, DamageReport damageReport)
@@ -37,6 +45,11 @@ namespace MoistureUpset
             if (damageReport.victimTeamIndex == TeamIndex.Player)
             {
                 SoundNetworkAssistant.playSound("MinecraftHurt", index);
+            }
+
+            if (damageReport.attackerBody.skinIndex == 2)
+            {
+                
             }
         }
 
