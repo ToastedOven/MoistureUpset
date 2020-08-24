@@ -15,7 +15,8 @@ namespace MoistureUpset
         {
             DeathSound();
             Somebody();
-            BossMusic();
+            //BossMusic();
+            DropRewards();
         }
         public static void DeathSound()
         {
@@ -28,7 +29,14 @@ namespace MoistureUpset
         {
             On.RoR2.BossGroup.DropRewards += (orig, self) =>
             {
-
+                orig(self);
+                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                Util.PlaySound("BossDied", mainBody.gameObject);
+            };
+            On.RoR2.BossGroup.OnEnable += (orig, self) =>
+            {
+                orig(self);
+                Chat.AddMessage("Spawning boss");
             };
         }
         public static void Somebody()
@@ -59,8 +67,16 @@ namespace MoistureUpset
                 //orig(self);
                 for (int i = 0; i < self.soundbankStrings.Length; i++)
                 {
-                    System.Console.WriteLine($"string[{i}]: {self.soundbankStrings[i]}");
-                    AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
+                    if (self.soundbankStrings[i] == "Music")
+                    {
+                        AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
+                        //AkBankManager.LoadBank("MusicReplacement", self.decodeBank, self.saveDecodedBank);
+                        //System.Console.WriteLine($"Loading MusicReplacement before {self.soundbankStrings[i]}");
+                    }
+                    else
+                    {
+                        AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
+                    }
                 }
             };
         }
