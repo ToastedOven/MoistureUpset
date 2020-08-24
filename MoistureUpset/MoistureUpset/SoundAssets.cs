@@ -1,14 +1,15 @@
 ﻿using RoR2;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace MoistureUpset
 {
     public static class SoundAssets
     {
+        private static NetworkUser[] users;
         public static void RegisterSoundEvents()
         {
-            On.RoR2.GlobalEventManager.ClientDamageNotified += GlobalEventManager_ClientDamageNotified;
             On.RoR2.GlobalEventManager.OnCharacterHitGround += GlobalEventManager_OnCharacterHitGround;
             On.RoR2.GlobalEventManager.ServerDamageDealt += GlobalEventManager_ServerDamageDealt;
         }
@@ -17,9 +18,25 @@ namespace MoistureUpset
         {
             orig(damageReport);
 
+            if (users == null)
+            {
+                users = NetworkUser.readOnlyInstancesList.ToArray();
+            }
+
+            int index = 0;
+
+            for (int i = 0; i < users.Length; i++)
+            {
+                if (damageReport.victimBody == users[i].master.GetBody())
+                {
+                    index = i;
+                    break;
+                }
+            }
+
             if (damageReport.victimTeamIndex == TeamIndex.Player)
             {
-                AkSoundEngine.PostEvent("MinecraftHurt", damageReport.victimBody.gameObject);
+                SoundNetworkAssistant.playSound("MinecraftHurt", index);
             }
         }
 
@@ -33,35 +50,6 @@ namespace MoistureUpset
             {
                 AkSoundEngine.PostEvent("MinecraftCrunch", characterBody.gameObject);
             }
-        }
-
-        private static void GlobalEventManager_ClientDamageNotified(On.RoR2.GlobalEventManager.orig_ClientDamageNotified orig, DamageDealtMessage damageDealtMessage)
-        {
-            orig(damageDealtMessage);
-            try
-            {
-                var playerList = NetworkUser.readOnlyLocalPlayersList;
-
-                if (playerList == null)
-                {
-                    return;
-                }
-
-                foreach (var item in playerList)
-                {
-                    var mainBody = item.master?.GetBody();
-
-                    if (mainBody.gameObject == damageDealtMessage.victim)
-                    {
-                        AkSoundEngine.PostEvent("MinecraftHurt", mainBody.gameObject);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-
         }
     }
 }
