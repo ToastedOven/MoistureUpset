@@ -15,7 +15,7 @@ namespace MoistureUpset
         {
             DeathSound();
             Somebody();
-            //BossMusic();
+            BossMusic();
             DropRewards();
         }
         public static void DeathSound()
@@ -27,6 +27,7 @@ namespace MoistureUpset
         }
         public static void DropRewards()
         {
+
             On.RoR2.BossGroup.DropRewards += (orig, self) =>
             {
                 orig(self);
@@ -36,7 +37,8 @@ namespace MoistureUpset
             On.RoR2.BossGroup.OnEnable += (orig, self) =>
             {
                 orig(self);
-                Chat.AddMessage("Spawning boss");
+                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                AkSoundEngine.PostEvent("BossTest", mainBody.gameObject);
             };
         }
         public static void Somebody()
@@ -51,34 +53,34 @@ namespace MoistureUpset
         {
             On.RoR2.WwiseUtils.CommonWwiseIds.Init += (orig) =>
             {
-                //orig();
-                RoR2.WwiseUtils.CommonWwiseIds.bossfight = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.alive = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.dead = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.gameplay = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.logbook = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.main = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.menu = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.none = AkSoundEngine.GetIDFromString("EDeath");
-                RoR2.WwiseUtils.CommonWwiseIds.secretLevel = AkSoundEngine.GetIDFromString("EDeath");
+                orig();
+                //RoR2.WwiseUtils.CommonWwiseIds.bossfight = AkSoundEngine.GetIDFromString("ooflongestloop");
+                RoR2.WwiseUtils.CommonWwiseIds.alive = AkSoundEngine.GetIDFromString("ooflongestloop");
+                RoR2.WwiseUtils.CommonWwiseIds.dead = AkSoundEngine.GetIDFromString("ooflongestloop");
+                //RoR2.WwiseUtils.CommonWwiseIds.gameplay = AkSoundEngine.GetIDFromString("ooflongestloop");
+                //RoR2.WwiseUtils.CommonWwiseIds.logbook = AkSoundEngine.GetIDFromString("ooflongestloop");
+                //RoR2.WwiseUtils.CommonWwiseIds.main = AkSoundEngine.GetIDFromString("ooflongestloop");
+                //RoR2.WwiseUtils.CommonWwiseIds.menu = AkSoundEngine.GetIDFromString("ooflongestloop");
+                //RoR2.WwiseUtils.CommonWwiseIds.none = AkSoundEngine.GetIDFromString("ooflongestloop");
+                //RoR2.WwiseUtils.CommonWwiseIds.secretLevel = AkSoundEngine.GetIDFromString("ooflongestloop");
             };
-            On.RoR2.WwiseUtils.SoundbankLoader.Start += (orig, self) =>
-            {
-                //orig(self);
-                for (int i = 0; i < self.soundbankStrings.Length; i++)
-                {
-                    if (self.soundbankStrings[i] == "Music")
-                    {
-                        AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
-                        //AkBankManager.LoadBank("MusicReplacement", self.decodeBank, self.saveDecodedBank);
-                        //System.Console.WriteLine($"Loading MusicReplacement before {self.soundbankStrings[i]}");
-                    }
-                    else
-                    {
-                        AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
-                    }
-                }
-            };
+            //On.RoR2.WwiseUtils.SoundbankLoader.Start += (orig, self) =>
+            //{
+            //    //orig(self);
+            //    for (int i = 0; i < self.soundbankStrings.Length; i++)
+            //    {
+            //        if (self.soundbankStrings[i] == "Music")
+            //        {
+            //            AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
+            //            //AkBankManager.LoadBank("MusicReplacement", self.decodeBank, self.saveDecodedBank);
+            //            //System.Console.WriteLine($"Loading MusicReplacement before {self.soundbankStrings[i]}");
+            //        }
+            //        else
+            //        {
+            //            AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
+            //        }
+            //    }
+            //};
         }
     }
 }
