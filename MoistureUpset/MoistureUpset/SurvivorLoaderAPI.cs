@@ -26,6 +26,13 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
             }
 
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.engineer"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi", MainAssetBundle));
+            }
+
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
         }
 
@@ -34,6 +41,71 @@ namespace MoistureUpset
             orig();
 
             AddStarPlatinumSkinToLoader();
+            AddToLoader("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/mesh0.mesh", RoR2.SurvivorIndex.Engi);
+        }
+
+        private static void AddToLoader(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
+        {
+            var survivorDef = SurvivorCatalog.GetSurvivorDef(_survivorIndex);
+            var bodyPrefab = survivorDef.bodyPrefab;
+
+            var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
+            foreach (var item in renderers)
+            {
+                Debug.Log(item);
+            }
+            var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
+
+            foreach (var item in skinController.skins)
+            {
+                Debug.Log($"{item.nameToken}");
+                foreach (var skinItem in item.baseSkins)
+                {
+                    Debug.Log($"{skinItem}");
+                }
+            }
+
+            var mdl = skinController.gameObject;
+
+            var skin = new LoadoutAPI.SkinDefInfo
+            {
+                Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
+                Name = _name,
+                NameToken = _nameToken,
+                RootObject = mdl,
+                BaseSkins = new SkinDef[0],
+                UnlockableName = "",
+                GameObjectActivations = new SkinDef.GameObjectActivation[0],
+
+                RendererInfos = new CharacterModel.RendererInfo[]
+                {
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = Resources.Load<Material>(_mat1),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[0]
+                    },
+                },
+                MeshReplacements = new SkinDef.MeshReplacement[]
+                {
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = Resources.Load<Mesh>(_mesh1),
+                        renderer = renderers[0]
+                    },
+
+                },
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
+            };
+
+            Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
+            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
+
+            var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
+            skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
+            Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
         }
 
         private static void AddStarPlatinumSkinToLoader()

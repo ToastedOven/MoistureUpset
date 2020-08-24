@@ -19,7 +19,6 @@ namespace MoistureUpset
         public void Awake()
         {
             SoundNetworkAssistant.InitSNA();
-            
             Assets.PopulateAssets();
 
             SoundAssets.RegisterSoundEvents();

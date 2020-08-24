@@ -22,7 +22,6 @@ namespace MoistureUpset
             On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
             {
                 Util.PlaySound("EDeath", self.outer.gameObject);
-                Chat.AddMessage($"{RoR2.WwiseUtils.CommonWwiseIds.bossfight}");
             };
         }
         public static void DropRewards()
