@@ -11,7 +11,7 @@ namespace MoistureUpset
     [BepInDependency("com.bepis.r2api")]
     //Change these
     [BepInPlugin("com.WetBoys.WetGamers", "We are really wet.", "0.6.9")]
-    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper")]
+    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI")]
     public class BigTest : BaseUnityPlugin
     {
         public void Awake()
@@ -21,6 +21,10 @@ namespace MoistureUpset
             SoundAssets.RegisterSoundEvents();
 
             SoundNetworkAssistant.InitSNA();
+
+            SurvivorLoaderAPI.LoadSurvivors();
+
+            //UnReady.Init();
             
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
