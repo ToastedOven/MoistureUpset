@@ -116,15 +116,6 @@ namespace MoistureUpset
             var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
             var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            foreach (var item in skinController.skins)
-            {
-                Debug.Log($"{item.nameToken}");
-                foreach (var skinItem in item.baseSkins)
-                {
-                    Debug.Log($"{skinItem}");
-                }
-            }
-
             var mdl = skinController.gameObject;
 
             var skin = new LoadoutAPI.SkinDefInfo
@@ -144,22 +135,41 @@ namespace MoistureUpset
                         defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
+                        renderer = renderers[0]
+                    },
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[1]
+                    },
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
                         renderer = renderers[2]
-                    }
+                    },
                 },
 
                 MeshReplacements = new SkinDef.MeshReplacement[]
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/ora.mesh"),
-                        renderer = renderers[2]
+                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
+                        renderer = renderers[0]
+                    },
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
+                        renderer = renderers[1]
                     },
                     new SkinDef.MeshReplacement
                     {
                         mesh = Resources.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
                         renderer = renderers[2]
-                    },
+                    }
 
                 },
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
