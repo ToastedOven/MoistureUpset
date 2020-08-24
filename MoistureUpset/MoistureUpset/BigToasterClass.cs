@@ -30,11 +30,15 @@ namespace MoistureUpset
             On.RoR2.MusicController.UpdateTeleporterParameters += (orig, self, t, cT, tB) =>
             {
                 orig(self, t, cT, tB);
+                bool flag = true;
+                flag = t.holdoutZoneController.IsBodyInChargingRadius(tB);
+                AkSoundEngine.SetRTPCValue("isInPortalRange", (flag ? 1f : 0f));
                 if (TeleporterInteraction.instance.isCharged)
                 {
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
                 }
+
             };
             On.RoR2.BossGroup.DropRewards += (orig, self) =>
             {
