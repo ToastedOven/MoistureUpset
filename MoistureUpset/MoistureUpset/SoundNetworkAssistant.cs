@@ -9,6 +9,7 @@ using R2API.Utils;
 using RoR2;
 using System.Linq;
 using RewiredConsts;
+using System.Collections;
 
 namespace MoistureUpset
 {
@@ -79,6 +80,28 @@ namespace MoistureUpset
                 }
             }
         }
+
+        public static void playSound(string soundIDString, Vector3 location)
+        {
+            if (NetworkServer.active)
+            {
+                if (!_centralNetworkObjectSpawned)
+                {
+                    _centralNetworkObjectSpawned = UnityEngine.Object.Instantiate(CentralNetworkObject);
+                    NetworkServer.Spawn(_centralNetworkObjectSpawned);
+                }
+
+                if (users == null)
+                {
+                    users = NetworkUser.readOnlyInstancesList.ToArray();
+                }
+
+                foreach (var user in users)
+                {
+                    NetworkedSoundComponent.Invoke(user, soundIDString, location);
+                }
+            }
+        }
     }
 }
 
@@ -88,9 +111,12 @@ internal class NetworkedSoundComponent : NetworkBehaviour
 
     private static NetworkUser[] users;
 
+    internal static GameObject soundPlayer;
+
     private void Awake()
     {
         _instance = this;
+        soundPlayer = new GameObject("Temp Audio Player");
     }
 
     public static void Invoke(NetworkUser user, string soundIDString, int playerIndex)
@@ -102,6 +128,11 @@ internal class NetworkedSoundComponent : NetworkBehaviour
         _instance.TargetPlaySoundNetworkIdentity(user.connectionToClient, soundIDString, identity);
     }
 
+    public static void Invoke(NetworkUser user, string soundIDString, Vector3 location)
+    {
+        _instance.TargetPlaySoundLocation(user.connectionToClient, soundIDString, location);
+    }
+
     [TargetRpc]
     private void TargetPlaySound(NetworkConnection target, string soundIDString, int playerIndex)
     {
@@ -110,12 +141,47 @@ internal class NetworkedSoundComponent : NetworkBehaviour
             users = NetworkUser.readOnlyInstancesList.ToArray();
         }
 
-        AkSoundEngine.PostEvent(soundIDString, users[playerIndex].master.GetBody().gameObject);
+
+        try
+        {
+            AkSoundEngine.PostEvent(soundIDString, users[playerIndex].master.GetBody().gameObject);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        
     }
 
     [TargetRpc]
     private void TargetPlaySoundNetworkIdentity(NetworkConnection target, string soundIDString, NetworkIdentity identity)
     {
-        AkSoundEngine.PostEvent(soundIDString, identity.gameObject);
+        try
+        {
+            AkSoundEngine.PostEvent(soundIDString, identity.gameObject);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        
+    }
+
+    [TargetRpc]
+    private void TargetPlaySoundLocation(NetworkConnection target, string soundIDString, Vector3 location)
+    {
+        try
+        {
+            GameObject tempAudio = Instantiate(soundPlayer, location, Quaternion.identity);
+
+            AkSoundEngine.PostEvent(soundIDString, tempAudio);
+
+            Destroy(tempAudio, 2f);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+
     }
 }

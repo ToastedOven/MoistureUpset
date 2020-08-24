@@ -29,10 +29,27 @@ namespace MoistureUpset
             
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
+            On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
+
             BigToasterClass.RunAll();
         }
 
+        public void Start()
+        {
+            RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene title");
+        }
 
+        private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
+        {
+            self.shouldAttemptToSpawnShopPortal = true;
+            self.Network_shouldAttemptToSpawnShopPortal = true;
+            self.baseShopSpawnChance = 1;
+
+            orig(self);
+
+            self.shouldAttemptToSpawnShopPortal = true;
+            self.Network_shouldAttemptToSpawnShopPortal = true;
+        }
 
         private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
         {

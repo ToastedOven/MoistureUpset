@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using R2API;
+using R2API.Utils;
+using RoR2;
 using System.Text;
 using IL.RoR2;
 using Mono.Cecil.Cil;
@@ -14,8 +17,6 @@ namespace MoistureUpset
         private static Transform HUDroot = null;
 
         private static GameObject UIGameObject;
-
-        private static MPButton localunreadyButton;
 
         private static bool ready = false;
 
@@ -46,11 +47,13 @@ namespace MoistureUpset
 
             HUDroot = self.transform.root;
 
-            UIGameObject = new GameObject("Moist Upset UI GameObject");
-
+            GameObject localunready = Resources.Load<GameObject>("Prefabs/UI/DefaultMPButton");
+            UIGameObject = GameObject.Instantiate(localunready);
             UIGameObject.transform.SetParent(HUDroot);
+            UIGameObject.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            UIGameObject.GetComponent<RectTransform>().anchorMax = Vector2.one; UIGameObject.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
 
-            localunreadyButton = GameObject.Instantiate<MPButton>(self.readyButton);
+            UIGameObject.SetActive(true);
         }
 
         private static bool CharacterSelectController_IsClientReady(On.RoR2.UI.CharacterSelectController.orig_IsClientReady orig, RoR2.UI.CharacterSelectController self)
@@ -58,13 +61,13 @@ namespace MoistureUpset
             bool iCR = orig(self);
 
 
-            if (iCR)
-            {
-                self.readyButton.gameObject.SetActive(true);
-                self.unreadyButton.gameObject.SetActive(false);
-            }
+            //if (iCR)
+            //{
+            //    self.readyButton.gameObject.SetActive(true);
+            //    self.unreadyButton.gameObject.SetActive(false);
+            //}
 
-            return false;
+            return iCR;
         }
     }
 }

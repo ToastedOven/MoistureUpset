@@ -24,45 +24,78 @@ namespace MoistureUpset
 
         private static void GlobalEventManager_ServerDamageDealt(On.RoR2.GlobalEventManager.orig_ServerDamageDealt orig, DamageReport damageReport)
         {
-            orig(damageReport);
-
-            if (users == null)
+            try
             {
-                users = NetworkUser.readOnlyInstancesList.ToArray();
-            }
-
-            int index = 0;
-
-            for (int i = 0; i < users.Length; i++)
-            {
-                if (damageReport.victimBody == users[i].master.GetBody())
+                if (damageReport.victimTeamIndex == TeamIndex.Player)
                 {
-                    index = i;
-                    break;
+                    if (users == null)
+                    {
+                        users = NetworkUser.readOnlyInstancesList.ToArray();
+                    }
+                    bool failed = false;
+
+                    for (int i = 0; i < users.Length; i++)
+                    {
+                        if (damageReport.victimBody == users[i].master.GetBody())
+                        {
+                            if (users[i].master.GetBody() != null)
+                            {
+                                try
+                                {
+                                    SoundNetworkAssistant.playSound("MinecraftHurt", i);
+                                }
+                                catch
+                                {
+                                    failed = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (failed)
+                    {
+                        if (damageReport.victimBody.networkIdentity.gameObject != null)
+                        {
+                            SoundNetworkAssistant.playSound("MinecraftHurt", damageReport.victimBody.master.networkIdentity);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                SoundNetworkAssistant.playSound("MinecraftHurt", damageReport.victimBody.master.gameObject.transform.position);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.Log(e);
+                            }
+                        }
+                    }
                 }
+
+                Debug.Log(damageReport.victimBody.name);
+            }
+            finally
+            {
+                orig(damageReport);
             }
 
-            if (damageReport.victimTeamIndex == TeamIndex.Player)
-            {
-                SoundNetworkAssistant.playSound("MinecraftHurt", index);
-            }
 
-            if (damageReport.attackerBody.skinIndex == 2)
-            {
-                
-            }
+            //if (damageReport.attackerBody.skinIndex == 2)
+            //{
+
+            //}
         }
 
         private static void GlobalEventManager_OnCharacterHitGround(On.RoR2.GlobalEventManager.orig_OnCharacterHitGround orig, GlobalEventManager self, CharacterBody characterBody, UnityEngine.Vector3 impactVelocity)
         {
-            float before = characterBody.healthComponent.health;
+            //float before = characterBody.healthComponent.health;
             orig(self, characterBody, impactVelocity);
-            float after = characterBody.healthComponent.health;
+            //float after = characterBody.healthComponent.health;
 
-            if (before != after)
-            {
-                AkSoundEngine.PostEvent("MinecraftCrunch", characterBody.gameObject);
-            }
+            //if (before != after)
+            //{
+            //    AkSoundEngine.PostEvent("MinecraftCrunch", characterBody.gameObject);
+            //}
         }
     }
 }
