@@ -50,20 +50,7 @@ namespace MoistureUpset
             var bodyPrefab = survivorDef.bodyPrefab;
 
             var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
-            foreach (var item in renderers)
-            {
-                Debug.Log(item);
-            }
             var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
-
-            foreach (var item in skinController.skins)
-            {
-                Debug.Log($"{item.nameToken}");
-                foreach (var skinItem in item.baseSkins)
-                {
-                    Debug.Log($"{skinItem}");
-                }
-            }
 
             var mdl = skinController.gameObject;
 
