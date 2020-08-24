@@ -5,6 +5,8 @@ using R2API;
 using R2API.MiscHelpers;
 using System.Reflection;
 using static R2API.SoundAPI;
+using UnityEngine;
+using System;
 
 namespace MoistureUpset
 {
@@ -16,11 +18,11 @@ namespace MoistureUpset
     {
         public void Awake()
         {
+            SoundNetworkAssistant.InitSNA();
+            
             Assets.PopulateAssets();
 
             SoundAssets.RegisterSoundEvents();
-
-            SoundNetworkAssistant.InitSNA();
 
             SurvivorLoaderAPI.LoadSurvivors();
 
@@ -28,7 +30,7 @@ namespace MoistureUpset
             
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
-            BigToasterClass.DeathSound();
+            BigToasterClass.RunAll();
         }
 
 
