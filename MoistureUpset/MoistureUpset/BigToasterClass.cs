@@ -27,7 +27,15 @@ namespace MoistureUpset
         }
         public static void DropRewards()
         {
-
+            On.RoR2.MusicController.UpdateTeleporterParameters += (orig, self, t, cT, tB) =>
+            {
+                orig(self, t, cT, tB);
+                if (TeleporterInteraction.instance.isCharged)
+                {
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
+                }
+            };
             On.RoR2.BossGroup.DropRewards += (orig, self) =>
             {
                 orig(self);
@@ -38,7 +46,7 @@ namespace MoistureUpset
             {
                 orig(self);
                 var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                AkSoundEngine.PostEvent("BossTest", mainBody.gameObject);
+                AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
             };
         }
         public static void Somebody()
