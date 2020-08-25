@@ -18,8 +18,9 @@ namespace MoistureUpset
     {
         public void Awake()
         {
-            SoundNetworkAssistant.InitSNA();
             Assets.PopulateAssets();
+
+            BigToasterClass.RunAll();
 
             SoundAssets.RegisterSoundEvents();
 
@@ -29,9 +30,16 @@ namespace MoistureUpset
             
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
-            On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
+            On.RoR2.Run.BeginStage += Run_BeginStage;
 
-            BigToasterClass.RunAll();
+            On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
+        }
+
+        private void Run_BeginStage(On.RoR2.Run.orig_BeginStage orig, Run self)
+        {
+            orig(self);
+
+            SoundNetworkAssistant.InitSNA();
         }
 
         public void Start()
@@ -41,14 +49,14 @@ namespace MoistureUpset
 
         private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
         {
-            self.shouldAttemptToSpawnShopPortal = true;
-            self.Network_shouldAttemptToSpawnShopPortal = true;
-            self.baseShopSpawnChance = 1;
+            //self.shouldAttemptToSpawnShopPortal = true;
+            //self.Network_shouldAttemptToSpawnShopPortal = true;
+            //self.baseShopSpawnChance = 1;
 
             orig(self);
 
-            self.shouldAttemptToSpawnShopPortal = true;
-            self.Network_shouldAttemptToSpawnShopPortal = true;
+            //self.shouldAttemptToSpawnShopPortal = true;
+            //self.Network_shouldAttemptToSpawnShopPortal = true;
         }
 
         private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)

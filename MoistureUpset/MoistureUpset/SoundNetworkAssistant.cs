@@ -24,6 +24,13 @@ namespace MoistureUpset
 
         public static void InitSNA()
         {
+            if (CentralNetworkObject != null || _centralNetworkObjectSpawned != null)
+            {
+                GameObject.Destroy(CentralNetworkObject);
+                GameObject.Destroy(_centralNetworkObjectSpawned);
+                users = null;
+            }
+
             var tempObject = new GameObject("moistUpsetTemp");
 
             tempObject.AddComponent<NetworkIdentity>();
@@ -33,8 +40,6 @@ namespace MoistureUpset
             GameObject.Destroy(tempObject);
 
             _nsc = CentralNetworkObject.AddComponent<NetworkedSoundComponent>();
-
-            CommandHelper.AddToConsoleWhenReady();
         }
 
         public static void playSound(string soundIDString, int index)
@@ -176,7 +181,7 @@ internal class NetworkedSoundComponent : NetworkBehaviour
 
             AkSoundEngine.PostEvent(soundIDString, tempAudio);
 
-            Destroy(tempAudio, 2f);
+            Destroy(tempAudio, 5f);
         }
         catch (Exception e)
         {
