@@ -6,6 +6,8 @@ using R2API.MiscHelpers;
 using System.Reflection;
 using static R2API.SoundAPI;
 using System;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace MoistureUpset
 {
@@ -19,6 +21,82 @@ namespace MoistureUpset
             DropRewards();
             Death();
         }
+        //public static void OnHit()
+        //{
+        //    On.RoR2.Projectile.ProjectileSingleTargetImpact.OnProjectileImpact += (orig, self, info) =>
+        //    {
+        //        if (!self.GetPropertyValue<bool>("alive"))
+        //        {
+        //            return;
+        //        }
+        //        Collider collider = info.collider;
+        //        if (collider)
+        //        {
+        //            DamageInfo damageInfo = new DamageInfo();
+        //            if (self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage"))
+        //            {
+        //                damageInfo.damage = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").damage;
+        //                damageInfo.crit = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").crit;
+        //                damageInfo.attacker = self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").owner;
+        //                damageInfo.inflictor = base.gameObject;
+        //                damageInfo.position = info.estimatedPointOfImpact;
+        //                damageInfo.force = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").force * base.transform.forward;
+        //                damageInfo.procChainMask = self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").procChainMask;
+        //                damageInfo.procCoefficient = self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").procCoefficient;
+        //                damageInfo.damageColorIndex = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").damageColorIndex;
+        //                damageInfo.damageType = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").damageType;
+        //            }
+        //            else
+        //            {
+        //                Debug.Log("No projectile damage component!");
+        //            }
+        //            HurtBox component = collider.GetComponent<HurtBox>();
+        //            if (component)
+        //            {
+        //                HealthComponent healthComponent = component.healthComponent;
+        //                if (healthComponent)
+        //                {
+        //                    if (healthComponent.gameObject == self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").owner)
+        //                    {
+        //                        return;
+        //                    }
+        //                    if (FriendlyFireManager.ShouldDirectHitProceed(healthComponent, self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").teamFilter.teamIndex))
+        //                    {
+        //                        Util.PlaySound(self.enemyHitSoundString, base.gameObject);
+        //                        if (NetworkServer.active)
+        //                        {
+        //                            damageInfo.ModifyDamageInfo(component.damageModifier);
+        //                            healthComponent.TakeDamage(damageInfo);
+        //                            GlobalEventManager.instance.OnHitEnemy(damageInfo, component.healthComponent.gameObject);
+        //                        }
+        //                    }
+        //                    self.InvokeMethod<bool>("set_alive", false);
+        //                }
+        //            }
+        //            else if (self.destroyOnWorld)
+        //            {
+        //                self.InvokeMethod<bool>("set_alive", false);
+        //            }
+        //            damageInfo.position = base.transform.position;
+        //            if (NetworkServer.active)
+        //            {
+        //                GlobalEventManager.instance.OnHitAll(damageInfo, collider.gameObject);
+        //            }
+        //        }
+        //        if (!self.GetPropertyValue<bool>("alive"))
+        //        {
+        //            if (NetworkServer.active && self.impactEffect)
+        //            {
+        //                EffectManager.SimpleImpactEffect(self.impactEffect, info.estimatedPointOfImpact, -base.transform.forward, !self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").isPrediction);
+        //            }
+        //            Util.PlaySound(self.hitSoundString, base.gameObject);
+        //            if (self.destroyWhenNotAlive)
+        //            {
+        //                UnityEngine.Object.Destroy(base.gameObject);
+        //            }
+        //        }
+        //    };
+        //}
         public static void Death()
         {
             On.RoR2.Chat.PlayerDeathChatMessage.ConstructChatString += (orig, self) =>
