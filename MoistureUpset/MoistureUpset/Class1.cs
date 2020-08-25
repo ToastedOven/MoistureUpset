@@ -8,6 +8,7 @@ using static R2API.SoundAPI;
 using UnityEngine;
 using System;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
@@ -27,22 +28,13 @@ namespace MoistureUpset
 
             SurvivorLoaderAPI.LoadSurvivors();
 
+            SoundNetworkAssistant.InitSNA();
+
             //UnReady.Init();
-            
+
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
-            On.RoR2.Run.BeginStage += Run_BeginStage;
-
             On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
-
-            
-        }
-
-        private void Run_BeginStage(On.RoR2.Run.orig_BeginStage orig, Run self)
-        {
-            orig(self);
-
-            SoundNetworkAssistant.InitSNA();
         }
 
         public void Start()

@@ -16,21 +16,12 @@ namespace MoistureUpset
     public static class SoundNetworkAssistant
     {
         public static GameObject CentralNetworkObject;
-        private static GameObject _centralNetworkObjectSpawned;
+        public static GameObject _centralNetworkObjectSpawned;
 
         private static NetworkedSoundComponent _nsc;
 
-        private static NetworkUser[] users;
-
         public static void InitSNA()
         {
-            if (CentralNetworkObject != null || _centralNetworkObjectSpawned != null)
-            {
-                GameObject.Destroy(CentralNetworkObject);
-                GameObject.Destroy(_centralNetworkObjectSpawned);
-                users = null;
-            }
-
             var tempObject = new GameObject("moistUpsetTemp");
 
             tempObject.AddComponent<NetworkIdentity>();
@@ -52,19 +43,14 @@ namespace MoistureUpset
                     NetworkServer.Spawn(_centralNetworkObjectSpawned);
                 }
 
-                if (users == null)
-                {
-                    users = NetworkUser.readOnlyInstancesList.ToArray();
-                }
-
-                foreach (var user in users)
+                foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
                     NetworkedSoundComponent.Invoke(user, soundIDString, index);
                 }
             }
         }
 
-        public static void playSound(string soundIDString, NetworkIdentity identity)
+        public static void playSound(string soundIDString, NetworkInstanceId identity)
         {
             if (NetworkServer.active)
             {
@@ -74,12 +60,7 @@ namespace MoistureUpset
                     NetworkServer.Spawn(_centralNetworkObjectSpawned);
                 }
 
-                if (users == null)
-                {
-                    users = NetworkUser.readOnlyInstancesList.ToArray();
-                }
-
-                foreach (var user in users)
+                foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
                     NetworkedSoundComponent.Invoke(user, soundIDString, identity);
                 }
@@ -96,12 +77,7 @@ namespace MoistureUpset
                     NetworkServer.Spawn(_centralNetworkObjectSpawned);
                 }
 
-                if (users == null)
-                {
-                    users = NetworkUser.readOnlyInstancesList.ToArray();
-                }
-
-                foreach (var user in users)
+                foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
                     NetworkedSoundComponent.Invoke(user, soundIDString, location);
                 }
@@ -113,8 +89,6 @@ namespace MoistureUpset
 internal class NetworkedSoundComponent : NetworkBehaviour
 {
     private static NetworkedSoundComponent _instance;
-
-    private static NetworkUser[] users;
 
     internal static GameObject soundPlayer;
 
@@ -128,7 +102,7 @@ internal class NetworkedSoundComponent : NetworkBehaviour
     {
         _instance.TargetPlaySound(user.connectionToClient, soundIDString, playerIndex);
     }
-    public static void Invoke(NetworkUser user, string soundIDString, NetworkIdentity identity)
+    public static void Invoke(NetworkUser user, string soundIDString, NetworkInstanceId identity)
     {
         _instance.TargetPlaySoundNetworkIdentity(user.connectionToClient, soundIDString, identity);
     }
@@ -141,15 +115,9 @@ internal class NetworkedSoundComponent : NetworkBehaviour
     [TargetRpc]
     private void TargetPlaySound(NetworkConnection target, string soundIDString, int playerIndex)
     {
-        if (users == null)
-        {
-            users = NetworkUser.readOnlyInstancesList.ToArray();
-        }
-
-
         try
         {
-            AkSoundEngine.PostEvent(soundIDString, users[playerIndex].master.GetBody().gameObject);
+            AkSoundEngine.PostEvent(soundIDString, NetworkUser.readOnlyInstancesList[playerIndex].master.GetBody().gameObject);
         }
         catch (Exception e)
         {
@@ -159,11 +127,11 @@ internal class NetworkedSoundComponent : NetworkBehaviour
     }
 
     [TargetRpc]
-    private void TargetPlaySoundNetworkIdentity(NetworkConnection target, string soundIDString, NetworkIdentity identity)
+    private void TargetPlaySoundNetworkIdentity(NetworkConnection target, string soundIDString, NetworkInstanceId identity)
     {
         try
         {
-            AkSoundEngine.PostEvent(soundIDString, identity.gameObject);
+            AkSoundEngine.PostEvent(soundIDString, NetworkServer.FindLocalObject(identity));
         }
         catch (Exception e)
         {
