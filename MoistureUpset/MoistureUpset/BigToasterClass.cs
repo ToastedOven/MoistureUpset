@@ -64,11 +64,9 @@ namespace MoistureUpset
                 try
                 {
                     AkSoundEngine.SetRTPCValue("BossDead", 0f);
-                    Debug.Log("-------------------------stopping fanfare");//STOP ALL MUSIC SOMEWHERE THIS DOESNT WORK
                 }
                 catch (Exception e)
                 {
-                    Debug.Log($"------------------------{e.Message}");
                 }
             };
             On.RoR2.TeleporterInteraction.AttemptToSpawnAllEligiblePortals += (orig, self) =>
