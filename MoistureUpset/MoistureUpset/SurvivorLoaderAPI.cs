@@ -41,7 +41,7 @@ namespace MoistureUpset
             orig();
 
             AddStarPlatinumSkinToLoader();
-            AddToLoader("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/mesh0.mesh", RoR2.SurvivorIndex.Engi);
+            AddToLoader("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
         }
 
         private static void AddToLoader(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
