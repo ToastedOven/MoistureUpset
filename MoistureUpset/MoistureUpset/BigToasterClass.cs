@@ -17,6 +17,15 @@ namespace MoistureUpset
             Somebody();
             BossMusic();
             DropRewards();
+            Death();
+        }
+        public static void Death()
+        {
+            On.RoR2.Chat.PlayerDeathChatMessage.ConstructChatString += (orig, self) =>
+            {
+                string text = orig(self);
+                return $"{text} <style=cDeath>loser alert.</style>";
+            };
         }
         public static void DeathSound()
         {
