@@ -29,28 +29,47 @@ namespace MoistureUpset
         {
             On.RoR2.MusicController.UpdateTeleporterParameters += (orig, self, t, cT, tB) =>
             {
-                orig(self, t, cT, tB);
-                bool flag = true;
-                flag = t.holdoutZoneController.IsBodyInChargingRadius(tB);
-                AkSoundEngine.SetRTPCValue("isInPortalRange", (flag ? 1f : 0f));
-                if (TeleporterInteraction.instance.isCharged)
+                try
                 {
-                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
+                    bool flag = true;
+                    flag = t.holdoutZoneController.IsBodyInChargingRadius(tB);
+                    AkSoundEngine.SetRTPCValue("isInPortalRange", (flag ? 1f : 0f));
+                    if (TeleporterInteraction.instance.isCharged)
+                    {
+                        var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                        AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
+                    }
                 }
+                catch (Exception)
+                {
+
+                }
+                orig(self, t, cT, tB);
 
             };
             On.RoR2.BossGroup.DropRewards += (orig, self) =>
             {
                 orig(self);
-                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                Util.PlaySound("BossDied", mainBody.gameObject);
+                try
+                {
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    Util.PlaySound("BossDied", mainBody.gameObject);
+                }
+                catch (Exception)
+                {
+                }
             };
             On.RoR2.BossGroup.OnEnable += (orig, self) =>
             {
                 orig(self);
-                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
+                try
+                {
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
+                }
+                catch (Exception)
+                {
+                }
             };
         }
         public static void Somebody()
@@ -67,8 +86,14 @@ namespace MoistureUpset
             {
                 orig();
                 //RoR2.WwiseUtils.CommonWwiseIds.bossfight = AkSoundEngine.GetIDFromString("ooflongestloop");
-                RoR2.WwiseUtils.CommonWwiseIds.alive = AkSoundEngine.GetIDFromString("ooflongestloop");
-                RoR2.WwiseUtils.CommonWwiseIds.dead = AkSoundEngine.GetIDFromString("ooflongestloop");
+                try
+                {
+                    RoR2.WwiseUtils.CommonWwiseIds.alive = AkSoundEngine.GetIDFromString("ooflongestloop");
+                    RoR2.WwiseUtils.CommonWwiseIds.dead = AkSoundEngine.GetIDFromString("ooflongestloop");
+                }
+                catch (Exception)
+                {
+                }
                 //RoR2.WwiseUtils.CommonWwiseIds.gameplay = AkSoundEngine.GetIDFromString("ooflongestloop");
                 //RoR2.WwiseUtils.CommonWwiseIds.logbook = AkSoundEngine.GetIDFromString("ooflongestloop");
                 //RoR2.WwiseUtils.CommonWwiseIds.main = AkSoundEngine.GetIDFromString("ooflongestloop");
