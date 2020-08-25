@@ -18,85 +18,29 @@ namespace MoistureUpset
             DeathSound();
             Somebody();
             BossMusic();
-            DropRewards();
+            BossMusicAndFanFare();
             Death();
+            OnHit();
         }
-        //public static void OnHit()
-        //{
-        //    On.RoR2.Projectile.ProjectileSingleTargetImpact.OnProjectileImpact += (orig, self, info) =>
-        //    {
-        //        if (!self.GetPropertyValue<bool>("alive"))
-        //        {
-        //            return;
-        //        }
-        //        Collider collider = info.collider;
-        //        if (collider)
-        //        {
-        //            DamageInfo damageInfo = new DamageInfo();
-        //            if (self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage"))
-        //            {
-        //                damageInfo.damage = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").damage;
-        //                damageInfo.crit = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").crit;
-        //                damageInfo.attacker = self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").owner;
-        //                damageInfo.inflictor = base.gameObject;
-        //                damageInfo.position = info.estimatedPointOfImpact;
-        //                damageInfo.force = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").force * base.transform.forward;
-        //                damageInfo.procChainMask = self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").procChainMask;
-        //                damageInfo.procCoefficient = self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").procCoefficient;
-        //                damageInfo.damageColorIndex = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").damageColorIndex;
-        //                damageInfo.damageType = self.GetPropertyValue<RoR2.Projectile.ProjectileDamage>("projectileDamage").damageType;
-        //            }
-        //            else
-        //            {
-        //                Debug.Log("No projectile damage component!");
-        //            }
-        //            HurtBox component = collider.GetComponent<HurtBox>();
-        //            if (component)
-        //            {
-        //                HealthComponent healthComponent = component.healthComponent;
-        //                if (healthComponent)
-        //                {
-        //                    if (healthComponent.gameObject == self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").owner)
-        //                    {
-        //                        return;
-        //                    }
-        //                    if (FriendlyFireManager.ShouldDirectHitProceed(healthComponent, self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").teamFilter.teamIndex))
-        //                    {
-        //                        Util.PlaySound(self.enemyHitSoundString, base.gameObject);
-        //                        if (NetworkServer.active)
-        //                        {
-        //                            damageInfo.ModifyDamageInfo(component.damageModifier);
-        //                            healthComponent.TakeDamage(damageInfo);
-        //                            GlobalEventManager.instance.OnHitEnemy(damageInfo, component.healthComponent.gameObject);
-        //                        }
-        //                    }
-        //                    self.InvokeMethod<bool>("set_alive", false);
-        //                }
-        //            }
-        //            else if (self.destroyOnWorld)
-        //            {
-        //                self.InvokeMethod<bool>("set_alive", false);
-        //            }
-        //            damageInfo.position = base.transform.position;
-        //            if (NetworkServer.active)
-        //            {
-        //                GlobalEventManager.instance.OnHitAll(damageInfo, collider.gameObject);
-        //            }
-        //        }
-        //        if (!self.GetPropertyValue<bool>("alive"))
-        //        {
-        //            if (NetworkServer.active && self.impactEffect)
-        //            {
-        //                EffectManager.SimpleImpactEffect(self.impactEffect, info.estimatedPointOfImpact, -base.transform.forward, !self.GetPropertyValue<RoR2.Projectile.ProjectileController>("projectileController").isPrediction);
-        //            }
-        //            Util.PlaySound(self.hitSoundString, base.gameObject);
-        //            if (self.destroyWhenNotAlive)
-        //            {
-        //                UnityEngine.Object.Destroy(base.gameObject);
-        //            }
-        //        }
-        //    };
-        //}
+        public static void OnHit()
+        {
+            On.RoR2.HealthComponent.TakeDamage += (orig, self, info) =>
+            {
+                orig(self, info);
+                if (info.attacker)
+                {
+                    CharacterBody characterBody = info.attacker.GetComponent<CharacterBody>();
+                    if (characterBody)
+                    {
+                        if (characterBody.teamComponent.teamIndex == TeamIndex.Player)
+                        {
+                            var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                            AkSoundEngine.PostEvent("HitMarker", mainBody.gameObject);
+                        }
+                    }
+                }
+            };
+        }
         public static void Death()
         {
             On.RoR2.Chat.PlayerDeathChatMessage.ConstructChatString += (orig, self) =>
@@ -112,8 +56,36 @@ namespace MoistureUpset
                 Util.PlaySound("EDeath", self.outer.gameObject);
             };
         }
-        public static void DropRewards()
+        public static void BossMusicAndFanFare()
         {
+            On.RoR2.SceneObjectToggleGroup.OnServerSceneChanged += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    AkSoundEngine.SetRTPCValue("BossDead", 0f);
+                    Debug.Log("-------------------------stopping fanfare");//STOP ALL MUSIC SOMEWHERE THIS DOESNT WORK
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"------------------------{e.Message}");
+                }
+            };
+            On.RoR2.TeleporterInteraction.AttemptToSpawnAllEligiblePortals += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
+                    AkSoundEngine.PostEvent("StopFanFare", mainBody.gameObject);
+                    AkSoundEngine.SetRTPCValue("BossDead", 1f);
+                    AkSoundEngine.PostEvent("PlayFanFare", mainBody.gameObject);
+                }
+                catch (Exception)
+                {
+                }
+            };
             On.RoR2.MusicController.UpdateTeleporterParameters += (orig, self, t, cT, tB) =>
             {
                 try
@@ -121,15 +93,9 @@ namespace MoistureUpset
                     bool flag = true;
                     flag = t.holdoutZoneController.IsBodyInChargingRadius(tB);
                     AkSoundEngine.SetRTPCValue("isInPortalRange", (flag ? 1f : 0f));
-                    if (TeleporterInteraction.instance.isCharged)
-                    {
-                        var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                        AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
-                    }
                 }
                 catch (Exception)
                 {
-
                 }
                 orig(self, t, cT, tB);
 
