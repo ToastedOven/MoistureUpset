@@ -82,20 +82,14 @@ namespace MoistureUpset
         }
         private static void EngineerStuff(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
         {
-            On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnExit += (orig, self) =>
-            {
-                orig(self);
-                Debug.Log(self.turretMasterPrefab);
-                Debug.Log(self.turretMasterPrefab.GetType());
-            };
             var survivorDef = SurvivorCatalog.GetSurvivorDef(_survivorIndex);
             var bodyPrefab = survivorDef.bodyPrefab;
 
             var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
             var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            var minionrenderers = Resources.Load<GameObject>("prefabs/charactermasters/EngiTurretMaster").GetComponentsInChildren<Renderer>();
-            var minionobj = Resources.Load<GameObject>("prefabs/charactermasters/EngiTurretMaster").GetComponentInChildren<ModelSkinController>().gameObject;
+            //var minionrenderers = Resources.Load<GameObject>("prefabs/charactermasters/EngiTurretMaster").GetComponentsInChildren<Renderer>();
+            //var minionobj = Resources.Load<GameObject>("prefabs/charactermasters/EngiTurretMaster").GetComponentInChildren<ModelSkinController>().gameObject;
 
 
 
