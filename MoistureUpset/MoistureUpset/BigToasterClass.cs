@@ -42,8 +42,9 @@ namespace MoistureUpset
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.Log($"OnHitError: {e.Message}");
                 }
             };
         }
@@ -73,6 +74,7 @@ namespace MoistureUpset
                 }
                 catch (Exception e)
                 {
+                    Debug.Log($"BossDiedError: {e.Message}");
                 }
             };
             On.RoR2.TeleporterInteraction.AttemptToSpawnAllEligiblePortals += (orig, self) =>
@@ -86,8 +88,9 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
                     AkSoundEngine.PostEvent("PlayFanFare", mainBody.gameObject);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.Log($"FanFareError: {e.Message}");
                 }
             };
             On.RoR2.MusicController.UpdateTeleporterParameters += (orig, self, t, cT, tB) =>
@@ -98,8 +101,9 @@ namespace MoistureUpset
                     flag = t.holdoutZoneController.IsBodyInChargingRadius(tB);
                     AkSoundEngine.SetRTPCValue("isInPortalRange", (flag ? 1f : 0f));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.Log($"PortalRangeError: {e.Message}");
                 }
                 orig(self, t, cT, tB);
 
@@ -112,8 +116,9 @@ namespace MoistureUpset
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     Util.PlaySound("BossDied", mainBody.gameObject);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.Log($"BossDiedError: {e.Message}");
                 }
             };
             On.RoR2.BossGroup.OnEnable += (orig, self) =>
@@ -124,8 +129,9 @@ namespace MoistureUpset
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.Log($"BossMusicError: {e.Message}");
                 }
             };
         }
