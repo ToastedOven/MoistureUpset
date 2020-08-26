@@ -127,8 +127,8 @@ namespace MoistureUpset
             var skin = new LoadoutAPI.SkinDefInfo
             {
                 Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
-                Name = "StarPlatinum",
-                NameToken = "STARPLATINUM_SKIN",
+                Name = "Star Platinum",
+                NameToken = "STAR_PLATINUM_SKIN",
                 RootObject = mdl,
                 BaseSkins = new SkinDef[0],
                 UnlockableName = "",
