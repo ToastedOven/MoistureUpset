@@ -27,17 +27,23 @@ namespace MoistureUpset
             On.RoR2.HealthComponent.TakeDamage += (orig, self, info) =>
             {
                 orig(self, info);
-                if (info.attacker)
+                try
                 {
-                    CharacterBody characterBody = info.attacker.GetComponent<CharacterBody>();
-                    if (characterBody)
+                    if (info.attacker)
                     {
-                        if (characterBody.teamComponent.teamIndex == TeamIndex.Player)
+                        CharacterBody characterBody = info.attacker.GetComponent<CharacterBody>();
+                        if (characterBody)
                         {
-                            var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                            AkSoundEngine.PostEvent("HitMarker", mainBody.gameObject);
+                            if (characterBody.teamComponent.teamIndex == TeamIndex.Player)
+                            {
+                                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                                AkSoundEngine.PostEvent("HitMarker", mainBody.gameObject);
+                            }
                         }
                     }
+                }
+                catch (Exception)
+                {
                 }
             };
         }
