@@ -8,6 +8,7 @@ using static R2API.SoundAPI;
 using System;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.IO;
 
 namespace MoistureUpset
 {
@@ -21,6 +22,72 @@ namespace MoistureUpset
             BossMusicAndFanFare();
             Death();
             OnHit();
+            ModifyChat();
+        }
+        public static void ModifyChat()
+        {
+            On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
+            {
+                bool sendmessage = true;
+                try
+                {
+                    int num = -1;
+                    string[] text = self.inputField.text.ToUpper().Split(' ');
+                    if (text[0] == "HITMARKER" || text[0] == "HITSOUND")
+                    {
+                        num = Int32.Parse(text[1]);
+                    }
+                    else if (text[0] == "HIT" && (text[1] == "SOUND" || text[1] == "MARKER"))
+                    {
+                        num = Int32.Parse(text[2]);
+                    }
+                    else if (text[0] == "HITMARKERVOLUME")
+                    {
+                        if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
+                        {
+                            Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
+                        }
+                        if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                        {
+                            string line;
+                            using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                            {
+                                line = r.ReadToEnd();
+                            }
+                            int readnum = Int32.Parse(line);
+                            Chat.AddMessage($"HitMarkerVolume: {readnum}");
+                        }
+                        sendmessage = false;
+                    }
+                    else if (text[0] == "HELP")
+                    {
+                        Chat.AddMessage("Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\nEX: hitmarker 69\n\nType hitmarkervolume to check the volume of the hitmarker");
+                        sendmessage = false;
+                    }
+                    if (num != -1)
+                    {
+                        if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
+                        {
+                            Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
+                        }
+                        AkSoundEngine.SetRTPCValue("RuneBadNoise", num);
+                        File.WriteAllText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis", string.Empty);
+                        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                        {
+                            r.Write(num);
+                        }
+                        sendmessage = false;
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                if (sendmessage)
+                {
+                    self.inputField.text = "";
+                }
+                orig(self);
+            };
         }
         public static void OnHit()
         {
@@ -35,7 +102,7 @@ namespace MoistureUpset
                         if (characterBody)
                         {
                             var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                            if (characterBody.teamComponent.teamIndex == TeamIndex.Player && info.attacker == mainBody)
+                            if (characterBody.teamComponent.teamIndex == TeamIndex.Player)
                             {
                                 SoundNetworkAssistant.playSound("HitMarker", info.attacker.transform.position);
                             }
@@ -83,7 +150,6 @@ namespace MoistureUpset
             On.RoR2.UI.ObjectivePanelController.FindTeleporterObjectiveTracker.ctor += (orig, self) =>//probably working
             {
                 orig(self);
-                Chat.AddMessage("fanfaren't time");
                 try
                 {
                     AkSoundEngine.SetRTPCValue("BossDead", 0f);
@@ -97,7 +163,6 @@ namespace MoistureUpset
             On.RoR2.UI.ObjectivePanelController.FinishTeleporterObjectiveTracker.ctor += (orig, self) =>
             {//probably working
                 orig(self);
-                Chat.AddMessage("fanfare time");
                 try
                 {
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
@@ -154,6 +219,36 @@ namespace MoistureUpset
                 {
                     RoR2.WwiseUtils.CommonWwiseIds.alive = AkSoundEngine.GetIDFromString("ooflongestloop");
                     RoR2.WwiseUtils.CommonWwiseIds.dead = AkSoundEngine.GetIDFromString("ooflongestloop");
+                }
+                catch (Exception)
+                {
+                }
+                //loading the hitmarker noise cause this spot seemed like a good idea
+                try
+                {
+                    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
+                    {
+                        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
+                    }
+                    if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                    {
+                        string line;
+                        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                        {
+                            line = r.ReadToEnd();
+                        }
+                        int readnum = Int32.Parse(line);
+                        AkSoundEngine.SetRTPCValue("RuneBadNoise", readnum);
+                    }
+                    else
+                    {
+                        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                        {
+                            r.Write(100);
+                            AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
+                        }
+                    }
+                    Debug.Log("-------------------------------Loaded hitmarkernoise file");
                 }
                 catch (Exception)
                 {
