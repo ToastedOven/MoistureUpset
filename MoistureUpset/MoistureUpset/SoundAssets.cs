@@ -252,6 +252,10 @@ namespace MoistureUpset
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
             finally
             {
                 orig(damageReport);
