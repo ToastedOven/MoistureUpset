@@ -34,17 +34,17 @@ namespace MoistureUpset
                         CharacterBody characterBody = info.attacker.GetComponent<CharacterBody>();
                         if (characterBody)
                         {
-                            if (characterBody.teamComponent.teamIndex == TeamIndex.Player)
+                            var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                            if (characterBody.teamComponent.teamIndex == TeamIndex.Player && info.attacker == mainBody)
                             {
-                                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                                AkSoundEngine.PostEvent("HitMarker", mainBody.gameObject);
+                                SoundNetworkAssistant.playSound("HitMarker", info.attacker.transform.position);
                             }
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    Debug.Log($"OnHitError: {e.Message}");
+
                 }
             };
         }
@@ -65,34 +65,6 @@ namespace MoistureUpset
         }
         public static void BossMusicAndFanFare()
         {
-            On.RoR2.SceneObjectToggleGroup.OnServerSceneChanged += (orig, self) =>
-            {
-                orig(self);
-                try
-                {
-                    AkSoundEngine.SetRTPCValue("BossDead", 0f);
-                }
-                catch (Exception e)
-                {
-                    Debug.Log($"BossDiedError: {e.Message}");
-                }
-            };
-            On.RoR2.TeleporterInteraction.AttemptToSpawnAllEligiblePortals += (orig, self) =>
-            {
-                orig(self);
-                try
-                {
-                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
-                    AkSoundEngine.PostEvent("StopFanFare", mainBody.gameObject);
-                    AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    AkSoundEngine.PostEvent("PlayFanFare", mainBody.gameObject);
-                }
-                catch (Exception e)
-                {
-                    Debug.Log($"FanFareError: {e.Message}");
-                }
-            };
             On.RoR2.MusicController.UpdateTeleporterParameters += (orig, self, t, cT, tB) =>
             {
                 try
@@ -103,12 +75,42 @@ namespace MoistureUpset
                 }
                 catch (Exception e)
                 {
-                    Debug.Log($"PortalRangeError: {e.Message}");
+
                 }
                 orig(self, t, cT, tB);
 
             };
-            On.RoR2.BossGroup.DropRewards += (orig, self) =>
+            On.RoR2.UI.ObjectivePanelController.FindTeleporterObjectiveTracker.ctor += (orig, self) =>//probably working
+            {
+                orig(self);
+                Chat.AddMessage("fanfaren't time");
+                try
+                {
+                    AkSoundEngine.SetRTPCValue("BossDead", 0f);
+                }
+                catch (Exception e)
+                {
+
+                }
+
+            };
+            On.RoR2.UI.ObjectivePanelController.FinishTeleporterObjectiveTracker.ctor += (orig, self) =>
+            {//probably working
+                orig(self);
+                Chat.AddMessage("fanfare time");
+                try
+                {
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
+                    AkSoundEngine.PostEvent("StopFanFare", mainBody.gameObject);
+                    AkSoundEngine.SetRTPCValue("BossDead", 1f);
+                    AkSoundEngine.PostEvent("PlayFanFare", mainBody.gameObject);
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.RoR2.BossGroup.OnDisable += (orig, self) =>//probably working
             {
                 orig(self);
                 try
@@ -116,9 +118,8 @@ namespace MoistureUpset
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     Util.PlaySound("BossDied", mainBody.gameObject);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.Log($"BossDiedError: {e.Message}");
                 }
             };
             On.RoR2.BossGroup.OnEnable += (orig, self) =>
@@ -131,7 +132,7 @@ namespace MoistureUpset
                 }
                 catch (Exception e)
                 {
-                    Debug.Log($"BossMusicError: {e.Message}");
+
                 }
             };
         }
