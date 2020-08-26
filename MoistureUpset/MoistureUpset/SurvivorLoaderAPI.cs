@@ -32,7 +32,12 @@ namespace MoistureUpset
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi", MainAssetBundle));
             }
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.droppod"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_droppod", MainAssetBundle));
+            }
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
         }
 
@@ -42,8 +47,21 @@ namespace MoistureUpset
 
             AddStarPlatinumSkinToLoader();
             AddToLoader("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
+            EditDropPod();
         }
 
+        private static void EditDropPod()
+        {
+            var fab = Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod");
+            var renderers = fab.GetComponentsInChildren<Renderer>();
+            var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            renderers[0].material = Resources.Load<Material>("@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat");
+            meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_engi:assets/engi.mesh");
+            //foreach (var item in fab.GetComponentsInChildren<Component>())
+            //{
+            //    Debug.Log($"------------------------------name: {item.name} type: {item.GetType()}");
+            //}
+        }
         private static void AddToLoader(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
         {
             var survivorDef = SurvivorCatalog.GetSurvivorDef(_survivorIndex);
@@ -51,6 +69,7 @@ namespace MoistureUpset
 
             var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
             var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
+
 
             var mdl = skinController.gameObject;
 
