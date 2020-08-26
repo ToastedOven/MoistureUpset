@@ -153,24 +153,24 @@ namespace MoistureUpset
                             Debug.Log(e);
                         }
                     }
-                    else if (damageReport.attackerMaster.minionOwnership != null)
-                    {
-                        if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) <= 0 && damageReport.victim.health > 0)
-                        {
-                            try
-                            {
-                                if (index != -1)
-                                {
-                                    Debug.Log(damageReport.attackerBody.name);
-                                    SoundNetworkAssistant.playSound("EngiTurretKillsSomething", index);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Debug.Log(e);
-                            }
-                        }
-                    }
+                    //else if (damageReport.attackerMaster.minionOwnership != null)
+                    //{
+                    //    if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) <= 0 && damageReport.victim.health > 0)
+                    //    {
+                    //        try
+                    //        {
+                    //            if (index != -1)
+                    //            {
+                    //                Debug.Log(damageReport.attackerBody.name);
+                    //                SoundNetworkAssistant.playSound("EngiTurretKillsSomething", index);
+                    //            }
+                    //        }
+                    //        catch (Exception e)
+                    //        {
+                    //            Debug.Log(e);
+                    //        }
+                    //    }
+                    //}
                 }
                 
             }
@@ -227,24 +227,24 @@ namespace MoistureUpset
                                 Debug.Log(e);
                             }
                         }
-                        else if (damageReport.victimMaster.minionOwnership != null)
-                        {
-                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.health - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.health > 0)
-                            {
-                                try
-                                {
-                                    Debug.Log($"brh {index}");
-                                    if (index != -1)
-                                    {
-                                        SoundNetworkAssistant.playSound("EngiTurretDies", index);
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    Debug.Log(e);
-                                }
-                            }
-                        }
+                        //else if (damageReport.victimMaster.minionOwnership != null)
+                        //{
+                        //    if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.health - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.health > 0)
+                        //    {
+                        //        try
+                        //        {
+                        //            Debug.Log($"brh {index}");
+                        //            if (index != -1)
+                        //            {
+                        //                SoundNetworkAssistant.playSound("EngiTurretDies", index);
+                        //            }
+                        //        }
+                        //        catch (Exception e)
+                        //        {
+                        //            Debug.Log(e);
+                        //        }
+                        //    }
+                        //}
                     }
                     catch (Exception e)
                     {
