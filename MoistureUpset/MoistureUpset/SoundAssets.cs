@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -19,9 +20,37 @@ namespace MoistureUpset
             On.RoR2.GlobalEventManager.ServerDamageDealt += GlobalEventManager_ServerDamageDealt;
             On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
 
-            On.RoR2.MusicController.UpdateTeleporterParameters += MusicController_UpdateTeleporterParameters;
+            On.RoR2.MasterSummon.Perform += MasterSummon_Perform;
 
-            On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += PlaceTurret_OnEnter;
+            On.RoR2.MusicController.UpdateTeleporterParameters += MusicController_UpdateTeleporterParameters;
+        }
+
+        private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
+        {
+            CharacterMaster cm = orig(self);
+
+            try
+            {
+                if (cm.minionOwnership.ownerMaster != null)
+                {
+                    if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (cm.name == "EngiWalkerTurretMaster(Clone)" || cm.name == "EngiTurretMaster(Clone)"))
+                    {
+                        for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
+                        {
+                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cm.minionOwnership.ownerMaster.GetBody())
+                            {
+                                SoundNetworkAssistant.playSound("EngiBuildsTurret", i);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+
+            return cm;
         }
 
         private static void MusicController_UpdateTeleporterParameters(On.RoR2.MusicController.orig_UpdateTeleporterParameters orig, MusicController self, TeleporterInteraction teleporter, Transform cameraTransform, CharacterBody targetBody)
@@ -91,21 +120,6 @@ namespace MoistureUpset
             orig(self, teleporter, cameraTransform, targetBody);
         }
 
-        private static void PlaceTurret_OnEnter(On.EntityStates.Engi.EngiWeapon.PlaceTurret.orig_OnEnter orig, EntityStates.Engi.EngiWeapon.PlaceTurret self)
-        {
-            orig(self);
-
-            try
-            {
-                //SoundNetworkAssistant.playSound("EngiBuildsTurret", self.outer.gameObject.); 
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
-            
-        }
-
         private static void GlobalEventManager_OnCharacterDeath(On.RoR2.GlobalEventManager.orig_OnCharacterDeath orig, GlobalEventManager self, DamageReport damageReport)
         {
             try
@@ -114,7 +128,7 @@ namespace MoistureUpset
 
                 for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
                 {
-                    if (damageReport.attackerBody == NetworkUser.readOnlyInstancesList[i].master.GetBody())
+                    if (damageReport.attackerBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() || damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody() == NetworkUser.readOnlyInstancesList[i].master.GetBody())
                     {
                         if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
                         {
@@ -153,24 +167,23 @@ namespace MoistureUpset
                             Debug.Log(e);
                         }
                     }
-                    //else if (damageReport.attackerMaster.minionOwnership != null)
-                    //{
-                    //    if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) <= 0 && damageReport.victim.health > 0)
-                    //    {
-                    //        try
-                    //        {
-                    //            if (index != -1)
-                    //            {
-                    //                Debug.Log(damageReport.attackerBody.name);
-                    //                SoundNetworkAssistant.playSound("EngiTurretKillsSomething", index);
-                    //            }
-                    //        }
-                    //        catch (Exception e)
-                    //        {
-                    //            Debug.Log(e);
-                    //        }
-                    //    }
-                    //}
+                    else if (damageReport.attackerMaster.minionOwnership != null)
+                    {
+                        if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
+                        {
+                            try
+                            {
+                                if (index != -1)
+                                {
+                                    SoundNetworkAssistant.playSound("EngiTurretKillsSomething", index);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.Log(e);
+                            }
+                        }
+                    }
                 }
                 
             }
@@ -227,24 +240,25 @@ namespace MoistureUpset
                                 Debug.Log(e);
                             }
                         }
-                        //else if (damageReport.victimMaster.minionOwnership != null)
-                        //{
-                        //    if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.health - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.health > 0)
-                        //    {
-                        //        try
-                        //        {
-                        //            Debug.Log($"brh {index}");
-                        //            if (index != -1)
-                        //            {
-                        //                SoundNetworkAssistant.playSound("EngiTurretDies", index);
-                        //            }
-                        //        }
-                        //        catch (Exception e)
-                        //        {
-                        //            Debug.Log(e);
-                        //        }
-                        //    }
-                        //}
+                        else if (damageReport.victimMaster.minionOwnership != null)
+                        {
+                            Debug.Log("bruh");
+                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.health - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.health > 0)
+                            {
+                                try
+                                {
+                                    Debug.Log($"brh {index}");
+                                    if (index != -1)
+                                    {
+                                        SoundNetworkAssistant.playSound("EngiTurretDies", index);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.Log(e);
+                                }
+                            }
+                        }
                     }
                     catch (Exception e)
                     {

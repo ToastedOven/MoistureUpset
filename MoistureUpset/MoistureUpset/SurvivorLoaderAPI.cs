@@ -45,6 +45,43 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_droppod", MainAssetBundle));
             }
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
+
+            On.RoR2.MasterSummon.Perform += MasterSummon_Perform;
+            //
+        }
+
+        private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
+        {
+            CharacterMaster cm = orig(self);
+
+            try
+            {
+                if (cm.minionOwnership.ownerMaster != null)
+                {
+                    if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
+                    {
+                        foreach (var item in cm.GetBody().GetComponentsInChildren<Component>())
+                        {
+                            Debug.Log(item);
+                        }
+
+                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
+                        for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
+                        {
+                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i] = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat");
+                        }
+
+                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+            
+
+            return cm;
         }
 
         private static void SurvivorCatalog_Init(On.RoR2.SurvivorCatalog.orig_Init orig)
@@ -88,16 +125,43 @@ namespace MoistureUpset
             var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
             var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            //var minionrenderers = Resources.Load<GameObject>("prefabs/charactermasters/EngiTurretMaster").GetComponentsInChildren<Renderer>();
-            //var minionobj = Resources.Load<GameObject>("prefabs/charactermasters/EngiTurretMaster").GetComponentInChildren<ModelSkinController>().gameObject;
+            var turretRenderers1 = skinController.skins[1].minionSkinReplacements[0].minionBodyPrefab.GetComponentsInChildren<Renderer>();
+            var turretRenderers2 = skinController.skins[1].minionSkinReplacements[1].minionBodyPrefab.GetComponentsInChildren<Renderer>();
 
+            var normalTurretBodyPrefab = Resources.Load<GameObject>("prefabs/characterbodies/EngiTurretBody");
 
+            var normalTRenderers = normalTurretBodyPrefab.GetComponentsInChildren<Renderer>();
+            var normalTController = normalTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
+
+            var turretSkinController = skinController.skins[1].minionSkinReplacements[0].minionBodyPrefab.GetComponentInChildren<ModelSkinController>();
 
             var mdl = skinController.gameObject;
 
+            Debug.Log($"++++++++++++++++++++++++++++++++++++{skinController.skins.Length}");
+            Debug.Log($"++++++++++++++++++++++++++++++++++++{skinController.skins[1].minionSkinReplacements.Length}");
+
+            foreach (var item in skinController.skins)
+            {
+                foreach (var item2 in item.minionSkinReplacements)
+                {
+                    Debug.Log($"------------------------------------------------{item2.minionSkin}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.name}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.nameToken}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.rootObject}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.baseSkins.Length}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.gameObjectActivations.Length}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.rendererInfos}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.meshReplacements}");
+                    Debug.Log($"------------------------------------------------{item2.minionSkin.minionSkinReplacements}");
+                }
+                
+            }
+
+
+
             var skin = new LoadoutAPI.SkinDefInfo
             {
-                Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
+                Icon = LoadoutAPI.CreateSkinIcon(Color.red, Color.yellow, Color.red, Color.yellow),
                 Name = _name,
                 NameToken = _nameToken,
                 RootObject = mdl,
@@ -113,7 +177,8 @@ namespace MoistureUpset
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[0]
-                    },
+                    }
+
                 },
                 MeshReplacements = new SkinDef.MeshReplacement[]
                 {
@@ -121,49 +186,87 @@ namespace MoistureUpset
                     {
                         mesh = Resources.Load<Mesh>(_mesh1),
                         renderer = renderers[0]
-                    },
+                    }
                 },
-                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0],
-                //MinionSkinReplacements = new SkinDef.MinionSkinReplacement[]
-                //{
-                //    new SkinDef.MinionSkinReplacement
-                //    {
-                //        minionSkin = new SkinDef
-                //        {
-                //            meshReplacements = new SkinDef.MeshReplacement[]
-                //            {
-                //                 new SkinDef.MeshReplacement
-                //                 {
-                //                   mesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh"),
-                //                   renderer = minionrenderers[0]
-                //                 },
-                //            },
-                //            rendererInfos = new CharacterModel.RendererInfo[]
-                //            {
-                //                 new CharacterModel.RendererInfo
-                //                 {
-                //                   defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat"),
-                //                   defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                //                   ignoreOverlays = false,
-                //                   renderer = minionrenderers[0]
-                //                 },
-                //            },
-                //        },
-                //        //minionBodyPrefab = minionobj,
-                //    },
-                //},
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0]
+            };
+            SkinDef test = LoadoutAPI.CreateNewSkinDef(skin);
+            On.RoR2.SkinDef.Awake += SkinDef_Awake;
+            SkinDef minionReplacement = ScriptableObject.CreateInstance<RoR2.SkinDef>();
+            SkinDef.MeshReplacement[] mr = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh"),
+                    renderer = normalTRenderers[0]
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh"),
+                    renderer = normalTRenderers[0]
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh"),
+                    renderer = normalTRenderers[0]
+                },
             };
 
+            CharacterModel.RendererInfo[] ri = new CharacterModel.RendererInfo[]
+            {
+                new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat"),
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false,
+                    renderer = normalTRenderers[0]
+                },
+                new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat"),
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false,
+                    renderer = normalTRenderers[0]
+                },
+                new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat"),
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false,
+                    renderer = normalTRenderers[0]
+                },
+            };
 
+            minionReplacement.meshReplacements = mr;
+            minionReplacement.rendererInfos = ri;
 
+            test.minionSkinReplacements = new SkinDef.MinionSkinReplacement[]
+            {
+                new SkinDef.MinionSkinReplacement
+                {
+                    minionSkin = minionReplacement,
+                    minionBodyPrefab = normalTurretBodyPrefab
+                }
+            };
+
+            
+
+            On.RoR2.SkinDef.Awake -= SkinDef_Awake;
 
             Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
-            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
+            skinController.skins[skinController.skins.Length - 1] = test;
+
+            Array.Resize(ref normalTController.skins, normalTController.skins.Length + 1);
+            normalTController.skins[normalTController.skins.Length - 1] = minionReplacement;
 
             var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
             skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
             Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
+        }
+
+        private static void SkinDef_Awake(On.RoR2.SkinDef.orig_Awake orig, RoR2.SkinDef self)
+        {
+
         }
 
         private static void AddStarPlatinumSkinToLoader()

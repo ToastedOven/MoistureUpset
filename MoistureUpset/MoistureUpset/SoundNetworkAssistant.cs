@@ -83,6 +83,23 @@ namespace MoistureUpset
                 }
             }
         }
+
+        public static void fuckMe(Vector3 location)
+        {
+            if (NetworkServer.active)
+            {
+                if (!_centralNetworkObjectSpawned)
+                {
+                    _centralNetworkObjectSpawned = UnityEngine.Object.Instantiate(CentralNetworkObject);
+                    NetworkServer.Spawn(_centralNetworkObjectSpawned);
+                }
+
+                foreach (var user in NetworkUser.readOnlyInstancesList)
+                {
+                    NetworkedSoundComponent.Invoke(user, location);
+                }
+            }
+        }
     }
 }
 
@@ -110,6 +127,11 @@ internal class NetworkedSoundComponent : NetworkBehaviour
     public static void Invoke(NetworkUser user, string soundIDString, Vector3 location)
     {
         _instance.TargetPlaySoundLocation(user.connectionToClient, soundIDString, location);
+    }
+
+    public static void Invoke(NetworkUser user, Vector3 location)
+    {
+        _instance.TargetGetPlayerLocation(user.connectionToClient, location);
     }
 
     [TargetRpc]
@@ -156,5 +178,21 @@ internal class NetworkedSoundComponent : NetworkBehaviour
             Debug.Log(e);
         }
 
+    }
+
+    [TargetRpc]
+    private void TargetGetPlayerLocation(NetworkConnection target, Vector3 location)
+    {
+        foreach (var item in NetworkUser.readOnlyInstancesList)
+        {
+            if (item.master.GetBody().transform.position == location)
+            {
+                Debug.Log($"Player found at {location}");
+            }
+            else
+            {
+                Debug.Log($"Player not");
+            }
+        }
     }
 }
