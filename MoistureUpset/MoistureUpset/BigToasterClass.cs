@@ -9,6 +9,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
@@ -23,6 +24,96 @@ namespace MoistureUpset
             Death();
             OnHit();
             ModifyChat();
+            PreGame();
+        }
+        public static void PreGame()
+        {
+            On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
+            {
+                orig(self);
+                AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+            };
+            On.RoR2.UI.MainMenu.MainMenuController.Start += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
+            {
+                orig(oldS, newS);
+                try
+                {
+                    switch (newS.name)
+                    {
+                        case "logbook":
+                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
+                            break;
+                        case "title":
+                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
+                            AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
+                            break;
+                        case "lobby":
+                            AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
+                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
+                            break;
+                        case "splash":
+                            AkSoundEngine.PostEvent("PlayMainMenu", GameObject.FindObjectOfType<GameObject>());
+                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+                            break;
+                        default:
+                            AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Debug.Log($"-------------exceptoimn: {e}");
+                }
+                //logbook
+                //title
+                //lobby
+            };
+            On.RoR2.MusicController.UpdateState += (orig, self) =>
+            {
+                //muMenu
+                orig(self);
+                try
+                {
+                    string song = self.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
+                    if (song == "muMenu" || song == "muLogbook")
+                    {
+                        self.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                    }
+                    //Debug.Log($"--------------{song}");
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.RoR2.UI.MainMenu.MainMenuController.SetDesiredMenuScreen += (orig, self, menu) =>
+            {
+                orig(self, menu);
+                try
+                {
+                    if (menu.name != "TitleMenu")
+                    {
+                        AkSoundEngine.SetRTPCValue("MainMenuMusic", 0.3f);
+                    }
+                    else
+                    {
+                        AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            };
         }
         public static void ModifyChat()
         {
@@ -82,7 +173,7 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
-                if (sendmessage)
+                if (!sendmessage)
                 {
                     self.inputField.text = "";
                 }
@@ -147,7 +238,33 @@ namespace MoistureUpset
                 orig(self, t, cT, tB);
 
             };
-            On.RoR2.UI.ObjectivePanelController.FindTeleporterObjectiveTracker.ctor += (orig, self) =>//probably working
+            On.RoR2.UI.ObjectivePanelController.FindTeleporterObjectiveTracker.ctor += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    AkSoundEngine.SetRTPCValue("BossDead", 0f);
+                }
+                catch (Exception e)
+                {
+
+                }
+
+            };
+            On.RoR2.UI.ObjectivePanelController.ActivateGoldshoreBeaconTracker.ctor += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    AkSoundEngine.SetRTPCValue("BossDead", 0f);
+                }
+                catch (Exception e)
+                {
+
+                }
+
+            };
+            On.RoR2.UI.ObjectivePanelController.DestroyTimeCrystals.ctor += (orig, self) =>
             {
                 orig(self);
                 try
@@ -161,7 +278,7 @@ namespace MoistureUpset
 
             };
             On.RoR2.UI.ObjectivePanelController.FinishTeleporterObjectiveTracker.ctor += (orig, self) =>
-            {//probably working
+            {
                 orig(self);
                 try
                 {
@@ -175,7 +292,7 @@ namespace MoistureUpset
                 {
                 }
             };
-            On.RoR2.BossGroup.OnDisable += (orig, self) =>//probably working
+            On.RoR2.BossGroup.OnDisable += (orig, self) =>
             {
                 orig(self);
                 try
@@ -187,7 +304,8 @@ namespace MoistureUpset
                 {
                 }
             };
-            On.RoR2.BossGroup.OnEnable += (orig, self) =>
+
+            On.RoR2.BossGroup.DefeatBossObjectiveTracker.ctor += (orig, self) =>
             {
                 orig(self);
                 try
@@ -248,7 +366,6 @@ namespace MoistureUpset
                             AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
                         }
                     }
-                    Debug.Log("-------------------------------Loaded hitmarkernoise file");
                 }
                 catch (Exception)
                 {
