@@ -76,7 +76,13 @@ namespace MoistureUpset
                         switch (cm.name)
                         {
                             case "EngiWalkerTurretMaster(Clone)":
-                                //stuff here for walking one
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_walkingsentry:assets/sentry1_reference.mesh");
+                                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
+                                {
+                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_walkingsentry:assets/turret1_texture.png");
+                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_walkingsentry:assets/turret1_texture.png"));
+
+                                }
                                 break;
                             case "EngiTurretMaster(Clone)":
                                 cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
@@ -152,26 +158,6 @@ namespace MoistureUpset
             var turretSkinController = skinController.skins[1].minionSkinReplacements[0].minionBodyPrefab.GetComponentInChildren<ModelSkinController>();
 
             var mdl = skinController.gameObject;
-
-            Debug.Log($"++++++++++++++++++++++++++++++++++++{skinController.skins.Length}");
-            Debug.Log($"++++++++++++++++++++++++++++++++++++{skinController.skins[1].minionSkinReplacements.Length}");
-
-            foreach (var item in skinController.skins)
-            {
-                foreach (var item2 in item.minionSkinReplacements)
-                {
-                    Debug.Log($"------------------------------------------------{item2.minionSkin}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.name}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.nameToken}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.rootObject}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.baseSkins.Length}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.gameObjectActivations.Length}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.rendererInfos}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.meshReplacements}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.minionSkinReplacements}");
-                }
-                
-            }
 
 
 
