@@ -61,7 +61,7 @@ namespace MoistureUpset
 
                 for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
                 {
-                    if (targetBody == NetworkUser.readOnlyInstancesList[i].master.GetBody())
+                    if (targetBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() && targetBody.name == "EngiBody(Clone)")
                     {
                         if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
                         {
@@ -242,7 +242,7 @@ namespace MoistureUpset
                         }
                         else if (damageReport.victimMaster.minionOwnership != null)
                         {
-                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.health - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.health > 0)
+                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.combinedHealth - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.combinedHealth > 0)
                             {
                                 try
                                 {

@@ -62,6 +62,8 @@ namespace MoistureUpset
             {
                 AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
             }
+
+            orig(self, survivor);
         }
     }
 }
