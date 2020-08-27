@@ -198,7 +198,7 @@ namespace MoistureUpset
                             var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                             if (characterBody.teamComponent.teamIndex == TeamIndex.Player)
                             {
-                                SoundNetworkAssistant.playSound("HitMarker", info.attacker.transform.position);
+                                NetworkAssistant.playSound("HitMarker", info.attacker.transform.position);
                             }
                         }
                     }

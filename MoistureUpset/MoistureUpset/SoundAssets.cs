@@ -39,7 +39,7 @@ namespace MoistureUpset
                         {
                             if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cm.minionOwnership.ownerMaster.GetBody())
                             {
-                                SoundNetworkAssistant.playSound("EngiBuildsTurret", i);
+                                NetworkAssistant.playSound("EngiBuildsTurret", i);
                             }
                         }
                     }
@@ -79,7 +79,7 @@ namespace MoistureUpset
                             if (index != -1)
                             {
                                 inPortal = true;
-                                SoundNetworkAssistant.playSound("EngiChargingTeleporter", index);
+                                NetworkAssistant.playSound("EngiChargingTeleporter", index);
                             }
                         }
                     }
@@ -97,7 +97,7 @@ namespace MoistureUpset
                                 if (index != -1)
                                 {
                                     portalFinished = true;
-                                    SoundNetworkAssistant.playSound("EngiTeleporterComplete", index);
+                                    NetworkAssistant.playSound("EngiTeleporterComplete", index);
                                 }
                             }
                         }
@@ -148,7 +148,8 @@ namespace MoistureUpset
                 {
                     if (damageReport.victimBody.skinIndex == 2 && damageReport.victimBody.name == "EngiBody(Clone)")
                     {
-                        SoundNetworkAssistant.playSound("EngiDying", damageReport.victimBody.transform.position);
+                        Debug.Log(damageReport.victimBody.transform.position);
+                        NetworkAssistant.playSound("EngiDying", damageReport.victimBody.transform.position);
                     }
                 }
                 else if (damageReport.victimTeamIndex == TeamIndex.Monster)
@@ -159,7 +160,7 @@ namespace MoistureUpset
                         {
                             if (index != -1)
                             {
-                                SoundNetworkAssistant.playSound("EngiKillsSomething", index);
+                                NetworkAssistant.playSound("EngiKillsSomething", index);
                             }
                         }
                         catch (Exception e)
@@ -175,7 +176,7 @@ namespace MoistureUpset
                             {
                                 if (index != -1)
                                 {
-                                    SoundNetworkAssistant.playSound("EngiTurretKillsSomething", index);
+                                    NetworkAssistant.playSound("EngiTurretKillsSomething", index);
                                 }
                             }
                             catch (Exception e)
@@ -208,14 +209,29 @@ namespace MoistureUpset
 
                     for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
                     {
-                        if (damageReport.victimBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() || damageReport.victimMaster.minionOwnership.ownerMaster.GetBody() == NetworkUser.readOnlyInstancesList[i].master.GetBody())
+                        if (damageReport.victimBody == NetworkUser.readOnlyInstancesList[i].master.GetBody())
                         {
                             if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
                             {
                                 try
                                 {
                                     index = i;
-                                    SoundNetworkAssistant.playSound("MinecraftHurt", i);
+                                    NetworkAssistant.playSound("MinecraftHurt", i);
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                        }
+                        else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody() == NetworkUser.readOnlyInstancesList[i].master.GetBody())
+                        {
+                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
+                            {
+                                try
+                                {
+                                    index = i;
+                                    NetworkAssistant.playSound("MinecraftHurt", damageReport.victimBody.transform.position);
                                 }
                                 catch
                                 {
@@ -232,7 +248,7 @@ namespace MoistureUpset
                             {
                                 if (index != -1)
                                 {
-                                    SoundNetworkAssistant.playSound("EngiNeedsMedic", index);
+                                    NetworkAssistant.playSound("EngiNeedsMedic", index);
                                 }
                             }
                             catch (Exception e)
@@ -242,13 +258,13 @@ namespace MoistureUpset
                         }
                         else if (damageReport.victimMaster.minionOwnership != null)
                         {
-                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.combinedHealth - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.combinedHealth > 0)
+                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (( damageReport.victim.combinedHealth + 5 )- (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.combinedHealth > 0)
                             {
                                 try
                                 {
                                     if (index != -1)
                                     {
-                                        SoundNetworkAssistant.playSound("EngiTurretDies", index);
+                                        NetworkAssistant.playSound("EngiTurretDies", index);
                                     }
                                 }
                                 catch (Exception e)

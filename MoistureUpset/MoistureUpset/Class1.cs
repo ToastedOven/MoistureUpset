@@ -28,7 +28,7 @@ namespace MoistureUpset
 
             SurvivorLoaderAPI.LoadSurvivors();
 
-            SoundNetworkAssistant.InitSNA();
+            NetworkAssistant.InitSNA();
 
             //UnReady.Init();
 

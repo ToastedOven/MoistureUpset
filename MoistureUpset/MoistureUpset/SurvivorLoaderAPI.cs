@@ -86,14 +86,14 @@ namespace MoistureUpset
             {
                 if (cm.minionOwnership.ownerMaster != null)
                 {
-                    if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
+                    if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && cm.GetBody().name.Contains("Engi"))
                     {
                         for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
                         {
                             cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
                             cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
-
                         }
+                        Debug.Log($"{cm.name}--------{cm.GetBody().name}");
                         switch (cm.name)
                         {
                             case "EngiWalkerTurretMaster(Clone)":
@@ -103,6 +103,8 @@ namespace MoistureUpset
                                 cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
                                 break;
                         }
+
+                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
                     }
                 }
             }
@@ -152,6 +154,12 @@ namespace MoistureUpset
                 foreach (var item in renderers)
                 {
                     if (item.gameObject.name == "EngiTurretMesh")
+                    {
+                        item.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                        item.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
+                        item.material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
+                    }
+                    else if (item.gameObject.name == "EngiWalkerTurretMesh")
                     {
                         item.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
                         item.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
@@ -216,11 +224,13 @@ namespace MoistureUpset
         {
             var cb = self.outer.GetComponentInChildren<CharacterBody>();
 
+            GameObject tempPrefab = (GameObject)null;
+
             if (cb.skinIndex == 2)
             {
                 if (self.blueprintPrefab != null)
                 {
-                    var tempPrefab = GameObject.Instantiate<GameObject>(self.blueprintPrefab);
+                    tempPrefab = GameObject.Instantiate<GameObject>(self.blueprintPrefab);
                     tempPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
                     self.blueprintPrefab = tempPrefab;
                 }
@@ -232,12 +242,47 @@ namespace MoistureUpset
             }
 
             orig(self);
+
+            if (tempPrefab != null)
+            {
+                GameObject.Destroy(tempPrefab);
+            }
         }
 
         private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
         {
             CharacterMaster cm = orig(self);
 
+            try
+            {
+                if (cm.minionOwnership.ownerMaster != null)
+                {
+                    if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && cm.GetBody().name.Contains("Engi"))
+                    {
+                        for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
+                        {
+                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
+                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
+                        }
+                        Debug.Log($"{cm.name}--------{cm.GetBody().name}");
+                        switch (cm.name)
+                        {
+                            case "EngiWalkerTurretMaster(Clone)":
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                                break;
+                            case "EngiTurretMaster(Clone)":
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                                break;
+                        }
+
+                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
 
 
             return cm;
