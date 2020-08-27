@@ -138,26 +138,6 @@ namespace MoistureUpset
 
             var mdl = skinController.gameObject;
 
-            Debug.Log($"++++++++++++++++++++++++++++++++++++{skinController.skins.Length}");
-            Debug.Log($"++++++++++++++++++++++++++++++++++++{skinController.skins[1].minionSkinReplacements.Length}");
-
-            foreach (var item in skinController.skins)
-            {
-                foreach (var item2 in item.minionSkinReplacements)
-                {
-                    Debug.Log($"------------------------------------------------{item2.minionSkin}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.name}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.nameToken}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.rootObject}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.baseSkins.Length}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.gameObjectActivations.Length}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.rendererInfos}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.meshReplacements}");
-                    Debug.Log($"------------------------------------------------{item2.minionSkin.minionSkinReplacements}");
-                }
-                
-            }
-
 
 
             var skin = new LoadoutAPI.SkinDefInfo
