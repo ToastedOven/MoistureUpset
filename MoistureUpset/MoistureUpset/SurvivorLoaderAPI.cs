@@ -32,18 +32,28 @@ namespace MoistureUpset
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi", MainAssetBundle));
             }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.unifiedturret"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_turret", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.mobile"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_turret2", MainAssetBundle));
+            }
+
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sentry2"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_sentry2", MainAssetBundle));
             }
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.walkingsentry"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_walkingsentry", MainAssetBundle));
-            }
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.outhousebetter"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
@@ -66,32 +76,25 @@ namespace MoistureUpset
         private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
         {
             CharacterMaster cm = orig(self);
-
             try
             {
                 if (cm.minionOwnership.ownerMaster != null)
                 {
                     if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
                     {
+                        for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
+                        {
+                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
+                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
+
+                        }
                         switch (cm.name)
                         {
                             case "EngiWalkerTurretMaster(Clone)":
-                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_walkingsentry:assets/sentry1_reference.mesh");
-                                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
-                                {
-                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_walkingsentry:assets/turret1_texture.png");
-                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_walkingsentry:assets/turret1_texture.png"));
-
-                                }
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_sentry.mesh");
                                 break;
                             case "EngiTurretMaster(Clone)":
-                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
-                                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
-                                {
-                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png");
-                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png"));
-
-                                }
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
                                 break;
                         }
                     }
@@ -101,7 +104,7 @@ namespace MoistureUpset
             {
                 Debug.Log(e);
             }
-            
+
 
             return cm;
         }
@@ -192,8 +195,8 @@ namespace MoistureUpset
                 },
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0]
             };
-            SkinDef test = LoadoutAPI.CreateNewSkinDef(skin);
             On.RoR2.SkinDef.Awake += SkinDef_Awake;
+            SkinDef test = LoadoutAPI.CreateNewSkinDef(skin);
             SkinDef minionReplacement = ScriptableObject.CreateInstance<RoR2.SkinDef>();
             SkinDef.MeshReplacement[] mr = new SkinDef.MeshReplacement[]
             {
@@ -251,7 +254,7 @@ namespace MoistureUpset
                 }
             };
 
-            
+
 
             On.RoR2.SkinDef.Awake -= SkinDef_Awake;
 
