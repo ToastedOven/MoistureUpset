@@ -47,7 +47,6 @@ namespace MoistureUpset
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
 
             On.RoR2.MasterSummon.Perform += MasterSummon_Perform;
-            //
         }
 
         private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
@@ -60,18 +59,14 @@ namespace MoistureUpset
                 {
                     if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
                     {
-                        foreach (var item in cm.GetBody().GetComponentsInChildren<Component>())
-                        {
-                            Debug.Log(item);
-                        }
-
+                        Debug.Log(cm.GetBody().name);
                         cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
                         for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
                         {
-                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i] = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat");
-                        }
+                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png");
+                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png"));
 
-                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat");
+                        }
                     }
                 }
             }

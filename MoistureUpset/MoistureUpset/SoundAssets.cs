@@ -242,12 +242,10 @@ namespace MoistureUpset
                         }
                         else if (damageReport.victimMaster.minionOwnership != null)
                         {
-                            Debug.Log("bruh");
                             if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (damageReport.victim.health - (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.health > 0)
                             {
                                 try
                                 {
-                                    Debug.Log($"brh {index}");
                                     if (index != -1)
                                     {
                                         SoundNetworkAssistant.playSound("EngiTurretDies", index);
