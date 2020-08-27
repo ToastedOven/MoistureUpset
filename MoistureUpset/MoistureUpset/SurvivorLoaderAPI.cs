@@ -76,7 +76,13 @@ namespace MoistureUpset
                         switch (cm.name)
                         {
                             case "EngiWalkerTurretMaster(Clone)":
-                                //stuff here for walking one
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_walkingsentry:assets/sentry1_reference.mesh");
+                                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
+                                {
+                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_walkingsentry:assets/turret1_texture.png");
+                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_walkingsentry:assets/turret1_texture.png"));
+
+                                }
                                 break;
                             case "EngiTurretMaster(Clone)":
                                 cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
