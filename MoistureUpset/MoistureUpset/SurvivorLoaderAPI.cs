@@ -53,6 +53,14 @@ namespace MoistureUpset
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
 
             On.RoR2.MasterSummon.Perform += MasterSummon_Perform;
+
+            On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += PlaceTurret_OnEnter;
+        }
+
+        private static void PlaceTurret_OnEnter(On.EntityStates.Engi.EngiWeapon.PlaceTurret.orig_OnEnter orig, EntityStates.Engi.EngiWeapon.PlaceTurret self)
+        {
+            orig(self);
+
         }
 
         private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
@@ -65,13 +73,20 @@ namespace MoistureUpset
                 {
                     if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
                     {
-                        Debug.Log(cm.GetBody().name);
-                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
-                        for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
+                        switch (cm.name)
                         {
-                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png");
-                            cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png"));
+                            case "EngiWalkerTurretMaster(Clone)":
+                                //stuff here for walking one
+                                break;
+                            case "EngiTurretMaster(Clone)":
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
+                                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
+                                {
+                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png");
+                                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_sentry2:assets/turret2_texture.png"));
 
+                                }
+                                break;
                         }
                     }
                 }
