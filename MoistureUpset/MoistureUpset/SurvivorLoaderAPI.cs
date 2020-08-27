@@ -38,6 +38,12 @@ namespace MoistureUpset
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_sentry2", MainAssetBundle));
             }
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.walkingsentry"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_walkingsentry", MainAssetBundle));
+            }
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.outhousebetter"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
