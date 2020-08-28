@@ -13,12 +13,12 @@ using System.Collections;
 
 namespace MoistureUpset
 {
-    public static class SoundNetworkAssistant
+    public static class NetworkAssistant
     {
         public static GameObject CentralNetworkObject;
         public static GameObject _centralNetworkObjectSpawned;
 
-        private static NetworkedSoundComponent _nsc;
+        private static NetworkedModComponent _nsc;
 
         public static void InitSNA()
         {
@@ -30,7 +30,7 @@ namespace MoistureUpset
 
             GameObject.Destroy(tempObject);
 
-            _nsc = CentralNetworkObject.AddComponent<NetworkedSoundComponent>();
+            _nsc = CentralNetworkObject.AddComponent<NetworkedModComponent>();
         }
 
         public static void playSound(string soundIDString, int index)
@@ -45,7 +45,7 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedSoundComponent.Invoke(user, soundIDString, index);
+                    NetworkedModComponent.Invoke(user, soundIDString, index);
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedSoundComponent.Invoke(user, soundIDString, identity);
+                    NetworkedModComponent.Invoke(user, soundIDString, identity);
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedSoundComponent.Invoke(user, soundIDString, location);
+                    NetworkedModComponent.Invoke(user, soundIDString, location);
                 }
             }
         }
@@ -96,16 +96,16 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedSoundComponent.Invoke(user, location);
+                    NetworkedModComponent.Invoke(user, location);
                 }
             }
         }
     }
 }
 
-internal class NetworkedSoundComponent : NetworkBehaviour
+internal class NetworkedModComponent : NetworkBehaviour
 {
-    private static NetworkedSoundComponent _instance;
+    private static NetworkedModComponent _instance;
 
     internal static GameObject soundPlayer;
 

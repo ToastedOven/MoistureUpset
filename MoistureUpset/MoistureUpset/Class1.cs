@@ -28,7 +28,7 @@ namespace MoistureUpset
 
             SurvivorLoaderAPI.LoadSurvivors();
 
-            SoundNetworkAssistant.InitSNA();
+            NetworkAssistant.InitSNA();
 
             //UnReady.Init();
 
@@ -62,6 +62,8 @@ namespace MoistureUpset
             {
                 AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
             }
+
+            orig(self, survivor);
         }
     }
 }
