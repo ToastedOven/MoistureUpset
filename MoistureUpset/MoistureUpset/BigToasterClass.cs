@@ -33,17 +33,6 @@ namespace MoistureUpset
                 orig(self);
                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
             };
-            On.RoR2.UI.MainMenu.MainMenuController.Start += (orig, self) =>
-            {
-                orig(self);
-                try
-                {
-
-                }
-                catch (Exception)
-                {
-                }
-            };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
                 orig(oldS, newS);
@@ -71,9 +60,8 @@ namespace MoistureUpset
                             break;
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    //Debug.Log($"-------------exceptoimn: {e}");
                 }
                 //logbook
                 //title
@@ -90,7 +78,23 @@ namespace MoistureUpset
                     {
                         self.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                     }
-                    //Debug.Log($"--------------{song}");
+                    //muFULLSong07
+                    //muFULLSong18
+                    //muSong04
+
+                    float num;
+                    int type = 1;
+                    AkSoundEngine.GetRTPCValue("CustomRunMusic", GameObject.FindObjectOfType<GameObject>(), 0, out num, ref type);
+                    if (num == 1)
+                    {
+                        MusicAPI.ReplaceSong(ref self, "mufullsong07", "PlayLevelMusic");
+                        MusicAPI.ReplaceSong(ref self, "mufullsong18", "PlayLevelMusic");
+                    }
+                    if (MusicAPI.ReplaceSong(ref self, "muSong04", "PlayShopMusic"))
+                    {
+                        AkSoundEngine.SetRTPCValue("BossDead", 0f);
+                    }
+                    Debug.Log($"--------------{song}");
                 }
                 catch (Exception)
                 {
@@ -152,7 +156,32 @@ namespace MoistureUpset
                     }
                     else if (text[0] == "HELP")
                     {
-                        Chat.AddMessage("Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\nEX: hitmarker 69\n\nType hitmarkervolume to check the volume of the hitmarker");
+                        Chat.AddMessage("-Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\n-Type 'hitmarkervolume' to check the volume of the hitmarker\n-Type 'togglerunmusic' to toggle custom music during normal gameplay.");
+                        sendmessage = false;
+                    }
+                    else if (text[0] == "TOGGLERUNMUSIC")
+                    {
+                        if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
+                        {
+                            Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
+                        }
+                        if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                        {
+                            string line;
+                            using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                            {
+                                line = r.ReadToEnd();
+                            }
+                            int readnum = Int32.Parse(line);
+                            readnum = (readnum == 0 ? 1 : 0);
+                            Chat.AddMessage($"CustomRunMusic: " + (readnum == 0 ? "false, changes will take place starting next level" : "true"));
+                            AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
+                            File.WriteAllText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis", string.Empty);
+                            using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                            {
+                                r.Write(readnum);
+                            }
+                        }
                         sendmessage = false;
                     }
                     if (num != -1)
@@ -200,7 +229,7 @@ namespace MoistureUpset
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -231,7 +260,7 @@ namespace MoistureUpset
                     flag = t.holdoutZoneController.IsBodyInChargingRadius(tB);
                     AkSoundEngine.SetRTPCValue("isInPortalRange", (flag ? 1f : 0f));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -245,7 +274,7 @@ namespace MoistureUpset
                 {
                     AkSoundEngine.SetRTPCValue("BossDead", 0f);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -258,7 +287,7 @@ namespace MoistureUpset
                 {
                     AkSoundEngine.SetRTPCValue("BossDead", 0f);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -271,7 +300,7 @@ namespace MoistureUpset
                 {
                     AkSoundEngine.SetRTPCValue("BossDead", 0f);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -312,10 +341,12 @@ namespace MoistureUpset
                 {
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
+                    var con = GameObject.FindObjectOfType<MusicController>();
+                    MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
                 }
                 catch (Exception e)
                 {
-
+                    Debug.Log($"-------------------{e}");
                 }
             };
         }
@@ -366,34 +397,29 @@ namespace MoistureUpset
                             AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
                         }
                     }
+                    if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                    {
+                        string line;
+                        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                        {
+                            line = r.ReadToEnd();
+                        }
+                        int readnum = Int32.Parse(line);
+                        AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
+                    }
+                    else
+                    {
+                        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                        {
+                            r.Write(0);
+                            AkSoundEngine.SetRTPCValue("CustomRunMusic", 0);
+                        }
+                    }
                 }
                 catch (Exception)
                 {
                 }
-                //RoR2.WwiseUtils.CommonWwiseIds.gameplay = AkSoundEngine.GetIDFromString("ooflongestloop");
-                //RoR2.WwiseUtils.CommonWwiseIds.logbook = AkSoundEngine.GetIDFromString("ooflongestloop");
-                //RoR2.WwiseUtils.CommonWwiseIds.main = AkSoundEngine.GetIDFromString("ooflongestloop");
-                //RoR2.WwiseUtils.CommonWwiseIds.menu = AkSoundEngine.GetIDFromString("ooflongestloop");
-                //RoR2.WwiseUtils.CommonWwiseIds.none = AkSoundEngine.GetIDFromString("ooflongestloop");
-                //RoR2.WwiseUtils.CommonWwiseIds.secretLevel = AkSoundEngine.GetIDFromString("ooflongestloop");
             };
-            //On.RoR2.WwiseUtils.SoundbankLoader.Start += (orig, self) =>
-            //{
-            //    //orig(self);
-            //    for (int i = 0; i < self.soundbankStrings.Length; i++)
-            //    {
-            //        if (self.soundbankStrings[i] == "Music")
-            //        {
-            //            AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
-            //            //AkBankManager.LoadBank("MusicReplacement", self.decodeBank, self.saveDecodedBank);
-            //            //System.Console.WriteLine($"Loading MusicReplacement before {self.soundbankStrings[i]}");
-            //        }
-            //        else
-            //        {
-            //            AkBankManager.LoadBank(self.soundbankStrings[i], self.decodeBank, self.saveDecodedBank);
-            //        }
-            //    }
-            //};
         }
     }
 }
