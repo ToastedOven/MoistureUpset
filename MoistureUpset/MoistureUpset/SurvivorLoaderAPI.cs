@@ -268,7 +268,7 @@ namespace MoistureUpset
                         switch (cm.name)
                         {
                             case "EngiWalkerTurretMaster(Clone)":
-                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
                                 break;
                             case "EngiTurretMaster(Clone)":
                                 cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
