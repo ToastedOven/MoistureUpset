@@ -208,6 +208,10 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
+            On.RoR2.GenericSkill.DeductStock += (orig, self, amount) =>
+            {
+                
+            };
         }
         public static void OnHit()
         {
