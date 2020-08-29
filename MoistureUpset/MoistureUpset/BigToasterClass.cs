@@ -26,14 +26,6 @@ namespace MoistureUpset
             ModifyChat();
             PreGame();
         }
-        public static void UIdebug()
-        {
-            UnityEngine.UI.Image[] objects = GameObject.FindObjectsOfType<UnityEngine.UI.Image>();
-            foreach (var item in objects)
-            {
-                Debug.Log($"---------------------------{item}");
-            }
-        }
         public static void PreGame()
         {
             On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
@@ -126,21 +118,9 @@ namespace MoistureUpset
             On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) =>
             {
                 orig(self);
-                try
-                {
-                    GameObject logo = GameObject.Find("LogoImage");
-                    if (logo.GetComponent<UnityEngine.UI.Image>().sprite.bounds.extents.x > 11)
-                    {
-                        byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.MoistureUpsetFinal.png");
-                        Component[] components = logo.GetComponents<Component>();
-                        Texture2D tex = new Texture2D(512, 512);
-                        tex.LoadImage(bytes);
-                        logo.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(.5f, .5f), 100); ;
-                    }
-                }
-                catch (Exception)
-                {
-                }
+                UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png");
+                UImods.ReplaceUIObject("MousePointer", "MoistureUpset.Resources.robloxhover.png");
+                UImods.ReplaceUIObject("MouseHover", "MoistureUpset.Resources.roblox.png");
             };
             On.RoR2.UI.MainMenu.MainMenuController.SetDesiredMenuScreen += (orig, self, menu) =>
             {
@@ -155,22 +135,22 @@ namespace MoistureUpset
                     {
                         AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
                     }
-                        //UIdebug();
                 }
                 catch (Exception)
                 {
                 }
             };
-            On.RoR2.TeleporterInteraction.AttemptToSpawnAllEligiblePortals += (orig, self) =>
-            {
-                self.shouldAttemptToSpawnShopPortal = true;
-                orig(self);
-            };
+            //On.RoR2.TeleporterInteraction.AttemptToSpawnAllEligiblePortals += (orig, self) =>
+            //{
+            //    self.shouldAttemptToSpawnShopPortal = true;
+            //    orig(self);
+            //};
         }
         public static void ModifyChat()
         {
             On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
             {
+                DebugClass.UIdebug();
                 bool sendmessage = true;
                 try
                 {
