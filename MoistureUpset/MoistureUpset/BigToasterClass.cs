@@ -26,6 +26,14 @@ namespace MoistureUpset
             ModifyChat();
             PreGame();
         }
+        public static void UIdebug()
+        {
+            UnityEngine.UI.Image[] objects = GameObject.FindObjectsOfType<UnityEngine.UI.Image>();
+            foreach (var item in objects)
+            {
+                Debug.Log($"---------------------------{item}");
+            }
+        }
         public static void PreGame()
         {
             On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
@@ -97,7 +105,38 @@ namespace MoistureUpset
                     {
                         AkSoundEngine.SetRTPCValue("BossDead", 0f);
                     }
-                    Debug.Log($"--------------{song}");
+                    //Debug.Log($"--------------{song}");
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.EntityStates.SpawnTeleporterState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    var c = GameObject.FindObjectOfType<MusicController>();
+                    MusicAPI.StopCustomSong(ref c, "StopShopMusic");
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    GameObject logo = GameObject.Find("LogoImage");
+                    if (logo.GetComponent<UnityEngine.UI.Image>().sprite.bounds.extents.x > 11)
+                    {
+                        byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.MoistureUpsetFinal.png");
+                        Component[] components = logo.GetComponents<Component>();
+                        Texture2D tex = new Texture2D(512, 512);
+                        tex.LoadImage(bytes);
+                        logo.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(.5f, .5f), 100); ;
+                    }
                 }
                 catch (Exception)
                 {
@@ -116,10 +155,16 @@ namespace MoistureUpset
                     {
                         AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
                     }
+                        //UIdebug();
                 }
                 catch (Exception)
                 {
                 }
+            };
+            On.RoR2.TeleporterInteraction.AttemptToSpawnAllEligiblePortals += (orig, self) =>
+            {
+                self.shouldAttemptToSpawnShopPortal = true;
+                orig(self);
             };
         }
         public static void ModifyChat()
@@ -211,35 +256,21 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            On.RoR2.GenericSkill.DeductStock += (orig, self, amount) =>
-            {
-                
-            };
         }
         public static void OnHit()
         {
-            On.RoR2.HealthComponent.TakeDamage += (orig, self, info) =>
+            On.RoR2.UI.CrosshairManager.RefreshHitmarker += (orig, self, crit) =>
             {
-                orig(self, info);
-                try
+                if (!crit)
                 {
-                    if (info.attacker)
-                    {
-                        CharacterBody characterBody = info.attacker.GetComponent<CharacterBody>();
-                        if (characterBody)
-                        {
-                            var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                            if (characterBody.teamComponent.teamIndex == TeamIndex.Player)
-                            {
-                                NetworkAssistant.playSound("HitMarker", info.attacker.transform.position);
-                            }
-                        }
-                    }
+                    AkSoundEngine.PostEvent("HitMarker", RoR2Application.instance.gameObject);
                 }
-                catch (Exception)
+                else
                 {
-
+                    crit = false;
+                    AkSoundEngine.PostEvent("CritMarker", RoR2Application.instance.gameObject);
                 }
+                orig(self, crit);
             };
         }
         public static void Death()
@@ -351,9 +382,8 @@ namespace MoistureUpset
                     var con = GameObject.FindObjectOfType<MusicController>();
                     MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.Log($"-------------------{e}");
                 }
             };
         }
