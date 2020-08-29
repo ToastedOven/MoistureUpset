@@ -24,6 +24,7 @@ namespace MoistureUpset
 
         private static void PopulateAssets()
         {
+
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
@@ -97,14 +98,14 @@ namespace MoistureUpset
                         switch (cm.name)
                         {
                             case "EngiWalkerTurretMaster(Clone)":
-                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                                cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
                                 break;
                             case "EngiTurretMaster(Clone)":
                                 cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
                                 break;
                         }
 
-                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                        //cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
                     }
                 }
             }
