@@ -15,6 +15,45 @@ namespace MoistureUpset
 {
     public static class DebugClass
     {
+        public static void GetHeirarchy(string name)
+        {
+            GameObject g = GameObject.Find(name);
+            try
+            {
+                while (g.transform.parent.gameObject)
+                {
+                    g = g.transform.parent.gameObject;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            Debug.Log("nutting");
+            Heirarchy(g, "");
+        }
+        public static void Heirarchy(GameObject g, string depth)
+        {
+            depth += "--"; 
+            Debug.Log($"{depth}{g.name}");
+            foreach (Transform item in g.transform)
+            {
+                Heirarchy(item.gameObject, depth);
+            }
+        }
+        public static bool GetParent(string name)
+        {
+            GameObject g = GameObject.Find(name);
+            try
+            {
+                Debug.Log($"-------------{g.transform.parent.gameObject}");
+                return true;
+            }
+            catch (Exception)
+            {
+                Debug.Log($"-------------no parent");
+                return false;
+            }
+        }
         public static void UIdebug()
         {
             UnityEngine.UI.Image[] objects = GameObject.FindObjectsOfType<UnityEngine.UI.Image>();
