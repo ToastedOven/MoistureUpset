@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 namespace MoistureUpset
 {
@@ -25,6 +26,10 @@ namespace MoistureUpset
             OnHit();
             ModifyChat();
             PreGame();
+            INeedToSortThese();
+        }
+        public static void INeedToSortThese()
+        {
         }
         public static void PreGame()
         {
@@ -63,6 +68,7 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
+                AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                 //logbook
                 //title
                 //lobby
@@ -77,22 +83,16 @@ namespace MoistureUpset
                 try
                 {
                     string song = self.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
+
                     if (song == "muMenu" || song == "muLogbook")
                     {
                         self.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                     }
+
                     //muFULLSong07
                     //muFULLSong18
                     //muSong04
 
-                    float num;
-                    int type = 1;
-                    AkSoundEngine.GetRTPCValue("CustomRunMusic", GameObject.FindObjectOfType<GameObject>(), 0, out num, ref type);
-                    if (num == 1)
-                    {
-                        MusicAPI.ReplaceSong(ref self, "mufullsong07", "PlayLevelMusic");
-                        MusicAPI.ReplaceSong(ref self, "mufullsong18", "PlayLevelMusic");
-                    }
                     if (MusicAPI.ReplaceSong(ref self, "muSong04", "PlayShopMusic"))
                     {
                         AkSoundEngine.SetRTPCValue("BossDead", 0f);
@@ -184,34 +184,34 @@ namespace MoistureUpset
                     }
                     else if (text[0] == "HELP")
                     {
-                        Chat.AddMessage("-Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\n-Type 'hitmarkervolume' to check the volume of the hitmarker\n-Type 'togglerunmusic' to toggle custom music during normal gameplay.");
+                        Chat.AddMessage("-Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\n-Type 'hitmarkervolume' to check the volume of the hitmarker");
                         sendmessage = false;
                     }
-                    else if (text[0] == "TOGGLERUNMUSIC")
-                    {
-                        if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
-                        {
-                            Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
-                        }
-                        if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                        {
-                            string line;
-                            using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                            {
-                                line = r.ReadToEnd();
-                            }
-                            int readnum = Int32.Parse(line);
-                            readnum = (readnum == 0 ? 1 : 0);
-                            Chat.AddMessage($"CustomRunMusic: " + (readnum == 0 ? "false, changes will take place starting next level" : "true"));
-                            AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
-                            File.WriteAllText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis", string.Empty);
-                            using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                            {
-                                r.Write(readnum);
-                            }
-                        }
-                        sendmessage = false;
-                    }
+                    //else if (text[0] == "TOGGLERUNMUSIC")
+                    //{
+                    //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
+                    //    {
+                    //        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
+                    //    }
+                    //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                    //    {
+                    //        string line;
+                    //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                    //        {
+                    //            line = r.ReadToEnd();
+                    //        }
+                    //        int readnum = Int32.Parse(line);
+                    //        readnum = (readnum == 0 ? 1 : 0);
+                    //        Chat.AddMessage($"CustomRunMusic: " + (readnum == 0 ? "false, changes will take place starting next level" : "true"));
+                    //        AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
+                    //        File.WriteAllText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis", string.Empty);
+                    //        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                    //        {
+                    //            r.Write(readnum);
+                    //        }
+                    //    }
+                    //    sendmessage = false;
+                    //}
                     if (num != -1)
                     {
                         if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
@@ -329,23 +329,28 @@ namespace MoistureUpset
                 orig(self);
                 try
                 {
+                    var c = GameObject.FindObjectOfType<MusicController>();
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    AkSoundEngine.PostEvent("EndBossMusic", mainBody.gameObject);
-                    AkSoundEngine.PostEvent("StopFanFare", mainBody.gameObject);
+                    AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
+                    AkSoundEngine.PostEvent("StopFanFare", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    AkSoundEngine.PostEvent("PlayFanFare", mainBody.gameObject);
+                    AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
                 }
                 catch (Exception)
                 {
                 }
             };
-            On.RoR2.BossGroup.OnDisable += (orig, self) =>
+            On.RoR2.BossGroup.OnMemberLost += (orig, self, master) =>
             {
-                orig(self);
+                orig(self, master);
                 try
                 {
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    Util.PlaySound("BossDied", mainBody.gameObject);
+                    var c = GameObject.FindObjectOfType<MusicController>();
+                    if (self.combatSquad.readOnlyMembersList.Count == 0)
+                    {
+                        Util.PlaySound("BossDied", c.gameObject);
+                    }
                 }
                 catch (Exception)
                 {
@@ -357,8 +362,11 @@ namespace MoistureUpset
                 orig(self);
                 try
                 {
+                    var c = GameObject.FindObjectOfType<MusicController>();
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
+                    AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
+                    AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
+                    AkSoundEngine.PostEvent("PlayBossMusic", c.gameObject);
                     var con = GameObject.FindObjectOfType<MusicController>();
                     MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
                 }
