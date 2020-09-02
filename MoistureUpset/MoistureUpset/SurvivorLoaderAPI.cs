@@ -24,6 +24,19 @@ namespace MoistureUpset
 
         private static void PopulateAssets()
         {
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.noob"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_noob", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.mike"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_mike", MainAssetBundle));
+            }
 
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
             {
@@ -295,21 +308,32 @@ namespace MoistureUpset
 
             AddStarPlatinumSkinToLoader();
             EngineerStuff("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
+            //EngineerStuff("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_mike:assets/engimesh.mesh", RoR2.SurvivorIndex.Engi);
             EditDropPod();
         }
-
         private static void EditDropPod()
         {
-            var fab = Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod");
-            var renderers = fab.GetComponentsInChildren<Renderer>();
-            var meshes = fab.GetComponentsInChildren<MeshFilter>();
-            renderers[0].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/outhouse.mesh");
-            renderers[1].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/door.mesh");
+            On.RoR2.UI.LogBook.LogBookController.GetMonsterStatus += (orig, profile, entry) =>
+            {
+                return RoR2.UI.LogBook.EntryStatus.Available;
+            };
+            //var fab = Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod");
+            //var renderers = fab.GetComponentsInChildren<Renderer>();
+            //var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            //renderers[0].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
+            //meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/outhouse.mesh");
+            //renderers[1].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
+            //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/door.mesh");
 
 
 
+            //var fab2 = Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
+            //var components2 = fab2.GetComponentsInChildren<Component>();
+            //Debug.Log($"-----engi-------------");
+            //foreach (var item in components2)
+            //{
+            //    Debug.Log($"-----component-----{item}");
+            //}
 
             //fab = Resources.Load<GameObject>("prefabs/characterbodies/EngiTurretBody");
             //renderers = fab.GetComponentsInChildren<Renderer>();
