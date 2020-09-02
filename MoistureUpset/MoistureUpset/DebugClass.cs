@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System.Text;
 
 namespace MoistureUpset
 {
@@ -91,6 +92,37 @@ namespace MoistureUpset
                 Debug.Log(item);
             }
             Debug.Log($"------------------------------------------");
+        }
+        public static void ListComponents(GameObject g)
+        {
+            if (!g)
+            {
+                Debug.Log($"----------------components----------------");
+                Debug.Log($"GameObject not found");
+                Debug.Log($"------------------------------------------");
+                return;
+            }
+            Debug.Log($"----------------components----------------");
+            foreach (var item in g.GetComponents<Component>())
+            {
+                Debug.Log(item);
+            }
+            Debug.Log($"------------------------------------------");
+        }
+        public static void DebugBones(string resource)
+        {
+            var fab = Resources.Load<GameObject>(resource);
+            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{resource}:\n");
+            sb.Append("[");
+            foreach (var bone in meshes[0].bones)
+            {
+                sb.Append($"'{bone.name}', ");
+            }
+            sb.Remove(sb.Length - 2, 2);
+            sb.Append("]");
+            Debug.Log(sb.ToString());
         }
     }
 }

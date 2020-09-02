@@ -30,6 +30,7 @@ namespace MoistureUpset
 
             NetworkAssistant.InitSNA();
 
+            EnemyReplacements.RunAll();
             //UnReady.Init();
 
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
