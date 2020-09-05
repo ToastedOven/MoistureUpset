@@ -76,6 +76,25 @@ namespace MoistureUpset
                 objects[i].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(.5f, .5f), 100);
             }
         }
+        public static void TextureDebugReplace()
+        {
+            Texture t = Resources.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
+            SkinnedMeshRenderer[] objects = GameObject.FindObjectsOfType<SkinnedMeshRenderer>();
+            for (int i = 0; i < objects.Length; i++)
+            {
+                Debug.Log($"------{objects[i].name}");
+                if (objects[i].name == "golem")
+                {
+                    foreach (var item in objects[i].sharedMaterials)
+                    {
+                        item.mainTexture = t;
+                        item.SetTexture("_EmTex", t);
+                    }
+                }
+                //objects[i] = t;
+            }
+            Debug.Log($"------end of list------");
+        }
         public static void ListComponents(string name)
         {
             GameObject g = GameObject.Find(name);
@@ -114,7 +133,33 @@ namespace MoistureUpset
             var fab = Resources.Load<GameObject>(resource);
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             StringBuilder sb = new StringBuilder();
+            sb.Append($"rendererererer: {meshes[0]}\n");
+            sb.Append($"bone count: {meshes[0].bones.Length}\n");
+            sb.Append($"mesh count = {meshes.Length}\n");
             sb.Append($"{resource}:\n");
+            if (meshes[0].bones.Length == 0)
+            {
+                sb.Append("No bones");
+            }
+            else
+            {
+                sb.Append("[");
+                foreach (var bone in meshes[0].bones)
+                {
+                    sb.Append($"'{bone.name}', ");
+                }
+                sb.Remove(sb.Length - 2, 2);
+                sb.Append("]");
+            }
+            sb.Append("\n\n");
+            Debug.Log(sb.ToString());
+        }
+        public static void DebugBones(GameObject fab)
+        {
+            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"mesh count = {meshes.Length}\n");
+            sb.Append($"{fab}:\n");
             sb.Append("[");
             foreach (var bone in meshes[0].bones)
             {
@@ -123,6 +168,24 @@ namespace MoistureUpset
             sb.Remove(sb.Length - 2, 2);
             sb.Append("]");
             Debug.Log(sb.ToString());
+        }
+        public static void GetAllGameObjects()
+        {
+            GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+            foreach (var item in objects)
+            {
+                //Debug.Log($"-------sex----{item.name}");
+                if (item.name == "Mesh")
+                {
+                    try
+                    {
+                        DebugBones(item);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
         }
     }
 }
