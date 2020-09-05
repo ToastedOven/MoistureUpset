@@ -150,7 +150,7 @@ namespace MoistureUpset
         {
             On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
             {
-                DebugClass.UIdebug();
+                //DebugClass.GetAllGameObjects();
                 bool sendmessage = true;
                 try
                 {

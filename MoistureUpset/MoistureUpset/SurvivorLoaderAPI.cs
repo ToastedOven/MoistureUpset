@@ -24,6 +24,55 @@ namespace MoistureUpset
 
         private static void PopulateAssets()
         {
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.chips"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_chips", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ghast"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_ghast", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.dogplane"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_wisp", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.na"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_NA", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.heavy"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_heavy", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.obamaprism"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_obamaprism", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.thomas"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_thomas", MainAssetBundle));
+            }
+
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.noob"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
