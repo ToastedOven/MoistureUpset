@@ -24,6 +24,20 @@ namespace MoistureUpset
 
         private static void PopulateAssets()
         {
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.bowser"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_bowser", MainAssetBundle));
+            }
+
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.fortnite"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_fortnite", MainAssetBundle));
+            }
+
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.chips"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);

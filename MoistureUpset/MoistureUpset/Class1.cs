@@ -6,9 +6,11 @@ using R2API.MiscHelpers;
 using System.Reflection;
 using static R2API.SoundAPI;
 using UnityEngine;
+using UnityEditor;
 using System;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 namespace MoistureUpset
 {
@@ -36,6 +38,34 @@ namespace MoistureUpset
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
             On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
+
+            //ligmaballs();
+        }
+
+        public static void ligmaballs()
+        {
+            var fortniteDance = Resources.Load<AnimationClip>("@MoistureUpset_fortnite:assets/dancemoves.anim");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody");
+
+            //foreach (var item in fab.GetComponentsInChildren<Component>())
+            //{
+            //    Debug.Log($"--------------------------------------------------{item}");
+            //}
+
+            var anim = fab.GetComponentInChildren<Animator>();
+
+            Debug.Log($"++++++++++++++++++++++++++++++++++++++++{anim.}");
+
+            //AnimatorController anim = new AnimatorController
+            AnimatorOverrideController aoc = new AnimatorOverrideController(anim.runtimeAnimatorController);
+
+            var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+            foreach (var a in aoc.animationClips)
+            {
+                anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(a, a));
+            }
+            aoc.ApplyOverrides(anims);
+            anim.runtimeAnimatorController = aoc;
         }
 
         public void Start()

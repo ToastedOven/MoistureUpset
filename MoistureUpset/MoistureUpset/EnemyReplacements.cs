@@ -57,7 +57,8 @@ namespace MoistureUpset
             try
             {
                 Lemurian();
-                LemurianBruiser();
+                ElderLemurian();
+                //LemurianBruiser();
                 DEBUG();
                 Golem();
                 Bison();
@@ -86,6 +87,15 @@ namespace MoistureUpset
         public static void Beetle()
         {
             //ReplaceModel("prefabs/characterbodies/BeetleBody", "@MoistureUpset_chips:assets/chip.mesh", "@MoistureUpset_chips:assets/chip.png");
+        }
+        public static void ElderLemurian()
+        {
+            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/LemurianBruiserBody");
+            //foreach (var item in fab.GetComponentsInChildren<Component>())
+            //{
+            //    Debug.Log($"--------------->{item}");
+            //}
+            ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_bowser:assets/bowser.mesh", "@MoistureUpset_bowser:assets/bowsertex.png");
         }
         public static void Templar()
         {
