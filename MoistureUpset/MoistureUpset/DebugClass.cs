@@ -187,5 +187,12 @@ namespace MoistureUpset
                 }
             }
         }
+        public static void GetAllGameObjects(GameObject g)
+        {
+            foreach (var item in g.GetComponents<GameObject>())
+            {
+                Debug.Log($"-------sex----{item}");
+            }
+        }
     }
 }

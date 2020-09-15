@@ -33,5 +33,21 @@ namespace MoistureUpset
             {
             }
         }
+        public static void ReplaceUIBetter(string path, string png)
+        {
+            try
+            {
+                var fab = Resources.Load<Sprite>(path);
+                byte[] bytes = ByteReader.readbytes(png);
+                fab.texture.LoadImage(bytes);
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Couldn't replace sprite: {e}");
+            }
+        }
     }
+    //Choice (Difficulty.Easy)
+    //Choice (Difficulty.Normal)
+    //Choice (Difficulty.Hard)
 }

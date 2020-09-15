@@ -83,6 +83,17 @@ namespace MoistureUpset
             {
             }
         }
+        public static void GetCurrentSong(ref MusicController controller)
+        {
+            try
+            {
+                string song = controller.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
+                Debug.Log($"--currently playing song------{song}");
+            }
+            catch (Exception)
+            {
+            }
+        }
         public static void StopCustomSong(ref MusicController controller, string stopevent)
         {
             try
