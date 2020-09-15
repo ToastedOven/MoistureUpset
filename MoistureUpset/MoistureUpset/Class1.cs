@@ -25,11 +25,11 @@ namespace MoistureUpset
         {
             Assets.PopulateAssets();
 
+            SurvivorLoaderAPI.LoadSurvivors();
+
             BigToasterClass.RunAll();
 
             SoundAssets.RegisterSoundEvents();
-
-            SurvivorLoaderAPI.LoadSurvivors();
 
             NetworkAssistant.InitSNA();
 

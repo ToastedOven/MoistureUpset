@@ -23,7 +23,9 @@ namespace MoistureUpset
                 if (logo)
                 {
                     byte[] bytes = ByteReader.readbytes(path);
-                    Texture2D tex = new Texture2D(512, 512);
+                    Texture2D tex = new Texture2D(256, 256);
+                    tex.filterMode = FilterMode.Trilinear;
+                    tex = logo.GetComponent<UnityEngine.UI.Image>().sprite.texture;
                     tex.LoadImage(bytes);
                     logo.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(.5f, .5f), 100);
                     logo.name = $"{logo.name}REPLACED";
