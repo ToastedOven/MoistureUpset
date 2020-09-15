@@ -11,6 +11,7 @@ using System;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using RoR2.UI;
 
 namespace MoistureUpset
 {
@@ -33,7 +34,10 @@ namespace MoistureUpset
             NetworkAssistant.InitSNA();
 
             EnemyReplacements.RunAll();
-            //UnReady.Init();
+
+            UnReady.Init();
+
+            OptionsScreen.Init();
 
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
@@ -95,6 +99,16 @@ namespace MoistureUpset
             }
 
             orig(self, survivor);
+
+            HGTextMeshProUGUI[] objects = GameObject.FindObjectsOfType<HGTextMeshProUGUI>();
+
+            foreach (var item in objects)
+            {
+                if (item.text == "Locked In")
+                {
+                    Debug.Log(item.transform.parent.name);
+                }
+            }
         }
     }
 }
