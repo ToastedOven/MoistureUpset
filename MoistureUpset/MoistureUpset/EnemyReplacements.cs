@@ -32,7 +32,7 @@ namespace MoistureUpset
                 //{
                 //    foreach (var item in meshes[0].sharedMaterials[i].GetTexturePropertyNames())
                 //    {
-                //        Debug.Log($"------------------------{item}");
+                //        Debug.Log($"---------{item}---------------{meshes[0].sharedMaterials[i].GetTexture(item)}");
                 //    }
                 //    Debug.Log($"------------------------{meshes[0].sharedMaterials[i]}");
                 //}
@@ -52,13 +52,18 @@ namespace MoistureUpset
                 }
             }
         }
+        private static void ReplaceModel(string prefab, string mesh, int position = 0)
+        {
+            var fab = Resources.Load<GameObject>(prefab);
+            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
         public static void RunAll()
         {
             try
             {
                 Lemurian();
                 ElderLemurian();
-                //LemurianBruiser();
                 DEBUG();
                 Golem();
                 Bison();
@@ -66,7 +71,10 @@ namespace MoistureUpset
                 Templar();
                 Wisp();
                 GreaterWisp();
+                Imp();
+                MiniMushroom();
                 Beetle();
+                //SneakyFontReplacement();
             }
             catch (Exception e)
             {
@@ -75,18 +83,152 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            //var fab = Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod");
-            //var renderers = fab.GetComponentsInChildren<Renderer>();
-            //var meshes = fab.GetComponentsInChildren<MeshFilter>();
-            //renderers[0].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            //meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/outhouse.mesh");
-            //renderers[1].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/door.mesh");
+            //ReplaceModel("prefabs/characterbodies/JellyfishBody", "@MoistureUpset_test:assets/kevinishomosex/JellyfishMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/HermitCrabBody", "@MoistureUpset_test:assets/kevinishomosex/HermitCrabMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_test:assets/kevinishomosex/BellMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/BeetleGuardBody", "@MoistureUpset_test:assets/kevinishomosex/BeetleGuardMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/BeetleGuardAllyBody", "@MoistureUpset_test:assets/kevinishomosex/BeetleGuardMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_test:assets/kevinishomosex/VultureMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/ParentBody", "@MoistureUpset_test:assets/kevinishomosex/ParentMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/BeetleQueen2Body", "@MoistureUpset_test:assets/kevinishomosex/BeetleQueenMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/ClayBossBody", "@MoistureUpset_test:assets/kevinishomosex/ClayBossMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/TitanBody", "@MoistureUpset_test:assets/kevinishomosex/Titan.mesh");
+            //ReplaceModel("prefabs/characterbodies/TitanGoldBody", "@MoistureUpset_test:assets/kevinishomosex/GoldTitan.mesh");
+            //ReplaceModel("prefabs/characterbodies/ShopkeeperBody", "@MoistureUpset_test:assets/kevinishomosex/NewtMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/VagrantBody", "@MoistureUpset_test:assets/kevinishomosex/VagrantMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/MagmaWormBody", "@MoistureUpset_test:assets/kevinishomosex/WormMesh.mesh", 1);
+            //ReplaceModel("prefabs/characterbodies/ElectricWormBody", "@MoistureUpset_test:assets/kevinishomosex/WormMesh.mesh", 1);
+            //ReplaceModel("prefabs/characterbodies/ImpBossBody", "@MoistureUpset_test:assets/kevinishomosex/ImpBossMesh.mesh");
+            //ReplaceModel("prefabs/characterbodies/MiniMushroomBody", "@MoistureUpset_toad:assets/toad.mesh");
 
+            //DebugClass.DebugBones("prefabs/characterbodies/JellyfishBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/HermitCrabBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/BellBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/BeetleGuardBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/BeetleGuardAllyBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/VultureBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/ParentBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/ParentPodBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/BeetleQueen2Body");
+            //DebugClass.DebugBones("prefabs/characterbodies/ClayBossBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/TitanBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/TitanGoldBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/ShopkeeperBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/VagrantBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/MagmaWormBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/ElectricWormBody");
+            //DebugClass.DebugBones("prefabs/characterbodies/ImpBossBody");
+
+            var fab = Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod");
+            var renderers = fab.GetComponentsInChildren<Renderer>();
+            var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            //DebugClass.DebugBones(fab);
+            //renderers[0].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
+            //meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/door.mesh");
+            //renderers[1].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
+            //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/pod.mesh");
+
+        }
+        //private static void ReplaceFont(string ogFont, string newFont)
+        //{
+        //    var font = Resources.Load<Font>(ogFont);
+        //    foreach (var item in font.material.GetTexturePropertyNames())
+        //    {
+        //        Debug.Log($"namnesadasd----=-=-=-=-=-{item}");
+        //    }
+        //    Debug.Log($"fontname----=-=-=-=-=-{font.material.mainTexture.name}");
+        //    font.material.SetTexture("_MainTex", Resources.Load<Font>(newFont).material.mainTexture);
+        //    Debug.Log($"fontname----=-=-=-=-=-{font.material.mainTexture.name}");
+        //    foreach (var item in font.material.GetTexturePropertyNames())
+        //    {
+        //        Debug.Log($"namnesadasd----=-=-=-=-=-{item}");
+        //    }
+        //    //var fab = Resources.Load<Font>(ogFont);
+        //    //var fab2 = Resources.Load<Font>(newFont);
+        //    //fab.characterInfo = fab2.characterInfo;
+        //    //fab.fontNames = fab2.fontNames;
+        //    //fab.hideFlags = fab2.hideFlags;
+        //    //fab.material = fab2.material;
+        //    //fab.name = fab2.name;
+        //}
+        //public static void SneakyFontReplacement()
+        //{
+        //    ReplaceFont("tmpfonts/fontsource/Bazaronite", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+        //    ReplaceFont("tmpfonts/fontsource/BOMBARD_", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+        //    ReplaceFont("tmpfonts/fontsource/NotoSans-Regular", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+        //    ReplaceFont("tmpfonts/fontsource/RiskofRainFont", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+        //    ReplaceFont("tmpfonts/fontsource/TRACER__", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+        //    ReplaceFont("tmpfonts/fontsource/VCR_OSD_MONO", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+
+
+        //    //fab = Resources.Load<Font>("tmpfonts/fontsource/BOMBARD_");
+        //    //fab2 = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+
+
+        //    //fab = Resources.Load<Font>("tmpfonts/fontsource/NotoSans-Regular");
+        //    //fab2 = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+
+
+        //    //fab = Resources.Load<Font>("tmpfonts/fontsource/RiskofRainFont");
+        //    //fab2 = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+
+
+        //    //fab = Resources.Load<Font>("tmpfonts/fontsource/TRACER__");
+        //    //fab2 = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+
+        //    //fab = Resources.Load<Font>("tmpfonts/fontsource/VCR_OSD_MONO");
+        //    //fab2 = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+        //}
+        public static void MiniMushroom()
+        {
+            //ReplaceModel("prefabs/characterbodies/MiniMushroomBody", "@MoistureUpset_toad:assets/toad.mesh", "@MoistureUpset_toad:assets/toad.png");
+            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/MiniMushroomBody");
+            //var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            //meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toad.mesh");
+        }
+        public static void Imp()
+        {
+            ReplaceModel("prefabs/characterbodies/ImpBody", "@MoistureUpset_dooter:assets/dooter.mesh", "@MoistureUpset_dooter:assets/dooter.png");
+            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/ImpBody");
+            //var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            //var texture = Resources.Load<Texture>("@MoistureUpset_dooter:assets/dooter.png");
+            //for (int i = 0; i < meshes[0].sharedMaterials.Length; i++)
+            //{
+            //    try
+            //    {
+            //        meshes[0].sharedMaterials[i].SetTexture("_PrintRamp", texture);
+            //        meshes[0].sharedMaterials[i].SetTexture("_FresnelRamp", texture);
+            //        foreach (var item in meshes[0].sharedMaterials[i].GetTexturePropertyNames())
+            //        {
+            //            Debug.Log($"---------{item}---------------{meshes[0].sharedMaterials[i].GetTexture(item)}");
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Debug.Log(e);
+            //    }
+            //}
+
+
+            On.EntityStates.ImpMonster.BlinkState.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("Doot", self.outer.gameObject);
+                orig(self);
+            };
+            On.EntityStates.ImpMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("Doot", self.outer.gameObject);
+                orig(self);
+            };
         }
         public static void Beetle()
         {
             //ReplaceModel("prefabs/characterbodies/BeetleBody", "@MoistureUpset_chips:assets/chip.mesh", "@MoistureUpset_chips:assets/chip.png");
+            On.EntityStates.BeetleMonster.HeadbuttState.OnEnter += (orig, self) =>
+            {
+                //Debug.Log($"---------------headbut--{self.GetPropertyValue<Animator>("modelAnimator").rootPosition}");
+                orig(self);
+            };
         }
         public static void ElderLemurian()
         {
@@ -95,7 +237,30 @@ namespace MoistureUpset
             //{
             //    Debug.Log($"--------------->{item}");
             //}
-            ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_bowser:assets/bowser.mesh", "@MoistureUpset_bowser:assets/bowsertex.png");
+            ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_bowser:assets/bowser.mesh", "@MoistureUpset_bowser:assets/bowser.png");
+            On.EntityStates.LemurianBruiserMonster.FireMegaFireball.OnEnter += (orig, self) =>
+            {
+                EntityStates.LemurianBruiserMonster.FireMegaFireball.attackString = "BowserFireBall";
+                orig(self);
+            };
+            On.EntityStates.LemurianBruiserMonster.Flamebreath.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("BowserBreath", self.outer.gameObject);
+                orig(self);
+            };
+            On.EntityStates.LemurianBruiserMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                EntityStates.LemurianBruiserMonster.SpawnState.spawnSoundString = "BowserSpawn";
+                orig(self);
+            };
+            //On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
+            //{
+            //    if (self.outer.name.ToUpper().Contains("LEMURIANBRUISER"))
+            //    {
+            //        Util.PlaySound("BowserDeath", self.outer.gameObject);
+            //    }
+            //    orig(self);
+            //};
         }
         public static void Templar()
         {
@@ -111,6 +276,36 @@ namespace MoistureUpset
                     meshes[i].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na.mesh");
                 }
             }
+
+            On.EntityStates.ClayBruiser.Weapon.MinigunFire.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("HeavyFire", self.outer.gameObject);
+                orig(self);
+            };
+            On.EntityStates.ClayBruiser.Weapon.FireSonicBoom.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("SonicBoom", self.outer.gameObject);
+                orig(self);
+            };
+            On.EntityStates.ClayBruiserMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                EntityStates.ClayBruiserMonster.SpawnState.spawnSoundString = "HeavySpawn";
+                orig(self);
+            };
+            //On.EntityStates.ClayBruiser.Weapon.MinigunSpinUp.OnEnter += (orig, self) =>
+            //{
+            //    Util.PlaySound("HeavySpottedPlayer", self.outer.gameObject);
+            //    orig(self);
+            //};
+            //On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
+            //{
+            //    //Debug.Log($"selfname-------------{self.outer.name}");
+            //    if (self.outer.name.ToUpper().Contains("CLAYBRUISER"))
+            //    {
+            //        Util.PlaySound("HeavyDeath", self.outer.gameObject);
+            //    }
+            //    orig(self);
+            //};
         }
         public static void GreaterWisp()
         {
@@ -130,6 +325,28 @@ namespace MoistureUpset
                     }
                 }
             }
+            On.EntityStates.GreaterWispMonster.DeathState.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("GhastDeath", self.outer.gameObject);
+                orig(self);
+            };
+            On.EntityStates.GreaterWispMonster.FireCannons.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("GhastAttack", self.outer.gameObject);
+                orig(self);
+            };
+            //On.EntityStates.EntityState.OnEnter += (orig, self) =>
+            //{
+            //    if (self.outer.gameObject.name.Contains("GreaterWispMaster"))
+            //    {
+            //        Util.PlaySound("GhastSpawn", self.outer.gameObject);
+            //    }
+            //    else if (self.outer.gameObject.name.Contains("GreaterWispBody"))
+            //    {
+            //        Util.PlaySound("GhastSpawn", self.outer.gameObject);
+            //    }
+            //    orig(self);
+            //};
         }
         public static void Wisp()
         {
@@ -173,7 +390,7 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             On.EntityStates.RoboBallBoss.DeathState.OnEnter += (orig, self) =>
             {
-                Util.PlaySound("ObamaDeath",self.outer.gameObject);
+                Util.PlaySound("ObamaDeath", self.outer.gameObject);
                 orig(self);
             };
             On.EntityStates.RoboBallBoss.SpawnState.OnEnter += (orig, self) =>
@@ -205,10 +422,6 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("prefabs/characterbodies/LemurianBody", "@MoistureUpset_mike:assets/mike.mesh", "@MoistureUpset_mike:assets/mike.png");
-        }
-        public static void LemurianBruiser()
-        {
-            //ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_mike:assets/bruisermike.mesh", "@MoistureUpset_mike:assets/mikebruiser.png");
         }
 
         public static void Golem()

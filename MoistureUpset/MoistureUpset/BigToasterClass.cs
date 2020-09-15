@@ -11,6 +11,7 @@ using UnityEngine.Networking;
 using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MoistureUpset
 {
@@ -27,12 +28,103 @@ namespace MoistureUpset
             ModifyChat();
             PreGame();
             INeedToSortThese();
+            PlayerDeath();
+            DifficultyIcons();
         }
         public static void INeedToSortThese()
         {
+            //On.RoR2.BossGroup.UpdateBossMemories += (orig, self) =>
+            //{
+            //    orig(self);
+            //    Debug.Log($"bossgroup--------{self.bestObservedName}");
+            //};
+            //On.RoR2.SceneDirector.Start += (orig, self) =>
+            //{
+            //    orig(self);
+            //    Debug.Log($"asddddddddddddddddddddddddddd--------{self.teleporterSpawnCard.name}");
+            //    foreach (var item in self.teleporterSpawnCard.prefab.GetComponents<Component>())
+            //    {
+            //        Debug.Log($"asddddddddddddddddddddddddddd--------{item}");
+            //    }
+            //    self.teleporterSpawnCard.prefab.GetComponent<BossGroup>().InvokeMethod("Start");
+            //    Debug.Log($"bossgroup--------{self.teleporterSpawnCard.prefab.GetComponent<BossGroup>().bestObservedName}");
+            //};
+        }
+        public static void DifficultyIcons()
+        {
+            UImods.ReplaceUIBetter("Textures/DifficultyIcons/texDifficultyEasyIcon", "MoistureUpset.Resources.easy.png");
+            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEasyIconDisabled", "MoistureUpset.Resources.easyDisabled.png");
+
+            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIcon", "MoistureUpset.Resources.medium.png");
+            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIconDisabled", "MoistureUpset.Resources.mediumDisabled.png");
+
+            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIcon", "MoistureUpset.Resources.hard.png");
+            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
+
+        }
+
+        public static void PlayerDeath()
+        {
+            On.RoR2.GlobalEventManager.OnPlayerCharacterDeath += (orig, self, report, user) =>
+            {
+                orig(self, report, user);
+                try
+                {
+                    if (!user)
+                    {
+                        return;
+                    }
+                    List<string> quotes = new List<string>{ "I fucking hate this game", "I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
+                    if (report.attackerMaster.name.ToUpper().Contains("MAGMAWORM"))
+                    {
+                        quotes.Add("The magma worm is such bullshit");
+                    }
+                    else if(report.attackerMaster.name.ToUpper().Contains("ELECTRICWORM"))
+                    {
+                        quotes.Add("Why does it get lightning? It's already strong enough");
+                    }
+                    else if (report.attackerMaster.name.ToUpper().Contains("BROTHERHURT"))
+                    {
+                        quotes.Add("This final phase sucks so much");
+                    }
+                    else if (report.attackerMaster.name.ToUpper().Contains("WISPMASTER"))
+                    {
+                        quotes.Add("Unfucking dodgeable");
+                    }
+                    else if (report.attackerMaster.name.ToUpper().Contains("VAGRANT"))
+                    {
+                        quotes.Add("How are you supposed to dodge that????");
+                    }
+                    else if (report.attackerMaster.name.ToUpper().Contains("LEMURIANBRUISERMASTER"))
+                    {
+                        quotes.Add("The fire breath is so annoying");
+                    }
+                    Chat.SendBroadcastChat(new Chat.UserChatMessage
+                    {
+                        sender = user.gameObject,
+                        text = quotes[UnityEngine.Random.Range(0, quotes.Count - 1)]
+                    });
+                }
+                catch (Exception)
+                {
+                }
+            };
         }
         public static void PreGame()
         {
+            On.RoR2.VoteController.StartTimer += (orig, self) =>
+            {
+                if (!NetworkServer.active)
+                {
+                    Debug.LogWarning("[Server] function 'System.Void RoR2.VoteController::StartTimer()' called on client");
+                    return;
+                }
+                if (self.timerIsActive)
+                {
+                    return;
+                }
+                self.NetworktimerIsActive = true;
+            };
             On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
             {
                 orig(self);
@@ -187,6 +279,11 @@ namespace MoistureUpset
                         Chat.AddMessage("-Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\n-Type 'hitmarkervolume' to check the volume of the hitmarker");
                         sendmessage = false;
                     }
+                    else if (text[0] == "DEBUGMUSIC")
+                    {
+                        var c = GameObject.FindObjectOfType<MusicController>();
+                        MusicAPI.GetCurrentSong(ref c);
+                    }
                     //else if (text[0] == "TOGGLERUNMUSIC")
                     //{
                     //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
@@ -255,19 +352,46 @@ namespace MoistureUpset
         }
         public static void Death()
         {
-            On.RoR2.Chat.PlayerDeathChatMessage.ConstructChatString += (orig, self) =>
-            {
-                string text = orig(self);
-                return $"{text} <style=cDeath>loser alert.</style>";
-            };
+            //On.RoR2.Chat.PlayerDeathChatMessage.ConstructChatString += (orig, self) =>
+            //{
+            //    string text = orig(self);
+            //    return $"{text} <style=cDeath>loser alert.</style>";
+            //};
         }
         public static void DeathSound()
         {
-            On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
+            On.RoR2.CharacterBody.Start += (orig, self) =>
             {
-                
-                Util.PlaySound("EDeath", self.outer.gameObject);
+                orig(self);
+                try
+                {
+                    Debug.Log($"sounddeath-------------{self.GetFieldValue<SfxLocator>("sfxLocator").deathSound}");
+                    //Debug.Log($"barksound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").barkSound}");
+                    //Debug.Log($"falldamagesound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").fallDamageSound}");
+                    //Debug.Log($"landingsound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").landingSound}");
+                    //Debug.Log($"opensound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").openSound}");
+                }
+                catch (Exception)
+                {
+                }
             };
+            On.RoR2.FootstepHandler.Start += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    Debug.Log($"footstep-------------{self.baseFootstepString}");
+                    Debug.Log($"footstep-override------------{self.sprintFootstepOverrideString}");
+                }
+                catch (Exception)
+                {
+                }
+
+            };
+            //On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
+            //{
+            //    Util.PlaySound("EDeath", self.outer.gameObject);
+            //};
         }
         public static void BossMusicAndFanFare()
         {
@@ -284,7 +408,6 @@ namespace MoistureUpset
 
                 }
                 orig(self, t, cT, tB);
-
             };
             On.RoR2.UI.ObjectivePanelController.FindTeleporterObjectiveTracker.ctor += (orig, self) =>
             {
@@ -297,7 +420,6 @@ namespace MoistureUpset
                 {
 
                 }
-
             };
             On.RoR2.UI.ObjectivePanelController.ActivateGoldshoreBeaconTracker.ctor += (orig, self) =>
             {
@@ -310,7 +432,6 @@ namespace MoistureUpset
                 {
 
                 }
-
             };
             On.RoR2.UI.ObjectivePanelController.DestroyTimeCrystals.ctor += (orig, self) =>
             {
@@ -323,7 +444,6 @@ namespace MoistureUpset
                 {
 
                 }
-
             };
             On.RoR2.UI.ObjectivePanelController.FinishTeleporterObjectiveTracker.ctor += (orig, self) =>
             {
@@ -364,6 +484,7 @@ namespace MoistureUpset
                 try
                 {
                     var c = GameObject.FindObjectOfType<MusicController>();
+                    MusicAPI.StopSong(ref c, "muSong23");
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 1);

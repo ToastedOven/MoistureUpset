@@ -54,7 +54,7 @@ namespace MoistureUpset
 
             var anim = fab.GetComponentInChildren<Animator>();
 
-            Debug.Log($"++++++++++++++++++++++++++++++++++++++++{anim.}");
+            Debug.Log($"++++++++++++++++++++++++++++++++++++++++{anim}");
 
             //AnimatorController anim = new AnimatorController
             AnimatorOverrideController aoc = new AnimatorOverrideController(anim.runtimeAnimatorController);
