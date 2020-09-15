@@ -61,6 +61,26 @@ namespace MoistureUpset
             UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIcon", "MoistureUpset.Resources.hard.png");
             UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
 
+            //var font = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
+            //var resources2 = Resources.LoadAll<Font>("");
+            //for (int i = 0; i < resources2.Length; i++)
+            //{
+            //    if (resources2[i].name.Contains("Font Texture") || resources2[i].name.Contains("Atlas"))
+            //    {
+            //        Debug.Log($"-----{resources2[i]}");
+            //        //resources2[i].
+            //    }
+            //}
+            //byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.font.png");
+            //var resources = Resources.LoadAll<UnityEngine.Object>("");
+            //for (int i = 0; i < resources.Length; i++)
+            //{
+            //        Debug.Log($"-----{resources[i]}");
+            //    if (resources[i].name.Contains("Font Texture") || resources[i].name.Contains("Atlas"))
+            //    {
+            //        //resources[i].LoadImage(bytes);
+            //    }
+            //}
         }
 
         public static void PlayerDeath()
@@ -74,12 +94,12 @@ namespace MoistureUpset
                     {
                         return;
                     }
-                    List<string> quotes = new List<string>{ "I fucking hate this game", "I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
+                    List<string> quotes = new List<string> { "I fucking hate this game", "I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
                     if (report.attackerMaster.name.ToUpper().Contains("MAGMAWORM"))
                     {
                         quotes.Add("The magma worm is such bullshit");
                     }
-                    else if(report.attackerMaster.name.ToUpper().Contains("ELECTRICWORM"))
+                    else if (report.attackerMaster.name.ToUpper().Contains("ELECTRICWORM"))
                     {
                         quotes.Add("Why does it get lightning? It's already strong enough");
                     }
@@ -206,6 +226,12 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
+            };
+            On.RoR2.CreditsController.OnEnable += (orig, self) =>
+            {
+                orig(self);
+                DebugClass.UIdebug();
+                UImods.ReplaceUIObject("Image", "MoistureUpset.Resources.MoistureUpsetFinal.png");
             };
             On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) =>
             {
