@@ -24,12 +24,6 @@ namespace MoistureUpset
 
         private static void PopulateAssets()
         {
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.test"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_test", MainAssetBundle));
-            }
 
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.robloxfont"))
             {
@@ -50,13 +44,6 @@ namespace MoistureUpset
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_dooter", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.bowser"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_bowser", MainAssetBundle));
             }
 
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.fortnite"))

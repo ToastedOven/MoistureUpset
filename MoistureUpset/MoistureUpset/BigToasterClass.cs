@@ -70,7 +70,7 @@ namespace MoistureUpset
                 {
                     try
                     {
-                        Debug.Log($"89-------{item.name}");
+                        //Debug.Log($"89-------{item.name}");
                         if (item.name == "Checkbox")
                         {
                             item.overrideSprite.texture.LoadImage(bytes);

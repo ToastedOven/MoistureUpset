@@ -11,6 +11,7 @@ using UnityEngine.Networking;
 using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MoistureUpset
 {
@@ -58,13 +59,18 @@ namespace MoistureUpset
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
         }
-        private static void LoadResource(string resource, string path)
+        private static void ReplaceModel(GameObject fab, string mesh, int position = 0)
+        {
+            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
+        private static void LoadResource(string resource)
         {
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{resource}"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{path}", MainAssetBundle));
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{resource}", MainAssetBundle));
             }
         }
         public static void RunAll()
@@ -140,7 +146,7 @@ namespace MoistureUpset
             //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/pod.mesh");
 
         }
-        public static void TacoBell()
+        private static void TacoBell()
         {
             //LoadResource("tacobell", "tacobell");
             On.EntityStates.Bell.DeathState.OnEnter += (orig, self) =>
@@ -185,7 +191,7 @@ namespace MoistureUpset
         //    //fab.material = fab2.material;
         //    //fab.name = fab2.name;
         //}
-        //public static void SneakyFontReplacement()
+        //private static void SneakyFontReplacement()
         //{
         //    ReplaceFont("tmpfonts/fontsource/Bazaronite", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
         //    ReplaceFont("tmpfonts/fontsource/BOMBARD_", "@MoistureUpset_robloxfont:assets/roblox_font.ttf");
@@ -213,14 +219,14 @@ namespace MoistureUpset
         //    //fab = Resources.Load<Font>("tmpfonts/fontsource/VCR_OSD_MONO");
         //    //fab2 = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
         //}
-        public static void MiniMushroom()
+        private static void MiniMushroom()
         {
             //ReplaceModel("prefabs/characterbodies/MiniMushroomBody", "@MoistureUpset_toad:assets/toad.mesh", "@MoistureUpset_toad:assets/toad.png");
             //var fab = Resources.Load<GameObject>("prefabs/characterbodies/MiniMushroomBody");
             //var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             //meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toad.mesh");
         }
-        public static void Imp()
+        private static void Imp()
         {
             ReplaceModel("prefabs/characterbodies/ImpBody", "@MoistureUpset_dooter:assets/dooter.mesh", "@MoistureUpset_dooter:assets/dooter.png");
             //var fab = Resources.Load<GameObject>("prefabs/characterbodies/ImpBody");
@@ -255,22 +261,19 @@ namespace MoistureUpset
                 orig(self);
             };
         }
-        public static void Beetle()
+        private static void Beetle()
         {
-            //ReplaceModel("prefabs/characterbodies/BeetleBody", "@MoistureUpset_chips:assets/chip.mesh", "@MoistureUpset_chips:assets/chip.png");
-            On.EntityStates.BeetleMonster.HeadbuttState.OnEnter += (orig, self) =>
-            {
-                //Debug.Log($"---------------headbut--{self.GetPropertyValue<Animator>("modelAnimator").rootPosition}");
-                orig(self);
-            };
+            LoadResource("beetle");
+            //ReplaceModel("prefabs/characterbodies/BeetleBody", "@MoistureUpset_beetle:assets/kevinishomosex/mesh.mesh");
         }
-        public static void ElderLemurian()
+        private static void ElderLemurian()
         {
             //var fab = Resources.Load<GameObject>("prefabs/characterbodies/LemurianBruiserBody");
             //foreach (var item in fab.GetComponentsInChildren<Component>())
             //{
             //    Debug.Log($"--------------->{item}");
             //}
+            LoadResource("bowser");
             ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_bowser:assets/bowser.mesh", "@MoistureUpset_bowser:assets/bowser.png");
             On.EntityStates.LemurianBruiserMonster.FireMegaFireball.OnEnter += (orig, self) =>
             {
@@ -296,7 +299,7 @@ namespace MoistureUpset
             //    orig(self);
             //};
         }
-        public static void Templar()
+        private static void Templar()
         {
             ReplaceModel("prefabs/characterbodies/ClayBruiserBody", "@MoistureUpset_heavy:assets/heavy.mesh", "@MoistureUpset_heavy:assets/heavy.png");
             ReplaceModel("prefabs/characterbodies/ClayBruiserBody", "@MoistureUpset_heavy:assets/minigun.mesh", "@MoistureUpset_heavy:assets/heavy.png", 1);
@@ -341,7 +344,7 @@ namespace MoistureUpset
             //    orig(self);
             //};
         }
-        public static void GreaterWisp()
+        private static void GreaterWisp()
         {
             ReplaceModel("prefabs/characterbodies/GreaterWispBody", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/GreaterWispBody");
@@ -382,7 +385,7 @@ namespace MoistureUpset
             //    orig(self);
             //};
         }
-        public static void Wisp()
+        private static void Wisp()
         {
             ReplaceModel("prefabs/characterbodies/WispBody", "@MoistureUpset_wisp:assets/bahdog.mesh", "@MoistureUpset_wisp:assets/bahdog.png");
             ReplaceModel("prefabs/characterbodies/WispSoulBody", "@MoistureUpset_wisp:assets/bahdog.mesh", "@MoistureUpset_wisp:assets/bahdog.png");
@@ -417,7 +420,7 @@ namespace MoistureUpset
                 }
             }
         }
-        public static void SolusUnit()
+        private static void SolusUnit()
         {
             ReplaceModel("prefabs/characterbodies/RoboBallMiniBody", "@MoistureUpset_obamaprism:assets/Obamium.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             ReplaceModel("prefabs/characterbodies/RoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
@@ -443,7 +446,7 @@ namespace MoistureUpset
                 orig(self);
             };
         }
-        public static void Lemurian()
+        private static void Lemurian()
         {
             On.EntityStates.LemurianMonster.Bite.OnEnter += (orig, self) =>
             {
@@ -458,7 +461,7 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/LemurianBody", "@MoistureUpset_mike:assets/mike.mesh", "@MoistureUpset_mike:assets/mike.png");
         }
 
-        public static void Golem()
+        private static void Golem()
         {
             On.EntityStates.GolemMonster.ChargeLaser.OnEnter += (orig, self) =>
             {
@@ -523,7 +526,7 @@ namespace MoistureUpset
             };
             ReplaceModel("prefabs/characterbodies/GolemBody", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
         }
-        public static void Bison()
+        private static void Bison()
         {
             On.EntityStates.Bison.Charge.OnEnter += (orig, self) =>
             {
