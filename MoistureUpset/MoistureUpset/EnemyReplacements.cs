@@ -58,6 +58,15 @@ namespace MoistureUpset
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
         }
+        private static void LoadResource(string resource, string path)
+        {
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{resource}"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{path}", MainAssetBundle));
+            }
+        }
         public static void RunAll()
         {
             try
@@ -74,6 +83,7 @@ namespace MoistureUpset
                 Imp();
                 MiniMushroom();
                 Beetle();
+                TacoBell();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -83,6 +93,7 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+
             //ReplaceModel("prefabs/characterbodies/JellyfishBody", "@MoistureUpset_test:assets/kevinishomosex/JellyfishMesh.mesh");
             //ReplaceModel("prefabs/characterbodies/HermitCrabBody", "@MoistureUpset_test:assets/kevinishomosex/HermitCrabMesh.mesh");
             //ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_test:assets/kevinishomosex/BellMesh.mesh");
@@ -128,6 +139,29 @@ namespace MoistureUpset
             //renderers[1].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
             //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/pod.mesh");
 
+        }
+        public static void TacoBell()
+        {
+            //LoadResource("tacobell", "tacobell");
+            On.EntityStates.Bell.DeathState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                AkSoundEngine.StopPlayingID(2506333542);
+            };
+            On.EntityStates.Bell.BellWeapon.ChargeTrioBomb.OnEnter += (orig, self) =>
+            {
+                try
+                {
+                    AkSoundEngine.StopPlayingID(2506333542);
+                    AkSoundEngine.PostEvent("TacoCreateAttack", self.outer.gameObject);
+                }
+                catch (Exception)
+                {
+                }
+                orig(self);
+            };
+            //ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_tacobell:assets/tacobell.mesh", "@MoistureUpset_dooter:assets/tacobell.png");
+            //ReplaceModel("prefabs/projectiles/BellBall", "@MoistureUpset_tacobell:assets/taco.mesh", "@MoistureUpset_dooter:assets/taco.png");
         }
         //private static void ReplaceFont(string ogFont, string newFont)
         //{
