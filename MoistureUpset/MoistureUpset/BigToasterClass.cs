@@ -23,7 +23,6 @@ namespace MoistureUpset
             Somebody();
             BossMusic();
             BossMusicAndFanFare();
-            Death();
             OnHit();
             ModifyChat();
             PreGame();
@@ -50,6 +49,7 @@ namespace MoistureUpset
             //    Debug.Log($"bossgroup--------{self.teleporterSpawnCard.prefab.GetComponent<BossGroup>().bestObservedName}");
             //};
         }
+
         public static void DifficultyIcons()
         {
             UImods.ReplaceUIBetter("Textures/DifficultyIcons/texDifficultyEasyIcon", "MoistureUpset.Resources.easy.png");
@@ -61,6 +61,27 @@ namespace MoistureUpset
             UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIcon", "MoistureUpset.Resources.hard.png");
             UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
 
+
+            byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.pizzaroll.png");
+            var r = Resources.LoadAll<GameObject>("prefabs/ui");
+            foreach (var sex in r)
+            {
+                foreach (var item in sex.GetComponentsInChildren<UnityEngine.UI.Image>())
+                {
+                    try
+                    {
+                        Debug.Log($"89-------{item.name}");
+                        if (item.name == "Checkbox")
+                        {
+                            item.overrideSprite.texture.LoadImage(bytes);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                }
+            }
             //var font = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
             //var resources2 = Resources.LoadAll<Font>("");
             //for (int i = 0; i < resources2.Length; i++)
@@ -180,6 +201,8 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
+                AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
+                AkSoundEngine.ExecuteActionOnEvent(816301922, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                 //logbook
                 //title
@@ -376,44 +399,36 @@ namespace MoistureUpset
                 orig(self, crit);
             };
         }
-        public static void Death()
-        {
-            //On.RoR2.Chat.PlayerDeathChatMessage.ConstructChatString += (orig, self) =>
-            //{
-            //    string text = orig(self);
-            //    return $"{text} <style=cDeath>loser alert.</style>";
-            //};
-        }
         public static void DeathSound()
         {
-            On.RoR2.CharacterBody.Start += (orig, self) =>
-            {
-                orig(self);
-                try
-                {
-                    Debug.Log($"sounddeath-------------{self.GetFieldValue<SfxLocator>("sfxLocator").deathSound}");
-                    //Debug.Log($"barksound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").barkSound}");
-                    //Debug.Log($"falldamagesound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").fallDamageSound}");
-                    //Debug.Log($"landingsound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").landingSound}");
-                    //Debug.Log($"opensound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").openSound}");
-                }
-                catch (Exception)
-                {
-                }
-            };
-            On.RoR2.FootstepHandler.Start += (orig, self) =>
-            {
-                orig(self);
-                try
-                {
-                    Debug.Log($"footstep-------------{self.baseFootstepString}");
-                    Debug.Log($"footstep-override------------{self.sprintFootstepOverrideString}");
-                }
-                catch (Exception)
-                {
-                }
+            //On.RoR2.CharacterBody.Start += (orig, self) =>
+            //{
+            //    orig(self);
+            //    try
+            //    {
+            //        Debug.Log($"sounddeath-------------{self.GetFieldValue<SfxLocator>("sfxLocator").deathSound}");
+            //        //Debug.Log($"barksound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").barkSound}");
+            //        //Debug.Log($"falldamagesound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").fallDamageSound}");
+            //        //Debug.Log($"landingsound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").landingSound}");
+            //        //Debug.Log($"opensound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").openSound}");
+            //    }
+            //    catch (Exception)
+            //    {
+            //    }
+            //};
+            //On.RoR2.FootstepHandler.Start += (orig, self) =>
+            //{
+            //    orig(self);
+            //    try
+            //    {
+            //        Debug.Log($"footstep-------------{self.baseFootstepString}");
+            //        Debug.Log($"footstep-override------------{self.sprintFootstepOverrideString}");
+            //    }
+            //    catch (Exception)
+            //    {
+            //    }
 
-            };
+            //};
             //On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
             //{
             //    Util.PlaySound("EDeath", self.outer.gameObject);
@@ -478,7 +493,7 @@ namespace MoistureUpset
                 {
                     var c = GameObject.FindObjectOfType<MusicController>();
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
+                    AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.PostEvent("StopFanFare", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
                     AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
@@ -512,9 +527,9 @@ namespace MoistureUpset
                     var c = GameObject.FindObjectOfType<MusicController>();
                     MusicAPI.StopSong(ref c, "muSong23");
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
+                    //AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                    AkSoundEngine.PostEvent("PlayBossMusic", c.gameObject);
+                    //AkSoundEngine.PostEvent("PlayBossMusic", c.gameObject);
                     var con = GameObject.FindObjectOfType<MusicController>();
                     MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
                 }
