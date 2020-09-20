@@ -122,7 +122,7 @@ namespace MoistureUpset
                 return;
             }
             Debug.Log($"----------------components----------------");
-            foreach (var item in g.GetComponents<Component>())
+            foreach (var item in g.GetComponentsInChildren<Component>())
             {
                 Debug.Log(item);
             }
@@ -135,7 +135,8 @@ namespace MoistureUpset
             StringBuilder sb = new StringBuilder();
             sb.Append($"rendererererer: {meshes[0]}\n");
             sb.Append($"bone count: {meshes[0].bones.Length}\n");
-            sb.Append($"mesh count = {meshes.Length}\n");
+            sb.Append($"mesh count: {meshes.Length}\n");
+            sb.Append($"root bone: {meshes[0].rootBone.name}\n");
             sb.Append($"{resource}:\n");
             if (meshes[0].bones.Length == 0)
             {

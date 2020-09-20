@@ -173,6 +173,18 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
+                //try
+                //{
+
+                //    EnemyReplacements.ReplaceMeshRenderer(EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab, "@MoistureUpset_sans:assets/boner.mesh");
+                //}
+                //catch (Exception e)
+                //{
+                //    Debug.Log($"3 {e}");
+                //    DebugClass.ListComponents(EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab);
+                //}
+                EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_sans:assets/boner.mesh");
                 orig(oldS, newS);
                 try
                 {
@@ -436,6 +448,48 @@ namespace MoistureUpset
         }
         public static void BossMusicAndFanFare()
         {
+            //On.RoR2.CharacterBody.Awake += (orig, self) =>
+            //{
+            //    orig(self);
+            //    Debug.Log($"name: {self.name}");
+            //    Debug.Log($"base: {self.baseNameToken}");
+            //    Debug.Log($"subtitle: {self.subtitleNameToken}");
+            //    if (self.master.isBoss)
+            //    {
+            //        AkSoundEngine.PostEvent("PlayBossMusic", RoR2Application.instance.gameObject);
+            //        Debug.Log($"its a boss");
+            //    }
+            //};
+            On.RoR2.Language.GetLocalizedStringByToken += (orig, self, token) =>
+            {
+                string s = orig(self, token);
+                if (s == "Imp Overlord")
+                {
+                    s = "Sans";///////replace these early on when it inititializes the list and not here, cause its slightly faster
+                }
+                return s;
+            };
+            On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
+            {
+                if (self.master && self.master.isBoss)
+                {
+                    var c = GameObject.FindObjectOfType<MusicController>();
+                    AkSoundEngine.ExecuteActionOnEvent(2493198437, AkActionOnEventType.AkActionOnEventType_Stop);
+                    AkSoundEngine.ExecuteActionOnEvent(291592398, AkActionOnEventType.AkActionOnEventType_Stop);
+                    if (self.baseNameToken.ToUpper().Contains("IMP"))
+                    {
+                        AkSoundEngine.PostEvent("PlaySans", c.gameObject);
+                    }
+                    else
+                    {
+                        AkSoundEngine.PostEvent("PlayBossMusic", c.gameObject);
+                    }//Imp Overlord
+                    Debug.Log($"name: {self.name}");
+                    Debug.Log($"base: {self.baseNameToken}");
+                    Debug.Log($"subtitle: {self.subtitleNameToken}");
+                }
+                return orig(self);
+            };
             On.RoR2.MusicController.UpdateTeleporterParameters += (orig, self, t, cT, tB) =>
             {
                 try
@@ -494,6 +548,7 @@ namespace MoistureUpset
                     var c = GameObject.FindObjectOfType<MusicController>();
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
+                    AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                     AkSoundEngine.PostEvent("StopFanFare", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
                     AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
@@ -529,7 +584,6 @@ namespace MoistureUpset
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     //AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                    //AkSoundEngine.PostEvent("PlayBossMusic", c.gameObject);
                     var con = GameObject.FindObjectOfType<MusicController>();
                     MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
                 }

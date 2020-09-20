@@ -25,10 +25,20 @@ namespace MoistureUpset
             var texture = Resources.Load<Texture>(png);
             for (int i = 0; i < meshes[position].sharedMaterials.Length; i++)
             {
+                meshes[position].sharedMaterials[i].shader = Shader.Find("Standard");
                 meshes[position].sharedMaterials[i].color = Color.white;
                 meshes[position].sharedMaterials[i].mainTexture = texture;
                 meshes[position].sharedMaterials[i].SetTexture("_EmTex", texture);
                 meshes[position].sharedMaterials[i].SetTexture("_NormalTex", null);
+                if (png.Contains("frog"))
+                {
+                    meshes[position].sharedMaterials[i].SetTexture("_FresnelRamp", null);
+                }
+                if (png.Contains("shop"))
+                {
+                    meshes[position].sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
+                    meshes[position].sharedMaterials[i].SetTexture("_FlowHeightmap", null);
+                }
                 //try
                 //{
                 //    foreach (var item in meshes[0].sharedMaterials[i].GetTexturePropertyNames())
@@ -52,6 +62,47 @@ namespace MoistureUpset
                     }
                 }
             }
+        }
+        private static void ReplaceMeshRenderer(string prefab, string mesh, string png)
+        {
+            var fab = Resources.Load<GameObject>(prefab);
+            var renderers = fab.GetComponentsInChildren<Renderer>();
+            var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            var texture = Resources.Load<Texture>(png);
+            for (int i = 0; i < renderers[0].sharedMaterials.Length; i++)
+            {
+                renderers[0].sharedMaterials[i].shader = Shader.Find("Standard");
+                renderers[0].sharedMaterials[i].color = Color.white;
+                renderers[0].sharedMaterials[i].mainTexture = texture;
+                renderers[0].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[0].sharedMaterials[i].SetTexture("_NormalTex", null);
+            }
+            meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
+        public static void ReplaceMeshRenderer(string prefab, string mesh)
+        {
+            var fab = Resources.Load<GameObject>(prefab);
+            var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
+        public static void ReplaceMeshRenderer(GameObject fab, string mesh)
+        {
+            var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
+        public static void ReplaceMeshRenderer(GameObject fab, string mesh, string png)
+        {
+            var renderers = fab.GetComponentsInChildren<Renderer>();
+            var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            var texture = Resources.Load<Texture>(png);
+            for (int i = 0; i < renderers[0].sharedMaterials.Length; i++)
+            {
+                renderers[0].sharedMaterials[i].color = Color.white;
+                renderers[0].sharedMaterials[i].mainTexture = texture;
+                renderers[0].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[0].sharedMaterials[i].SetTexture("_NormalTex", null);
+            }
+            meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
         }
         private static void ReplaceModel(string prefab, string mesh, int position = 0)
         {
@@ -90,6 +141,10 @@ namespace MoistureUpset
                 MiniMushroom();
                 Beetle();
                 TacoBell();
+                Jelly();
+                BeetleGuard();
+                Shop();
+                Sans();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -146,19 +201,85 @@ namespace MoistureUpset
             //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/pod.mesh");
 
         }
-        private static void TacoBell()
+        private static void Sans()
         {
-            //LoadResource("tacobell", "tacobell");
-            On.EntityStates.Bell.DeathState.OnEnter += (orig, self) =>
+            LoadResource("sans");
+            ReplaceModel("prefabs/characterbodies/ImpBossBody", "@MoistureUpset_sans:assets/sans.mesh", "@MoistureUpset_sans:assets/sans.png");
+            ReplaceMeshRenderer("prefabs/projectileghosts/ImpVoidspikeProjectileGhost", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
+            //ReplaceMeshRenderer("prefabs/projectiles/ImpCrawler", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
+            //replace imp ImpClawFX with bones
+        }
+        private static void Shop()
+        {
+            LoadResource("shop");
+            ReplaceModel("prefabs/characterbodies/ShopkeeperBody", "@MoistureUpset_shop:assets/shop.mesh", "@MoistureUpset_shop:assets/shop.png");
+        }
+        private static void BeetleGuard()
+        {
+            LoadResource("winston");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleGuardBody");
+            List<Transform> t = new List<Transform>();
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (!item.name.Contains("Hurtbox") && !item.name.Contains("IK") && !item.name.Contains("_end"))
+                {
+                    t.Add(item);
+                }
+            }
+            foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                item.bones = t.ToArray();
+            }
+            ReplaceModel("prefabs/characterbodies/BeetleGuardBody", "@MoistureUpset_winston:assets/winston.mesh", "@MoistureUpset_winston:assets/winston.png");
+            fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleGuardAllyBody");
+            t.Clear();
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (!item.name.Contains("Hurtbox") && !item.name.Contains("IK") && !item.name.Contains("_end"))
+                {
+                    t.Add(item);
+                }
+            }
+            foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                item.bones = t.ToArray();
+            }
+            ReplaceModel("prefabs/characterbodies/BeetleGuardAllyBody", "@MoistureUpset_winston:assets/winston.mesh", "@MoistureUpset_winston:assets/winston.png");
+            On.EntityStates.BeetleGuardMonster.FireSunder.OnEnter += (orig, self) =>
             {
                 orig(self);
-                AkSoundEngine.StopPlayingID(2506333542);
+                AkSoundEngine.PostEvent("WinstonAttack2", self.outer.gameObject);
+            };
+            On.EntityStates.BeetleGuardMonster.GroundSlam.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                AkSoundEngine.PostEvent("WinstonAttack1", self.outer.gameObject);
+            };
+        }
+        private static void Jelly()
+        {
+            LoadResource("jelly");
+            ReplaceModel("prefabs/characterbodies/JellyfishBody", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
+            On.EntityStates.JellyfishMonster.DeathState.OnEnter += (orig, self) =>
+            {
+                //AkSoundEngine.PostEvent();
+                //AkSoundEngine.ExecuteActionOnEvent(4193522322, AkActionOnEventType.AkActionOnEventType_Stop);
+                orig(self);
+            };
+        }
+        private static void TacoBell()
+        {
+            LoadResource("tacobell");
+            On.EntityStates.Bell.DeathState.OnEnter += (orig, self) =>
+            {
+                AkSoundEngine.PostEvent("StopTacos", self.outer.gameObject);
+                orig(self);
             };
             On.EntityStates.Bell.BellWeapon.ChargeTrioBomb.OnEnter += (orig, self) =>
             {
                 try
                 {
-                    AkSoundEngine.StopPlayingID(2506333542);
+                    AkSoundEngine.PostEvent("StopTacos", self.outer.gameObject);
                     AkSoundEngine.PostEvent("TacoCreateAttack", self.outer.gameObject);
                 }
                 catch (Exception)
@@ -166,8 +287,8 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            //ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_tacobell:assets/tacobell.mesh", "@MoistureUpset_dooter:assets/tacobell.png");
-            //ReplaceModel("prefabs/projectiles/BellBall", "@MoistureUpset_tacobell:assets/taco.mesh", "@MoistureUpset_dooter:assets/taco.png");
+            ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_tacobell:assets/taco.mesh", "@MoistureUpset_tacobell:assets/taco.png");
+            ReplaceMeshRenderer("prefabs/projectileghosts/BellBallGhost", "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
         }
         //private static void ReplaceFont(string ogFont, string newFont)
         //{
@@ -261,18 +382,41 @@ namespace MoistureUpset
                 orig(self);
             };
         }
+        private static void GetChildren(Transform t, ref List<Transform> l, int depth = 0)
+        {
+            StringBuilder sb = new StringBuilder();
+            l.Add(t);
+            for (int i = 0; i < depth; i++)
+            {
+                sb.Append("====");
+            }
+            Debug.Log($"{sb.ToString()}=={depth}======{t.name}");
+            for (int i = 0; i < t.childCount; i++)
+            {
+                GetChildren(t.GetChild(i), ref l, depth + 1);
+            }
+        }
         private static void Beetle()
         {
-            LoadResource("beetle");
-            //ReplaceModel("prefabs/characterbodies/BeetleBody", "@MoistureUpset_beetle:assets/kevinishomosex/mesh.mesh");
+            LoadResource("frog");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleBody");
+            List<Transform> t = new List<Transform>();
+            //this is the fucking stupid but it works (minus claws)
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (!item.name.Contains("Hurtbox") && !item.name.Contains("BeetleBody") && !item.name.Contains("Mesh") && !item.name.Contains("mdl"))
+                {
+                    t.Add(item);
+                }
+            }
+            foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                item.bones = t.ToArray();
+            }
+            ReplaceModel("prefabs/characterbodies/BeetleBody", "@MoistureUpset_frog:assets/frogchair.mesh", "@MoistureUpset_frog:assets/frogchair.png");
         }
         private static void ElderLemurian()
         {
-            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/LemurianBruiserBody");
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"--------------->{item}");
-            //}
             LoadResource("bowser");
             ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_bowser:assets/bowser.mesh", "@MoistureUpset_bowser:assets/bowser.png");
             On.EntityStates.LemurianBruiserMonster.FireMegaFireball.OnEnter += (orig, self) =>
