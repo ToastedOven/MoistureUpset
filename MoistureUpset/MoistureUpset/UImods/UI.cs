@@ -48,6 +48,19 @@ namespace MoistureUpset
                 Debug.Log($"Couldn't replace sprite: {e}");
             }
         }
+        public static void ReplaceTexture2D(string path, string png)
+        {
+            try
+            {
+                var fab = Resources.Load<Texture2D>(path);
+                byte[] bytes = ByteReader.readbytes(png);
+                fab.LoadImage(bytes);
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Couldn't replace sprite: {e}");
+            }
+        }
     }
     //Choice (Difficulty.Easy)
     //Choice (Difficulty.Normal)
