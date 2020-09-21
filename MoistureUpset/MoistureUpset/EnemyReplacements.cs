@@ -23,12 +23,14 @@ namespace MoistureUpset
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
             var texture = Resources.Load<Texture>(png);
+            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
             for (int i = 0; i < meshes[position].sharedMaterials.Length; i++)
             {
-                meshes[position].sharedMaterials[i].shader = Shader.Find("Standard");
+                //Debug.Log($"-=============={meshes[position].sharedMaterials[i].shader.name}");
+                //meshes[position].sharedMaterials[i].shader = Shader.Find("Standard");
                 meshes[position].sharedMaterials[i].color = Color.white;
                 meshes[position].sharedMaterials[i].mainTexture = texture;
-                meshes[position].sharedMaterials[i].SetTexture("_EmTex", texture);
+                meshes[position].sharedMaterials[i].SetTexture("_EmTex", blank);
                 meshes[position].sharedMaterials[i].SetTexture("_NormalTex", null);
                 if (png.Contains("frog"))
                 {
@@ -38,6 +40,20 @@ namespace MoistureUpset
                 {
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightmap", null);
+                }
+                if (prefab.ToUpper().Contains("IMPBOSS"))
+                {
+                    foreach (var item in fab.GetComponentsInChildren<Color>())
+                    {
+                        Debug.Log($"-=-=-=-=-=-{item}");
+                    }
+                }
+                else if (prefab.ToUpper().Contains("IMP"))
+                {
+                    foreach (var item in fab.GetComponentsInChildren<Color>())
+                    {
+                        Debug.Log($"-=-=-=-=-=-{item}");
+                    }
                 }
                 //try
                 //{
@@ -145,6 +161,8 @@ namespace MoistureUpset
                 BeetleGuard();
                 Shop();
                 Sans();
+                Names();
+                Icons();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -201,13 +219,111 @@ namespace MoistureUpset
             //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/pod.mesh");
 
         }
+        private static void Icons()
+        {
+            UImods.ReplaceTexture2D("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardBody", "MoistureUpset.Resources.winston.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardAllyBody", "MoistureUpset.Resources.winston.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/BellBody", "MoistureUpset.Resources.tacobell.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/BisonBody", "MoistureUpset.Resources.thomas.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/ClayBruiserBody", "MoistureUpset.Resources.heavy.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/GolemBody", "MoistureUpset.Resources.oof.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/GreaterWispBody", "MoistureUpset.Resources.ghast.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/ImpBody", "MoistureUpset.Resources.doot.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/ImpBossBody", "MoistureUpset.Resources.sans.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/JellyfishBody", "MoistureUpset.Resources.joy.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/LemurianBody", "MoistureUpset.Resources.mike.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/LemurianBruiserBody", "MoistureUpset.Resources.bowser.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/RoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/RoboBallMiniBody", "MoistureUpset.Resources.obamaprism.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/SuperRoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/WispBody", "MoistureUpset.Resources.dogplane.png");
+            //UImods.ReplaceUIBetter("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
+        }
+        private static void Names()
+        {
+            On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
+            {
+                if (st.Contains("Imp Overlord"))
+                {
+                    st = st.Replace("Imp Overlord", "Sans");
+                }
+                else if (st.Contains("Imp"))
+                {
+                    st = st.Replace("Imp", "Trumpet Skeleton");
+                }
+                else if (st.Contains("Lesser Wisp"))
+                {
+                    st = st.Replace("Lesser Wisp", "Dogplane");
+                }
+                else if (st.Contains("Jellyfish"))
+                {
+                    st = st.Replace("Jellyfish", "Comedy");
+                }
+
+
+                else if (st.Contains("Beetle Guard"))
+                {
+                    st = st.Replace("Beetle Guard", "Winston");
+                }
+                else if (st.Contains("Beetle") && !st.Contains("Queen"))
+                {
+                    st = st.Replace("Beetle", "Froggy Chair");
+                }
+
+
+                else if (st.Contains("Elder Lemurian"))
+                {
+                    st = st.Replace("Elder Lemurian", "Bowser");
+                }
+                else if (st.Contains("Lemurian"))
+                {
+                    st = st.Replace("Lemurian", "Mike Wazowski");
+                }
+                else if (st.Contains("Solus Probe"))
+                {
+                    st = st.Replace("Solus Probe", "Obama Prism");
+                }
+                else if (st.Contains("Brass Contraption"))
+                {
+                    st = st.Replace("Brass Contraption", "Taco Bell");
+                }
+                else if (st.Contains("Bighorn Bison"))
+                {
+                    st = st.Replace("Bighorn Bison", "Thomas");
+                }
+                else if (st.Contains("Stone Golem"))
+                {
+                    st = st.Replace("Stone Golem", "Robloxian");
+                }
+                else if (st.Contains("Clay Templar"))
+                {
+                    st = st.Replace("Clay Templar", "Heavy");
+                }
+                else if (st.Contains("Greater Wisp"))
+                {
+                    st = st.Replace("Greater Wisp", "Ghast");
+                }
+                else if (st.Contains("Solus Control Unit"))
+                {
+                    st = st.Replace("Solus Control Unit", "Obama Sphere");
+                }
+                else if (st.Contains("Alloy Worship Unit"))
+                {
+                    st = st.Replace("Alloy Worship Unit", "Obamium Worship Unit");
+                }
+                //else if (st.Contains("Jellyfish"))
+                //{
+                //    st = st.Replace("Jellyfish", "Comedy");
+                //}
+                orig(self, token, st);
+            };
+        }
         private static void Sans()
         {
             LoadResource("sans");
             ReplaceModel("prefabs/characterbodies/ImpBossBody", "@MoistureUpset_sans:assets/sans.mesh", "@MoistureUpset_sans:assets/sans.png");
             ReplaceMeshRenderer("prefabs/projectileghosts/ImpVoidspikeProjectileGhost", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
-            //ReplaceMeshRenderer("prefabs/projectiles/ImpCrawler", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
-            //replace imp ImpClawFX with bones
         }
         private static void Shop()
         {
@@ -342,10 +458,24 @@ namespace MoistureUpset
         //}
         private static void MiniMushroom()
         {
-            //ReplaceModel("prefabs/characterbodies/MiniMushroomBody", "@MoistureUpset_toad:assets/toad.mesh", "@MoistureUpset_toad:assets/toad.png");
-            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/MiniMushroomBody");
-            //var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
-            //meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toad.mesh");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/MiniMushroomBody");
+            List<Transform> t = new List<Transform>();
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (!item.name.Contains("Hurtbox") && !item.name.Contains("IK") && !item.name.Contains("_end") && !item.name.Contains("miniMush_R_Palps_02"))
+                {
+                    t.Add(item);
+                }
+            }
+            for (int i = 0; i < 7; i++)
+            {
+                t.RemoveAt(t.Count - 1);
+            }
+            foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                item.bones = t.ToArray();
+            }
+            ReplaceModel("prefabs/characterbodies/MiniMushroomBody", "@MoistureUpset_toad:assets/toad.mesh"/*, "@MoistureUpset_toad:assets/toad.png"*/);
         }
         private static void Imp()
         {

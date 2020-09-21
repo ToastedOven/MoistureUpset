@@ -174,17 +174,7 @@ namespace MoistureUpset
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
                 EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
-                //try
-                //{
-
-                //    EnemyReplacements.ReplaceMeshRenderer(EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab, "@MoistureUpset_sans:assets/boner.mesh");
-                //}
-                //catch (Exception e)
-                //{
-                //    Debug.Log($"3 {e}");
-                //    DebugClass.ListComponents(EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab);
-                //}
-                EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_sans:assets/boner.mesh");
+                EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
                 orig(oldS, newS);
                 try
                 {
@@ -460,15 +450,6 @@ namespace MoistureUpset
             //        Debug.Log($"its a boss");
             //    }
             //};
-            On.RoR2.Language.GetLocalizedStringByToken += (orig, self, token) =>
-            {
-                string s = orig(self, token);
-                if (s == "Imp Overlord")
-                {
-                    s = "Sans";///////replace these early on when it inititializes the list and not here, cause its slightly faster
-                }
-                return s;
-            };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
                 if (self.master && self.master.isBoss)
