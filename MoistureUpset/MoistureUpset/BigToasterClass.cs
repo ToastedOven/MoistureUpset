@@ -12,6 +12,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
+using RoR2.UI;
 
 namespace MoistureUpset
 {
@@ -567,24 +568,31 @@ namespace MoistureUpset
                     {
                         Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
                     }
-                    if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                    {
-                        string line;
-                        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                        {
-                            line = r.ReadToEnd();
-                        }
-                        int readnum = Int32.Parse(line);
-                        AkSoundEngine.SetRTPCValue("RuneBadNoise", readnum);
-                    }
-                    else
-                    {
-                        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                        {
-                            r.Write(100);
-                            AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
-                        }
-                    }
+                    //if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                    //{
+                    //    string line;
+                    //    using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                    //    {
+                    //        line = r.ReadToEnd();
+                    //    }
+                    //    int readnum = Int32.Parse(line);
+                    //    AkSoundEngine.SetRTPCValue("RuneBadNoise", readnum);
+                    //}
+                    //else
+                    //{
+                    //    using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                    //    {
+                    //        r.Write(100);
+                    //        AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
+                    //    }
+                    //}
+
+                    float hitvolume = float.Parse(ModSettingsManager.getOptionValue("Hitmarker Volume"));
+
+                    AkSoundEngine.SetRTPCValue("RuneBadNoise", (int)Math.Round(hitvolume));
+
+                    
+
                     if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
                     {
                         string line;
@@ -604,10 +612,14 @@ namespace MoistureUpset
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.LogWarning(e);
                 }
             };
         }
+
+
+        
     }
 }

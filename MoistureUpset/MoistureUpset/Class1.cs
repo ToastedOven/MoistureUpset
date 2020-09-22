@@ -16,6 +16,7 @@ using RoR2.UI;
 namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
+    [BepInDependency("com.rune580.RiskOfOptions")]
     //Change these
     [BepInPlugin("com.WetBoys.WetGamers", "We are really wet.", "0.6.9")]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI")]
@@ -37,7 +38,7 @@ namespace MoistureUpset
 
             UnReady.Init();
 
-            OptionsScreen.Init();
+            ModSettingsManager.Init();
 
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
