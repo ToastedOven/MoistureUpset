@@ -174,6 +174,41 @@ namespace MoistureUpset
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
                 EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
+                EnemyReplacements.ReplaceParticleSystemmesh(EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab, "@MoistureUpset_toad:assets/toadbombfull.mesh", 1);
+                var skin = EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab.GetComponentsInChildren<ParticleSystemRenderer>()[1];
+                //skin.sharedMaterial = Resources.Load<Material>("@MoistureUpset_toad:assets/toadbomb.mat");
+                skin.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                skin.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                skin.sharedMaterial.SetInt("_ZWrite", 0);
+                skin.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
+                skin.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
+                skin.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                skin.sharedMaterial.renderQueue = 3000;
+                //try
+                //{
+                //    var pre = EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab;
+                //    Debug.Log("-" + pre);
+                //    var gameobject = pre.GetComponentsInChildren<ParticleSystemRenderer>()[1];
+                //    Debug.Log("-" + gameobject);
+                //    var skin = gameobject.gameObject.AddComponent<SkinnedMeshRenderer>() as SkinnedMeshRenderer;
+                //    Debug.Log("-" + skin);
+                //    skin.transform.parent = gameobject.transform;
+                //    skin.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toadbomblid.mesh");
+                //    skin.sharedMaterial = Resources.Load<Material>("@MoistureUpset_toad:assets/toadbomb.mat");
+                //    skin.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                //    skin.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                //    skin.sharedMaterial.SetInt("_ZWrite", 0);
+                //    skin.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
+                //    skin.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
+                //    skin.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                //    skin.sharedMaterial.renderQueue = 3000;
+                //}
+                //catch (Exception)
+                //{
+                //}
+
+
+
                 EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
                 orig(oldS, newS);
                 try
