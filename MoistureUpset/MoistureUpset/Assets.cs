@@ -19,6 +19,14 @@ namespace MoistureUpset
                 SoundBanks.Add(bytes);
             }
 
+            using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ImReallyMoist.bnk"))
+            {
+                var bytes = new byte[bankStream.Length];
+                bankStream.Read(bytes, 0, bytes.Length);
+
+                SoundBanks.Add(bytes);
+            }
+
             using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Risk2GaySounds.bnk"))
             {
                 var bytes = new byte[bankStream.Length];

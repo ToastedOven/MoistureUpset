@@ -41,20 +41,6 @@ namespace MoistureUpset
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightmap", null);
                 }
-                if (prefab.ToUpper().Contains("IMPBOSS"))
-                {
-                    foreach (var item in fab.GetComponentsInChildren<Color>())
-                    {
-                        Debug.Log($"-=-=-=-=-=-{item}");
-                    }
-                }
-                else if (prefab.ToUpper().Contains("IMP"))
-                {
-                    foreach (var item in fab.GetComponentsInChildren<Color>())
-                    {
-                        Debug.Log($"-=-=-=-=-=-{item}");
-                    }
-                }
                 //try
                 //{
                 //    foreach (var item in meshes[0].sharedMaterials[i].GetTexturePropertyNames())
@@ -79,7 +65,7 @@ namespace MoistureUpset
                 }
             }
         }
-        private static void ReplaceMeshRenderer(string prefab, string mesh, string png)
+        private static void ReplaceMeshFilter(string prefab, string mesh, string png)
         {
             var fab = Resources.Load<GameObject>(prefab);
             var renderers = fab.GetComponentsInChildren<Renderer>();
@@ -94,6 +80,11 @@ namespace MoistureUpset
                 renderers[0].sharedMaterials[i].SetTexture("_NormalTex", null);
             }
             meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
+        public static void ReplaceParticleSystemmesh(GameObject fab, string mesh, int spot = 0)
+        {
+            var meshes = fab.GetComponentsInChildren<ParticleSystemRenderer>();
+            meshes[spot].mesh = Resources.Load<Mesh>(mesh);
         }
         public static void ReplaceMeshRenderer(string prefab, string mesh)
         {
@@ -120,13 +111,13 @@ namespace MoistureUpset
             }
             meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
         }
-        private static void ReplaceModel(string prefab, string mesh, int position = 0)
+        public static void ReplaceModel(string prefab, string mesh, int position = 0)
         {
             var fab = Resources.Load<GameObject>(prefab);
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
         }
-        private static void ReplaceModel(GameObject fab, string mesh, int position = 0)
+        public static void ReplaceModel(GameObject fab, string mesh, int position = 0)
         {
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
@@ -323,7 +314,7 @@ namespace MoistureUpset
         {
             LoadResource("sans");
             ReplaceModel("prefabs/characterbodies/ImpBossBody", "@MoistureUpset_sans:assets/sans.mesh", "@MoistureUpset_sans:assets/sans.png");
-            ReplaceMeshRenderer("prefabs/projectileghosts/ImpVoidspikeProjectileGhost", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
+            ReplaceMeshFilter("prefabs/projectileghosts/ImpVoidspikeProjectileGhost", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
         }
         private static void Shop()
         {
@@ -404,7 +395,7 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_tacobell:assets/taco.mesh", "@MoistureUpset_tacobell:assets/taco.png");
-            ReplaceMeshRenderer("prefabs/projectileghosts/BellBallGhost", "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
+            ReplaceMeshFilter("prefabs/projectileghosts/BellBallGhost", "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
         }
         //private static void ReplaceFont(string ogFont, string newFont)
         //{
@@ -475,7 +466,38 @@ namespace MoistureUpset
             {
                 item.bones = t.ToArray();
             }
-            ReplaceModel("prefabs/characterbodies/MiniMushroomBody", "@MoistureUpset_toad:assets/toad.mesh"/*, "@MoistureUpset_toad:assets/toad.png"*/);
+            ReplaceModel("prefabs/characterbodies/MiniMushroomBody", "@MoistureUpset_toad:assets/toad.mesh", "@MoistureUpset_toad:assets/toad.png");
+            ReplaceMeshFilter("prefabs/projectileghosts/SporeGrenadeGhost", "@MoistureUpset_toad:assets/toadbomb.mesh", "@MoistureUpset_toad:assets/toadbomb.png");
+            var g = Resources.Load<GameObject>("prefabs/projectileghosts/SporeGrenadeGhost");
+            var meshfilter = g.GetComponentInChildren<MeshFilter>();
+            var skinnedmesh = meshfilter.gameObject.AddComponent<SkinnedMeshRenderer>() as SkinnedMeshRenderer;
+            skinnedmesh.transform.position = g.transform.position;
+            skinnedmesh.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toadbomblid.mesh");
+
+            skinnedmesh.sharedMaterial = Resources.Load<Material>("@MoistureUpset_toad:assets/toadbomb.mat");
+            skinnedmesh.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            skinnedmesh.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            skinnedmesh.sharedMaterial.SetInt("_ZWrite", 0);
+            skinnedmesh.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
+            skinnedmesh.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
+            skinnedmesh.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+            skinnedmesh.sharedMaterial.renderQueue = 3000;
+
+
+
+
+            //var pre = Resources.Load<GameObject>("prefabs/projectiles/SporeGrenadeProjectile");
+            //var gameobject = pre.GetComponentsInChildren<MeshFilter>()[0];
+            //var skin = gameobject.gameObject.AddComponent<SkinnedMeshRenderer>() as SkinnedMeshRenderer;
+            //skin.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toadbomblid.mesh");
+            //skin.sharedMaterial = Resources.Load<Material>("@MoistureUpset_toad:assets/toadbomb.mat");
+            //skin.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            //skin.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            //skin.sharedMaterial.SetInt("_ZWrite", 0);
+            //skin.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
+            //skin.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
+            //skin.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+            //skin.sharedMaterial.renderQueue = 3000;
         }
         private static void Imp()
         {
