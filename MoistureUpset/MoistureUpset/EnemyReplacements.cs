@@ -229,6 +229,7 @@ namespace MoistureUpset
             UImods.ReplaceTexture2D("textures/bodyicons/RoboBallMiniBody", "MoistureUpset.Resources.obamaprism.png");
             UImods.ReplaceTexture2D("textures/bodyicons/SuperRoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
             UImods.ReplaceTexture2D("textures/bodyicons/WispBody", "MoistureUpset.Resources.dogplane.png");
+            UImods.ReplaceTexture2D("textures/bodyicons/MiniMushroomBody", "MoistureUpset.Resources.toad.png");
             //UImods.ReplaceUIBetter("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
         }
         private static void Names()
@@ -302,6 +303,10 @@ namespace MoistureUpset
                 else if (st.Contains("Alloy Worship Unit"))
                 {
                     st = st.Replace("Alloy Worship Unit", "Obamium Worship Unit");
+                }
+                else if (st.Contains("Mini Mushrum"))
+                {
+                    st = st.Replace("Mini Mushrum", "Toad");
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -483,21 +488,23 @@ namespace MoistureUpset
             skinnedmesh.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
             skinnedmesh.sharedMaterial.renderQueue = 3000;
 
-
-
-
-            //var pre = Resources.Load<GameObject>("prefabs/projectiles/SporeGrenadeProjectile");
-            //var gameobject = pre.GetComponentsInChildren<MeshFilter>()[0];
-            //var skin = gameobject.gameObject.AddComponent<SkinnedMeshRenderer>() as SkinnedMeshRenderer;
-            //skin.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toadbomblid.mesh");
-            //skin.sharedMaterial = Resources.Load<Material>("@MoistureUpset_toad:assets/toadbomb.mat");
-            //skin.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-            //skin.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            //skin.sharedMaterial.SetInt("_ZWrite", 0);
-            //skin.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
-            //skin.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
-            //skin.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-            //skin.sharedMaterial.renderQueue = 3000;
+            var splat = Resources.Load<GameObject>("prefabs/projectiles/SporeGrenadeProjectileDotZone");
+            var texture = Resources.Load<Texture>("@MoistureUpset_toad:assets/toadsplatcolorhighres.png");
+            foreach (var item in splat.GetComponentsInChildren<ThreeEyedGames.Decal>())
+            {
+                item.Material.shaderKeywords = null;
+                item.RenderMode = ThreeEyedGames.Decal.DecalRenderMode.Unlit;
+                item.Material.color = Color.white;
+                foreach (var mat in item.Material.GetTexturePropertyNames())
+                {
+                    //Debug.Log($"--=={item.Material.GetTexture(mat)}");
+                    if (item.Material.GetTexture(mat) && item.Material.GetTexture(mat).name == "texMushDecalMask")
+                    {
+                        item.Material.SetTexture(mat, texture);
+                        item.transform.localScale *= .95f;
+                    }
+                }
+            }
         }
         private static void Imp()
         {
