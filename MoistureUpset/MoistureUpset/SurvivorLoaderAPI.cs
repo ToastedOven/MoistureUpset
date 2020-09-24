@@ -32,7 +32,7 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_robloxfont", MainAssetBundle));
             }
 
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.toad"))
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.toad1"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 

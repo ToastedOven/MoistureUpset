@@ -12,6 +12,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
+using RiskOfOptions;
 
 namespace MoistureUpset
 {
@@ -131,29 +132,43 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{resource}", MainAssetBundle));
             }
         }
+        private static void LoadBNK(string bnk)
+        {
+            string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
+            Debug.Log(s);
+            using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
+            {
+                var bytes = new byte[bankStream.Length];
+                bankStream.Read(bytes, 0, bytes.Length);
+
+                SoundBanks.Add(bytes);
+            }
+        }
         public static void RunAll()
         {
             try
             {
-                Lemurian();
                 ElderLemurian();
+                Lemurian();
                 DEBUG();
                 Golem();
                 Bison();
                 SolusUnit();
                 Templar();
-                Wisp();
                 GreaterWisp();
+                Wisp();
+                Sans();
                 Imp();
                 MiniMushroom();
+                BeetleGuard();
                 Beetle();
                 TacoBell();
                 Jelly();
-                BeetleGuard();
                 Shop();
-                Sans();
                 Names();
                 Icons();
+                _UI();
+                NonEnemyNames();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -212,25 +227,108 @@ namespace MoistureUpset
         }
         private static void Icons()
         {
-            UImods.ReplaceTexture2D("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardBody", "MoistureUpset.Resources.winston.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardAllyBody", "MoistureUpset.Resources.winston.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/BellBody", "MoistureUpset.Resources.tacobell.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/BisonBody", "MoistureUpset.Resources.thomas.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/ClayBruiserBody", "MoistureUpset.Resources.heavy.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/GolemBody", "MoistureUpset.Resources.oof.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/GreaterWispBody", "MoistureUpset.Resources.ghast.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/ImpBody", "MoistureUpset.Resources.doot.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/ImpBossBody", "MoistureUpset.Resources.sans.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/JellyfishBody", "MoistureUpset.Resources.joy.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/LemurianBody", "MoistureUpset.Resources.mike.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/LemurianBruiserBody", "MoistureUpset.Resources.bowser.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/RoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/RoboBallMiniBody", "MoistureUpset.Resources.obamaprism.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/SuperRoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/WispBody", "MoistureUpset.Resources.dogplane.png");
-            UImods.ReplaceTexture2D("textures/bodyicons/MiniMushroomBody", "MoistureUpset.Resources.toad.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Winston")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardBody", "MoistureUpset.Resources.winston.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Winston")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardAllyBody", "MoistureUpset.Resources.winston.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/BellBody", "MoistureUpset.Resources.tacobell.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Thomas")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/BisonBody", "MoistureUpset.Resources.thomas.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/ClayBruiserBody", "MoistureUpset.Resources.heavy.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/GolemBody", "MoistureUpset.Resources.oof.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Ghast")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/GreaterWispBody", "MoistureUpset.Resources.ghast.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/ImpBody", "MoistureUpset.Resources.doot.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/ImpBossBody", "MoistureUpset.Resources.sans.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/JellyfishBody", "MoistureUpset.Resources.joy.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/LemurianBody", "MoistureUpset.Resources.mike.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Bowser")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/LemurianBruiserBody", "MoistureUpset.Resources.bowser.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/RoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/RoboBallMiniBody", "MoistureUpset.Resources.obamaprism.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Obama prism")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/SuperRoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/WispBody", "MoistureUpset.Resources.dogplane.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/MiniMushroomBody", "MoistureUpset.Resources.toad.png");
             //UImods.ReplaceUIBetter("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
+        }
+        private static void NonEnemyNames()
+        {
+            On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
+            {
+                if (float.Parse(ModSettingsManager.getOptionValue("NSFW")) == 1 && float.Parse(ModSettingsManager.getOptionValue("Difficulty Names")) == 1)
+                {
+                    if (st == "Drizzle")
+                    {
+                        st = "Jizzle";
+                    }
+                    else if (st == "Rainstorm")
+                    {
+                        st = "Jizzstorm";
+                    }
+                    else if (st == "Monsoon")
+                    {
+                        st = "Jizzoon";
+                    }
+                }
+                if (float.Parse(ModSettingsManager.getOptionValue("In-Run Difficulty Names")) == 1)
+                {
+                    if (token == "DIFFICULTY_BAR_0")
+                    {
+                        st = "Baby Mode";
+                    }
+                    else if (token == "DIFFICULTY_BAR_1")
+                    {
+                        st = "Somebody once told me the";
+                    }
+                    else if (token == "DIFFICULTY_BAR_2")
+                    {
+                        st = "world was gonna roll me,";
+                    }
+                    else if (token == "DIFFICULTY_BAR_3")
+                    {
+                        st = "I ain't the sharpest tool";
+                    }
+                    else if (token == "DIFFICULTY_BAR_4")
+                    {
+                        st = "in the shed. She was looking";
+                    }
+                    else if (token == "DIFFICULTY_BAR_5")
+                    {
+                        st = "kind of dumb with her finger";
+                    }
+                    else if (token == "DIFFICULTY_BAR_6")
+                    {
+                        st = "and her thumb in the shape";
+                    }
+                    else if (token == "DIFFICULTY_BAR_7")
+                    {
+                        st = "of an L on her forehead.";
+                    }
+                    else if (token == "DIFFICULTY_BAR_8")
+                    {
+                        st = "Well, the years start coming";
+                    }
+                    else if (token == "DIFFICULTY_BAR_9")
+                    {
+                        st = " and they dont stop coming ";
+                    }
+                }
+                orig(self, token, st);
+            };
         }
         private static void Names()
         {
@@ -238,75 +336,107 @@ namespace MoistureUpset
             {
                 if (st.Contains("Imp Overlord"))
                 {
-                    st = st.Replace("Imp Overlord", "Sans");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
+                        st = st.Replace("Imp Overlord", "Sans");
                 }
-                else if (st.Contains("Imp"))
+                else if (st == "Lord of the Red Plane")
                 {
-                    st = st.Replace("Imp", "Trumpet Skeleton");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
+                        st = "You're gonna have a bad time";
+                }
+                else if (st.Contains("Imp") && !st.Contains("Overlord") && !st.Contains("Impossible") && !st.Contains("Important") && !st.Contains("Improves"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) == 1)
+                        st = st.Replace("Imp", "Trumpet Skeleton");
                 }
                 else if (st.Contains("Lesser Wisp"))
                 {
-                    st = st.Replace("Lesser Wisp", "Dogplane");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) == 1)
+                        st = st.Replace("Lesser Wisp", "Dogplane");
                 }
                 else if (st.Contains("Jellyfish"))
                 {
-                    st = st.Replace("Jellyfish", "Comedy");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) == 1)
+                        st = st.Replace("Jellyfish", "Comedy");
                 }
 
 
                 else if (st.Contains("Beetle Guard"))
                 {
-                    st = st.Replace("Beetle Guard", "Winston");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Winston")) == 1)
+                        st = st.Replace("Beetle Guard", "Winston");
                 }
-                else if (st.Contains("Beetle") && !st.Contains("Queen"))
+                else if (st.Contains("Beetle") && !st.Contains("Queen") && !st.Contains("Guard"))
                 {
-                    st = st.Replace("Beetle", "Froggy Chair");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) == 1)
+                        st = st.Replace("Beetle", "Froggy Chair");
                 }
 
 
                 else if (st.Contains("Elder Lemurian"))
                 {
-                    st = st.Replace("Elder Lemurian", "Bowser");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Bowser")) == 1)
+                        st = st.Replace("Elder Lemurian", "Bowser");
                 }
-                else if (st.Contains("Lemurian"))
+                else if (st.Contains("Lemurian") && !st.Contains("Elder"))
                 {
-                    st = st.Replace("Lemurian", "Mike Wazowski");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) == 1)
+                        st = st.Replace("Lemurian", "Mike Wazowski");
                 }
                 else if (st.Contains("Solus Probe"))
                 {
-                    st = st.Replace("Solus Probe", "Obama Prism");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                        st = st.Replace("Solus Probe", "Obama Prism");
                 }
                 else if (st.Contains("Brass Contraption"))
                 {
-                    st = st.Replace("Brass Contraption", "Taco Bell");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) == 1)
+                        st = st.Replace("Brass Contraption", "Taco Bell");
                 }
                 else if (st.Contains("Bighorn Bison"))
                 {
-                    st = st.Replace("Bighorn Bison", "Thomas");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Thomas")) == 1)
+                        st = st.Replace("Bighorn Bison", "Thomas");
                 }
                 else if (st.Contains("Stone Golem"))
                 {
-                    st = st.Replace("Stone Golem", "Robloxian");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) == 1)
+                        st = st.Replace("Stone Golem", "Robloxian");
                 }
                 else if (st.Contains("Clay Templar"))
                 {
-                    st = st.Replace("Clay Templar", "Heavy");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) == 1)
+                        st = st.Replace("Clay Templar", "Heavy");
                 }
                 else if (st.Contains("Greater Wisp"))
                 {
-                    st = st.Replace("Greater Wisp", "Ghast");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Ghast")) == 1)
+                        st = st.Replace("Greater Wisp", "Ghast");
                 }
                 else if (st.Contains("Solus Control Unit"))
                 {
-                    st = st.Replace("Solus Control Unit", "Obama Sphere");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                        st = st.Replace("Solus Control Unit", "Obama Sphere");
+                }
+                else if (st == "Corrupted AI")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                        st = "Bringer of the Prisms";
+                }
+                else if (st == "Friend of Vultures")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                        st = "Friend of Prisms";
                 }
                 else if (st.Contains("Alloy Worship Unit"))
                 {
-                    st = st.Replace("Alloy Worship Unit", "Obamium Worship Unit");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                        st = st.Replace("Alloy Worship Unit", "Obamium Worship Unit");
                 }
                 else if (st.Contains("Mini Mushrum"))
                 {
-                    st = st.Replace("Mini Mushrum", "Toad");
+                    if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
+                        st = st.Replace("Mini Mushrum", "Toad");
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -315,19 +445,36 @@ namespace MoistureUpset
                 orig(self, token, st);
             };
         }
+        private static void _UI()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Awp UI")) == 1)
+                LoadBNK("awp");
+            if (float.Parse(ModSettingsManager.getOptionValue("Chest noises")) == 1)
+                LoadBNK("chestinteraction");
+            if (float.Parse(ModSettingsManager.getOptionValue("Player death sound")) == 1)
+                LoadBNK("playerdeath");
+        }
         private static void Sans()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Sans")) != 1)
+                return;
+            LoadBNK("sans");
             LoadResource("sans");
             ReplaceModel("prefabs/characterbodies/ImpBossBody", "@MoistureUpset_sans:assets/sans.mesh", "@MoistureUpset_sans:assets/sans.png");
             ReplaceMeshFilter("prefabs/projectileghosts/ImpVoidspikeProjectileGhost", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
         }
         private static void Shop()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Merchant")) != 1)
+                return;
             LoadResource("shop");
             ReplaceModel("prefabs/characterbodies/ShopkeeperBody", "@MoistureUpset_shop:assets/shop.mesh", "@MoistureUpset_shop:assets/shop.png");
         }
         private static void BeetleGuard()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Winston")) != 1)
+                return;
+            LoadBNK("beetleguard");
             LoadResource("winston");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleGuardBody");
             List<Transform> t = new List<Transform>();
@@ -370,6 +517,9 @@ namespace MoistureUpset
         }
         private static void Jelly()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) != 1)
+                return;
+            LoadBNK("comedy");
             LoadResource("jelly");
             ReplaceModel("prefabs/characterbodies/JellyfishBody", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
             On.EntityStates.JellyfishMonster.DeathState.OnEnter += (orig, self) =>
@@ -381,6 +531,9 @@ namespace MoistureUpset
         }
         private static void TacoBell()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) != 1)
+                return;
+            LoadBNK("tacobell");
             LoadResource("tacobell");
             On.EntityStates.Bell.DeathState.OnEnter += (orig, self) =>
             {
@@ -454,6 +607,9 @@ namespace MoistureUpset
         //}
         private static void MiniMushroom()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Toad")) != 1)
+                return;
+            LoadBNK("toad");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/MiniMushroomBody");
             List<Transform> t = new List<Transform>();
             foreach (var item in fab.GetComponentsInChildren<Transform>())
@@ -508,26 +664,9 @@ namespace MoistureUpset
         }
         private static void Imp()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) != 1)
+                return;
             ReplaceModel("prefabs/characterbodies/ImpBody", "@MoistureUpset_dooter:assets/dooter.mesh", "@MoistureUpset_dooter:assets/dooter.png");
-            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/ImpBody");
-            //var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
-            //var texture = Resources.Load<Texture>("@MoistureUpset_dooter:assets/dooter.png");
-            //for (int i = 0; i < meshes[0].sharedMaterials.Length; i++)
-            //{
-            //    try
-            //    {
-            //        meshes[0].sharedMaterials[i].SetTexture("_PrintRamp", texture);
-            //        meshes[0].sharedMaterials[i].SetTexture("_FresnelRamp", texture);
-            //        foreach (var item in meshes[0].sharedMaterials[i].GetTexturePropertyNames())
-            //        {
-            //            Debug.Log($"---------{item}---------------{meshes[0].sharedMaterials[i].GetTexture(item)}");
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Debug.Log(e);
-            //    }
-            //}
 
 
             On.EntityStates.ImpMonster.BlinkState.OnEnter += (orig, self) =>
@@ -557,6 +696,9 @@ namespace MoistureUpset
         }
         private static void Beetle()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) != 1)
+                return;
+            LoadBNK("beetle");
             LoadResource("frog");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleBody");
             List<Transform> t = new List<Transform>();
@@ -576,6 +718,9 @@ namespace MoistureUpset
         }
         private static void ElderLemurian()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Bowser")) != 1)
+                return;
+            LoadBNK("bowser");
             LoadResource("bowser");
             ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_bowser:assets/bowser.mesh", "@MoistureUpset_bowser:assets/bowser.png");
             On.EntityStates.LemurianBruiserMonster.FireMegaFireball.OnEnter += (orig, self) =>
@@ -604,6 +749,9 @@ namespace MoistureUpset
         }
         private static void Templar()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) != 1)
+                return;
+            LoadBNK("heavy");
             ReplaceModel("prefabs/characterbodies/ClayBruiserBody", "@MoistureUpset_heavy:assets/heavy.mesh", "@MoistureUpset_heavy:assets/heavy.png");
             ReplaceModel("prefabs/characterbodies/ClayBruiserBody", "@MoistureUpset_heavy:assets/minigun.mesh", "@MoistureUpset_heavy:assets/heavy.png", 1);
 
@@ -649,6 +797,9 @@ namespace MoistureUpset
         }
         private static void GreaterWisp()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Ghast")) != 1)
+                return;
+            LoadBNK("ghast");
             ReplaceModel("prefabs/characterbodies/GreaterWispBody", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/GreaterWispBody");
             var meshes = fab.GetComponentsInChildren<Component>();
@@ -690,6 +841,9 @@ namespace MoistureUpset
         }
         private static void Wisp()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) != 1)
+                return;
+            LoadBNK("dogplane");
             ReplaceModel("prefabs/characterbodies/WispBody", "@MoistureUpset_wisp:assets/bahdog.mesh", "@MoistureUpset_wisp:assets/bahdog.png");
             ReplaceModel("prefabs/characterbodies/WispSoulBody", "@MoistureUpset_wisp:assets/bahdog.mesh", "@MoistureUpset_wisp:assets/bahdog.png");
             On.EntityStates.Wisp1Monster.ChargeEmbers.OnEnter += (orig, self) =>
@@ -725,6 +879,9 @@ namespace MoistureUpset
         }
         private static void SolusUnit()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) != 1)
+                return;
+            LoadBNK("prism");
             ReplaceModel("prefabs/characterbodies/RoboBallMiniBody", "@MoistureUpset_obamaprism:assets/Obamium.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             ReplaceModel("prefabs/characterbodies/RoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             ReplaceModel("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
@@ -751,6 +908,8 @@ namespace MoistureUpset
         }
         private static void Lemurian()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) != 1)
+                return;
             On.EntityStates.LemurianMonster.Bite.OnEnter += (orig, self) =>
             {
                 Util.PlaySound("MikeAttack", self.outer.gameObject);
@@ -766,6 +925,9 @@ namespace MoistureUpset
 
         private static void Golem()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) != 1)
+                return;
+            LoadBNK("oof");
             On.EntityStates.GolemMonster.ChargeLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.ChargeLaser.attackSoundString = "GolemChargeLaser";
@@ -782,7 +944,6 @@ namespace MoistureUpset
                             foreach (var item in mesh.sharedMaterials)
                             {
                                 item.mainTexture = t;
-                                item.SetTexture("_EmTex", t);
                             }
                             break;
                         }
@@ -810,7 +971,6 @@ namespace MoistureUpset
                             foreach (var item in mesh.sharedMaterials)
                             {
                                 item.mainTexture = t;
-                                item.SetTexture("_EmTex", t);
                             }
                             break;
                         }
@@ -831,6 +991,8 @@ namespace MoistureUpset
         }
         private static void Bison()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Thomas")) != 1)
+                return;
             On.EntityStates.Bison.Charge.OnEnter += (orig, self) =>
             {
                 EntityStates.Bison.Charge.startSoundString = "BisonCharge";

@@ -12,6 +12,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
+using RiskOfOptions;
 
 namespace MoistureUpset
 {
@@ -24,12 +25,10 @@ namespace MoistureUpset
             BossMusic();
             BossMusicAndFanFare();
             OnHit();
-            ModifyChat();
             PreGame();
             INeedToSortThese();
             PlayerDeath();
             DifficultyIcons();
-            //HitMarker();
         }
         public static void INeedToSortThese()
         {
@@ -53,34 +52,39 @@ namespace MoistureUpset
 
         public static void DifficultyIcons()
         {
-            UImods.ReplaceUIBetter("Textures/DifficultyIcons/texDifficultyEasyIcon", "MoistureUpset.Resources.easy.png");
-            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEasyIconDisabled", "MoistureUpset.Resources.easyDisabled.png");
-
-            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIcon", "MoistureUpset.Resources.medium.png");
-            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIconDisabled", "MoistureUpset.Resources.mediumDisabled.png");
-
-            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIcon", "MoistureUpset.Resources.hard.png");
-            UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
-
-
-            byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.pizzaroll.png");
-            var r = Resources.LoadAll<GameObject>("prefabs/ui");
-            foreach (var sex in r)
+            if (float.Parse(ModSettingsManager.getOptionValue("Difficulty Icons")) == 1)
             {
-                foreach (var item in sex.GetComponentsInChildren<UnityEngine.UI.Image>())
-                {
-                    try
-                    {
-                        //Debug.Log($"89-------{item.name}");
-                        if (item.name == "Checkbox")
-                        {
-                            item.overrideSprite.texture.LoadImage(bytes);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
+                UImods.ReplaceUIBetter("Textures/DifficultyIcons/texDifficultyEasyIcon", "MoistureUpset.Resources.easy.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEasyIconDisabled", "MoistureUpset.Resources.easyDisabled.png");
 
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIcon", "MoistureUpset.Resources.medium.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIconDisabled", "MoistureUpset.Resources.mediumDisabled.png");
+
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIcon", "MoistureUpset.Resources.hard.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
+            }
+
+            if (float.Parse(ModSettingsManager.getOptionValue("Pizza Roll")) == 1)
+            {
+                byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.pizzaroll.png");
+                var r = Resources.LoadAll<GameObject>("prefabs/ui");
+                foreach (var sex in r)
+                {
+                    foreach (var item in sex.GetComponentsInChildren<UnityEngine.UI.Image>())
+                    {
+                        try
+                        {
+                            //Debug.Log($"89-------{item.name}");
+                            if (item.name == "Checkbox")
+                            {
+                                item.overrideSprite.texture.LoadImage(bytes);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+
+                    }
                 }
             }
             //var font = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
@@ -107,7 +111,8 @@ namespace MoistureUpset
 
         public static void PlayerDeath()
         {
-            On.RoR2.GlobalEventManager.OnPlayerCharacterDeath += (orig, self, report, user) =>
+            if (float.Parse(ModSettingsManager.getOptionValue("Player death chat")) == 1)
+                On.RoR2.GlobalEventManager.OnPlayerCharacterDeath += (orig, self, report, user) =>
             {
                 orig(self, report, user);
                 try
@@ -116,7 +121,11 @@ namespace MoistureUpset
                     {
                         return;
                     }
-                    List<string> quotes = new List<string> { "I fucking hate this game", "I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
+                    List<string> quotes = new List<string> {"I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
+                    if (float.Parse(ModSettingsManager.getOptionValue("NSFW")) == 1)
+                    {
+                        quotes.Add("I fucking hate this game");
+                    }
                     if (report.attackerMaster.name.ToUpper().Contains("MAGMAWORM"))
                     {
                         quotes.Add("The magma worm is such bullshit");
@@ -154,19 +163,6 @@ namespace MoistureUpset
         }
         public static void PreGame()
         {
-            On.RoR2.VoteController.StartTimer += (orig, self) =>
-            {
-                if (!NetworkServer.active)
-                {
-                    Debug.LogWarning("[Server] function 'System.Void RoR2.VoteController::StartTimer()' called on client");
-                    return;
-                }
-                if (self.timerIsActive)
-                {
-                    return;
-                }
-                self.NetworktimerIsActive = true;
-            };
             On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
             {
                 orig(self);
@@ -174,71 +170,53 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
-                EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
-                EnemyReplacements.ReplaceParticleSystemmesh(EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab, "@MoistureUpset_toad:assets/toadbombfull.mesh", 1);
-                var skin = EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab.GetComponentsInChildren<ParticleSystemRenderer>()[1];
-                //skin.sharedMaterial = Resources.Load<Material>("@MoistureUpset_toad:assets/toadbomb.mat");
-                skin.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                skin.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                skin.sharedMaterial.SetInt("_ZWrite", 0);
-                skin.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
-                skin.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
-                skin.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                skin.sharedMaterial.renderQueue = 3000;
-                //try
-                //{
-                //    var pre = EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab;
-                //    Debug.Log("-" + pre);
-                //    var gameobject = pre.GetComponentsInChildren<ParticleSystemRenderer>()[1];
-                //    Debug.Log("-" + gameobject);
-                //    var skin = gameobject.gameObject.AddComponent<SkinnedMeshRenderer>() as SkinnedMeshRenderer;
-                //    Debug.Log("-" + skin);
-                //    skin.transform.parent = gameobject.transform;
-                //    skin.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_toad:assets/toadbomblid.mesh");
-                //    skin.sharedMaterial = Resources.Load<Material>("@MoistureUpset_toad:assets/toadbomb.mat");
-                //    skin.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                //    skin.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                //    skin.sharedMaterial.SetInt("_ZWrite", 0);
-                //    skin.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
-                //    skin.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
-                //    skin.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                //    skin.sharedMaterial.renderQueue = 3000;
-                //}
-                //catch (Exception)
-                //{
-                //}
+                if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) == 1)
+                    EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
+                if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
+                {
+                    EnemyReplacements.ReplaceParticleSystemmesh(EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab, "@MoistureUpset_toad:assets/toadbombfull.mesh", 1);
+                    var skin = EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab.GetComponentsInChildren<ParticleSystemRenderer>()[1];
+                    skin.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    skin.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    skin.sharedMaterial.SetInt("_ZWrite", 0);
+                    skin.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
+                    skin.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
+                    skin.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                    skin.sharedMaterial.renderQueue = 3000;
+                }
 
 
-
-                EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
+                if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
+                    EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
                 orig(oldS, newS);
-                try
-                {
-                    switch (newS.name)
+                if (float.Parse(ModSettingsManager.getOptionValue("Main menu music")) == 1)
+                    try
                     {
-                        case "logbook":
-                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
-                            break;
-                        case "title":
-                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
-                            AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
-                            break;
-                        case "lobby":
-                            AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
-                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
-                            break;
-                        case "splash":
-                            AkSoundEngine.PostEvent("PlayMainMenu", GameObject.FindObjectOfType<GameObject>());
-                            AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
-                            break;
-                        default:
-                            AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
-                            break;
+                        switch (newS.name)
+                        {
+                            case "logbook":
+                                AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
+                                break;
+                            case "title":
+                                AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
+                                AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
+                                break;
+                            case "lobby":
+                                AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
+                                AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
+                                break;
+                            case "splash":
+                                AkSoundEngine.PostEvent("PlayMainMenu", GameObject.FindObjectOfType<GameObject>());
+                                AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+                                break;
+                            default:
+                                AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
+                                break;
+                        }
                     }
-                }
-                catch (Exception)
-                {
-                }
+                    catch (Exception)
+                    {
+                    }
                 AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.ExecuteActionOnEvent(816301922, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
@@ -257,16 +235,17 @@ namespace MoistureUpset
                 {
                     string song = self.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
 
-                    if (song == "muMenu" || song == "muLogbook")
-                    {
-                        self.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
-                    }
+                    if (float.Parse(ModSettingsManager.getOptionValue("Main menu music")) == 1)
+                        if (song == "muMenu" || song == "muLogbook")
+                        {
+                            self.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                        }
 
                     //muFULLSong07
                     //muFULLSong18
                     //muSong04
-
-                    if (MusicAPI.ReplaceSong(ref self, "muSong04", "PlayShopMusic"))
+                    if (float.Parse(ModSettingsManager.getOptionValue("Merchant")) == 1)
+                        if (MusicAPI.ReplaceSong(ref self, "muSong04", "PlayShopMusic"))
                     {
                         AkSoundEngine.SetRTPCValue("BossDead", 0f);
                     }
@@ -288,18 +267,22 @@ namespace MoistureUpset
                 {
                 }
             };
-            On.RoR2.CreditsController.OnEnable += (orig, self) =>
+            if (float.Parse(ModSettingsManager.getOptionValue("Logo")) == 1)
+                On.RoR2.CreditsController.OnEnable += (orig, self) =>
             {
                 orig(self);
-                DebugClass.UIdebug();
                 UImods.ReplaceUIObject("Image", "MoistureUpset.Resources.MoistureUpsetFinal.png");
             };
             On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) =>
             {
                 orig(self);
-                UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png");
-                UImods.ReplaceUIObject("MousePointer", "MoistureUpset.Resources.robloxhover.png");
-                UImods.ReplaceUIObject("MouseHover", "MoistureUpset.Resources.roblox.png");
+                if (float.Parse(ModSettingsManager.getOptionValue("Logo")) == 1)
+                    UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png");
+                if (float.Parse(ModSettingsManager.getOptionValue("Roblox Cursor")) == 1)
+                {
+                    UImods.ReplaceUIObject("MousePointer", "MoistureUpset.Resources.robloxhover.png");
+                    UImods.ReplaceUIObject("MouseHover", "MoistureUpset.Resources.roblox.png");
+                }
             };
             On.RoR2.UI.MainMenu.MainMenuController.SetDesiredMenuScreen += (orig, self, menu) =>
             {
@@ -327,79 +310,8 @@ namespace MoistureUpset
         }
         public static void HitMarker(float _Vol)
         {
-            Debug.Log("Set hitmarker volume");
+            Debug.Log($"Set hitmarker volume {_Vol}");
             AkSoundEngine.SetRTPCValue("RuneBadNoise", _Vol);
-        }
-        public static void ModifyChat()
-        {
-            On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
-            {
-                //DebugClass.GetAllGameObjects();
-                bool sendmessage = true;
-                try
-                {
-                    int num = -1;
-                    string[] text = self.inputField.text.ToUpper().Split(' ');
-                    if (text[0] == "HITMARKER" || text[0] == "HITSOUND")
-                    {
-                        num = Int32.Parse(text[1]);
-                    }
-                    else if (text[0] == "HIT" && (text[1] == "SOUND" || text[1] == "MARKER"))
-                    {
-                        num = Int32.Parse(text[2]);
-                    }
-                    //else if (text[0] == "HITMARKERVOLUME")
-                    //{
-                    //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
-                    //    {
-                    //        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
-                    //    }
-                    //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                    //    {
-                    //        string line;
-                    //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                    //        {
-                    //            line = r.ReadToEnd();
-                    //        }
-                    //        int readnum = Int32.Parse(line);
-                    //        Chat.AddMessage($"HitMarkerVolume: {readnum}");
-                    //    }
-                    //    sendmessage = false;
-                    //}
-                    else if (text[0] == "HELP")
-                    {
-                        Chat.AddMessage("-Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\n-Type 'hitmarkervolume' to check the volume of the hitmarker");
-                        sendmessage = false;
-                    }
-                    else if (text[0] == "DEBUGMUSIC")
-                    {
-                        var c = GameObject.FindObjectOfType<MusicController>();
-                        MusicAPI.GetCurrentSong(ref c);
-                    }
-                    //if (num != -1)
-                    //{
-                    //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
-                    //    {
-                    //        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
-                    //    }
-                    //    AkSoundEngine.SetRTPCValue("RuneBadNoise", num);
-                    //    File.WriteAllText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis", string.Empty);
-                    //    using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                    //    {
-                    //        r.Write(num);
-                    //    }
-                    //    sendmessage = false;
-                    //}
-                }
-                catch (Exception)
-                {
-                }
-                if (!sendmessage)
-                {
-                    self.inputField.text = "";
-                }
-                orig(self);
-            };
         }
         public static void OnHit()
         {
@@ -473,14 +385,14 @@ namespace MoistureUpset
                     var c = GameObject.FindObjectOfType<MusicController>();
                     AkSoundEngine.ExecuteActionOnEvent(2493198437, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.ExecuteActionOnEvent(291592398, AkActionOnEventType.AkActionOnEventType_Stop);
-                    if (self.baseNameToken.ToUpper().Contains("IMP"))
+                    if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", c.gameObject);
                     }
-                    else
+                    else if (float.Parse(ModSettingsManager.getOptionValue("Generic boss music")) == 1)
                     {
                         AkSoundEngine.PostEvent("PlayBossMusic", c.gameObject);
-                    }//Imp Overlord
+                    }
                     Debug.Log($"name: {self.name}");
                     Debug.Log($"base: {self.baseNameToken}");
                     Debug.Log($"subtitle: {self.subtitleNameToken}");
@@ -548,23 +460,8 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                     AkSoundEngine.PostEvent("StopFanFare", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
-                }
-                catch (Exception)
-                {
-                }
-            };
-            On.RoR2.BossGroup.OnMemberLost += (orig, self, master) =>
-            {
-                orig(self, master);
-                try
-                {
-                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    var c = GameObject.FindObjectOfType<MusicController>();
-                    if (self.combatSquad.readOnlyMembersList.Count == 0)
-                    {
-                        Util.PlaySound("BossDied", c.gameObject);
-                    }
+                    if (float.Parse(ModSettingsManager.getOptionValue("Fanfare")) == 1)
+                        AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
                 }
                 catch (Exception)
                 {
@@ -591,7 +488,8 @@ namespace MoistureUpset
         }
         public static void Somebody()
         {
-            On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
+            if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
+                On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
             {
                 orig(self);
                 Util.PlaySound("somebody", self.outer.gameObject);
@@ -611,53 +509,6 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
-                //loading the hitmarker noise cause this spot seemed like a good idea
-                //try
-                //{
-                //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
-                //    {
-                //        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
-                //    }
-                //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                //    {
-                //        string line;
-                //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                //        {
-                //            line = r.ReadToEnd();
-                //        }
-                //        int readnum = Int32.Parse(line);
-                //        AkSoundEngine.SetRTPCValue("RuneBadNoise", readnum);
-                //    }
-                //    else
-                //    {
-                //        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                //        {
-                //            r.Write(100);
-                //            AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
-                //        }
-                //    }
-                //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                //    {
-                //        string line;
-                //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                //        {
-                //            line = r.ReadToEnd();
-                //        }
-                //        int readnum = Int32.Parse(line);
-                //        AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
-                //    }
-                //    else
-                //    {
-                //        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                //        {
-                //            r.Write(0);
-                //            AkSoundEngine.SetRTPCValue("CustomRunMusic", 0);
-                //        }
-                //    }
-                //}
-                //catch (Exception)
-                //{
-                //}
             };
         }
     }
