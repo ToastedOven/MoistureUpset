@@ -12,6 +12,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using RoR2.UI;
+using RiskOfOptions;
 
 namespace MoistureUpset
 {
@@ -39,8 +40,6 @@ namespace MoistureUpset
             EnemyReplacements.RunAll();
 
             UnReady.Init();
-
-            OptionsScreen.Init();
 
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
