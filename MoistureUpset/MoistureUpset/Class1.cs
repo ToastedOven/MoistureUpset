@@ -31,13 +31,9 @@ namespace MoistureUpset
 
             SurvivorLoaderAPI.LoadSurvivors();
 
-            BigToasterClass.RunAll();
-
             SoundAssets.RegisterSoundEvents();
 
             NetworkAssistant.InitSNA();
-
-            EnemyReplacements.RunAll();
 
             UnReady.Init();
 
