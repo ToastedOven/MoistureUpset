@@ -16,13 +16,16 @@ using RoR2.UI;
 namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
+    [BepInDependency("com.rune580.riskofoptions")]
     //Change these
-    [BepInPlugin("com.WetBoys.WetGamers", "We are really wet.", "0.6.9")]
+    [BepInPlugin("com.WetBoys.MoistureUpset", "Moisture Upset", "1.0.0")]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI")]
     public class BigTest : BaseUnityPlugin
     {
         public void Awake()
         {
+            Settings.RunAll();
+
             Assets.PopulateAssets();
 
             SurvivorLoaderAPI.LoadSurvivors();
