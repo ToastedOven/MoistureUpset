@@ -19,12 +19,14 @@ namespace MoistureUpset
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("com.rune580.riskofoptions")]
     //Change these
-    [BepInPlugin("com.WetBoys.WetGamers", "Moisture Upset", "0.6.9")]
+    [BepInPlugin("com.WetBoys.MoistureUpset", "Moisture Upset", "1.0.0")]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI")]
     public class BigTest : BaseUnityPlugin
     {
         public void Awake()
         {
+            Settings.RunAll();
+
             Assets.PopulateAssets();
 
             SurvivorLoaderAPI.LoadSurvivors();
@@ -44,17 +46,6 @@ namespace MoistureUpset
             On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
 
             //ligmaballs();
-
-            InitOptions();
-        }
-
-        private static void InitOptions()
-        {
-            ModSettingsManager.setPanelDescription("Options for the Moisture Upset, The re-imagining of Risk of Rain 2");
-
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "Hitmarker Volume", "Volume of both the hitmarker and the crit sound effects."));
-
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Enable Turret Skins", "EXPERIMENTAL: Enable the Engi turret skin replacments."));
         }
 
         public static void ligmaballs()

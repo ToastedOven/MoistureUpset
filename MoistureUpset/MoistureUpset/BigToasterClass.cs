@@ -29,6 +29,7 @@ namespace MoistureUpset
             INeedToSortThese();
             PlayerDeath();
             DifficultyIcons();
+            //HitMarker();
         }
         public static void INeedToSortThese()
         {
@@ -324,6 +325,11 @@ namespace MoistureUpset
             //    orig(self);
             //};
         }
+        public static void HitMarker(float _Vol)
+        {
+            Debug.Log("Set hitmarker volume");
+            AkSoundEngine.SetRTPCValue("RuneBadNoise", _Vol);
+        }
         public static void ModifyChat()
         {
             On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
@@ -342,24 +348,24 @@ namespace MoistureUpset
                     {
                         num = Int32.Parse(text[2]);
                     }
-                    else if (text[0] == "HITMARKERVOLUME")
-                    {
-                        if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
-                        {
-                            Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
-                        }
-                        if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                        {
-                            string line;
-                            using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                            {
-                                line = r.ReadToEnd();
-                            }
-                            int readnum = Int32.Parse(line);
-                            Chat.AddMessage($"HitMarkerVolume: {readnum}");
-                        }
-                        sendmessage = false;
-                    }
+                    //else if (text[0] == "HITMARKERVOLUME")
+                    //{
+                    //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
+                    //    {
+                    //        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
+                    //    }
+                    //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                    //    {
+                    //        string line;
+                    //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                    //        {
+                    //            line = r.ReadToEnd();
+                    //        }
+                    //        int readnum = Int32.Parse(line);
+                    //        Chat.AddMessage($"HitMarkerVolume: {readnum}");
+                    //    }
+                    //    sendmessage = false;
+                    //}
                     else if (text[0] == "HELP")
                     {
                         Chat.AddMessage("-Type 'hitmarker' followed by a number 0-100 to change the hitmarker volume\n-Type 'hitmarkervolume' to check the volume of the hitmarker");
@@ -370,45 +376,20 @@ namespace MoistureUpset
                         var c = GameObject.FindObjectOfType<MusicController>();
                         MusicAPI.GetCurrentSong(ref c);
                     }
-                    //else if (text[0] == "TOGGLERUNMUSIC")
+                    //if (num != -1)
                     //{
                     //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
                     //    {
                     //        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
                     //    }
-                    //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                    //    AkSoundEngine.SetRTPCValue("RuneBadNoise", num);
+                    //    File.WriteAllText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis", string.Empty);
+                    //    using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
                     //    {
-                    //        string line;
-                    //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                    //        {
-                    //            line = r.ReadToEnd();
-                    //        }
-                    //        int readnum = Int32.Parse(line);
-                    //        readnum = (readnum == 0 ? 1 : 0);
-                    //        Chat.AddMessage($"CustomRunMusic: " + (readnum == 0 ? "false, changes will take place starting next level" : "true"));
-                    //        AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
-                    //        File.WriteAllText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis", string.Empty);
-                    //        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                    //        {
-                    //            r.Write(readnum);
-                    //        }
+                    //        r.Write(num);
                     //    }
                     //    sendmessage = false;
                     //}
-                    if (num != -1)
-                    {
-                        if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
-                        {
-                            Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
-                        }
-                        AkSoundEngine.SetRTPCValue("RuneBadNoise", num);
-                        File.WriteAllText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis", string.Empty);
-                        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                        {
-                            r.Write(num);
-                        }
-                        sendmessage = false;
-                    }
                 }
                 catch (Exception)
                 {
@@ -631,52 +612,52 @@ namespace MoistureUpset
                 {
                 }
                 //loading the hitmarker noise cause this spot seemed like a good idea
-                try
-                {
-                    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
-                    {
-                        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
-                    }
-                    if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                    {
-                        string line;
-                        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                        {
-                            line = r.ReadToEnd();
-                        }
-                        int readnum = Int32.Parse(line);
-                        AkSoundEngine.SetRTPCValue("RuneBadNoise", readnum);
-                    }
-                    else
-                    {
-                        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
-                        {
-                            r.Write(100);
-                            AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
-                        }
-                    }
-                    if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                    {
-                        string line;
-                        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                        {
-                            line = r.ReadToEnd();
-                        }
-                        int readnum = Int32.Parse(line);
-                        AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
-                    }
-                    else
-                    {
-                        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
-                        {
-                            r.Write(0);
-                            AkSoundEngine.SetRTPCValue("CustomRunMusic", 0);
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                }
+                //try
+                //{
+                //    if (!Directory.Exists(@"BepInEx\plugins\MoistureUpset"))
+                //    {
+                //        Directory.CreateDirectory(@"BepInEx\plugins\MoistureUpset");
+                //    }
+                //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                //    {
+                //        string line;
+                //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                //        {
+                //            line = r.ReadToEnd();
+                //        }
+                //        int readnum = Int32.Parse(line);
+                //        AkSoundEngine.SetRTPCValue("RuneBadNoise", readnum);
+                //    }
+                //    else
+                //    {
+                //        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\HitMarkerNoise.BlameRuneForThis"))
+                //        {
+                //            r.Write(100);
+                //            AkSoundEngine.SetRTPCValue("RuneBadNoise", 100);
+                //        }
+                //    }
+                //    if (File.Exists(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                //    {
+                //        string line;
+                //        using (StreamReader r = new StreamReader(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                //        {
+                //            line = r.ReadToEnd();
+                //        }
+                //        int readnum = Int32.Parse(line);
+                //        AkSoundEngine.SetRTPCValue("CustomRunMusic", readnum);
+                //    }
+                //    else
+                //    {
+                //        using (StreamWriter r = File.CreateText(@"BepInEx\plugins\MoistureUpset\CustomRunMusic.BlameRuneForThis"))
+                //        {
+                //            r.Write(0);
+                //            AkSoundEngine.SetRTPCValue("CustomRunMusic", 0);
+                //        }
+                //    }
+                //}
+                //catch (Exception)
+                //{
+                //}
             };
         }
     }
