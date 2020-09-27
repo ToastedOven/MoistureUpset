@@ -29,7 +29,7 @@ namespace MoistureUpset
             {
                 //Debug.Log($"-=============={meshes[position].sharedMaterials[i].shader.name}");
                 //meshes[position].sharedMaterials[i].shader = Shader.Find("Standard");
-                if (prefab == "prefabs/characterbodies/ShopkeeperBody")
+                if (prefab == "prefabs/characterbodies/ShopkeeperBody" || prefab == "prefabs/characterbodies/TitanGoldBody")
                 {
                     meshes[position].sharedMaterials[i].shader = Shader.Find("Standard");
                 }
@@ -1036,6 +1036,39 @@ namespace MoistureUpset
             if (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) != 1)
                 return;
             LoadResource("roblox");
+            ReplaceModel("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.mesh", "@MoistureUpset_roblox:assets/robloxtitan.png");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/TitanBody");
+            try
+            {
+                Texture t = Resources.Load<Texture>("@MoistureUpset_NA:assets/solid.png");
+                var meshes = fab.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < meshes.Length; i++)
+                {
+                    if (meshes[i].name.StartsWith("spm") || meshes[i].name.StartsWith("bb"))
+                    {
+                        meshes[i].gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        Debug.Log("safawpefo======== " + meshes[i]);
+                    }
+                }
+                var particles = fab.GetComponentsInChildren<ParticleSystem>();
+                for (int i = 0; i < particles.Length; i++)
+                {
+                    //Debug.Log("safawpefo======== " +meshes[i].sharedMesh/*.sharedMesh*/);
+                    if (particles[i].name.StartsWith("EyeGlow"))
+                    {
+                        particles[i].emissionRate = 0;
+                    }
+                }
+                var light = fab.GetComponentInChildren<UnityEngine.Light>();
+                light.intensity = 0;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
             On.EntityStates.TitanMonster.DeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
@@ -1052,16 +1085,78 @@ namespace MoistureUpset
                     AkSoundEngine.PostEvent("RobloxFist", self.outer.gameObject);
                 }
             };
+            On.RoR2.EffectManager.SpawnEffect_GameObject_EffectData_bool += (orig, pre, data, transmit) =>
+            {
+                if (pre.name == "TitanFistEffect")
+                {
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    Debug.Log($"-------------{pre.transform.position}");
+                    Debug.Log($"-------------{mainBody.transform.position}");
+                    GameObject g = new GameObject();
+                    g.transform.position = data.origin;
+                    var yeet = pre.GetComponentsInChildren<ParticleSystemRenderer>()[0];
+                    yeet.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_roblox:assets/robloxfist.png");
+                    try
+                    {
+                        int num = UnityEngine.Random.Range(0, 100);
+                        if (num == 99)
+                        {
+                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/jj5x5.mesh");
+                            AkSoundEngine.PostEvent("RobloxJJ5X5", g);
+                        }
+                        else
+                            switch (num % 7)
+                            {
+                                case 0:
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/pizza.mesh");
+                                    AkSoundEngine.PostEvent("RobloxPizza", g);
+                                    break;
+                                case 1:
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/sword.mesh");
+                                    AkSoundEngine.PostEvent("RobloxSword", g);
+                                    break;
+                                case 2:
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cola.mesh");
+                                    AkSoundEngine.PostEvent("RobloxCola", g);
+                                    break;
+                                case 3:
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cake.mesh");
+                                    AkSoundEngine.PostEvent("RobloxCake", g);
+                                    break;
+                                case 4:
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/burger.mesh");
+                                    AkSoundEngine.PostEvent("RobloxBurger", g);
+                                    break;
+                                case 5:
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/gravity.mesh");
+                                    AkSoundEngine.PostEvent("RobloxGravity", g);
+                                    break;
+                                case 6:
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/robloxtaco.mesh");
+                                    AkSoundEngine.PostEvent("RobloxTaco", g);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        GameObject.Destroy(g);
+                        yeet.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e);
+                    }
+                }
+                orig(pre, data, transmit);
+            };
             On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
             {
-                orig(self, position, delay);
                 if (!self.outer.gameObject.name.Contains("Gold"))
                 {
                     GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast"), position, Quaternion.identity);
                     AkSoundEngine.PostEvent("RobloxFist", gameObject);
-                    AkSoundEngine.PostEvent("RobloxFistDelayed", gameObject);
                     GameObject.Destroy(gameObject);
                 }
+                orig(self, position, delay);
             };
             On.EntityStates.TitanMonster.SpawnState.OnEnter += (orig, self) =>
             {
@@ -1079,10 +1174,6 @@ namespace MoistureUpset
                     AkSoundEngine.PostEvent("RobloxLaser", self.outer.gameObject);
                 }
             };
-            foreach (var item in EntityStates.TitanMonster.RechargeRocks.rockControllerPrefab.GetComponentsInChildren<ParticleSystem>())
-            {
-                Debug.Log($"item::: {item}");
-            }
             On.EntityStates.TitanMonster.RechargeRocks.OnEnter += (orig, self) =>
             {
                 if (!self.outer.gameObject.name.Contains("Gold"))
@@ -1125,15 +1216,11 @@ namespace MoistureUpset
                 var meshes = fab.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < meshes.Length; i++)
                 {
-                    if (meshes[i].name.StartsWith("spm") || meshes[i].name.StartsWith("bb"))
-                    {
-                        meshes[i].gameObject.SetActive(false);
-                    }
+                    meshes[i].gameObject.SetActive(false);
                 }
                 var particles = fab.GetComponentsInChildren<ParticleSystem>();
                 for (int i = 0; i < particles.Length; i++)
                 {
-                    //Debug.Log("safawpefo======== " +meshes[i].sharedMesh/*.sharedMesh*/);
                     if (particles[i].name.StartsWith("EyeGlow"))
                     {
                         particles[i].emissionRate = 0;
@@ -1146,6 +1233,16 @@ namespace MoistureUpset
             {
                 Debug.Log(e);
             }
+            On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
+            {
+                orig(self, position, delay);
+                if (self.outer.gameObject.name.Contains("Gold"))
+                {
+                    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast"), position, Quaternion.identity);
+                    AkSoundEngine.PostEvent("AlexFistDelayed", gameObject);
+                    GameObject.Destroy(gameObject);
+                }
+            };
             On.EntityStates.TitanMonster.ChargeGoldMegaLaser.FixedUpdate += (orig, self) =>
             {
                 orig(self);
@@ -1162,6 +1259,16 @@ namespace MoistureUpset
             };
             On.EntityStates.TitanMonster.FireGoldFist.PlacePredictedAttack += (orig, self) =>
             {
+                var yeet = self.fistEffectPrefab.GetComponentsInChildren<ParticleSystemRenderer>()[0];
+                try
+                {
+                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_alexjones:assets/datboi.mesh");
+                    yeet.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+                    yeet.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_alexjones:assets/frogge.png");
+                }
+                catch (Exception)
+                {
+                }
                 orig(self);
                 AkSoundEngine.PostEvent("AlexFist", self.outer.gameObject);
             };
