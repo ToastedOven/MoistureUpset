@@ -29,6 +29,10 @@ namespace MoistureUpset
             {
                 //Debug.Log($"-=============={meshes[position].sharedMaterials[i].shader.name}");
                 //meshes[position].sharedMaterials[i].shader = Shader.Find("Standard");
+                if (prefab == "prefabs/characterbodies/ShopkeeperBody")
+                {
+                    meshes[position].sharedMaterials[i].shader = Shader.Find("Standard");
+                }
                 meshes[position].sharedMaterials[i].color = Color.white;
                 meshes[position].sharedMaterials[i].mainTexture = texture;
                 meshes[position].sharedMaterials[i].SetTexture("_EmTex", blank);
@@ -148,6 +152,8 @@ namespace MoistureUpset
         {
             try
             {
+                RobloxTitan();
+                Alex();
                 ElderLemurian();
                 Lemurian();
                 DEBUG();
@@ -263,6 +269,8 @@ namespace MoistureUpset
                 UImods.ReplaceTexture2D("textures/bodyicons/WispBody", "MoistureUpset.Resources.dogplane.png");
             if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/MiniMushroomBody", "MoistureUpset.Resources.toad.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/TitanGoldBody", "MoistureUpset.Resources.alexjones.png");
             //UImods.ReplaceUIBetter("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
         }
         private static void NonEnemyNames()
@@ -437,6 +445,16 @@ namespace MoistureUpset
                 {
                     if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
                         st = st.Replace("Mini Mushrum", "Toad");
+                }
+                else if (st.Contains("Aurelionite"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+                        st = st.Replace("Aurelionite", "Alex Jones");
+                }
+                else if (token == "TITANGOLD_BODY_SUBTITLE")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+                        st = "Prince of the Social Media Shadow Realm";
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -643,6 +661,7 @@ namespace MoistureUpset
             skinnedmesh.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
             skinnedmesh.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
             skinnedmesh.sharedMaterial.renderQueue = 3000;
+            meshfilter.transform.localScale *= .7f;
 
             var splat = Resources.Load<GameObject>("prefabs/projectiles/SporeGrenadeProjectileDotZone");
             var texture = Resources.Load<Texture>("@MoistureUpset_toad:assets/toadsplatcolorhighres.png");
@@ -660,6 +679,13 @@ namespace MoistureUpset
                         item.transform.localScale *= .95f;
                     }
                 }
+                item.Material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                item.Material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                item.Material.SetInt("_ZWrite", 0);
+                item.Material.DisableKeyword("_ALPHATEST_ON");
+                item.Material.DisableKeyword("_ALPHABLEND_ON");
+                item.Material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                item.Material.renderQueue = 3000;
             }
         }
         private static void Imp()
@@ -1004,6 +1030,185 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("prefabs/characterbodies/BisonBody", "@MoistureUpset_thomas:assets/thomas.mesh", "@MoistureUpset_thomas:assets/dankengine.png", 0, true);
+        }
+        private static void RobloxTitan()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) != 1)
+                return;
+            LoadResource("roblox");
+            On.EntityStates.TitanMonster.DeathState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                if (!self.outer.gameObject.name.Contains("Gold"))
+                {
+                    AkSoundEngine.PostEvent("RobloxDeath", self.outer.gameObject);
+                }
+            };
+            On.EntityStates.TitanMonster.FireFist.PlacePredictedAttack += (orig, self) =>
+            {
+                orig(self);
+                if (!self.outer.gameObject.name.Contains("Gold"))
+                {
+                    AkSoundEngine.PostEvent("RobloxFist", self.outer.gameObject);
+                }
+            };
+            On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
+            {
+                orig(self, position, delay);
+                if (!self.outer.gameObject.name.Contains("Gold"))
+                {
+                    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast"), position, Quaternion.identity);
+                    AkSoundEngine.PostEvent("RobloxFist", gameObject);
+                    AkSoundEngine.PostEvent("RobloxFistDelayed", gameObject);
+                    GameObject.Destroy(gameObject);
+                }
+            };
+            On.EntityStates.TitanMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                if (!self.outer.gameObject.name.Contains("Gold"))
+                {
+                    AkSoundEngine.PostEvent("RobloxSpawn", self.outer.gameObject);
+                }
+            };
+            On.EntityStates.TitanMonster.FireMegaLaser.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                if (!self.outer.gameObject.name.Contains("Gold"))
+                {
+                    AkSoundEngine.PostEvent("RobloxLaser", self.outer.gameObject);
+                }
+            };
+            foreach (var item in EntityStates.TitanMonster.RechargeRocks.rockControllerPrefab.GetComponentsInChildren<ParticleSystem>())
+            {
+                Debug.Log($"item::: {item}");
+            }
+            On.EntityStates.TitanMonster.RechargeRocks.OnEnter += (orig, self) =>
+            {
+                if (!self.outer.gameObject.name.Contains("Gold"))
+                {
+                    AkSoundEngine.PostEvent("RobloxRocks", self.outer.gameObject);
+                    Texture t = Resources.Load<Texture>("@MoistureUpset_roblox:assets/nominecraft.png");
+                    var particle = EntityStates.TitanMonster.RechargeRocks.rockControllerPrefab.GetComponentsInChildren<ParticleSystemRenderer>()[1];
+                    var system = EntityStates.TitanMonster.RechargeRocks.rockControllerPrefab.GetComponentsInChildren<ParticleSystem>()[1];
+                    system.startRotation = 0;
+                    system.maxParticles = 1;
+                    try
+                    {
+                        particle.material.shader = Shader.Find("Sprites/Default");
+                        particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                        particle.material.SetInt("_ZWrite", 0);
+                        particle.material.DisableKeyword("_ALPHATEST_ON");
+                        particle.material.DisableKeyword("_ALPHABLEND_ON");
+                        particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                        particle.material.renderQueue = 3000;
+                        particle.material.mainTexture = t;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                orig(self);
+            };
+        }
+        private static void Alex()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) != 1)
+                return;
+            LoadResource("alexjones");
+            ReplaceModel("prefabs/characterbodies/TitanGoldBody", "@MoistureUpset_alexjones:assets/alexjones.mesh", "@MoistureUpset_alexjones:assets/alexjones.png");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/TitanGoldBody");
+            try
+            {
+                Texture t = Resources.Load<Texture>("@MoistureUpset_NA:assets/solid.png");
+                var meshes = fab.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < meshes.Length; i++)
+                {
+                    if (meshes[i].name.StartsWith("spm") || meshes[i].name.StartsWith("bb"))
+                    {
+                        meshes[i].gameObject.SetActive(false);
+                    }
+                }
+                var particles = fab.GetComponentsInChildren<ParticleSystem>();
+                for (int i = 0; i < particles.Length; i++)
+                {
+                    //Debug.Log("safawpefo======== " +meshes[i].sharedMesh/*.sharedMesh*/);
+                    if (particles[i].name.StartsWith("EyeGlow"))
+                    {
+                        particles[i].emissionRate = 0;
+                    }
+                }
+                var light = fab.GetComponentInChildren<UnityEngine.Light>();
+                light.intensity = 0;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+            On.EntityStates.TitanMonster.ChargeGoldMegaLaser.FixedUpdate += (orig, self) =>
+            {
+                orig(self);
+                AkSoundEngine.PostEvent("AlexCharge", self.outer.gameObject);
+                AkSoundEngine.PostEvent("AlexLaser", self.outer.gameObject);
+            };
+            On.EntityStates.TitanMonster.DeathState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                if (self.outer.gameObject.name.Contains("Gold"))
+                {
+                    AkSoundEngine.PostEvent("AlexDeath", self.outer.gameObject);
+                }
+            };
+            On.EntityStates.TitanMonster.FireGoldFist.PlacePredictedAttack += (orig, self) =>
+            {
+                orig(self);
+                AkSoundEngine.PostEvent("AlexFist", self.outer.gameObject);
+            };
+            On.EntityStates.TitanMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                if (self.outer.gameObject.name.Contains("Gold"))
+                {
+                    Debug.Log($"----{self.outer.commonComponents.teamComponent.teamIndex}");
+                    if (self.outer.commonComponents.teamComponent.teamIndex == TeamIndex.Player)
+                    {
+                        AkSoundEngine.PostEvent("AlexSpawnAlly", self.outer.gameObject);
+                    }
+                    else
+                    {
+                        AkSoundEngine.PostEvent("AlexSpawn", self.outer.gameObject);
+                    }
+                }
+            };
+            On.EntityStates.TitanMonster.RechargeRocks.OnEnter += (orig, self) =>
+            {
+                Texture t = Resources.Load<Texture>("@MoistureUpset_alexjones:assets/datboi.png");
+                var particle = EntityStates.TitanMonster.RechargeRocks.rockControllerPrefab.GetComponentsInChildren<ParticleSystemRenderer>()[1];
+                var system = EntityStates.TitanMonster.RechargeRocks.rockControllerPrefab.GetComponentsInChildren<ParticleSystem>()[1];
+                system.startRotation = 0;
+                system.maxParticles = 1;
+                try
+                {
+                    particle.material.shader = Shader.Find("Sprites/Default");
+                    particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    particle.material.SetInt("_ZWrite", 0);
+                    particle.material.DisableKeyword("_ALPHATEST_ON");
+                    particle.material.DisableKeyword("_ALPHABLEND_ON");
+                    particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                    particle.material.renderQueue = 3000;
+                    particle.material.mainTexture = t;
+                }
+                catch (Exception)
+                {
+                }
+                if (self.outer.gameObject.name.Contains("Gold"))
+                {
+                    AkSoundEngine.PostEvent("AlexRocks", self.outer.gameObject);
+                }
+                orig(self);
+            };
         }
     }
 }

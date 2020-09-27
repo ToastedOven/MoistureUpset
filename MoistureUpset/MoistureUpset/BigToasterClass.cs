@@ -121,7 +121,7 @@ namespace MoistureUpset
                     {
                         return;
                     }
-                    List<string> quotes = new List<string> {"I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
+                    List<string> quotes = new List<string> { "I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
                     if (float.Parse(ModSettingsManager.getOptionValue("NSFW")) == 1)
                     {
                         quotes.Add("I fucking hate this game");
@@ -246,9 +246,9 @@ namespace MoistureUpset
                     //muSong04
                     if (float.Parse(ModSettingsManager.getOptionValue("Merchant")) == 1)
                         if (MusicAPI.ReplaceSong(ref self, "muSong04", "PlayShopMusic"))
-                    {
-                        AkSoundEngine.SetRTPCValue("BossDead", 0f);
-                    }
+                        {
+                            AkSoundEngine.SetRTPCValue("BossDead", 0f);
+                        }
                     //Debug.Log($"--------------{song}");
                 }
                 catch (Exception)
@@ -382,20 +382,44 @@ namespace MoistureUpset
             {
                 if (self.master && self.master.isBoss)
                 {
-                    var c = GameObject.FindObjectOfType<MusicController>();
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.ExecuteActionOnEvent(2493198437, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.ExecuteActionOnEvent(291592398, AkActionOnEventType.AkActionOnEventType_Stop);
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
-                        AkSoundEngine.PostEvent("PlaySans", c.gameObject);
+                        AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
+                    }
+                    else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
+                    {
+
+                    }
+                    else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
+                    {
+
+                    }
+                    else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1))
+                    {
+
                     }
                     else if (float.Parse(ModSettingsManager.getOptionValue("Generic boss music")) == 1)
                     {
-                        AkSoundEngine.PostEvent("PlayBossMusic", c.gameObject);
+                        AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
                     }
                     Debug.Log($"name: {self.name}");
                     Debug.Log($"base: {self.baseNameToken}");
                     Debug.Log($"subtitle: {self.subtitleNameToken}");
+
+                    try
+                    {
+                        var c = GameObject.FindObjectOfType<MusicController>();
+                        MusicAPI.StopSong(ref c, "muSong23");
+                        AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
+                        var con = GameObject.FindObjectOfType<MusicController>();
+                        MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
                 return orig(self);
             };
@@ -467,33 +491,16 @@ namespace MoistureUpset
                 {
                 }
             };
-
-            On.RoR2.BossGroup.DefeatBossObjectiveTracker.ctor += (orig, self) =>
-            {
-                orig(self);
-                try
-                {
-                    var c = GameObject.FindObjectOfType<MusicController>();
-                    MusicAPI.StopSong(ref c, "muSong23");
-                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    //AkSoundEngine.PostEvent("EndBossMusic", c.gameObject);
-                    AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                    var con = GameObject.FindObjectOfType<MusicController>();
-                    MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
-                }
-                catch (Exception)
-                {
-                }
-            };
         }
         public static void Somebody()
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
-                On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
-            {
-                orig(self);
-                Util.PlaySound("somebody", self.outer.gameObject);
-            };
+                if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
+                    On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
+                {
+                    orig(self);
+                    Util.PlaySound("somebody", self.outer.gameObject);
+                };
         }
         public static void BossMusic()
         {
