@@ -185,7 +185,8 @@ namespace MoistureUpset
                     skin.sharedMaterial.renderQueue = 3000;
                 }
 
-
+                if (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) == 1)
+                    EnemyReplacements.ReplaceTexture("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.png");
                 if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
                     EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
                 orig(oldS, newS);
@@ -385,6 +386,7 @@ namespace MoistureUpset
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.ExecuteActionOnEvent(2493198437, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.ExecuteActionOnEvent(291592398, AkActionOnEventType.AkActionOnEventType_Stop);
+                    AkSoundEngine.ExecuteActionOnEvent(2857659536, AkActionOnEventType.AkActionOnEventType_Stop);
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
@@ -400,6 +402,10 @@ namespace MoistureUpset
                     else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1))
                     {
 
+                    }
+                    else if (self.baseNameToken == "TITAN_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("RobloxMusic", mainBody.gameObject);
                     }
                     else if (float.Parse(ModSettingsManager.getOptionValue("Generic boss music")) == 1)
                     {
@@ -495,12 +501,21 @@ namespace MoistureUpset
         public static void Somebody()
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
+            {
                 if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
                     On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
                 {
                     orig(self);
                     Util.PlaySound("somebody", self.outer.gameObject);
                 };
+                EnemyReplacements.LoadResource("outhousebetter");
+                foreach (var item in Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod").GetComponentsInChildren<ChildLocator>())
+                {
+                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_outhousebetter:assets/escapepodtestdoorreleased.mesh");
+                }
+                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_outhousebetter:assets/escapepodtest.mesh", 1);
+                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_outhousebetter:assets/escapepodtestdoor.mesh", 0);
+            }
         }
         public static void BossMusic()
         {

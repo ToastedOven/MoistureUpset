@@ -32,20 +32,6 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_robloxfont", MainAssetBundle));
             }
 
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.toad1"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_toad", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.dooter"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_dooter", MainAssetBundle));
-            }
-
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.fortnite"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
@@ -53,67 +39,18 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_fortnite", MainAssetBundle));
             }
 
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.chips"))
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Models.chips"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_chips", MainAssetBundle));
             }
 
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ghast"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_ghast", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.dogplane"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_wisp", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.na"))
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Models.na"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_NA", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.heavy"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_heavy", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.obamaprism"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_obamaprism", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.thomas"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_thomas", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.noob"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_noob", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.mike"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_mike", MainAssetBundle));
             }
 
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
@@ -149,13 +86,6 @@ namespace MoistureUpset
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_sentry2", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.outhousebetter"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_droppod", MainAssetBundle));
             }
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
 
