@@ -89,7 +89,7 @@ namespace MoistureUpset
 
             //On.RoR2.MasterSummon.Perform += MasterSummon_Perform;
 
-            //On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += PlaceTurret_OnEnter;
+            On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += PlaceTurret_OnEnter;
 
             //On.RoR2.UI.CharacterSelectController.Update += CharacterSelectController_Update;
             //On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
@@ -251,7 +251,17 @@ namespace MoistureUpset
                 if (self.blueprintPrefab != null)
                 {
                     tempPrefab = GameObject.Instantiate<GameObject>(self.blueprintPrefab);
-                    tempPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+
+                    switch (self.blueprintPrefab.name)
+                    {
+                        case "EngiTurretBlueprints":
+                            tempPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
+                            break;
+                        case "EngiWalkerTurretBlueprints":
+                            tempPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
+                            break;
+                    }
+                    
                     self.blueprintPrefab = tempPrefab;
                 }
                 else
