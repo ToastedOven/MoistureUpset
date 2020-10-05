@@ -26,11 +26,17 @@ namespace MoistureUpset
 
             skinController.ApplySkin(skinIndex);
 
-            foreach (var item in skinController.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials)
+            switch (gameObject.name)
             {
-                Debug.Log("replacing textures");
-                item.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
-                item.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
+                case "EngiTurretBody(Clone)":
+                case "EngiWalkerTurretBody(Clone)":
+                    foreach (var item in skinController.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials)
+                    {
+                        Debug.Log("replacing textures");
+                        item.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
+                        item.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
+                    }
+                    break;
             }
         }
     }
