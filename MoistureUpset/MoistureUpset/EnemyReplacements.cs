@@ -1541,7 +1541,8 @@ namespace MoistureUpset
             }
             foreach (var item in fab.GetComponentsInChildren<UnityEngine.Rendering.PostProcessing.PostProcessVolume>())
             {
-                Debug.Log($"-------------{item.blendDistance}");
+                Debug.Log($"-------------{item.blendDistance = 0}");
+                Debug.Log($"-------------{item.profile}");
             }
             BlueParticles("prefabs/characterbodies/MagmaWormBody");
             BlueParticles("prefabs/effects/MagmaWormBurrow");
