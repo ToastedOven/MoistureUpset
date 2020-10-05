@@ -37,9 +37,9 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Comedy", "Replaces jellyfish with an astounding amount of comedy", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Froggy Chair", "Replaces beetles with froggy chairs", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Mike Wazowski", "Replaces lemurians with mike wazowskis", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Hermit Crab", "Replaces hermit crabs with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Skeleton Crab", "Replaces hermit crabs with spider jockies", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Trumpet Skeleton", "Replaces imps with trumpet skeletons", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Alloy Vulture", "Replaces alloy vultures with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Lemme Smash", "please", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Obama Prism", "Replaces solus units with obamium units", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Toad", "Shoutouts to SimpleFlips", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Taco Bell", "Replaces brass contraptions with midroll ads", "1"));
@@ -50,25 +50,23 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Ghast", "Replaces greater wisps with ghasts", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Lunar Chimera Flying", "Replaces flying lunar chimeras with _", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Bowser", "Replaces elder lemurians with bowsers", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Parent", "Replaces parents with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Hagrid", "Replaces parents with hagrid", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Mithrix", "Replaces mithrix with _", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Lunar Chimera Grounded", "Replaces grounded lunar chimeras with _", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Void Reaver", "Replaces void reavers with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Crab Rave", "Replaces void reavers with crabs", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Beetle Queen", "Replaces beetle queens with _", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Clay Dunestrider", "Replaces clay dunestriders with _", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Stone Titan", "Replaces stone titans with _", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Aurelionite", "Replaces aurelionite with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Roblox Titan", "Replaces Stone Titan with a buff robloxian", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Alex Jones", "Replaces Aurelionite with alex jones", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Wandering Vagrant", "Replaces wandering vagrants with _", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Magma Worm", "Replaces magma worms with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Pool Noodle", "Replaces magma worms with pool noodles", "1"));
             //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Obama Sphere", "Replaces solus control units with obama spheres", "1"));
             //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Obamium Worship Unit", "Replaces alloy worship units with obama spheres", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Grovetender", "Replaces grovetenders with _", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Sans", "Replaces imp overlords with sans", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Scavenger", "Replaces scavengers with _", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Overloading Worm", "Replaces overloading worms with _", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Merchant", "Replaces shop keeper worms with beetle", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Alex Jones", "Replaces Aurelionite worms with alex jones", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Roblox Titan", "Replaces Stone Titan worms with a buff robloxian", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Merchant", "Replaces shop keeper with beedle", "1"));
         }
         private static void Misc()
         {
@@ -87,6 +85,8 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "In-Run Difficulty Names", "AND THEY DON'T STOP COMING", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Main menu music", "WHATS GOING ON", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Shreks outhouse", "SOMEBODY", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Shrine Changes", "Very important updates for shrines", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Misc", "Random text changes, might fix later", "1"));
             //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Shreks outhouse", "SOMEBODY", "1"));
         }
     }
