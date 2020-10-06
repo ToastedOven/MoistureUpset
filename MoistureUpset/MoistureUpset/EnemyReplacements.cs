@@ -70,6 +70,17 @@ namespace MoistureUpset
                 }
             }
         }
+        public static void ReplaceModel(string prefab, string mesh, int position = 0)
+        {
+            var fab = Resources.Load<GameObject>(prefab);
+            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
+        public static void ReplaceModel(GameObject fab, string mesh, int position = 0)
+        {
+            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
         public static void ReplaceTexture(string prefab, string png, int position = 0)
         {
             var fab = Resources.Load<GameObject>(prefab);
@@ -148,17 +159,6 @@ namespace MoistureUpset
                 renderers[0].sharedMaterials[i].SetTexture("_NormalTex", null);
             }
             meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
-        }
-        public static void ReplaceModel(string prefab, string mesh, int position = 0)
-        {
-            var fab = Resources.Load<GameObject>(prefab);
-            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
-            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
-        }
-        public static void ReplaceModel(GameObject fab, string mesh, int position = 0)
-        {
-            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
-            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
         }
         public static void LoadResource(string resource)
         {
@@ -280,6 +280,12 @@ namespace MoistureUpset
                 UImods.ReplaceTexture2D("textures/bodyicons/TitanBody", "MoistureUpset.Resources.buffroblox.png");
             if (float.Parse(ModSettingsManager.getOptionValue("Lemme Smash")) == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/VultureBody", "MoistureUpset.Resources.lemmesmash.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Crab Rave")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/NullifierBody", "MoistureUpset.Resources.crab.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Skeleton Crab")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/HermitCrabBody", "MoistureUpset.Resources.jockey.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/MagmaWormBody", "MoistureUpset.Resources.noodle.png");
             //UImods.ReplaceUIBetter("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
         }
         private static void NonEnemyNames()
@@ -574,6 +580,26 @@ namespace MoistureUpset
                 {
                     if (float.Parse(ModSettingsManager.getOptionValue("Lemme Smash")) == 1)
                         st = st.Replace("Alloy Vulture", "Ron");
+                }
+                else if (st.Contains("Void Reaver"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Crab Rave")) == 1)
+                        st = st.Replace("Void Reaver", "Crab Rave");
+                }
+                else if (st.Contains("Hermit Crab"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Skeleton Crab")) == 1)
+                        st = st.Replace("Hermit Crab", "Spider Jockey");
+                }
+                else if (st.Contains("Magma Worm"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) == 1)
+                        st = st.Replace("Magma Worm", "Pool Noodle");
+                }
+                else if (token == "MAGMAWORM_BODY_SUBTITLE")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) == 1)
+                        st = "It's basically just a floppy sword";
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -1284,6 +1310,19 @@ namespace MoistureUpset
                 orig(self);
                 if (!self.outer.gameObject.name.Contains("Gold"))
                 {
+                    self.outer.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_roblox:assets/robloxtitan.png");
+                    var meshes = self.outer.gameObject.GetComponentsInChildren<MeshRenderer>();
+                    for (int i = 0; i < meshes.Length; i++)
+                    {
+                        if (meshes[i].name.StartsWith("spm") || meshes[i].name.StartsWith("bb"))
+                        {
+                            meshes[i].gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            Debug.Log($"-------------{meshes[i].name}");
+                        }
+                    }
                     AkSoundEngine.PostEvent("RobloxSpawn", self.outer.gameObject);
                 }
             };
@@ -1477,6 +1516,16 @@ namespace MoistureUpset
                 AkSoundEngine.PostEvent("HagridTeleport", self.outer.gameObject);
             };
         }
+        public static void MakePoolNoodleBlue()
+        {
+            BlueParticles("prefabs/characterbodies/MagmaWormBody");
+            BlueParticles("prefabs/effects/MagmaWormBurrow");
+            BlueParticles("prefabs/effects/MagmaWormDeath");
+            BlueParticles("prefabs/effects/MagmaWormDeathDust");
+            BlueParticles("prefabs/effects/MagmaWormImpactExplosion");
+            BlueParticles("prefabs/effects/MagmaWormRupture");
+            BlueParticles("prefabs/effects/MagmaWormWarning");
+        }
         private static void BlueParticles(string path)
         {
             var fab = Resources.Load<GameObject>(path);
@@ -1484,8 +1533,16 @@ namespace MoistureUpset
             {
                 foreach (var thing in item.gameObject.GetComponentsInChildren<ParticleSystemRenderer>())
                 {
-                    thing.sharedMaterial.SetVector("_TintColor", new Vector4(0, .47f, .75f, 1));
-                    thing.sharedMaterial.SetVector("_EmissionColor", new Vector4(0, .47f, .75f, 1));
+                    if (thing.sharedMaterial.name.ToUpper().Contains("WORM") || thing.sharedMaterial.name.ToUpper().Contains("MAGMA"))
+                    {
+                        thing.sharedMaterial.SetVector("_TintColor", new Vector4(0, .47f, .75f, 1));
+                        thing.sharedMaterial.SetVector("_EmissionColor", new Vector4(0, .47f, .75f, 1));
+                    }
+                    else
+                    {
+                        thing.material.SetVector("_TintColor", new Vector4(0, .47f, .75f, 1));
+                        thing.material.SetVector("_EmissionColor", new Vector4(0, .47f, .75f, 1));
+                    }
                 }
             }
         }
@@ -1539,23 +1596,19 @@ namespace MoistureUpset
                 mesh.sharedMaterials[i].SetTexture("_FlowHeightmap", blank);
                 mesh.sharedMaterials[i].SetTexture("_FlowTex", blank);
             }
+            var fab2 = Resources.Load<GameObject>("prefabs/characterbodies/ElectricWormBody");
             foreach (var item in fab.GetComponentsInChildren<UnityEngine.Rendering.PostProcessing.PostProcessVolume>())
             {
-                Debug.Log($"-------------{item.blendDistance = 0}");
-                Debug.Log($"-------------{item.profile}");
+                var ting = fab2.GetComponentInChildren<UnityEngine.Rendering.PostProcessing.PostProcessVolume>();
+                ((UnityEngine.Rendering.PostProcessing.PostProcessProfile)item.sharedProfile).settings = ((UnityEngine.Rendering.PostProcessing.PostProcessProfile)ting.sharedProfile).settings;
             }
-            BlueParticles("prefabs/characterbodies/MagmaWormBody");
-            BlueParticles("prefabs/effects/MagmaWormBurrow");
-            BlueParticles("prefabs/effects/MagmaWormDeath");
-            BlueParticles("prefabs/effects/MagmaWormDeathDust");
-            BlueParticles("prefabs/effects/MagmaWormImpactExplosion");
-            BlueParticles("prefabs/effects/MagmaWormRupture");
-            BlueParticles("prefabs/effects/MagmaWormWarning");
+            MakePoolNoodleBlue();
         }
         private static void Skeleton()
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Skeleton Crab")) != 1)
                 return;
+            LoadBNK("jockey");
             LoadResource("skeleton");
             //ReplaceTexture("prefabs/characterbodies/HermitCrabBody", "@MoistureUpset_skeleton:assets/skeleton.png");
             ReplaceModel("prefabs/characterbodies/HermitCrabBody", "@MoistureUpset_skeleton:assets/skeleton.mesh", "@MoistureUpset_skeleton:assets/skeleton.png");
@@ -1578,8 +1631,9 @@ namespace MoistureUpset
             if (float.Parse(ModSettingsManager.getOptionValue("Crab Rave")) != 1)
                 return;
             LoadResource("crabrave");
-            //ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_crabrave:assets/crabrave.mesh", "@MoistureUpset_crabrave:assets/crabrave.png");
-            ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_crabrave:assets/kevinishomosex/nullifiermesh.mesh", 1);
+            LoadBNK("crabrave");
+            ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_crabrave:assets/crab.mesh", "@MoistureUpset_crabrave:assets/crab.png", 1);
+            ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_NA:assets/na.mesh", "@MoistureUpset_NA:assets/blank.png");
         }
     }
 }
