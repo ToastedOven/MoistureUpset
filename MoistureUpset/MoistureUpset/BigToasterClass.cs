@@ -150,10 +150,14 @@ namespace MoistureUpset
                     {
                         quotes.Add("The fire breath is so annoying");
                     }
+                    //else if (UnityEngine.Random.Range(0, 1000) == 5)//maybe have a dummy super rare easter egg?
+                    //{
+                    //    quotes.Add("");
+                    //}
                     Chat.SendBroadcastChat(new Chat.UserChatMessage
                     {
                         sender = user.gameObject,
-                        text = quotes[UnityEngine.Random.Range(0, quotes.Count - 1)]
+                        text = quotes[UnityEngine.Random.Range(0, quotes.Count - 1)],
                     });
                 }
                 catch (Exception)
@@ -508,13 +512,14 @@ namespace MoistureUpset
                     orig(self);
                     Util.PlaySound("somebody", self.outer.gameObject);
                 };
-                EnemyReplacements.LoadResource("outhousebetter");
+                EnemyReplacements.LoadResource("shreklet");
                 foreach (var item in Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod").GetComponentsInChildren<ChildLocator>())
                 {
-                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_outhousebetter:assets/escapepodtestdoorreleased.mesh");
+                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shrekletdoorphysics.mesh");
+                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshRenderer>()[1].sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_shreklet:assets/shreklet.png");
                 }
-                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_outhousebetter:assets/escapepodtest.mesh", 1);
-                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_outhousebetter:assets/escapepodtestdoor.mesh", 0);
+                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_shreklet:assets/shreklet.mesh", "@MoistureUpset_shreklet:assets/shreklet.png", 1);
+                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_shreklet:assets/shrekletdoor.mesh", "@MoistureUpset_shreklet:assets/shreklet.png", 0);
             }
         }
         public static void BossMusic()
