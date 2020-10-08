@@ -215,6 +215,7 @@ namespace MoistureUpset
                 Noodle();
                 Skeleton();
                 CrabRave();
+                PUDDI();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -687,7 +688,7 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/JellyfishBody", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
             On.EntityStates.JellyfishMonster.JellyNova.Detonate += (orig, self) =>
             {
-                AkSoundEngine.PostEvent("JellyDetonate", self.outer.gameObject);
+                NetworkAssistant.playSound("JellyDetonate", self.outer.gameObject.transform.position);
                 orig(self);
             };
         }
@@ -1634,6 +1635,44 @@ namespace MoistureUpset
             LoadBNK("crabrave");
             ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_crabrave:assets/crab.mesh", "@MoistureUpset_crabrave:assets/crab.png", 1);
             ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_NA:assets/na.mesh", "@MoistureUpset_NA:assets/blank.png");
+        }
+        private static void PUDDI()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) != 1)
+                return;
+            LoadResource("puddi");
+            ReplaceModel("prefabs/characterbodies/ClayBossBody", "@MoistureUpset_puddi:assets/puddi.mesh", "@MoistureUpset_puddi:assets/puddi.png");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/ClayBossBody");
+            var mesh = fab.GetComponentInChildren<SkinnedMeshRenderer>();
+            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            for (int i = 0; i < mesh.sharedMaterials.Length; i++)
+            {
+                mesh.sharedMaterials[i].SetTexture("_PrintRamp", blank);
+                mesh.sharedMaterials[i].SetTexture("_GreenChannelNormalTex", blank);
+                mesh.sharedMaterials[i].SetTexture("_GreenChannelTex", blank);
+                mesh.sharedMaterials[i].SetTexture("_SliceAlphaTex", blank);
+            }
+            ReplaceMeshFilter("prefabs/projectileghosts/ClayPotProjectileGhost", "@MoistureUpset_puddi:assets/puddighost.mesh", "@MoistureUpset_puddi:assets/puddi.png");
+            foreach (var item in fab.GetComponentsInChildren<Component>())
+            {
+                Debug.Log($"-------------{item}");
+            }
+            Vector4 color = new Vector4(87f / 2500f, 40f / 2500f, 17f / 2500f, 1);
+            Debug.Log($"-------------{color}");
+            foreach (var item in fab.GetComponentsInChildren<LineRenderer>())
+            {
+                item.sharedMaterial.SetVector("_TintColor", color);
+                item.sharedMaterial.SetVector("_EmissionColor", color);
+            }
+            fab = Resources.Load<GameObject>("prefabs/projectileghosts/TarballGhost");
+            var mesh2 = fab.GetComponentsInChildren<MeshRenderer>();
+            foreach (var item in mesh2)
+            {
+                item.sharedMaterial = Resources.Load<Material>("@MoistureUpset_puddi:assets/puddi.mat");
+            }
+            fab.GetComponentsInChildren<ParticleSystemRenderer>()[1].gameObject.SetActive(false);
+            fab.GetComponentsInChildren<TrailRenderer>()[0].sharedMaterial.SetVector("_EmissionColor", color);
+            ReplaceMeshFilter("prefabs/projectileghosts/TarballGhost", "@MoistureUpset_puddi:assets/puddighost.mesh", "@MoistureUpset_puddi:assets/puddi.png");
         }
     }
 }
