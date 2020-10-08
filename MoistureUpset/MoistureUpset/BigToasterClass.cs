@@ -391,6 +391,8 @@ namespace MoistureUpset
                     AkSoundEngine.ExecuteActionOnEvent(2493198437, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.ExecuteActionOnEvent(291592398, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.ExecuteActionOnEvent(2857659536, AkActionOnEventType.AkActionOnEventType_Stop);
+                    AkSoundEngine.ExecuteActionOnEvent(3163719647, AkActionOnEventType.AkActionOnEventType_Stop);
+                    AkSoundEngine.ExecuteActionOnEvent(1581288698, AkActionOnEventType.AkActionOnEventType_Stop);
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
@@ -406,6 +408,14 @@ namespace MoistureUpset
                     else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1))
                     {
 
+                    }
+                    else if (self.baseNameToken == "CLAYBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("PlayPudi", mainBody.gameObject);
+                    }
+                    else if (self.baseNameToken == "MAGMAWORM_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("PlayNoodle", mainBody.gameObject);
                     }
                     else if (self.baseNameToken == "TITAN_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) == 1))
                     {

@@ -55,7 +55,7 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Lunar Chimera Grounded", "Replaces grounded lunar chimeras with _", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Crab Rave", "Replaces void reavers with crabs", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Beetle Queen", "Replaces beetle queens with _", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Clay Dunestrider", "Replaces clay dunestriders with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Giga Puddi", "PUDDI PUDDI", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Roblox Titan", "Replaces Stone Titan with a buff robloxian", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Alex Jones", "Replaces Aurelionite with alex jones", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Wandering Vagrant", "Replaces wandering vagrants with _", "1"));
