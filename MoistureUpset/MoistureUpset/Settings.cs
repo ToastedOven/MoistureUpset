@@ -65,7 +65,7 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Grovetender", "Replaces grovetenders with _", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Sans", "Replaces imp overlords with sans", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Scavenger", "Replaces scavengers with _", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Overloading Worm", "Replaces overloading worms with _", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Squirmles", "Replaces overloading worms with Squirmles", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Merchant", "Replaces shop keeper with beedle", "1"));
         }
         private static void Misc()
