@@ -216,6 +216,7 @@ namespace MoistureUpset
                 Skeleton();
                 CrabRave();
                 PUDDI();
+                StringWorm();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -667,7 +668,7 @@ namespace MoistureUpset
             {
                 item.bones = t.ToArray();
             }
-            ReplaceModel("prefabs/characterbodies/BeetleGuardAllyBody", "@MoistureUpset_winston:assets/winston.mesh", "@MoistureUpset_winston:assets/winston.png");
+            ReplaceModel("prefabs/characterbodies/BeetleGuardAllyBody", "@MoistureUpset_winston:assets/winston.mesh", "@MoistureUpset_winston:assets/blinston.png");
             On.EntityStates.BeetleGuardMonster.FireSunder.OnEnter += (orig, self) =>
             {
                 orig(self);
@@ -1311,7 +1312,6 @@ namespace MoistureUpset
                 orig(self);
                 if (!self.outer.gameObject.name.Contains("Gold"))
                 {
-                    self.outer.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_roblox:assets/robloxtitan.png");
                     var meshes = self.outer.gameObject.GetComponentsInChildren<MeshRenderer>();
                     for (int i = 0; i < meshes.Length; i++)
                     {
@@ -1641,6 +1641,7 @@ namespace MoistureUpset
             if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) != 1)
                 return;
             LoadResource("puddi");
+            LoadBNK("puddi");
             ReplaceModel("prefabs/characterbodies/ClayBossBody", "@MoistureUpset_puddi:assets/puddi.mesh", "@MoistureUpset_puddi:assets/puddi.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/ClayBossBody");
             var mesh = fab.GetComponentInChildren<SkinnedMeshRenderer>();
@@ -1653,12 +1654,7 @@ namespace MoistureUpset
                 mesh.sharedMaterials[i].SetTexture("_SliceAlphaTex", blank);
             }
             ReplaceMeshFilter("prefabs/projectileghosts/ClayPotProjectileGhost", "@MoistureUpset_puddi:assets/puddighost.mesh", "@MoistureUpset_puddi:assets/puddi.png");
-            foreach (var item in fab.GetComponentsInChildren<Component>())
-            {
-                Debug.Log($"-------------{item}");
-            }
             Vector4 color = new Vector4(87f / 2500f, 40f / 2500f, 17f / 2500f, 1);
-            Debug.Log($"-------------{color}");
             foreach (var item in fab.GetComponentsInChildren<LineRenderer>())
             {
                 item.sharedMaterial.SetVector("_TintColor", color);
@@ -1673,6 +1669,55 @@ namespace MoistureUpset
             fab.GetComponentsInChildren<ParticleSystemRenderer>()[1].gameObject.SetActive(false);
             fab.GetComponentsInChildren<TrailRenderer>()[0].sharedMaterial.SetVector("_EmissionColor", color);
             ReplaceMeshFilter("prefabs/projectileghosts/TarballGhost", "@MoistureUpset_puddi:assets/puddighost.mesh", "@MoistureUpset_puddi:assets/puddi.png");
+        }
+        private static void StringWorm()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Squirmles")) != 1)
+                return;
+            LoadResource("werm");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/ElectricWormBody");
+            List<Transform> t = new List<Transform>();
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (item.name.Contains("Head") && !item.name.Contains("_end") && !item.name.Contains("Center"))
+                {
+                    t.Add(item);
+                }
+            }
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (item.name.Contains("Jaw") && !item.name.Contains("_end"))
+                {
+                    t.Add(item);
+                }
+            }
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (item.name.Contains("eye.") && !item.name.Contains("_end"))
+                {
+                    t.Add(item);
+                }
+            }
+            foreach (var item in fab.GetComponentsInChildren<Transform>())
+            {
+                if (item.name.Contains("Neck") && !item.name.Contains("_end"))
+                {
+                    t.Add(item);
+                }
+            }
+            foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                item.bones = t.ToArray();
+            }
+            ReplaceModel("prefabs/characterbodies/ElectricWormBody", "@MoistureUpset_werm:assets/werm.mesh", "@MoistureUpset_werm:assets/werm.png");
+            var mesh = fab.GetComponentInChildren<SkinnedMeshRenderer>();
+            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            for (int i = 0; i < mesh.sharedMaterials.Length; i++)
+            {
+                mesh.sharedMaterials[i].SetTexture("_FlowHeightRamp", blank);
+                mesh.sharedMaterials[i].SetTexture("_FlowHeightmap", blank);
+                mesh.sharedMaterials[i].SetTexture("_FlowTex", blank);
+            }
         }
     }
 }
