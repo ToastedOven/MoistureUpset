@@ -9,11 +9,14 @@ namespace MoistureUpset
 {
     class SkinReloader : MonoBehaviour
     {
+        // For some reason clients will sometimes see the incorrect skin with custom skins, so I just add this to all survivors and engi turrets, in the hopes that it ensures the correct skin is displayed.
+
+        // Also if you don't like how I'm applying the turret skins, go complain to the r2api people for not providing good documentation on how to implement minion skin replacements.
         private void Start()
         {
             var skinController = GetComponentInChildren<ModelSkinController>();
 
-            int skinIndex = 0;
+            int skinIndex;
 
             if (GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster == null)
             {
