@@ -152,7 +152,7 @@ namespace MoistureUpset
                     }
                     else if (self.name == "DisplayShieldBug(Clone)")
                     {
-                        //self.gameObject.transform.localPosition = new Vector3(self.gameObject.transform.localPosition.x, self.gameObject.transform.localPosition.y - 0.1f, self.gameObject.transform.localPosition.z);
+                        self.gameObject.transform.localPosition = new Vector3(self.gameObject.transform.localPosition.x, 0.6f, self.gameObject.transform.localPosition.z);
                     }
                     else if (self.name == "DisplayLunarDagger(Clone)")
                     {
