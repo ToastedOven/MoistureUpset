@@ -35,9 +35,13 @@ namespace MoistureUpset
                 case "EngiWalkerTurretBody(Clone)":
                     foreach (var item in skinController.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials)
                     {
-                        Debug.Log("replacing textures");
-                        item.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
-                        item.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
+                        //Debug.Log("replacing textures");
+                        //Debug.Log($"Original Texture: {item.name}");
+                        if (item.name == "matEngiTurret")
+                        {
+                            item.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
+                            item.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
+                        }
                     }
                     break;
             }
