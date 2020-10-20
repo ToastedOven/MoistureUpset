@@ -393,6 +393,7 @@ namespace MoistureUpset
                     AkSoundEngine.ExecuteActionOnEvent(2857659536, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.ExecuteActionOnEvent(3163719647, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.ExecuteActionOnEvent(1581288698, AkActionOnEventType.AkActionOnEventType_Stop);
+                    AkSoundEngine.ExecuteActionOnEvent(974987421, AkActionOnEventType.AkActionOnEventType_Stop);
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
@@ -408,6 +409,10 @@ namespace MoistureUpset
                     else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1))
                     {
 
+                    }
+                    else if (self.baseNameToken == "VAGRANT_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("PlayDiscord", mainBody.gameObject);
                     }
                     else if (self.baseNameToken == "CLAYBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1))
                     {
