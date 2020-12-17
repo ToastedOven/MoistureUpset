@@ -56,6 +56,20 @@ namespace MoistureUpset
             RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "no_enemies");
             RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "kill_all");
             RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_money 1000000");
+            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
+        }
+
+        [ConCommand(commandName = "musicdebug", flags = ConVarFlags.None, helpText = "Spits currently playing music to console")]
+        private static void MusicTest(ConCommandArgs args)
+        {
+            var c = GameObject.FindObjectOfType<MusicController>();
+            Debug.Log($"-------------{c.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName}");
+        }
+
+        [ConCommand(commandName = "getallgameobjects", flags = ConVarFlags.None, helpText = "yes")]
+        private static void GameObjects(ConCommandArgs args)
+        {
+            DebugClass.GetAllGameObjects();
         }
 
         public static void ligmaballs()

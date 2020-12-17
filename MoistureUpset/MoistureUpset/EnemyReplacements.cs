@@ -198,11 +198,15 @@ namespace MoistureUpset
         {
             try
             {
+                LoadBNK("ImWettest");
+                DEBUG();
+                Twitch();
+                Cereal();
+                Thanos();
                 RobloxTitan();
                 Alex();
                 ElderLemurian();
                 Lemurian();
-                DEBUG();
                 Golem();
                 Bison();
                 SolusUnit();
@@ -242,65 +246,11 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            //"prefabs/characterbodies/ArtifactShellBody";
-            //LoadResource("shield");
-            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/ArtifactShellBody");///////////its something else i need to delete
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    //Debug.Log($"-------------{}");
-            //    try
-            //    {
-            //        item.gameObject.SetActive(false);
-            //    }
-            //    catch (Exception)
-            //    {
-            //    }
-            //}
-            //ReplaceMeshFilter("prefabs/characterbodies/ArtifactShellBody", "@MoistureUpset_shield:assets/shield.mesh");///////this replaces the outer effect thing, I can use this and should
-
-            LoadResource("debug");
-            On.RoR2.UI.HealthBar.Awake += (orig, self) =>
-            {
-                orig(self);
-                var root = self.transform.root;
-                var gameobject = Resources.Load<GameObject>("@MoistureUpset_debug:assets/arbitraryfolder/runtimehierarchy");
-            };
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"-------------{item}");
-            //}
-
-
-
             LoadResource("scavenger");
-            LoadResource("twitch");
-            LoadResource("thanos");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scavbackpackmesh.mesh", 0);
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scaveyemesh.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scavmesh.mesh", 2);
-            //ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scavweaponmesh.mesh", 3);
-
-            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_twitch:assets/bosses/gravekeepermaskmesh.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_twitch:assets/bosses/gravekeepermesh.mesh", 2);
-            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_twitch:assets/bosses/sphere.mesh", 3);
-
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brotherbodymesh.mesh", 0);
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brotherclothpieces.mesh", 1);
-            //ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brothereye.mesh", 2);
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brotherhammerconcrete.mesh", 2);
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brotherhammerstib.mesh", 3);
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brotherstibpieces.mesh", 4);
-            //ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brotherheadarmormesh.mesh", 5);
-            //ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/brothershoulderarmor.mesh", 6);
-            //var fab = Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod");
-            //var renderers = fab.GetComponentsInChildren<Renderer>();
-            //var meshes = fab.GetComponentsInChildren<MeshFilter>();
-            //DebugClass.DebugBones(fab);
-            //renderers[0].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            //meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/door.mesh");
-            //renderers[1].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/pod.mesh");
-
+            ReplaceMeshFilter("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scavweaponmesh.mesh");
         }
         private static void Icons()
         {
@@ -358,7 +308,18 @@ namespace MoistureUpset
                 UImods.ReplaceTexture2D("textures/bodyicons/ElectricWormBody", "MoistureUpset.Resources.werm.png");
             if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ClayBossBody", "MoistureUpset.Resources.puddi.png");
-            //UImods.ReplaceUIBetter("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/VagrantBody", "MoistureUpset.Resources.discord.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/LunarWispBody", "MoistureUpset.Resources.rofl.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Rob")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/LunarGolemBody", "MoistureUpset.Resources.rob.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/BeetleQueen2Body", "MoistureUpset.Resources.nyancat.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/texBrotherIcon", "MoistureUpset.Resources.thanos.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/GravekeeperBody", "MoistureUpset.Resources.twitch.png");
         }
         private static void NonEnemyNames()
         {
@@ -693,6 +654,78 @@ namespace MoistureUpset
                 {
                     if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1)
                         st = "Sugoku Dekkai, Giga Puddi!";
+                }
+
+                else if (st.Contains("Beetle Queen"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
+                        st = st.Replace("Beetle Queen", "Nyan Cat");
+                }
+                else if (token == "BEETLEQUEEN_BODY_SUBTITLE")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
+                        st = "Nyan nyan nyan nyan nyan nyan nyan nyan nyan nyan!";
+                }
+
+                else if (token.Contains("LUNARGOLEM"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Rob")) == 1)
+                    {
+                        st = st.Replace("Lunar Chimera", "Rob");
+                        st = st.Replace("Zenith", "Meme");
+                    }
+                }
+                else if (token.Contains("LUNARWISP"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) == 1)
+                    {
+                        st = st.Replace("Lunar Chimera", "Roflcopter");
+                        st = st.Replace("Zenith", "Meme");
+                    }
+                }
+
+                else if (st.Contains("Mithrix"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                        st = st.Replace("Mithrix", "Thanos");
+                }
+                else if (token == "BROTHER_BODY_SUBTITLE")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                        st = "King of Balance";
+                }
+
+                else if (st.Contains("Grovetender"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+                        st = st.Replace("Grovetender", "Twitch.exe");
+                }
+                else if (token == "GRAVEKEEPER_BODY_SUBTITLE")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+                        st = "Meme Cultivator";
+                }
+
+                else if (st.Contains("Artifact Reliquary"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Cereal")) == 1)
+                        st = st.Replace("Artifact Reliquary", "Reese's puffs");
+                }
+                else if (token == "ARTIFACTSHELL_BODY_DESCRIPTION")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Cereal")) == 1)
+                        st = "Eat em up eat em up eat em up eat em up!";
+                }
+
+                else if (st.Contains("Wandering Vagrant"))
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1)
+                        st = st.Replace("Wandering Vagrant", "@Everyone");
+                }
+                else if (token == "VAGRANT_BODY_SUBTITLE")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1)
+                        st = "PING!";
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -1501,15 +1534,24 @@ namespace MoistureUpset
             {
                 Debug.Log(e);
             }
-            On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
+            //On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
+            //{
+            //    orig(self, position, delay);
+            //    if (self.outer.gameObject.name.Contains("Gold"))
+            //    {
+            //        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast"), position, Quaternion.identity);
+            //        AkSoundEngine.PostEvent("AlexFistDelayed", gameObject);
+            //        GameObject.Destroy(gameObject);
+            //    }
+            //};
+            On.RoR2.EffectManager.SpawnEffect_EffectIndex_EffectData_bool += (orig, index, data, transmit) =>
             {
-                orig(self, position, delay);
-                if (self.outer.gameObject.name.Contains("Gold"))
+                ////////////////////406
+                if ((int)index == 406 && !transmit)
                 {
-                    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast"), position, Quaternion.identity);
-                    AkSoundEngine.PostEvent("AlexFistDelayed", gameObject);
-                    GameObject.Destroy(gameObject);
+                    RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("OHSHITWADDUP"), data.origin);
                 }
+                orig(index, data, transmit);
             };
             On.EntityStates.TitanMonster.ChargeGoldMegaLaser.FixedUpdate += (orig, self) =>
             {
@@ -1792,6 +1834,25 @@ namespace MoistureUpset
             fab.GetComponentsInChildren<ParticleSystemRenderer>()[1].gameObject.SetActive(false);
             fab.GetComponentsInChildren<TrailRenderer>()[0].sharedMaterial.SetVector("_EmissionColor", color);
             ReplaceMeshFilter("prefabs/projectileghosts/TarballGhost", "@MoistureUpset_puddi:assets/puddighost.mesh", "@MoistureUpset_puddi:assets/puddi.png");
+            fab = Resources.Load<GameObject>("prefabs/characterbodies/ExplosivePotDestructibleBody");
+            ReplaceMeshFilter("prefabs/characterbodies/ExplosivePotDestructibleBody", "@MoistureUpset_puddi:assets/puddicontainer.mesh", "@MoistureUpset_puddi:assets/puddicontainer.png");
+
+            fab = Resources.Load<GameObject>("prefabs/effects/ClayBossDeath");
+            foreach (var item in fab.GetComponentsInChildren<MeshFilter>())
+            {
+                item.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_puddi:assets/puddighost.mesh");
+                //item.transform.localScale *= 3;
+            }
+            foreach (var item in fab.GetComponentsInChildren<MeshRenderer>())
+            {
+                item.sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_puddi:assets/puddi.png");
+            }
+            fab = Resources.Load<GameObject>("prefabs/Pot2Debris");
+            foreach (var item in fab.GetComponentsInChildren<MeshFilter>())
+            {
+                item.transform.localScale *= .5f;
+                item.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_puddi:assets/puddighost.mesh");
+            }
         }
         private static void StringWorm()
         {
@@ -1848,7 +1909,7 @@ namespace MoistureUpset
                 {
                     foreach (var item in self.meatballProjectile.GetComponentsInChildren<RoR2.Projectile.ProjectileImpactExplosion>())
                     {
-                        Debug.Log($"-------------{item.explosionSoundString = "PlayLightning"}");
+                        item.explosionSoundString = "PlayLightning";
                     }
                 }
                 orig(self, normal, position, forward, count, angle, force);
@@ -1912,6 +1973,7 @@ namespace MoistureUpset
             if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) != 1)
                 return;
             LoadResource("roflcopter");
+            LoadBNK("Roflcopter");
             ReplaceModel("prefabs/characterbodies/LunarWispBody", "@MoistureUpset_roflcopter:assets/roflcopter.mesh", "@MoistureUpset_roflcopter:assets/roflcopter.png");
             //var anim = Resources.Load<AnimationClip>("@MoistureUpset_roflcopter:assets/roflcopter_fly.anim");
             var anim = Resources.Load<AnimationClip>("@MoistureUpset_roflcopter:assets/Idle.anim");
@@ -1954,7 +2016,7 @@ namespace MoistureUpset
             if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) != 1)
                 return;
             LoadResource("beetlequeen");
-
+            LoadBNK("Nyam2");
             ReplaceModel("prefabs/characterbodies/BeetleQueen2Body", "@MoistureUpset_beetlequeen:assets/bosses/nyancat.mesh", "@MoistureUpset_NA:assets/blank.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleQueen2Body");
             foreach (var item in fab.GetComponentsInChildren<Light>())
@@ -1963,6 +2025,217 @@ namespace MoistureUpset
             }
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.png"));
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.SetVector("_EmColor", new Vector4(.4f, .4f, .4f, 1));
+
+            fab = Resources.Load<GameObject>("prefabs/projectileghosts/BeetleQueenSpitGhost");
+            fab.GetComponentsInChildren<TrailRenderer>()[1].gameObject.SetActive(false);
+            fab.GetComponentsInChildren<TrailRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/trail.mat");
+            var p = fab.GetComponentInChildren<ParticleSystem>();
+            p.startSpeed = 0;
+            p.simulationSpace = ParticleSystemSimulationSpace.Local;
+            p.gravityModifier = 0;
+            p.maxParticles = 1;
+            p.startLifetime = 10;
+            var shape = p.shape;
+            shape.shapeType = ParticleSystemShapeType.Sprite;
+
+            var vel = p.limitVelocityOverLifetime;
+            vel.enabled = true;
+            vel.limitMultiplier = 0;
+            var succ = p.rotationBySpeed;
+            succ.zMultiplier = 1;
+            var part = fab.GetComponentInChildren<ParticleSystemRenderer>();
+            try
+            {
+                part.material.shader = Shader.Find("Sprites/Default");
+                part.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                part.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                part.material.SetInt("_ZWrite", 0);
+                part.material.DisableKeyword("_ALPHATEST_ON");
+                part.material.DisableKeyword("_ALPHABLEND_ON");
+                part.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                part.material.renderQueue = 3000;
+                part.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyanjpeg.png");
+            }
+            catch (Exception)
+            {
+            }
+            foreach (var particle in EntityStates.BeetleQueenMonster.FireSpit.effectPrefab.GetComponentsInChildren<ParticleSystemRenderer>())
+            {
+                try
+                {
+                    particle.material.shader = Shader.Find("Sprites/Default");
+                    particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    particle.material.SetInt("_ZWrite", 0);
+                    particle.material.DisableKeyword("_ALPHATEST_ON");
+                    particle.material.DisableKeyword("_ALPHABLEND_ON");
+                    particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                    particle.material.renderQueue = 3000;
+                    particle.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyanstars.png");
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+
+            On.RoR2.Orbs.BeetleWardOrb.OnArrival += (orig, self) => //Can't do this pre game like everything else?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+            {
+                if (self.target)
+                {
+                    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/NetworkedObjects/BeetleWard"), self.target.transform.position, Quaternion.identity);
+                    gameObject.GetComponent<TeamFilter>().teamIndex = self.target.teamIndex;
+
+
+                    gameObject.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");
+                    gameObject.GetComponentsInChildren<SkinnedMeshRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.mat");
+
+
+                    NetworkServer.Spawn(gameObject);
+                }
+            };
+
+            fab = Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/BeetleWardOrbEffect");
+            fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");
+            fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.mat");
+            fab.GetComponentsInChildren<TrailRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/trail.mat");
+        }
+        private static void Thanos()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) != 1)
+                return;
+            LoadResource("thanos");
+            LoadBNK("Thanos");
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/thanos.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 0);
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/infinityhammer.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 2);
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 4);
+
+            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_thanos:assets/bosses/thanos.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 0);
+            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_thanos:assets/bosses/infinityhammer.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
+            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
+
+
+            ReplaceModel("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_thanos:assets/bosses/thanos.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 0);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 2);
+            ReplaceModel("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+        }
+        private static void Cereal()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Cereal")) != 1)
+                return;
+            LoadResource("artifact");
+            ReplaceMeshFilter("prefabs/characterbodies/ArtifactShellBody", "@MoistureUpset_artifact:assets/bosses/bowl.mesh");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/ArtifactShellBody");
+            var mesh = fab.GetComponentsInChildren<MeshRenderer>();
+            foreach (var item in mesh)
+            {
+                item.sharedMaterial = Resources.Load<Material>("@MoistureUpset_artifact:assets/bosses/bowl.mat");
+            }
+            fab = Resources.Load<GameObject>("prefabs/projectiles/ArtifactShellSeekingSolarFlare");
+            var skinnedmesh = fab.AddComponent<SkinnedMeshRenderer>() as SkinnedMeshRenderer;
+            skinnedmesh.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_artifact:assets/bosses/box.mesh");
+            skinnedmesh.sharedMaterial = Resources.Load<Material>("@MoistureUpset_artifact:assets/bosses/box.mat");
+            On.EntityStates.ArtifactShell.WaitForKey.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                foreach (var item in GameObject.FindObjectsOfType<GameObject>())
+                {
+                    if (item.name.StartsWith("Ring,"))
+                    {
+                        item.SetActive(false);
+                    }
+                }
+            };
+            On.RoR2.ArtifactTrialMissionController.CombatState.OnEnter += (orig, self) =>
+            {
+                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                AkSoundEngine.ExecuteActionOnEvent(3772119855, AkActionOnEventType.AkActionOnEventType_Stop);
+                AkSoundEngine.PostEvent("ArtifactLoop", mainBody.gameObject);
+                orig(self);
+            };
+            On.RoR2.ArtifactTrialMissionController.CombatState.OnExit += (orig, self) =>
+            {
+                try
+                {
+                    var c = GameObject.FindObjectOfType<MusicController>();
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
+                    AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
+                    AkSoundEngine.PostEvent("StopFanFare", c.gameObject);
+                    AkSoundEngine.SetRTPCValue("BossDead", 1f);
+                    AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
+                }
+                catch (Exception)
+                {
+                }
+                orig(self);
+            };
+        }
+        private static void Twitch()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) != 1)
+                return;
+            LoadResource("twitch");
+            LoadBNK("Twitch");
+            Texture[] textures = { Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/yep.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/trihard.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/pogu.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/poggers.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/pogchamp.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/pjsalt.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/pepehands.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/monkaw.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/monkagiga.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/lul.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/kreygasm.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/kappa.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/jebaited.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/heyguys.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/dansgame.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/biblethump.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/babyrage.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/4head.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/5head.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/ayayaya.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/D.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/kekw.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/lulw.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/peepohappy.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/pepega.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/sadge.png"), Resources.Load<Texture>("@MoistureUpset_twitch:assets/twitch/weirdchamp.png") };
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_twitch:assets/twitch.mesh", "@MoistureUpset_twitch:assets/twitch.png", 2);
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
+            var fab = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperTrackingFireballGhost");
+            fab.GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
+            var particle = fab.GetComponentsInChildren<ParticleSystemRenderer>()[0];
+            try
+            {
+                particle.material.shader = Shader.Find("Sprites/Default");
+                particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                particle.material.SetInt("_ZWrite", 0);
+                particle.material.DisableKeyword("_ALPHATEST_ON");
+                particle.material.DisableKeyword("_ALPHABLEND_ON");
+                particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                particle.material.renderQueue = 3000;
+            }
+            catch (Exception)
+            {
+            }
+            var p = fab.GetComponentsInChildren<ParticleSystem>()[0];
+            p.startSpeed = 0;
+            p.simulationSpace = ParticleSystemSimulationSpace.Local;
+            p.gravityModifier = 0;
+            p.maxParticles = 1;
+            p.startLifetime = 100;
+            var shape = p.shape;
+            shape.shapeType = ParticleSystemShapeType.Sprite;
+
+            var vel = p.limitVelocityOverLifetime;
+            vel.enabled = true;
+            vel.limitMultiplier = 0;
+            var succ = p.rotationBySpeed;
+            succ.zMultiplier = 1;
+
+
+            On.EntityStates.GravekeeperMonster.Weapon.GravekeeperBarrage.OnEnter += (orig, self) =>
+            {
+                var fab2 = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperTrackingFireballGhost");
+                fab2.GetComponentInChildren<ParticleSystemRenderer>().material.mainTexture = textures[UnityEngine.Random.Range(0, textures.Length)];
+                Util.PlaySound("TwitchMemes", self.outer.gameObject);
+                orig(self);
+            };
+            On.EntityStates.GravekeeperBoss.FireHook.OnEnter += (orig, self) =>
+            {
+                Util.PlaySound("TwitchChains", self.outer.gameObject);
+                orig(self);
+            };
         }
     }
 }

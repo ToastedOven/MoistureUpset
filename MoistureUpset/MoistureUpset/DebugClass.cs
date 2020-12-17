@@ -175,17 +175,18 @@ namespace MoistureUpset
             GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
             foreach (var item in objects)
             {
-                //Debug.Log($"-------sex----{item.name}");
-                if (item.name == "Mesh")
-                {
-                    try
-                    {
-                        DebugBones(item);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
+                ////Debug.Log($"-------sex----{item.name}");
+                //if (item.name == "Mesh")
+                //{
+                //    try
+                //    {
+                //        DebugBones(item);
+                //    }
+                //    catch (Exception)
+                //    {
+                //    }
+                //}
+                Debug.Log($"-------------{item}");
             }
         }
         public static void GetAllGameObjects(GameObject g)

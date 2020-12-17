@@ -47,7 +47,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                //Debug.Log(e);
             }
 
             return cm;
@@ -103,7 +103,7 @@ namespace MoistureUpset
                         }
                         catch (Exception e)
                         {
-                            Debug.Log(e);
+                            //Debug.Log(e);
                         }
                     }
                     else
@@ -113,7 +113,7 @@ namespace MoistureUpset
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e);
+                    //Debug.Log(e);
                 }
             }
 
@@ -148,7 +148,7 @@ namespace MoistureUpset
                 {
                     if (damageReport.victimBody.skinIndex == 2 && damageReport.victimBody.name == "EngiBody(Clone)")
                     {
-                        Debug.Log(damageReport.victimBody.transform.position);
+                        //Debug.Log(damageReport.victimBody.transform.position);
                         NetworkAssistant.playSound("EngiDying", damageReport.victimBody.transform.position);
                     }
                 }
@@ -165,7 +165,7 @@ namespace MoistureUpset
                         }
                         catch (Exception e)
                         {
-                            Debug.Log(e);
+                            //Debug.Log(e);
                         }
                     }
                     else if (damageReport.attackerMaster.minionOwnership != null)
@@ -181,7 +181,7 @@ namespace MoistureUpset
                             }
                             catch (Exception e)
                             {
-                                Debug.Log(e);
+                                //Debug.Log(e);
                             }
                         }
                     }
@@ -190,7 +190,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                //Debug.Log(e);
             }
             finally
             {
@@ -253,7 +253,7 @@ namespace MoistureUpset
                             }
                             catch (Exception e)
                             {
-                                Debug.Log(e);
+                                //Debug.Log(e);
                             }
                         }
                         else if (damageReport.victimMaster.minionOwnership != null)
@@ -269,20 +269,20 @@ namespace MoistureUpset
                                 }
                                 catch (Exception e)
                                 {
-                                    Debug.Log(e);
+                                    //Debug.Log(e);
                                 }
                             }
                         }
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e);
+                        //Debug.Log(e);
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                //Debug.Log(e);
             }
             finally
             {
