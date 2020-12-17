@@ -20,7 +20,6 @@ namespace MoistureUpset
     {
         public static void RunAll()
         {
-            DeathSound();
             Somebody();
             BossMusic();
             BossMusicAndFanFare();
@@ -334,73 +333,43 @@ namespace MoistureUpset
                 orig(self, crit);
             };
         }
-        public static void DeathSound()
+        public static void StopBossMusic(UInt32[] ids)
         {
-            //On.RoR2.CharacterBody.Start += (orig, self) =>
-            //{
-            //    orig(self);
-            //    try
-            //    {
-            //        Debug.Log($"sounddeath-------------{self.GetFieldValue<SfxLocator>("sfxLocator").deathSound}");
-            //        //Debug.Log($"barksound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").barkSound}");
-            //        //Debug.Log($"falldamagesound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").fallDamageSound}");
-            //        //Debug.Log($"landingsound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").landingSound}");
-            //        //Debug.Log($"opensound-------------{self.GetFieldValue<SfxLocator>("sfxLocator").openSound}");
-            //    }
-            //    catch (Exception)
-            //    {
-            //    }
-            //};
-            //On.RoR2.FootstepHandler.Start += (orig, self) =>
-            //{
-            //    orig(self);
-            //    try
-            //    {
-            //        Debug.Log($"footstep-------------{self.baseFootstepString}");
-            //        Debug.Log($"footstep-override------------{self.sprintFootstepOverrideString}");
-            //    }
-            //    catch (Exception)
-            //    {
-            //    }
-
-            //};
-            //On.EntityStates.GenericCharacterDeath.PlayDeathSound += (orig, self) =>
-            //{
-            //    Util.PlaySound("EDeath", self.outer.gameObject);
-            //};
+            foreach (var item in ids)
+            {
+                AkSoundEngine.ExecuteActionOnEvent(item, AkActionOnEventType.AkActionOnEventType_Stop);
+            }
         }
         public static void BossMusicAndFanFare()
         {
-            //On.RoR2.CharacterBody.Awake += (orig, self) =>
-            //{
-            //    orig(self);
-            //    Debug.Log($"name: {self.name}");
-            //    Debug.Log($"base: {self.baseNameToken}");
-            //    Debug.Log($"subtitle: {self.subtitleNameToken}");
-            //    if (self.master.isBoss)
-            //    {
-            //        AkSoundEngine.PostEvent("PlayBossMusic", RoR2Application.instance.gameObject);
-            //        Debug.Log($"its a boss");
-            //    }
-            //};
+            int brother = 0;
+            On.EntityStates.Missions.BrotherEncounter.PreEncounter.OnEnter += (orig, self) =>
+            {
+                StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421 });
+
+                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
+                orig(self);
+                AkSoundEngine.PostEvent("Thanos1", mainBody.gameObject);
+            };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
                 if (self.master && self.master.isBoss)
                 {
+                    bool resetThanos = true;
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    AkSoundEngine.ExecuteActionOnEvent(2493198437, AkActionOnEventType.AkActionOnEventType_Stop);
-                    AkSoundEngine.ExecuteActionOnEvent(291592398, AkActionOnEventType.AkActionOnEventType_Stop);
-                    AkSoundEngine.ExecuteActionOnEvent(2857659536, AkActionOnEventType.AkActionOnEventType_Stop);
-                    AkSoundEngine.ExecuteActionOnEvent(3163719647, AkActionOnEventType.AkActionOnEventType_Stop);
-                    AkSoundEngine.ExecuteActionOnEvent(1581288698, AkActionOnEventType.AkActionOnEventType_Stop);
-                    AkSoundEngine.ExecuteActionOnEvent(974987421, AkActionOnEventType.AkActionOnEventType_Stop);
+                    StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421 });
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
                     }
+                    else if (self.baseNameToken == "ARTIFACTSHELL_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Cereal")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("ArtifactIntro", mainBody.gameObject);
+                    }
                     else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
                     {
-
+                        //u didn't build that
                     }
                     else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
                     {
@@ -409,6 +378,40 @@ namespace MoistureUpset
                     else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1))
                     {
 
+                    }
+                    else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME") && (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1))
+                    {
+                        resetThanos = false;
+                        brother++;
+                        switch (brother)
+                        {
+                            case 1:
+                                break;
+                            case 2:
+                                AkSoundEngine.ExecuteActionOnEvent(2369706651, AkActionOnEventType.AkActionOnEventType_Stop);
+                                AkSoundEngine.PostEvent("Thanos2", mainBody.gameObject);
+                                break;
+                            case 3:
+                                AkSoundEngine.PostEvent("Thanos3", mainBody.gameObject);
+                                break;
+                            case 4:
+                                AkSoundEngine.PostEvent("Thanos4", mainBody.gameObject);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (self.baseNameToken == "ELECTRICWORM_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Squirmles")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("PlaySquirmles", mainBody.gameObject);
+                    }
+                    else if (self.baseNameToken == "GRAVEKEEPER_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("PlayTwitch", mainBody.gameObject);
+                    }
+                    else if (self.baseNameToken == "BEETLEQUEEN_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("PlayNyan", mainBody.gameObject);
                     }
                     else if (self.baseNameToken == "VAGRANT_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1))
                     {
@@ -430,14 +433,20 @@ namespace MoistureUpset
                     {
                         AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
                     }
-                    Debug.Log($"name: {self.name}");
-                    Debug.Log($"base: {self.baseNameToken}");
-                    Debug.Log($"subtitle: {self.subtitleNameToken}");
-
+                    if (resetThanos)
+                    {
+                        brother = 0;
+                        AkSoundEngine.ExecuteActionOnEvent(2369706651, AkActionOnEventType.AkActionOnEventType_Stop);
+                    }
                     try
                     {
+                        //muEscape
+                        //muSong25
                         var c = GameObject.FindObjectOfType<MusicController>();
+                        MusicAPI.StopSong(ref c, "muSong25");
                         MusicAPI.StopSong(ref c, "muSong23");
+                        MusicAPI.StopSong(ref c, "muSong13");
+                        MusicAPI.GetCurrentSong(ref c);
                         //AkSoundEngine.exec
                         AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
                         var con = GameObject.FindObjectOfType<MusicController>();
