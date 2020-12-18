@@ -1979,36 +1979,11 @@ namespace MoistureUpset
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) != 1)
                 return;
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/LunarWispBody");
+            fab.AddComponent<Helicopter>();
             LoadResource("roflcopter");
             LoadBNK("Roflcopter");
             ReplaceModel("prefabs/characterbodies/LunarWispBody", "@MoistureUpset_roflcopter:assets/roflcopter.mesh", "@MoistureUpset_roflcopter:assets/roflcopter.png");
-            //var anim = Resources.Load<AnimationClip>("@MoistureUpset_roflcopter:assets/roflcopter_fly.anim");
-            var anim = Resources.Load<AnimationClip>("@MoistureUpset_roflcopter:assets/Idle.anim");
-
-
-            //var fab = Resources.Load<GameObject>("prefabs/characterbodies/LunarWispBody");
-            //foreach (var animator in fab.GetComponentsInChildren<Animator>())
-            //{
-            //    //AnimatorOverrideController over = new AnimatorOverrideController(animator.runtimeAnimatorController) { [animator.runtimeAnimatorController.animationClips[0]] = anim};
-            //    //animator.runtimeAnimatorController = over;
-            //    AnimatorOverrideController aoc = new AnimatorOverrideController(animator.runtimeAnimatorController);
-            //    var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-            //    foreach (var a in aoc.animationClips)
-            //    {
-            //        anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(a, anim));
-            //    }
-            //    aoc.ApplyOverrides(anims);
-            //    animator.runtimeAnimatorController = aoc;
-
-            //    //aoc["Idle"] = anim;
-            //    ////aoc["Idle"] = aoc["Spawn"];
-
-
-            //    for (int i = 0; i < animator.runtimeAnimatorController.animationClips.Length; i++)
-            //    {
-            //        Debug.Log($"------{animator.runtimeAnimatorController.animationClips[i]}");
-            //    }
-            //}
         }
         private static void Rob()
         {
@@ -2244,39 +2219,50 @@ namespace MoistureUpset
                 orig(self);
             };
         }
+        private static void ImposterChanger(string name)
+        {
+            var fab = Resources.Load<GameObject>($"prefabs/characterbodies/{name}");
+            Shader temp = fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shader;
+            fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial = Resources.Load<Material>("@MoistureUpset_scavenger:assets/bosses/imposter.mat");
+            fab.GetComponentsInChildren<SkinnedMeshRenderer>()[2].sharedMaterial = Resources.Load<Material>("@MoistureUpset_scavenger:assets/bosses/imposter.mat");
+            fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shader = temp;
+            fab.GetComponentsInChildren<SkinnedMeshRenderer>()[2].sharedMaterial.shader = temp;
+        }
         private static void Imposter()
         {
+            if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) != 1)
+                return;
             LoadResource("scavenger");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/networkedobjects/ScavBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh"); //needs different weight painting
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png");
-
-
+            ImposterChanger("ScavBody");
 
             ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
-
+            ImposterChanger("ScavLunar1Body");
 
             ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
-
+            ImposterChanger("ScavLunar2Body");
 
             ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
-
+            ImposterChanger("ScavLunar3Body");
 
             ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+            ImposterChanger("ScavLunar4Body");
         }
     }
 }

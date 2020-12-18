@@ -223,6 +223,7 @@ namespace MoistureUpset
                     }
                 AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.ExecuteActionOnEvent(816301922, AkActionOnEventType.AkActionOnEventType_Stop);
+                AkSoundEngine.ExecuteActionOnEvent(1214003200, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                 //logbook
                 //title
@@ -253,6 +254,11 @@ namespace MoistureUpset
                         {
                             AkSoundEngine.SetRTPCValue("BossDead", 0f);
                         }
+                    if (float.Parse(ModSettingsManager.getOptionValue("Creative Void Zone")) == 1)
+                        if (MusicAPI.ReplaceSong(ref self, "muSong08", "Play_Dicks"))
+                        {
+                            AkSoundEngine.SetRTPCValue("BossDead", 0f);
+                        }
                     //Debug.Log($"--------------{song}");
                 }
                 catch (Exception)
@@ -270,6 +276,15 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
+            };
+            On.RoR2.CharacterBody.HasBuff += (orig, self, index) =>
+            {
+                if (BuffIndex.NullSafeZone == index)
+                {
+                    //NullSafeZone
+                    AkSoundEngine.SetRTPCValue("Dicks", (orig(self, index) ? 0f : 1f));
+                }
+                return orig(self, index);
             };
             if (float.Parse(ModSettingsManager.getOptionValue("Logo")) == 1)
                 On.RoR2.CreditsController.OnEnable += (orig, self) =>
@@ -369,7 +384,7 @@ namespace MoistureUpset
                     }
                     else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
                     {
-                        //u didn't build that
+                        AkSoundEngine.PostEvent("ArtifactIntro", mainBody.gameObject);
                     }
                     else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
                     {
