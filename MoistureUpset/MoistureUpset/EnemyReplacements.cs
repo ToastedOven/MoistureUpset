@@ -123,9 +123,9 @@ namespace MoistureUpset
         public static void ReplaceMeshFilter(string prefab, string mesh, string png, int position = 0)
         {
             var fab = Resources.Load<GameObject>(prefab);
-            var renderers = fab.GetComponentsInChildren<Renderer>();
             var meshes = fab.GetComponentsInChildren<MeshFilter>();
             var texture = Resources.Load<Texture>(png);
+            var renderers = fab.GetComponentsInChildren<Renderer>();
             for (int i = 0; i < renderers[position].sharedMaterials.Length; i++)
             {
                 renderers[position].sharedMaterials[i].shader = Shader.Find("Standard");
@@ -237,6 +237,7 @@ namespace MoistureUpset
                 Copter();
                 Rob();
                 Nyan();
+                Imposter();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -246,11 +247,7 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            LoadResource("scavenger");
-            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scavbackpackmesh.mesh", 0);
-            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scaveyemesh.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scavmesh.mesh", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/scavweaponmesh.mesh");
+
         }
         private static void Icons()
         {
@@ -726,6 +723,16 @@ namespace MoistureUpset
                 {
                     if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1)
                         st = "PING!";
+                }
+
+                else if (st.Contains("Scavenger"))
+                {
+                    if (true)
+                        st = st.Replace("Scavenger", "<color=#D9262C>Crewmate</color>");
+                }
+                else if (token == "SCAV_BODY_SUBTITLE")
+                {
+                    st = "Idk, seems pretty sus to me";
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -2236,6 +2243,40 @@ namespace MoistureUpset
                 Util.PlaySound("TwitchChains", self.outer.gameObject);
                 orig(self);
             };
+        }
+        private static void Imposter()
+        {
+            LoadResource("scavenger");
+            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/networkedobjects/ScavBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh"); //needs different weight painting
+            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png");
+
+
+
+            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+
+
+            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+
+
+            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+
+
+            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
         }
     }
 }
