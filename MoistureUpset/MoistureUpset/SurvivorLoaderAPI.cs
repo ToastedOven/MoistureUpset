@@ -210,7 +210,7 @@ namespace MoistureUpset
         //        //    }
         //        //}
 
-                
+
         //    }
         //    catch (Exception e)
         //    {
@@ -226,7 +226,7 @@ namespace MoistureUpset
         //{
         //    try
         //    {
-                
+
         //    }
         //    catch (Exception e)
         //    {
@@ -259,14 +259,14 @@ namespace MoistureUpset
                             tempPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
                             break;
                     }
-                    
+
                     self.blueprintPrefab = tempPrefab;
                 }
                 else
                 {
                     Debug.LogWarning("is null");
                 }
-                
+
             }
 
             orig(self);
@@ -308,7 +308,7 @@ namespace MoistureUpset
         //                        break;
         //                }
 
-                        
+
         //                //cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
         //            }
         //        }
@@ -348,34 +348,6 @@ namespace MoistureUpset
             {
                 return RoR2.UI.LogBook.EntryStatus.Available;
             };
-            //var fab = Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod");
-            //var renderers = fab.GetComponentsInChildren<Renderer>();
-            //var meshes = fab.GetComponentsInChildren<MeshFilter>();
-            //renderers[0].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            //meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/outhouse.mesh");
-            //renderers[1].material = Resources.Load<Material>("@MoistureUpset_droppod:assets/shrekpodmat.mat");
-            //meshes[1].mesh = Resources.Load<Mesh>("@MoistureUpset_droppod:assets/door.mesh");
-
-
-
-            //var fab2 = Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
-            //var components2 = fab2.GetComponentsInChildren<Component>();
-            //Debug.Log($"-----engi-------------");
-            //foreach (var item in components2)
-            //{
-            //    Debug.Log($"-----component-----{item}");
-            //}
-
-            //fab = Resources.Load<GameObject>("prefabs/characterbodies/EngiTurretBody");
-            //renderers = fab.GetComponentsInChildren<Renderer>();
-            //meshes = fab.GetComponentsInChildren<MeshFilter>();
-            //renderers[0].material = Resources.Load<Material>("@MoistureUpset_engi_sentry2:assets/coolturretmat.mat");
-            //meshes[0].mesh = Resources.Load<Mesh>("@MoistureUpset_engi_sentry2:assets/sentry2_optimized_reference.mesh");
-            //fab = Resources.Load<GameObject>("prefabs/characterbodies/Turret1Body");
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"------------------------------name: {item.name} type: {item.GetType()}");
-            //}
         }
         private static void EngineerStuff(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
         {
@@ -396,6 +368,18 @@ namespace MoistureUpset
             var TurretSkinController = engiTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
             var WalkerTurretSkinController = engiWalkerTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
 
+            EnemyReplacements.LoadResource("dispenser");
+            try
+            {
+
+                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_dispenser:assets/dispenser.mesh", "@MoistureUpset_dispenser:assets/dispenser.png");
+                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 1);
+                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 2);
+            }
+            catch (Exception)
+            {
+                Debug.Log($"-------------gayyyyyyyyyyyyyyyyyyyyyyy");
+            }
             //On.RoR2.SkinDef.Awake += SkinDef_Awake;
 
             //var turretSkinDef = ScriptableObject.CreateInstance<RoR2.SkinDef>();
@@ -574,7 +558,7 @@ namespace MoistureUpset
 
 
             Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
-            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin); 
+            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
 
             Array.Resize(ref TurretSkinController.skins, TurretSkinController.skins.Length + 1);
             TurretSkinController.skins[TurretSkinController.skins.Length - 1] = bruh;
