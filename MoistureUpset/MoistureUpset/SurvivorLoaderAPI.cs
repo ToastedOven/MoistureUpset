@@ -10,6 +10,8 @@ using UnityEngine;
 using System.Linq;
 using static RoR2.UI.CharacterSelectController;
 using EntityStates.BrotherMonster;
+using EntityStates.Engi.EngiBubbleShield;
+using RoR2.Projectile;
 
 namespace MoistureUpset
 {
@@ -85,56 +87,91 @@ namespace MoistureUpset
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_sentry2", MainAssetBundle));
             }
-            On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
 
-            //On.RoR2.MasterSummon.Perform += MasterSummon_Perform;
+            EnemyReplacements.LoadResource("dispener");
+            EnemyReplacements.LoadResource("demopill");
+            EnemyReplacements.LoadResource("rocket");
+
+
+            On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
 
             On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += PlaceTurret_OnEnter;
 
-            //On.RoR2.UI.CharacterSelectController.Update += CharacterSelectController_Update;
-            //On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
-            //On.RoR2.UI.CharacterSelectController.OnNetworkUserLoadoutChanged += CharacterSelectController_OnNetworkUserLoadoutChanged;
+            On.RoR2.Projectile.ProjectileController.Start += ProjectileController_Start;
 
-            //On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
         }
 
-        //private static void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
-        //{
-        //    CharacterMaster cm = body.master;
+        private static void ProjectileController_Start(On.RoR2.Projectile.ProjectileController.orig_Start orig, ProjectileController self)
+        {
+            orig(self);
 
-        //    try
-        //    {
-        //        if (cm.minionOwnership.ownerMaster != null)
-        //        {
-        //            if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && cm.GetBody().name.Contains("Engi"))
-        //            {
-        //                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
-        //                {
-        //                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
-        //                    cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
-        //                }
-        //                Debug.Log($"{cm.name}--------{cm.GetBody().name}");
-        //                switch (cm.name)
-        //                {
-        //                    case "EngiWalkerTurretMaster(Clone)":
-        //                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
-        //                        break;
-        //                    case "EngiTurretMaster(Clone)":
-        //                        cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
-        //                        break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.Log(e);
-        //    }
-        //    finally
-        //    {
-        //        orig(self, body);
-        //    }
-        //}
+            var cb = self.owner.GetComponentInChildren<CharacterBody>();
+
+            if (cb != null)
+            {
+                if (self.owner.name == "EngiBody(Clone)" && cb.skinIndex == 2)
+                {
+                    Debug.Log(self.ghost.name);
+                    if (self.ghost.name == "EngiSeekerGrenadeGhost(Clone)")
+                    {
+                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
+
+                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_dispener:assets/dispenser.mesh");
+                        meshes[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
+                        meshes[2].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
+                        
+                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png");
+                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png"));
+                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_NormalTex", null);
+
+                        meshes[0].transform.localScale = new Vector3(0.5f, 0.55f, 0.5f);
+                        meshes[0].transform.localPosition += new Vector3(0f, 0f, 0.5f);
+
+                        GameObject.DestroyImmediate(self.ghost.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>());
+
+                        for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
+                        {
+                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cb)
+                            {
+                                NetworkAssistant.playSound("EngiBuildsDispenser", i);
+                            }
+                        }
+
+                        //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
+                        //{
+                        //    Debug.Log($"---------------------{}");
+                        //}
+                    }
+                    else if (self.ghost.name == "EngiGrenadeGhost(Clone)")
+                    {
+                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
+
+                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_demopill:assets/demopill.mesh");
+
+                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material = Resources.Load<Material>("@MoistureUpset_demopill:assets/demopill.mat");
+
+                        meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+                    }
+                    else if (self.ghost.name == "EngiHarpoonGhost(Clone)")
+                    {
+                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
+
+                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_rocket:assets/rocket.mesh");
+
+                        //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
+                        //{
+                        //    Debug.Log($"---------------------{comp}");
+                        //}
+
+                        self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat");
+
+                        Debug.Log(self.ghost.gameObject.GetComponentInChildren<TrailRenderer>().material.color);
+
+                        meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+                    }
+                }
+            }
+        }
 
 
         //This is one of the worst code practices I've ever done. But I have no better ideas so ¯\_(ツ)_/¯
@@ -368,18 +405,18 @@ namespace MoistureUpset
             var TurretSkinController = engiTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
             var WalkerTurretSkinController = engiWalkerTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            EnemyReplacements.LoadResource("dispenser");
-            try
-            {
+            //
+            //try
+            //{
 
-                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_dispenser:assets/dispenser.mesh", "@MoistureUpset_dispenser:assets/dispenser.png");
-                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 1);
-                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 2);
-            }
-            catch (Exception)
-            {
-                Debug.Log($"-------------gayyyyyyyyyyyyyyyyyyyyyyy");
-            }
+            //    EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_dispenser:assets/dispenser.mesh", "@MoistureUpset_dispenser:assets/dispenser.png");
+            //    EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            //    EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 2);
+            //}
+            //catch (Exception)
+            //{
+            //    Debug.Log($"-------------gayyyyyyyyyyyyyyyyyyyyyyy");
+            //}
             //On.RoR2.SkinDef.Awake += SkinDef_Awake;
 
             //var turretSkinDef = ScriptableObject.CreateInstance<RoR2.SkinDef>();
