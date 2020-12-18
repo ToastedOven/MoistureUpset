@@ -368,18 +368,6 @@ namespace MoistureUpset
             var TurretSkinController = engiTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
             var WalkerTurretSkinController = engiWalkerTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            EnemyReplacements.LoadResource("dispenser");
-            try
-            {
-
-                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_dispenser:assets/dispenser.mesh", "@MoistureUpset_dispenser:assets/dispenser.png");
-                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 1);
-                EnemyReplacements.ReplaceMeshFilter("prefabs/projectileghosts/EngiSeekerGrenadeGhost", "@MoistureUpset_NA:assets/na1.mesh", 2);
-            }
-            catch (Exception)
-            {
-                Debug.Log($"-------------gayyyyyyyyyyyyyyyyyyyyyyy");
-            }
             //On.RoR2.SkinDef.Awake += SkinDef_Awake;
 
             //var turretSkinDef = ScriptableObject.CreateInstance<RoR2.SkinDef>();
