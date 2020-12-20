@@ -2189,7 +2189,16 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_twitch:assets/twitch.mesh", "@MoistureUpset_twitch:assets/twitch.png", 2);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
-            var fab = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperTrackingFireballGhost");
+            ReplaceMeshFilter("prefabs/projectileghosts/GravekeeperHookGhost", "@MoistureUpset_twitch:assets/bosses/GAMER.mesh", "@MoistureUpset_twitch:assets/twitch.png");
+            var fab = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperHookGhost");
+            //foreach (var item in fab.GetComponentsInChildren<Component>())
+            //{
+            //    Debug.Log($"-------------{item}");
+            //}
+            fab.GetComponentInChildren<TrailRenderer>().material = Resources.Load<Material>("@MoistureUpset_twitch:assets/bosses/matt.mat");
+
+
+            fab = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperTrackingFireballGhost");
             fab.GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
             var particle = fab.GetComponentsInChildren<ParticleSystemRenderer>()[0];
             try
