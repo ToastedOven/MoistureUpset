@@ -61,6 +61,15 @@ namespace MoistureUpset
 
                 UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIcon", "MoistureUpset.Resources.hard.png");
                 UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
+
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse1Icon", "MoistureUpset.Resources.e1.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse2Icon", "MoistureUpset.Resources.e2.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse3Icon", "MoistureUpset.Resources.e3.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse4Icon", "MoistureUpset.Resources.e4.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse5Icon", "MoistureUpset.Resources.e5.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse6Icon", "MoistureUpset.Resources.e6.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse7Icon", "MoistureUpset.Resources.e7.png");
+                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse8Icon", "MoistureUpset.Resources.e8.png");
             }
 
             if (float.Parse(ModSettingsManager.getOptionValue("Pizza Roll")) == 1)
@@ -173,6 +182,7 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                AkSoundEngine.SetRTPCValue("Dicks", 0);
                 if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) == 1)
                     EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
                 if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
@@ -202,6 +212,13 @@ namespace MoistureUpset
                                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
                                 break;
                             case "title":
+                                if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
+                                {
+                                    GameObject pod = GameObject.Find("SurvivorPod");
+                                    pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shreklet.mesh");
+                                    pod = GameObject.Find("EscapePodDoorMesh");
+                                    pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shrekletdoor.mesh");
+                                }
                                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
                                 AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
                                 break;
@@ -277,15 +294,15 @@ namespace MoistureUpset
                 {
                 }
             };
-            On.RoR2.CharacterBody.HasBuff += (orig, self, index) =>
-            {
-                if (BuffIndex.NullSafeZone == index)
-                {
-                    //NullSafeZone
-                    AkSoundEngine.SetRTPCValue("Dicks", (orig(self, index) ? 0f : 1f));
-                }
-                return orig(self, index);
-            };
+            //On.RoR2.CharacterBody.HasBuff += (orig, self, index) =>
+            //{
+            //    if (BuffIndex.NullSafeZone == index)
+            //    {
+            //        //NullSafeZone
+            //        AkSoundEngine.SetRTPCValue("Dicks", (orig(self, index) ? 0f : 1f));
+            //    }
+            //    return orig(self, index);
+            //};
             if (float.Parse(ModSettingsManager.getOptionValue("Logo")) == 1)
                 On.RoR2.CreditsController.OnEnable += (orig, self) =>
             {
@@ -384,7 +401,7 @@ namespace MoistureUpset
                     }
                     else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
                     {
-                        AkSoundEngine.PostEvent("ArtifactIntro", mainBody.gameObject);
+                        AkSoundEngine.PostEvent("PlayObama", mainBody.gameObject);
                     }
                     else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1))
                     {
@@ -521,6 +538,28 @@ namespace MoistureUpset
                 catch (Exception)
                 {
 
+                }
+            };
+            On.RoR2.UI.ObjectivePanelController.AddObjectiveTracker += (orig, self, tracker) =>
+            {
+                orig(self, tracker);
+                try
+                {
+                    AkSoundEngine.SetRTPCValue("Dicks", (tracker.ToString() == "RoR2.HoldoutZoneController+ChargeHoldoutZoneObjectiveTracker" ? 1f : 0f));
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.RoR2.UI.ObjectivePanelController.RemoveObjectiveTracker += (orig, self, tracker) =>
+            {
+                orig(self, tracker);
+                try
+                {
+                    AkSoundEngine.SetRTPCValue("Dicks", (tracker.ToString() == "RoR2.HoldoutZoneController+ChargeHoldoutZoneObjectiveTracker" ? 0f : 1f));
+                }
+                catch (Exception)
+                {
                 }
             };
             On.RoR2.UI.ObjectivePanelController.FinishTeleporterObjectiveTracker.ctor += (orig, self) =>

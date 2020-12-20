@@ -247,7 +247,6 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-
         }
         private static void Icons()
         {
@@ -317,6 +316,10 @@ namespace MoistureUpset
                 UImods.ReplaceTexture2D("textures/bodyicons/texBrotherIcon", "MoistureUpset.Resources.thanos.png");
             if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/GravekeeperBody", "MoistureUpset.Resources.twitch.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/ScavBody", "MoistureUpset.Resources.imposter.png");
+            if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                UImods.ReplaceTexture2D("textures/bodyicons/ScavLunarBody", "MoistureUpset.Resources.imposter.png");
         }
         private static void NonEnemyNames()
         {
@@ -1194,6 +1197,14 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/RoboBallMiniBody", "@MoistureUpset_obamaprism:assets/Obamium.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             ReplaceModel("prefabs/characterbodies/RoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             ReplaceModel("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_obamaprism:assets/crown.mesh", "@MoistureUpset_obamaprism:assets/crown.png");
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 1);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 3);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 4);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 5);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 6);
+            //"@MoistureUpset_NA:assets/na1.mesh"
             On.EntityStates.RoboBallBoss.DeathState.OnEnter += (orig, self) =>
             {
                 Util.PlaySound("ObamaDeath", self.outer.gameObject);
@@ -1920,6 +1931,7 @@ namespace MoistureUpset
                     }
                 }
                 orig(self, normal, position, forward, count, angle, force);
+                //Debug.Log($"-------------{self.meatballProjectile}");
             };
             //sfxlocator
             //skilllocator
@@ -1981,6 +1993,10 @@ namespace MoistureUpset
                 return;
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/LunarWispBody");
             fab.AddComponent<Helicopter>();
+            fab.GetComponentsInChildren<ParticleSystem>()[0].maxParticles = 0;
+            fab.GetComponentsInChildren<ParticleSystem>()[1].maxParticles = 0;
+            fab.GetComponentsInChildren<ParticleSystem>()[2].maxParticles = 0;
+            fab.GetComponentsInChildren<ParticleSystem>()[3].maxParticles = 0;
             LoadResource("roflcopter");
             LoadBNK("Roflcopter");
             ReplaceModel("prefabs/characterbodies/LunarWispBody", "@MoistureUpset_roflcopter:assets/roflcopter.mesh", "@MoistureUpset_roflcopter:assets/roflcopter.png");
