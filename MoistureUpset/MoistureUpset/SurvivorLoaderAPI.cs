@@ -91,6 +91,7 @@ namespace MoistureUpset
             EnemyReplacements.LoadResource("dispener");
             EnemyReplacements.LoadResource("demopill");
             EnemyReplacements.LoadResource("rocket");
+            EnemyReplacements.LoadResource("mines");
 
 
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
@@ -119,7 +120,7 @@ namespace MoistureUpset
                         meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_dispener:assets/dispenser.mesh");
                         meshes[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
                         meshes[2].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
-                        
+
                         self.ghost.gameObject.GetComponentInChildren<Renderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png");
                         self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png"));
                         self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_NormalTex", null);
@@ -169,12 +170,32 @@ namespace MoistureUpset
 
                         meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                     }
+                    else if (self.ghost.name == "SpiderMineGhost(Clone)")
+                    {
+                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/spidermine.mesh");
+
+                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
+                    }
+                    else if (self.ghost.name == "EngiMineGhost(Clone)")
+                    {
+                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/harpoon.mesh");
+
+                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
+                    }
                 }
             }
         }
 
 
         //This is one of the worst code practices I've ever done. But I have no better ideas so ¯\_(ツ)_/¯
+
+        // It really do be like that sometimes
+
+
 
         //private static List<NetworkUser> GetSortedNetworkUsersList()
         //{
