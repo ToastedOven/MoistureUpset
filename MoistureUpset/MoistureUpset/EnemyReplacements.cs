@@ -1009,6 +1009,7 @@ namespace MoistureUpset
             LoadBNK("beetle");
             LoadResource("frog");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleBody");
+            fab.GetComponentInChildren<SfxLocator>().barkSound = "ChairIdle";
             List<Transform> t = new List<Transform>();
             //this is the fucking stupid but it works (minus claws)
             foreach (var item in fab.GetComponentsInChildren<Transform>())
@@ -1776,7 +1777,7 @@ namespace MoistureUpset
                 orig(self, point, normal);
                 if (self.name == "MagmaWormBody(Clone)")
                 {
-                    AkSoundEngine.PostEvent("NoodleSplash", self.gameObject);
+                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
                 }
             };
             On.RoR2.WormBodyPositions2.OnExitSurface += (orig, self, point, normal) =>
@@ -1784,7 +1785,7 @@ namespace MoistureUpset
                 orig(self, point, normal);
                 if (self.name == "MagmaWormBody(Clone)")
                 {
-                    AkSoundEngine.PostEvent("NoodleSplash", self.gameObject);
+                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
                 }
             };
         }
@@ -1921,18 +1922,12 @@ namespace MoistureUpset
                 mesh.sharedMaterials[i].SetTexture("_FlowHeightmap", blank);
                 mesh.sharedMaterials[i].SetTexture("_FlowTex", blank);
             }
-            On.RoR2.WormBodyPositions2.FireMeatballs += (orig, self, normal, position, forward, count, angle, force) =>
-            {
-                if (self.name == "ElectricWormBody(Clone)")
-                {
-                    foreach (var item in self.meatballProjectile.GetComponentsInChildren<RoR2.Projectile.ProjectileImpactExplosion>())
-                    {
-                        item.explosionSoundString = "PlayLightning";
-                    }
-                }
-                orig(self, normal, position, forward, count, angle, force);
-                //Debug.Log($"-------------{self.meatballProjectile}");
-            };
+            fab = Resources.Load<GameObject>("prefabs/projectiles/ElectricWormSeekerProjectile");
+            ((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", "PlayLightning");
+            ((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", 2467737487);
+
+            //2467737487 << new sfx
+            //600329706 << original lighning sfx
             //sfxlocator
             //skilllocator
         }
@@ -1956,6 +1951,15 @@ namespace MoistureUpset
                 item.baseLightInfos[0].defaultColor = new Color(0, 0, 0, 0);
                 item.baseLightInfos[0].light.color = new Color(0, 0, 0, 0);
             }
+
+            EntityStates.VagrantMonster.FireMegaNova.novaSoundString = "DiscordExplosion";
+
+
+            //Play_vagrant_R_explode
+            /*
+                         ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
+            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", 1002825203);
+             */
 
             fab = Resources.Load<GameObject>("prefabs/projectileghosts/VagrantCannonGhost");
             var filter = fab.GetComponentsInChildren<MeshFilter>()[0];
@@ -2035,6 +2039,10 @@ namespace MoistureUpset
             p.startLifetime = 10;
             var shape = p.shape;
             shape.shapeType = ParticleSystemShapeType.Sprite;
+
+            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
+            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", 1002825203);
+
 
             var vel = p.limitVelocityOverLifetime;
             vel.enabled = true;
@@ -2191,10 +2199,6 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
             ReplaceMeshFilter("prefabs/projectileghosts/GravekeeperHookGhost", "@MoistureUpset_twitch:assets/bosses/GAMER.mesh", "@MoistureUpset_twitch:assets/twitch.png");
             var fab = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperHookGhost");
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"-------------{item}");
-            //}
             fab.GetComponentInChildren<TrailRenderer>().material = Resources.Load<Material>("@MoistureUpset_twitch:assets/bosses/matt.mat");
 
 

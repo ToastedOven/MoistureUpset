@@ -218,6 +218,7 @@ namespace MoistureUpset
                                     pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shreklet.mesh");
                                     pod = GameObject.Find("EscapePodDoorMesh");
                                     pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shrekletdoor.mesh");
+                                    AkSoundEngine.PostEvent("PlayMainMenu", GameObject.FindObjectOfType<GameObject>());
                                 }
                                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
                                 AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
@@ -227,7 +228,6 @@ namespace MoistureUpset
                                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
                                 break;
                             case "splash":
-                                AkSoundEngine.PostEvent("PlayMainMenu", GameObject.FindObjectOfType<GameObject>());
                                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
                                 break;
                             default:
@@ -241,6 +241,7 @@ namespace MoistureUpset
                 AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.ExecuteActionOnEvent(816301922, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.ExecuteActionOnEvent(1214003200, AkActionOnEventType.AkActionOnEventType_Stop);
+                AkSoundEngine.ExecuteActionOnEvent(1593864692, AkActionOnEventType.AkActionOnEventType_Stop);
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                 //logbook
                 //title
@@ -281,6 +282,27 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
+            };
+            On.RoR2.Run.OnClientGameOver += (orig, self, report) =>
+            {
+                orig(self, report);
+                if (float.Parse(ModSettingsManager.getOptionValue("End of game music")) == 1)
+                    try
+                    {
+                        if (report.gameEnding.ToString() == "StandardLoss (RoR2.GameEndingDef)")
+                        {
+                            var c = GameObject.FindObjectOfType<Transform>();
+                            AkSoundEngine.PostEvent("Defeat", c.gameObject);
+                        }
+                        else
+                        {
+                            //AkSoundEngine.PostEvent("Victory", gameObject);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                //StandardLoss
             };
             On.EntityStates.SpawnTeleporterState.OnEnter += (orig, self) =>
             {
