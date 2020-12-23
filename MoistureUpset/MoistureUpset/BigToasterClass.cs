@@ -136,27 +136,33 @@ namespace MoistureUpset
                     }
                     if (report.attackerMaster.name.ToUpper().Contains("MAGMAWORM"))
                     {
-                        quotes.Add("The magma worm is such bullshit");
+                        for (int i = 0; i < 3; i++)
+                            quotes.Add("The magma worm is such bullshit");
                     }
                     else if (report.attackerMaster.name.ToUpper().Contains("ELECTRICWORM"))
                     {
-                        quotes.Add("Why does it get lightning? It's already strong enough");
+                        for (int i = 0; i < 3; i++)
+                            quotes.Add("Why does it get lightning? It's already strong enough");
                     }
                     else if (report.attackerMaster.name.ToUpper().Contains("BROTHERHURT"))
                     {
-                        quotes.Add("This final phase sucks so much");
+                        for (int i = 0; i < 3; i++)
+                            quotes.Add("This final phase sucks so much");
                     }
                     else if (report.attackerMaster.name.ToUpper().Contains("WISPMASTER"))
                     {
-                        quotes.Add("Unfucking dodgeable");
+                        for (int i = 0; i < 3; i++)
+                            quotes.Add("Unfucking dodgeable");
                     }
                     else if (report.attackerMaster.name.ToUpper().Contains("VAGRANT"))
                     {
-                        quotes.Add("How are you supposed to dodge that????");
+                        for (int i = 0; i < 3; i++)
+                            quotes.Add("How are you supposed to dodge that????");
                     }
                     else if (report.attackerMaster.name.ToUpper().Contains("LEMURIANBRUISERMASTER"))
                     {
-                        quotes.Add("The fire breath is so annoying");
+                        for (int i = 0; i < 3; i++)
+                            quotes.Add("The fire breath is so annoying");
                     }
                     //else if (UnityEngine.Random.Range(0, 1000) == 5)//maybe have a dummy super rare easter egg?
                     //{
@@ -291,12 +297,9 @@ namespace MoistureUpset
                     {
                         if (report.gameEnding.ToString() == "StandardLoss (RoR2.GameEndingDef)")
                         {
+                            StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
                             var c = GameObject.FindObjectOfType<Transform>();
                             AkSoundEngine.PostEvent("Defeat", c.gameObject);
-                        }
-                        else
-                        {
-                            //AkSoundEngine.PostEvent("Victory", gameObject);
                         }
                     }
                     catch (Exception)
@@ -399,9 +402,9 @@ namespace MoistureUpset
             int brother = 0;
             On.EntityStates.Missions.BrotherEncounter.PreEncounter.OnEnter += (orig, self) =>
             {
-                StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421 });
+                StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
 
-                var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                var mainBody = GameObject.FindObjectOfType<Transform>();
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
                 orig(self);
                 AkSoundEngine.PostEvent("Thanos1", mainBody.gameObject);
@@ -412,7 +415,7 @@ namespace MoistureUpset
                 {
                     bool resetThanos = true;
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421 });
+                    StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
@@ -430,6 +433,10 @@ namespace MoistureUpset
 
                     }
                     else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1))
+                    {
+
+                    }
+                    else if (self.baseNameToken.StartsWith("SCAVLUNAR") && (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1))
                     {
 
                     }

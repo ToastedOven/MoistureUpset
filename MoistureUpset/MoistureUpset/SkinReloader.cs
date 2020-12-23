@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using RoR2;
 using UnityEngine;
-using RoR2;
-using R2API;
 
 namespace MoistureUpset
 {
     class SkinReloader : MonoBehaviour
     {
         // For some reason clients will sometimes see the incorrect skin with custom skins, so I just add this to all survivors and engi turrets, in the hopes that it ensures the correct skin is displayed.
-
-        // Also if you don't like how I'm applying the turret skins, go complain to the r2api people for not providing good documentation on how to implement minion skin replacements.
         private void Start()
         {
             var skinController = GetComponentInChildren<ModelSkinController>();
@@ -25,26 +19,13 @@ namespace MoistureUpset
             else
             {
                 skinIndex = (int)GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster.GetBody().skinIndex;
+                GetComponentInChildren<CharacterBody>().skinIndex = (uint)skinIndex; //I feel like I should be able to do this at a better time, like when initializing this stuff, but it don't work and/or I'm not smart enough to figure it out
             }
-
             skinController.ApplySkin(skinIndex);
+        }
 
-            switch (gameObject.name)
-            {
-                case "EngiTurretBody(Clone)":
-                case "EngiWalkerTurretBody(Clone)":
-                    foreach (var item in skinController.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials)
-                    {
-                        //Debug.Log("replacing textures");
-                        //Debug.Log($"Original Texture: {item.name}");
-                        if (item.name == "matEngiTurret")
-                        {
-                            item.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
-                            item.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
-                        }
-                    }
-                    break;
-            }
+        void FixedUpdate()
+        {
         }
     }
 }
