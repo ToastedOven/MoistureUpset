@@ -18,6 +18,17 @@ namespace MoistureUpset
 {
     public static class EnemyReplacements
     {
+        public static T CopyComponent<T>(T original, GameObject destination) where T : Component
+        {
+            System.Type type = original.GetType();
+            Component copy = destination.AddComponent(type);
+            System.Reflection.FieldInfo[] fields = type.GetFields();
+            foreach (System.Reflection.FieldInfo field in fields)
+            {
+                field.SetValue(copy, field.GetValue(original));
+            }
+            return copy as T;
+        }
         public static void ReplaceModel(string prefab, string mesh, string png, int position = 0, bool replaceothers = false)
         {
             var fab = Resources.Load<GameObject>(prefab);
@@ -198,6 +209,7 @@ namespace MoistureUpset
         {
             try
             {
+                ThanosQuotes();
                 LoadBNK("ImWettest");
                 DEBUG();
                 Twitch();
@@ -247,6 +259,16 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+            //On.RoR2.CharacterModel.OnEnable += (orig, self) =>
+            //{
+            //    Debug.Log($"-------------{self.name}");
+            //    orig(self);
+            //};
+            //On.RoR2.SkinDef.Apply += (orig, self, g) =>
+            //{
+            //    orig(self, g);
+            //    Debug.Log($"-------------{self.name}");
+            //};
         }
         private static void Icons()
         {
@@ -741,6 +763,130 @@ namespace MoistureUpset
                 //{
                 //    st = st.Replace("Jellyfish", "Comedy");
                 //}
+                orig(self, token, st);
+            };
+        }
+        private static void ThanosQuotes()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
+            {
+                if (token == "BROTHER_SPAWN_PHASE1_1")
+                {
+                    st = "When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.";
+                }
+                else if (token == "BROTHER_SPAWN_PHASE1_2")
+                {
+                    st = "I will shred this universe down to it’s last atom and then, with the stones you’ve collected for me, create a new one. It is not what is lost but only what it is been given… a grateful universe.";
+                }
+                else if (token == "BROTHER_SPAWN_PHASE1_3")
+                {
+                    st = "Dread it. Run from it. Destiny still arrives. Or should I say, I have.";
+                }
+                else if (token == "BROTHER_SPAWN_PHASE1_4")
+                {
+                    st = "You couldn’t live with your own failure. Where did that bring you? Back to me.";
+                }
+
+
+                else if (token == "BROTHER_DAMAGEDEALT_1" || token == "BROTHERHURT_DAMAGEDEALT_1")
+                {
+                    st = "You’re strong. But I could snap my fingers, and you’d all cease to exist.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_2" || token == "BROTHERHURT_DAMAGEDEALT_2")
+                {
+                    st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_3" || token == "BROTHERHURT_DAMAGEDEALT_3")
+                {
+                    st = "I'm a survivor.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_4" || token == "BROTHERHURT_DAMAGEDEALT_4")
+                {
+                    st = "You're not the only one cursed with knowledge.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_5" || token == "BROTHERHURT_DAMAGEDEALT_5")
+                {
+                    st = "You should be grateful.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_6" || token == "BROTHERHURT_DAMAGEDEALT_6")
+                {
+                    st = "I don't even know who you are.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_7" || token == "BROTHERHURT_DAMAGEDEALT_7")
+                {
+                    st = "I am...inevitable.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_8" || token == "BROTHERHURT_DAMAGEDEALT_8")
+                {
+                    st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_9" || token == "BROTHERHURT_DAMAGEDEALT_9")
+                {
+                    st = "I am...inevitable.";
+                }
+                else if (token == "BROTHER_DAMAGEDEALT_10" || token == "BROTHERHURT_DAMAGEDEALT_10")
+                {
+                    st = "You should be grateful.";
+                }
+
+
+                else if (token == "BROTHER_KILL_1")
+                {
+                    st = "I know what it’s like to lose. To feel so desperately that you’re right, yet to fail nonetheless.";
+                }
+                else if (token == "BROTHER_KILL_2")
+                {
+                    st = "I ignored my destiny once, I can not do that again. Even for you. I’m sorry Little one.";
+                }
+                else if (token == "BROTHER_KILL_3")
+                {
+                    st = "The universe required correction.";
+                }
+                else if (token == "BROTHER_KILL_4")
+                {
+                    st = "I hope they remember you.";
+                }
+                else if (token == "BROTHER_KILL_5")
+                {
+                    st = "A small price to pay for salvation.";
+                }
+
+
+                else if (token == "BROTHERHURT_KILL_1")
+                {
+                    st = "I... had... to.";
+                }
+                else if (token == "BROTHERHURT_KILL_2")
+                {
+                    st = "Rain fire!";
+                }
+                else if (token == "BROTHERHURT_KILL_3")
+                {
+                    st = "You should’ve gone for the head.";
+                }
+                else if (token == "BROTHERHURT_KILL_4")
+                {
+                    st = "Reality can be whatever I want.";
+                }
+                else if (token == "BROTHERHURT_KILL_5")
+                {
+                    st = "Your optimism is misplaced.";
+                }
+
+
+                else if (token == "BROTHERHURT_DEATH_4")
+                {
+                    st = "NO... NOT NOW...";
+                }
+                else if (token == "BROTHERHURT_DEATH_5")
+                {
+                    st = "WHY... WHY NOW...?";
+                }
+                else if (token == "BROTHERHURT_DEATH_6")
+                {
+                    st = "NO... NO...!";
+                }
                 orig(self, token, st);
             };
         }
@@ -1922,9 +2068,32 @@ namespace MoistureUpset
                 mesh.sharedMaterials[i].SetTexture("_FlowHeightmap", blank);
                 mesh.sharedMaterials[i].SetTexture("_FlowTex", blank);
             }
+            /*
             fab = Resources.Load<GameObject>("prefabs/projectiles/ElectricWormSeekerProjectile");
-            ((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", "PlayLightning");
-            ((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", 2467737487);
+            AkEvent ak = fab.AddComponent<AkEvent>();
+            ak.data.ObjectReference.SetFieldValue("objectName", "PlayLightning");
+            ak.data.ObjectReference.SetFieldValue("id", 2467737487);
+            Debug.Log($"-------------{ak.data.Name}");
+            //ak.data = fab.GetComponent<AkEvent>().data;
+            Debug.Log($"-------------{ak.data.Name}");
+            Component.Destroy(fab.GetComponents<AkEvent>());
+            Debug.Log($"-------------{fab.GetComponent<AkEvent>().data.Name}");
+            */
+
+
+
+
+            //CopyComponent(fab.GetComponentInChildren<AkEvent>(), ak.gameObject);
+
+
+
+
+            //add component, copy details, remove old component, check in between to make sure we guuda
+
+
+
+            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", "PlayLightning");
+            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", 2467737487);
 
             //2467737487 << new sfx
             //600329706 << original lighning sfx
@@ -2263,35 +2432,80 @@ namespace MoistureUpset
                 return;
             LoadResource("scavenger");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
-            ReplaceModel("prefabs/networkedobjects/ScavBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh"); //needs different weight painting
+            ReplaceModel("prefabs/networkedobjects/ScavBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png");
+            ReplaceMeshFilter("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/gun.mesh");
             ImposterChanger("ScavBody");
+            var fab = Resources.Load<GameObject>("prefabs/characterbodies/ScavBody");
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.AddComponent<AbungusColors>();
+            Material mat = Resources.Load<Material>("@MoistureUpset_scavenger:assets/bosses/materials/gun.mat");
+            On.RoR2.CharacterModel.UpdateRendererMaterials += (orig, self, r, m, i) =>
+            {
+                orig(self, r, m, i);
+                try
+                {
+                    if (m.ToString().StartsWith("matScav"))
+                    {
+                        r.sharedMaterial = self.gameObject.GetComponentInChildren<AbungusColors>().material;
+                    }
+                    else if(m.ToString() == "matTrimSheetConstructionBlueScavenged (UnityEngine.Material)" || m.ToString() == "matTrimSheetConstructionBlueEmission (UnityEngine.Material)")
+                    {
+                        r.sharedMaterial = mat;
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            };
 
-            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            On.EntityStates.ScavMonster.Death.AttemptDropPack += (orig, self) =>
+            {
+                try
+                {
+                    var backpack = Resources.Load<GameObject>("prefabs/networkedobjects/ScavBackpack");
+                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                    GameObject g = self.outer.gameObject;
+                    for (int i = 0; i < objects.Length; i++)
+                    {
+                        if (objects[i] == g)
+                        {
+                            backpack.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial = objects[i - 2].GetComponentInChildren<AbungusColors>().material;
+                            break;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                orig(self);
+            };
+
+            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar1Body");
 
-            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar2Body");
 
-            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar3Body");
 
-            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
+            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
             ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", "@MoistureUpset_scavenger:assets/bosses/gun.png", 4);
+            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar4Body");
+
+            ReplaceModel("prefabs/networkedobjects/ScavLunarBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png");
         }
     }
 }

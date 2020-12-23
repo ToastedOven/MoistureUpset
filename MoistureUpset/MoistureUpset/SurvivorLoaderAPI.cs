@@ -602,7 +602,8 @@ namespace MoistureUpset
 
             engiTurretBodyPrefab.AddComponent<SkinReloader>();
             engiWalkerTurretBodyPrefab.AddComponent<SkinReloader>();
-
+            //engiTurretBodyPrefab.GetComponentInChildren<CharacterBody>().skinIndex = 2;
+            //engiWalkerTurretBodyPrefab.GetComponentInChildren<CharacterBody>().skinIndex = 2;
 
             Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
             skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
