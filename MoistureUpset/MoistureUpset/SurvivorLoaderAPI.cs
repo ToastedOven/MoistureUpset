@@ -110,9 +110,11 @@ namespace MoistureUpset
 
             if (cb != null)
             {
+                //Debug.Log("--------------");
+                //Debug.Log(self.owner.name);
+                //Debug.Log(self.ghost.name);
                 if (self.owner.name == "EngiBody(Clone)" && cb.skinIndex == 2)
                 {
-                    Debug.Log(self.ghost.name);
                     if (self.ghost.name == "EngiSeekerGrenadeGhost(Clone)")
                     {
                         var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
@@ -187,6 +189,18 @@ namespace MoistureUpset
                         self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
                     }
                 }
+                //else if (self.owner.name == "GravekeeperBody(Clone)")
+                //{
+                //    if (self.ghost.name == "GravekeeperHookGhost(Clone)")
+                //    {
+                //        Debug.Log($"---------------------");
+                //        foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
+                //        {
+                //            Debug.Log($"---------------------{comp}");
+                //        }
+                //        Debug.Log($"---------------------");
+                //    }
+                //}
             }
         }
 

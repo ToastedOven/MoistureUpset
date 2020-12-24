@@ -55,67 +55,75 @@ namespace MoistureUpset
 
         private static void MusicController_UpdateTeleporterParameters(On.RoR2.MusicController.orig_UpdateTeleporterParameters orig, MusicController self, TeleporterInteraction teleporter, Transform cameraTransform, CharacterBody targetBody)
         {
-            if (TeleporterInteraction.instance != null)
+            try
             {
-                int index = -1;
-
-                for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
+                if (TeleporterInteraction.instance != null)
                 {
-                    if (targetBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() && targetBody.name == "EngiBody(Clone)")
-                    {
-                        if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
-                        {
-                            index = i;
-                        }
-                    }
-                }
+                    int index = -1;
 
-                try
-                {
-                    if (teleporter.holdoutZoneController.IsBodyInChargingRadius(targetBody))
+                    for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
                     {
-                        if (!inPortal && !TeleporterInteraction.instance.isCharged)
+                        if (targetBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() && targetBody.name == "EngiBody(Clone)")
                         {
-                            if (index != -1)
+                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
                             {
-                                inPortal = true;
-                                NetworkAssistant.playSound("EngiChargingTeleporter", index);
+                                index = i;
                             }
                         }
                     }
-                    else if (!teleporter.holdoutZoneController.IsBodyInChargingRadius(targetBody) && inPortal)
-                    {
-                        inPortal = false;
-                    }
 
-                    if (TeleporterInteraction.instance.isCharged)
+                    try
                     {
-                        try
+                        if (teleporter.holdoutZoneController.IsBodyInChargingRadius(targetBody))
                         {
-                            if (!portalFinished)
+                            if (!inPortal && !TeleporterInteraction.instance.isCharged)
                             {
                                 if (index != -1)
                                 {
-                                    portalFinished = true;
-                                    NetworkAssistant.playSound("EngiTeleporterComplete", index);
+                                    inPortal = true;
+                                    NetworkAssistant.playSound("EngiChargingTeleporter", index);
                                 }
                             }
                         }
-                        catch (Exception e)
+                        else if (!teleporter.holdoutZoneController.IsBodyInChargingRadius(targetBody) && inPortal)
                         {
-                            //Debug.Log(e);
+                            inPortal = false;
+                        }
+
+                        if (TeleporterInteraction.instance.isCharged)
+                        {
+                            try
+                            {
+                                if (!portalFinished)
+                                {
+                                    if (index != -1)
+                                    {
+                                        portalFinished = true;
+                                        NetworkAssistant.playSound("EngiTeleporterComplete", index);
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                //Debug.Log(e);
+                            }
+                        }
+                        else
+                        {
+                            portalFinished = false;
                         }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        portalFinished = false;
+                        //Debug.Log(e);
                     }
                 }
-                catch (Exception e)
-                {
-                    //Debug.Log(e);
-                }
             }
+            catch (Exception e)
+            {
+
+            }
+            
 
             orig(self, teleporter, cameraTransform, targetBody);
         }

@@ -35,8 +35,6 @@ namespace MoistureUpset
 
             NetworkAssistant.InitSNA();
 
-            UnReady.Init();
-
             On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
             On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
@@ -130,10 +128,10 @@ namespace MoistureUpset
         {
             self.selectedSurvivorIndex = survivor;
 
-            if (survivor == SurvivorIndex.Commando)
-            {
-                AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
-            }
+            //if (survivor == SurvivorIndex.Commando)
+            //{
+            //    AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
+            //}
 
             orig(self, survivor);
 
