@@ -2209,8 +2209,8 @@ namespace MoistureUpset
             var shape = p.shape;
             shape.shapeType = ParticleSystemShapeType.Sprite;
 
-            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
-            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", 1002825203);
+            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan"); //this used to work, idk what I broke
+            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", 1002825203);
 
 
             var vel = p.limitVelocityOverLifetime;
