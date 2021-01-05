@@ -326,7 +326,7 @@ namespace MoistureUpset
                 UImods.ReplaceTexture2D("textures/bodyicons/ElectricWormBody", "MoistureUpset.Resources.werm.png");
             if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ClayBossBody", "MoistureUpset.Resources.puddi.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1)
+            if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/VagrantBody", "MoistureUpset.Resources.discord.png");
             if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/LunarWispBody", "MoistureUpset.Resources.rofl.png");
@@ -741,12 +741,12 @@ namespace MoistureUpset
 
                 else if (st.Contains("Wandering Vagrant"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) == 1)
                         st = st.Replace("Wandering Vagrant", "@Everyone");
                 }
                 else if (token == "VAGRANT_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) == 1)
                         st = "PING!";
                 }
 
@@ -2069,7 +2069,6 @@ namespace MoistureUpset
                 mesh.sharedMaterials[i].SetTexture("_FlowTex", blank);
             }
             /*
-            fab = Resources.Load<GameObject>("prefabs/projectiles/ElectricWormSeekerProjectile");
             AkEvent ak = fab.AddComponent<AkEvent>();
             ak.data.ObjectReference.SetFieldValue("objectName", "PlayLightning");
             ak.data.ObjectReference.SetFieldValue("id", 2467737487);
@@ -2092,8 +2091,25 @@ namespace MoistureUpset
 
 
 
-            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", "PlayLightning");
-            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", 2467737487);
+
+
+            //foreach (var item in fab.GetComponentsInChildren<Component>())
+            //{
+            //    Debug.Log($"--------{item}");
+            //}
+            //fab = Resources.Load<GameObject>("prefabs/projectiles/ElectricWormSeekerProjectile");
+            //string n = ((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.GetFieldValue<string>("objectName");
+            ////((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", "PlayLightning");
+            ////((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", (UInt32)2467737487);
+            //var sb = fab.AddComponent<SeekingBullet>();
+            ////sb.akevent = fab.GetComponent<AkEvent>().data;
+            //((AK.Wwise.BaseType)sb.akevent).ObjectReference.SetFieldValue("objectName", "PlayLightning");
+            //((AK.Wwise.BaseType)sb.akevent).ObjectReference.SetFieldValue("id", (UInt32)2467737487);
+            //Debug.Log($"--------{sb.akevent.ObjectReference.GetFieldValue<string>("objectName")}");
+            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", n);
+            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", (UInt32)600329706);
+            //Debug.Log($"--------{sb.akevent.ObjectReference.GetFieldValue<string>("objectName")}");
+
 
             //2467737487 << new sfx
             //600329706 << original lighning sfx
@@ -2102,7 +2118,7 @@ namespace MoistureUpset
         }
         private static void Discord()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Wandering @Everyone")) != 1)
+            if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) != 1)
                 return;
             LoadResource("discord");
             LoadBNK("discord");
@@ -2209,8 +2225,8 @@ namespace MoistureUpset
             var shape = p.shape;
             shape.shapeType = ParticleSystemShapeType.Sprite;
 
-            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan"); //this used to work, idk what I broke
-            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", 1002825203);
+            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
+            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
 
 
             var vel = p.limitVelocityOverLifetime;
@@ -2426,6 +2442,7 @@ namespace MoistureUpset
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shader = temp;
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[2].sharedMaterial.shader = temp;
         }
+        public static bool kindlyKillYourselfRune = true;
         private static void Imposter()
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) != 1)
@@ -2458,25 +2475,28 @@ namespace MoistureUpset
                 {
                 }
             };
-
-            On.EntityStates.ScavMonster.Death.AttemptDropPack += (orig, self) =>
+            On.EntityStates.ScavMonster.Death.OnEnter += (orig, self) =>
             {
-                try
+                if (kindlyKillYourselfRune)
                 {
-                    var backpack = Resources.Load<GameObject>("prefabs/networkedobjects/ScavBackpack");
-                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
-                    GameObject g = self.outer.gameObject;
-                    for (int i = 0; i < objects.Length; i++)
+                    kindlyKillYourselfRune = false;
+                    try
                     {
-                        if (objects[i] == g)
+                        var backpack = Resources.Load<GameObject>("prefabs/networkedobjects/ScavBackpack");
+                        GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                        GameObject g = self.outer.gameObject;
+                        for (int i = 0; i < objects.Length; i++)
                         {
-                            backpack.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial = objects[i - 2].GetComponentInChildren<AbungusColors>().material;
-                            break;
+                            if (objects[i] == g)
+                            {
+                                backpack.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial = objects[i - 2].GetComponentInChildren<AbungusColors>().material;
+                                break;
+                            }
                         }
                     }
-                }
-                catch (Exception)
-                {
+                    catch (Exception)
+                    {
+                    }
                 }
                 orig(self);
             };
