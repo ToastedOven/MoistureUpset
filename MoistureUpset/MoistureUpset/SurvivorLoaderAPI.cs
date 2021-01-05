@@ -20,6 +20,14 @@ namespace MoistureUpset
         public static void LoadSurvivors()
         {
             PopulateAssets();
+            EngiDisplayFix();
+        }
+
+        private static void EngiDisplayFix()
+        {
+            var fab = Resources.Load<GameObject>("prefabs/characterdisplays/EngiDisplay");
+
+            fab.AddComponent<DisplayFix>();
         }
 
         private static void PopulateAssets()
@@ -113,7 +121,7 @@ namespace MoistureUpset
                 //Debug.Log("--------------");
                 //Debug.Log(self.owner.name);
                 //Debug.Log(self.ghost.name);
-                if (self.owner.name == "EngiBody(Clone)" && cb.skinIndex == 2)
+                if (self.owner.name == "EngiBody(Clone)" && cb.isSkin("THE_TF2_ENGINEER_SKIN"))
                 {
                     if (self.ghost.name == "EngiSeekerGrenadeGhost(Clone)")
                     {
@@ -316,7 +324,7 @@ namespace MoistureUpset
 
             GameObject tempPrefab = (GameObject)null;
 
-            if (cb.skinIndex == 2)
+            if (cb.isSkin("THE_TF2_ENGINEER_SKIN"))
             {
                 if (self.blueprintPrefab != null)
                 {
@@ -357,7 +365,7 @@ namespace MoistureUpset
         //    {
         //        if (cm.minionOwnership.ownerMaster != null)
         //        {
-        //            if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && cm.GetBody().name.Contains("Engi"))
+        //            if (cm.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && cm.GetBody().name.Contains("Engi"))
         //            {
         //                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
         //                {
@@ -399,7 +407,7 @@ namespace MoistureUpset
             orig();
 
             AddStarPlatinumSkinToLoader();
-            EngineerStuff("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
+            EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
             //EngineerStuff("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_mike:assets/engimesh.mesh", RoR2.SurvivorIndex.Engi);
             EditDropPod();
 
@@ -616,8 +624,6 @@ namespace MoistureUpset
 
             engiTurretBodyPrefab.AddComponent<SkinReloader>();
             engiWalkerTurretBodyPrefab.AddComponent<SkinReloader>();
-            //engiTurretBodyPrefab.GetComponentInChildren<CharacterBody>().skinIndex = 2;
-            //engiWalkerTurretBodyPrefab.GetComponentInChildren<CharacterBody>().skinIndex = 2;
 
             Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
             skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
@@ -635,6 +641,8 @@ namespace MoistureUpset
             skinsField[BodyCatalog.FindBodyIndex(engiWalkerTurretBodyPrefab)] = WalkerTurretSkinController.skins;
 
             Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
+
+            SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
         }
 
         private static void SkinDef_Awake(On.RoR2.SkinDef.orig_Awake orig, RoR2.SkinDef self)
@@ -716,6 +724,8 @@ namespace MoistureUpset
             var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
             skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
             Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
+
+            
         }
     }
 }

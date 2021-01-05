@@ -14,6 +14,7 @@ namespace MoistureUpset
             ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(PingAll));
             Misc();
             EnemyOptions();
+            SoundOptions();
         }
         public static void PingAll()
         {
@@ -68,6 +69,12 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Squirmles", "Replaces overloading worms with Squirmles", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Merchant", "Replaces shop keeper with beedle", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Cereal", "EAT EM UP EAT EM UP EAT EM UP!", "1"));
+        }
+
+        private static void SoundOptions()
+        {
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Minecraft Oof Sounds", "Adds Minecraft oof sounds whenever you get hurt.", "1"));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Minecraft Oof Sounds"), new UnityEngine.Events.UnityAction<bool>(delegate(bool temp) { SoundAssets.doMinecraftHurtSounds = temp; }));
         }
         private static void Misc()
         {

@@ -8,10 +8,30 @@ namespace MoistureUpset
 {
     public static class ItemDisplayPositionFixer
     {
-        private static List<string> displays = new List<string>();
+        public static ItemDisplayRuleSet TF2_Engi_IDRS;
         public static void Init()
         {
-            On.RoR2.ItemDisplay.SetVisibilityLevel += ItemDisplay_SetVisibilityLevel;
+
+            GenerateIDRSEngi();
+        }
+
+        private static void GenerateIDRSEngi()
+        {
+            var engiBody = Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
+
+            var cm = engiBody.GetComponentInChildren<CharacterModel>();
+
+            TF2_Engi_IDRS = cm.itemDisplayRuleSet; // We are creating a new ItemDisplayRuleSet for our Engi skin. this lets us provide custom transforms and change the parent of the items when displayed.
+
+
+            // Lens Maker Glasses
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("CritGlasses").rules[0].localPos = new Vector3(-0.0019f, 0.4301f, 0.2229f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("CritGlasses").rules[0].localAngles = new Vector3(-349.51f, 0, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("CritGlasses").rules[0].localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+            // Predatory Instinct
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("AttackSpeedOnCrit").rules[0].localPos = new Vector3(0, 0.45f, 0.25f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("AttackSpeedOnCrit").rules[0].localScale = new Vector3(0.35f, 0.35f, 0.35f);
         }
 
         private static void ItemDisplay_SetVisibilityLevel(On.RoR2.ItemDisplay.orig_SetVisibilityLevel orig, ItemDisplay self, VisibilityLevel newVisibilityLevel)
@@ -22,31 +42,12 @@ namespace MoistureUpset
             {
                 Transform parent = GetParent(self.gameObject.transform);
 
-                if (parent != null)
-                {
-                    if (!displays.Contains($"{self.gameObject.name}, Path: {GetPathToParent(self.gameObject.transform)}, Skin Index: {parent.GetComponent<ModelSkinController>().currentSkinIndex}, position: {self.gameObject.transform.localPosition}, scale: {self.gameObject.transform.localScale}"))
-                    {
-                        displays.Add($"{self.gameObject.name}, Path: {GetPathToParent(self.gameObject.transform)}, Skin Index: {parent.GetComponent<ModelSkinController>().currentSkinIndex}, position: {self.gameObject.transform.localPosition}, scale: {self.gameObject.transform.localScale}");
-                        Debug.Log($"{self.gameObject.name}, Path: {GetPathToParent(self.gameObject.transform)}, Skin Index: {parent.GetComponent<ModelSkinController>().currentSkinIndex}, position: {self.gameObject.transform.localPosition}, scale: {self.gameObject.transform.localScale}");
-                    }
-                }
-
                 if (parent.GetComponent<ModelSkinController>().currentSkinIndex == 2 && parent.name == "mdlEngi")
                 {
-                    if (self.name == "DisplayWolfPelt(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, 0.45f, 0.25f);
-                        self.gameObject.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-                    }
-                    else if (self.name == "DisplayMissileLauncher(Clone)")
+                    
+                    if (self.name == "DisplayMissileLauncher(Clone)")
                     {
                         self.gameObject.transform.localPosition = new Vector3(-0.074f, 0.559f, -0.362f);
-                    }
-                    else if (self.name == "DisplayGlasses(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.0019f, 0.4301f, 0.2229f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-349.51f, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                     }
                     else if (self.name == "DisplaySteakCurved(Clone)")
                     {
@@ -168,24 +169,6 @@ namespace MoistureUpset
                 //self.gameObject.transform.localEulerAngles = new Vector3();
                 //self.gameObject.transform.localScale = new Vector3();
             }
-        }
-
-        private static string GetPathToParent(Transform transform)
-        {
-            string path = "";
-
-            Transform parent = transform.parent;
-
-            path += $"{transform.name}";
-
-            while (parent != null)
-            {
-                path += $"/{parent.name}";
-
-                parent = parent.parent;
-            }
-
-            return path;
         }
 
         private static Transform GetParent(Transform transform)

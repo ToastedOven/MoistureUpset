@@ -13,6 +13,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using RoR2.UI;
 using RiskOfOptions;
+using System.Text;
+using System.IO;
 
 namespace MoistureUpset
 {
@@ -79,6 +81,82 @@ namespace MoistureUpset
         private static void GameObjects(ConCommandArgs args)
         {
             DebugClass.GetAllGameObjects();
+        }
+
+        [ConCommand(commandName = "braindamage", flags = ConVarFlags.None, helpText = "Grabs all the meshes")]
+        private static void RemoveThisLater(ConCommandArgs args)
+        {
+            var meshes = GameObject.FindObjectsOfType<MeshFilter>();
+
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter($"export/bigboi.obj"))
+                {
+                    foreach (var mf in meshes)
+                    {
+                        sw.WriteLine(MeshToString(mf));
+                    }
+                    
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            //foreach (var mf in meshes)
+            //{
+                
+
+            //}            
+        }
+
+        private static string MeshToString(MeshFilter mf)
+        {
+            Mesh m = mf.mesh;
+            Material[] mats = new Material[0];
+
+            if (mf.gameObject.GetComponent<MeshRenderer>() != null)
+            {
+                mats = mf.gameObject.GetComponent<MeshRenderer>().sharedMaterials;
+            }
+            else
+            {
+                mats = mf.gameObject.GetComponent<SkinnedMeshRenderer>().sharedMaterials;
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("o ").Append(mf.name).Append("\n");
+            foreach (Vector3 v in m.vertices)
+            {
+                sb.Append(string.Format("v {0} {1} {2}\n", v.x + mf.transform.position.x, v.y + mf.transform.position.y, v.z + mf.transform.position.z));
+            }
+            sb.Append("\n");
+            foreach (Vector3 v in m.normals)
+            {
+                sb.Append(string.Format("vn {0} {1} {2}\n", v.x, v.y, v.z));
+            }
+            sb.Append("\n");
+            foreach (Vector3 v in m.uv)
+            {
+                sb.Append(string.Format("vt {0} {1}\n", v.x, v.y));
+            }
+            for (int material = 0; material < m.subMeshCount; material++)
+            {
+                sb.Append("\n");
+                sb.Append("usemtl ").Append(mats[material].name).Append("\n");
+                sb.Append("usemap ").Append(mats[material].name).Append("\n");
+
+                int[] triangles = m.GetTriangles(material);
+                for (int i = 0; i < triangles.Length; i += 3)
+                {
+                    sb.Append(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}\n",
+                        triangles[i] + 1, triangles[i + 1] + 1, triangles[i + 2] + 1));
+                }
+            }
+            return sb.ToString();
         }
 
         public static void ligmaballs()

@@ -22,6 +22,11 @@ namespace MoistureUpset
                 GetComponentInChildren<CharacterBody>().skinIndex = (uint)skinIndex; //I feel like I should be able to do this at a better time, like when initializing this stuff, but it don't work and/or I'm not smart enough to figure it out
             }
             skinController.ApplySkin(skinIndex);
+
+            if (GetComponentInChildren<CharacterBody>().isSkin("THE_TF2_ENGINEER_SKIN"))
+            {
+                GetComponentInChildren<CharacterModel>().itemDisplayRuleSet = ItemDisplayPositionFixer.TF2_Engi_IDRS; // We apply our own display rule set so that items look correct on our skin.
+            }
         }
 
         void FixedUpdate()

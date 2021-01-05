@@ -14,6 +14,9 @@ namespace MoistureUpset
     {
         private static bool inPortal = false;
         private static bool portalFinished = false;
+
+        public static bool doMinecraftHurtSounds = false;
+
         public static void RegisterSoundEvents()
         {
             On.RoR2.GlobalEventManager.OnCharacterHitGround += GlobalEventManager_OnCharacterHitGround;
@@ -33,7 +36,7 @@ namespace MoistureUpset
             {
                 if (cm.minionOwnership.ownerMaster != null)
                 {
-                    if (cm.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (cm.name == "EngiWalkerTurretMaster(Clone)" || cm.name == "EngiTurretMaster(Clone)"))
+                    if (cm.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (cm.name == "EngiWalkerTurretMaster(Clone)" || cm.name == "EngiTurretMaster(Clone)"))
                     {
                         for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
                         {
@@ -63,7 +66,7 @@ namespace MoistureUpset
 
                     for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
                     {
-                        if (targetBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() && targetBody.name == "EngiBody(Clone)")
+                        if (targetBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() && targetBody.name == "EngiBody(Clone)" && targetBody.isSkin("THE_TF2_ENGINEER_SKIN"))
                         {
                             if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
                             {
@@ -154,7 +157,7 @@ namespace MoistureUpset
 
                 if (damageReport.victimTeamIndex == TeamIndex.Player)
                 {
-                    if (damageReport.victimBody.skinIndex == 2 && damageReport.victimBody.name == "EngiBody(Clone)")
+                    if (damageReport.victimBody.isSkin("THE_TF2_ENGINEER_SKIN") && damageReport.victimBody.name == "EngiBody(Clone)")
                     {
                         //Debug.Log(damageReport.victimBody.transform.position);
                         NetworkAssistant.playSound("EngiDying", damageReport.victimBody.transform.position);
@@ -162,7 +165,7 @@ namespace MoistureUpset
                 }
                 else if (damageReport.victimTeamIndex == TeamIndex.Monster)
                 {
-                    if (damageReport.attackerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.attackerMaster.GetBody().skinIndex == 2)
+                    if (damageReport.attackerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.attackerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
                     {
                         try
                         {
@@ -178,7 +181,7 @@ namespace MoistureUpset
                     }
                     else if (damageReport.attackerMaster.minionOwnership != null)
                     {
-                        if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
+                        if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
                         {
                             try
                             {
@@ -232,25 +235,25 @@ namespace MoistureUpset
                                 }
                             }
                         }
-                        else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody() == NetworkUser.readOnlyInstancesList[i].master.GetBody())
-                        {
-                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
-                            {
-                                try
-                                {
-                                    index = i;
-                                    NetworkAssistant.playSound("MinecraftHurt", damageReport.victimBody.transform.position);
-                                }
-                                catch
-                                {
+                        //else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody() == NetworkUser.readOnlyInstancesList[i].master.GetBody())
+                        //{
+                        //    if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
+                        //    {
+                        //        try
+                        //        {
+                        //            index = i;
+                        //            NetworkAssistant.playSound("MinecraftHurt", damageReport.victimBody.transform.position);
+                        //        }
+                        //        catch
+                        //        {
 
-                                }
-                            }
-                        }
+                        //        }
+                        //    }
+                        //}
                     }
                     try
                     {
-                        if (damageReport.victimBody.name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) < (damageReport.victim.fullHealth * .3f) && damageReport.victimBody.skinIndex == 2)
+                        if (damageReport.victimBody.name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) < (damageReport.victim.fullHealth * .3f) && damageReport.victimBody.isSkin("THE_TF2_ENGINEER_SKIN"))
                         {
                             try
                             {
@@ -266,7 +269,7 @@ namespace MoistureUpset
                         }
                         else if (damageReport.victimMaster.minionOwnership != null)
                         {
-                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().skinIndex == 2 && (( damageReport.victim.combinedHealth + 5 )- (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.combinedHealth > 0)
+                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && (( damageReport.victim.combinedHealth + 5 )- (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.combinedHealth > 0)
                             {
                                 try
                                 {
