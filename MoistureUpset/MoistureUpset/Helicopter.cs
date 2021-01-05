@@ -17,9 +17,9 @@ namespace MoistureUpset
             head = transforms[35];
         }
 
-        void FixedUpdate()
+        void Update()
         {
-            head.Rotate(new Vector3(0, 10, 0));
+            head.Rotate(new Vector3(0, 1500 * Time.deltaTime, 0));
         }
     }
 }
