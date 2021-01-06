@@ -10,6 +10,7 @@ using RoR2;
 using System.Linq;
 using RewiredConsts;
 using System.Collections;
+using RiskOfOptions;
 
 namespace MoistureUpset
 {
@@ -137,6 +138,8 @@ internal class NetworkedModComponent : NetworkBehaviour
     [TargetRpc]
     private void TargetPlaySound(NetworkConnection target, string soundIDString, int playerIndex)
     {
+        //MinecraftHurt <<< rune u gay?
+        //Debug.Log($"--------{soundIDString}");
         try
         {
             AkSoundEngine.PostEvent(soundIDString, NetworkUser.readOnlyInstancesList[playerIndex].master.GetBody().gameObject);
@@ -165,6 +168,18 @@ internal class NetworkedModComponent : NetworkBehaviour
     [TargetRpc]
     private void TargetPlaySoundLocation(NetworkConnection target, string soundIDString, Vector3 location)
     {
+        if ((soundIDString == "ChanceFailure" || soundIDString == "ChanceSuccess") && float.Parse(ModSettingsManager.getOptionValue("Shrine Changes")) != 1)
+        {
+            return;
+        }
+        if (soundIDString == "NoodleSplash" && float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) != 1)
+        {
+            return;
+        }
+        if (soundIDString == "PlayerDeath" && float.Parse(ModSettingsManager.getOptionValue("Player death sound")) != 1)
+        {
+            return;
+        }
         try
         {
             GameObject tempAudio = Instantiate(soundPlayer, location, Quaternion.identity);

@@ -9,15 +9,17 @@ namespace MoistureUpset
 {
     class SeekingBullet : MonoBehaviour
     {
-        public AK.Wwise.Event akevent;
         void Start()
         {
-            //Debug.Log($"--------{GetComponentInChildren<RoR2.Projectile.ProjectileSteerTowardTarget>().rotationSpeed}");
-            GetComponentInChildren<AkEvent>().data = akevent;
         }
 
         void Update()
         {
+        }
+
+        void OnDestroy()
+        {
+            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("PlayLightning"), transform.position);
         }
     }
 }
