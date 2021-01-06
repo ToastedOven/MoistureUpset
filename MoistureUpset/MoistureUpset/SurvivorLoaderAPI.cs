@@ -29,9 +29,28 @@ namespace MoistureUpset
             On.EntityStates.Engi.EngiBubbleShield.Deployed.OnEnter += (orig, self) =>
             {
                 orig(self);
-                //AkSoundEngine.PostEvent("PlayBubble", self.outer.gameObject);
-                //AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
-                Debug.Log($"--------{self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.bodyPrefab.GetComponentInChildren<RoR2.ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.name}");
+                //
+                //
+                if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
+                {
+                    AkSoundEngine.PostEvent("PlayBubble", self.outer.gameObject);
+                }
+            };
+
+            On.EntityStates.Engi.EngiBubbleShield.Deployed.OnExit += (orig, self) =>
+            {
+                if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
+                {
+                    AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
+                }
+
+                orig(self);
+            };
+
+            On.EntityStates.EntityState.Destroy += (orig, obj) =>
+            {
+                Debug.Log(obj.name);
+                orig(obj);
             };
         }
         private static void EngiDisplayFix()
