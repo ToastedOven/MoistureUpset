@@ -285,19 +285,39 @@ namespace MoistureUpset
             On.RoR2.Run.OnClientGameOver += (orig, self, report) =>
             {
                 orig(self, report);
-                if (float.Parse(ModSettingsManager.getOptionValue("End of game music")) == 1)
-                    try
+                try
+                {
+                    StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
+                    var c = GameObject.FindObjectOfType<Transform>();
+                    if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
                     {
-                        if (report.gameEnding.ToString() == "StandardLoss (RoR2.GameEndingDef)")
+                        var cs = GameObject.FindObjectsOfType<RoR2.CharacterMaster>();
+                        foreach (var item in cs)
                         {
-                            StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
-                            var c = GameObject.FindObjectOfType<Transform>();
-                            AkSoundEngine.PostEvent("Defeat", c.gameObject);
+                            if (item.name.StartsWith("ScavLunar"))
+                            {
+                                if (report.gameEnding.ToString() == "StandardLoss (RoR2.GameEndingDef)")
+                                {
+                                    AkSoundEngine.PostEvent("ScavDefeat", c.gameObject);
+                                    return;
+                                }
+                            }
                         }
                     }
-                    catch (Exception)
-                    {
-                    }
+                    if (float.Parse(ModSettingsManager.getOptionValue("End of game music")) == 1)
+                        if (report.gameEnding.ToString() == "StandardLoss (RoR2.GameEndingDef)")
+                        {
+                            AkSoundEngine.PostEvent("Defeat", c.gameObject);
+                        }
+                    if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                        if (report.gameEnding.ToString() == "LimboEnding (RoR2.GameEndingDef)")
+                        {
+                            AkSoundEngine.PostEvent("ScavVictory", c.gameObject);
+                        }
+                }
+                catch (Exception)
+                {
+                }
                 //StandardLoss
             };
             On.EntityStates.SpawnTeleporterState.OnEnter += (orig, self) =>
