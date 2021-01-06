@@ -32,6 +32,21 @@ namespace MoistureUpset
             // Predatory Instinct
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("AttackSpeedOnCrit").rules[0].localPos = new Vector3(0, 0.45f, 0.25f);
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("AttackSpeedOnCrit").rules[0].localScale = new Vector3(0.35f, 0.35f, 0.35f);
+
+            // Steak
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("RegenOnKill").rules[0].localPos = new Vector3(-0.158f, -0.251f, -0.341f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("RegenOnKill").rules[0].localAngles = new Vector3(47.971f, -109.439f, -25.023f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("RegenOnKill").rules[0].localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+            // Warbanner
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localPos = new Vector3(0.046f, 0.213f, -0.133f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localAngles = new Vector3(-90f, 0, 90f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+            // TopazBrooch
+            //TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localPos = new Vector3(0.046f, 0.213f, -0.133f);
+            //TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localAngles = new Vector3(-90f, 0, 90f);
+            //TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
 
         private static void ItemDisplay_SetVisibilityLevel(On.RoR2.ItemDisplay.orig_SetVisibilityLevel orig, ItemDisplay self, VisibilityLevel newVisibilityLevel)
@@ -48,18 +63,6 @@ namespace MoistureUpset
                     if (self.name == "DisplayMissileLauncher(Clone)")
                     {
                         self.gameObject.transform.localPosition = new Vector3(-0.074f, 0.559f, -0.362f);
-                    }
-                    else if (self.name == "DisplaySteakCurved(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.158f, -0.251f, -0.341f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(47.971f, -109.439f, -25.023f);
-                        self.gameObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-                    }
-                    else if (self.name == "DisplayWarbanner(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0.046f, 0.213f, -0.133f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-90f, 0, 90f);
-                        self.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                     }
                     else if (self.name == "DisplayBrooch(Clone)")
                     {

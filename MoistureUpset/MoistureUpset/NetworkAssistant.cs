@@ -110,10 +110,23 @@ internal class NetworkedModComponent : NetworkBehaviour
 
     internal static GameObject soundPlayer;
 
+    public static bool MineCraftHurt = true;
+
     private void Awake()
     {
         _instance = this;
         soundPlayer = new GameObject("Temp Audio Player");
+
+        string temp = ModSettingsManager.getOptionValue("Minecraft Oof Sounds");
+
+        if (temp == "1")
+        {
+            MineCraftHurt = true;
+        }
+        else
+        {
+            MineCraftHurt = false;
+        }
     }
 
     public static void Invoke(NetworkUser user, string soundIDString, int playerIndex)

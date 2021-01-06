@@ -17,7 +17,7 @@ namespace MoistureUpset
 
         private void Start()
         {
-            Debug.Log("Deliggging the balls");
+
         }
 
 
@@ -86,7 +86,6 @@ namespace MoistureUpset
             {
                 foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
                 {
-                    Debug.Log(smr.sharedMesh.name);
                     switch (smr.sharedMesh.name)
                     {
                         case "Normal_Sentry":
