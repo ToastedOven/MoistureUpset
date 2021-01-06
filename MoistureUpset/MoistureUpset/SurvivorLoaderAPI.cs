@@ -21,8 +21,19 @@ namespace MoistureUpset
         {
             PopulateAssets();
             EngiDisplayFix();
+            AnimeBubble();
         }
 
+        private static void AnimeBubble()
+        {
+            On.EntityStates.Engi.EngiBubbleShield.Deployed.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                //AkSoundEngine.PostEvent("PlayBubble", self.outer.gameObject);
+                //AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
+                Debug.Log($"--------{self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.bodyPrefab.GetComponentInChildren<RoR2.ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.name}");
+            };
+        }
         private static void EngiDisplayFix()
         {
             var fab = Resources.Load<GameObject>("prefabs/characterdisplays/EngiDisplay");
@@ -113,102 +124,107 @@ namespace MoistureUpset
         private static void ProjectileController_Start(On.RoR2.Projectile.ProjectileController.orig_Start orig, ProjectileController self)
         {
             orig(self);
-
-            var cb = self.owner.GetComponentInChildren<CharacterBody>();
-
-            if (cb != null)
+            try
             {
-                //Debug.Log("--------------");
-                //Debug.Log(self.owner.name);
-                //Debug.Log(self.ghost.name);
-                if (self.owner.name == "EngiBody(Clone)" && cb.isSkin("THE_TF2_ENGINEER_SKIN"))
+                var cb = self.owner.GetComponentInChildren<CharacterBody>();
+
+                if (cb != null)
                 {
-                    if (self.ghost.name == "EngiSeekerGrenadeGhost(Clone)")
+                    //Debug.Log("--------------");
+                    //Debug.Log(self.owner.name);
+                    //Debug.Log(self.ghost.name);
+                    if (self.owner.name == "EngiBody(Clone)" && cb.isSkin("THE_TF2_ENGINEER_SKIN"))
                     {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_dispener:assets/dispenser.mesh");
-                        meshes[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
-                        meshes[2].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
-
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png");
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png"));
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_NormalTex", null);
-
-                        meshes[0].transform.localScale = new Vector3(0.5f, 0.55f, 0.5f);
-                        meshes[0].transform.localPosition += new Vector3(0f, 0f, 0.5f);
-
-                        GameObject.DestroyImmediate(self.ghost.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>());
-
-                        for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
+                        if (self.ghost.name == "EngiSeekerGrenadeGhost(Clone)")
                         {
-                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cb)
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
+
+                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_dispener:assets/dispenser.mesh");
+                            meshes[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
+                            meshes[2].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
+
+                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png");
+                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png"));
+                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_NormalTex", null);
+
+                            meshes[0].transform.localScale = new Vector3(0.5f, 0.55f, 0.5f);
+                            meshes[0].transform.localPosition += new Vector3(0f, 0f, 0.5f);
+
+                            GameObject.DestroyImmediate(self.ghost.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>());
+
+                            for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
                             {
-                                NetworkAssistant.playSound("EngiBuildsDispenser", i);
+                                if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cb)
+                                {
+                                    NetworkAssistant.playSound("EngiBuildsDispenser", i);
+                                }
                             }
+
+                            //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
+                            //{
+                            //    Debug.Log($"---------------------{}");
+                            //}
                         }
+                        else if (self.ghost.name == "EngiGrenadeGhost(Clone)")
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
 
-                        //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
-                        //{
-                        //    Debug.Log($"---------------------{}");
-                        //}
+                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_demopill:assets/demopill.mesh");
+
+                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material = Resources.Load<Material>("@MoistureUpset_demopill:assets/demopill.mat");
+
+                            meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+                        }
+                        else if (self.ghost.name == "EngiHarpoonGhost(Clone)")
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
+
+                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_rocket:assets/rocket.mesh");
+
+                            //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
+                            //{
+                            //    Debug.Log($"---------------------{comp}");
+                            //}
+
+                            self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat");
+
+                            Debug.Log(self.ghost.gameObject.GetComponentInChildren<TrailRenderer>().material.color);
+
+                            meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+                        }
+                        else if (self.ghost.name == "SpiderMineGhost(Clone)")
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/spidermine.mesh");
+
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
+                        }
+                        else if (self.ghost.name == "EngiMineGhost(Clone)")
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/harpoon.mesh");
+
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
+                        }
                     }
-                    else if (self.ghost.name == "EngiGrenadeGhost(Clone)")
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_demopill:assets/demopill.mesh");
-
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material = Resources.Load<Material>("@MoistureUpset_demopill:assets/demopill.mat");
-
-                        meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                    }
-                    else if (self.ghost.name == "EngiHarpoonGhost(Clone)")
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_rocket:assets/rocket.mesh");
-
-                        //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
-                        //{
-                        //    Debug.Log($"---------------------{comp}");
-                        //}
-
-                        self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat");
-
-                        Debug.Log(self.ghost.gameObject.GetComponentInChildren<TrailRenderer>().material.color);
-
-                        meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                    }
-                    else if (self.ghost.name == "SpiderMineGhost(Clone)")
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/spidermine.mesh");
-
-                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
-                    }
-                    else if (self.ghost.name == "EngiMineGhost(Clone)")
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-                        meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/harpoon.mesh");
-
-                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
-                    }
+                    //else if (self.owner.name == "GravekeeperBody(Clone)")
+                    //{
+                    //    if (self.ghost.name == "GravekeeperHookGhost(Clone)")
+                    //    {
+                    //        Debug.Log($"---------------------");
+                    //        foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
+                    //        {
+                    //            Debug.Log($"---------------------{comp}");
+                    //        }
+                    //        Debug.Log($"---------------------");
+                    //    }
+                    //}
                 }
-                //else if (self.owner.name == "GravekeeperBody(Clone)")
-                //{
-                //    if (self.ghost.name == "GravekeeperHookGhost(Clone)")
-                //    {
-                //        Debug.Log($"---------------------");
-                //        foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
-                //        {
-                //            Debug.Log($"---------------------{comp}");
-                //        }
-                //        Debug.Log($"---------------------");
-                //    }
-                //}
+            }
+            catch (Exception)
+            {
             }
         }
 
