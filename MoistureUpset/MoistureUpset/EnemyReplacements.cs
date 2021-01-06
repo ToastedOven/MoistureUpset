@@ -193,7 +193,7 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{resource}", MainAssetBundle));
             }
         }
-        private static void LoadBNK(string bnk)
+        public static void LoadBNK(string bnk)
         {
             string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
             Debug.Log(s);
@@ -476,8 +476,6 @@ namespace MoistureUpset
         }
         private static void Shrines()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Shrine Changes")) != 1)
-                return;
             On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
             {
                 float yes = self.GetFieldValue<int>("successfulPurchaseCount");
@@ -1863,6 +1861,22 @@ namespace MoistureUpset
         }
         private static void Noodle()
         {
+            On.RoR2.WormBodyPositions2.OnEnterSurface += (orig, self, point, normal) =>
+            {
+                orig(self, point, normal);
+                if (self.name == "MagmaWormBody(Clone)")
+                {
+                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
+                }
+            };
+            On.RoR2.WormBodyPositions2.OnExitSurface += (orig, self, point, normal) =>
+            {
+                orig(self, point, normal);
+                if (self.name == "MagmaWormBody(Clone)")
+                {
+                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
+                }
+            };
             if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) != 1)
                 return;
             LoadResource("noodle");
@@ -1918,22 +1932,6 @@ namespace MoistureUpset
                 ((UnityEngine.Rendering.PostProcessing.PostProcessProfile)item.sharedProfile).settings = ((UnityEngine.Rendering.PostProcessing.PostProcessProfile)ting.sharedProfile).settings;
             }
             MakePoolNoodleBlue();
-            On.RoR2.WormBodyPositions2.OnEnterSurface += (orig, self, point, normal) =>
-            {
-                orig(self, point, normal);
-                if (self.name == "MagmaWormBody(Clone)")
-                {
-                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
-                }
-            };
-            On.RoR2.WormBodyPositions2.OnExitSurface += (orig, self, point, normal) =>
-            {
-                orig(self, point, normal);
-                if (self.name == "MagmaWormBody(Clone)")
-                {
-                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
-                }
-            };
         }
         private static void Skeleton()
         {
@@ -2068,53 +2066,11 @@ namespace MoistureUpset
                 mesh.sharedMaterials[i].SetTexture("_FlowHeightmap", blank);
                 mesh.sharedMaterials[i].SetTexture("_FlowTex", blank);
             }
-            /*
-            AkEvent ak = fab.AddComponent<AkEvent>();
-            ak.data.ObjectReference.SetFieldValue("objectName", "PlayLightning");
-            ak.data.ObjectReference.SetFieldValue("id", 2467737487);
-            Debug.Log($"-------------{ak.data.Name}");
-            //ak.data = fab.GetComponent<AkEvent>().data;
-            Debug.Log($"-------------{ak.data.Name}");
-            Component.Destroy(fab.GetComponents<AkEvent>());
-            Debug.Log($"-------------{fab.GetComponent<AkEvent>().data.Name}");
-            */
 
 
 
-
-            //CopyComponent(fab.GetComponentInChildren<AkEvent>(), ak.gameObject);
-
-
-
-
-            //add component, copy details, remove old component, check in between to make sure we guuda
-
-
-
-
-
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"--------{item}");
-            //}
-            //fab = Resources.Load<GameObject>("prefabs/projectiles/ElectricWormSeekerProjectile");
-            //string n = ((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.GetFieldValue<string>("objectName");
-            ////((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", "PlayLightning");
-            ////((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", (UInt32)2467737487);
-            //var sb = fab.AddComponent<SeekingBullet>();
-            ////sb.akevent = fab.GetComponent<AkEvent>().data;
-            //((AK.Wwise.BaseType)sb.akevent).ObjectReference.SetFieldValue("objectName", "PlayLightning");
-            //((AK.Wwise.BaseType)sb.akevent).ObjectReference.SetFieldValue("id", (UInt32)2467737487);
-            //Debug.Log($"--------{sb.akevent.ObjectReference.GetFieldValue<string>("objectName")}");
-            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("objectName", n);
-            //((AK.Wwise.BaseType)fab.GetComponentInChildren<AkEvent>().data).ObjectReference.SetFieldValue("id", (UInt32)600329706);
-            //Debug.Log($"--------{sb.akevent.ObjectReference.GetFieldValue<string>("objectName")}");
-
-
-            //2467737487 << new sfx
-            //600329706 << original lighning sfx
-            //sfxlocator
-            //skilllocator
+            fab = Resources.Load<GameObject>("prefabs/projectiles/ElectricWormSeekerProjectile");
+            var sb = fab.AddComponent<SeekingBullet>();
         }
         private static void Discord()
         {
@@ -2269,22 +2225,6 @@ namespace MoistureUpset
                 }
             }
 
-
-            On.RoR2.Orbs.BeetleWardOrb.OnArrival += (orig, self) => //Can't do this pre game like everything else?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-            {
-                if (self.target)
-                {
-                    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/NetworkedObjects/BeetleWard"), self.target.transform.position, Quaternion.identity);
-                    gameObject.GetComponent<TeamFilter>().teamIndex = self.target.teamIndex;
-
-
-                    gameObject.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");
-                    gameObject.GetComponentsInChildren<SkinnedMeshRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.mat");
-
-
-                    NetworkServer.Spawn(gameObject);
-                }
-            };
 
             fab = Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/BeetleWardOrbEffect");
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");

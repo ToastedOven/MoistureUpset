@@ -25,28 +25,14 @@ namespace MoistureUpset
             BossMusicAndFanFare();
             OnHit();
             PreGame();
-            INeedToSortThese();
+            DeathRespawn();
             PlayerDeath();
             DifficultyIcons();
         }
-        public static void INeedToSortThese()
+        public static void DeathRespawn()
         {
-            //On.RoR2.BossGroup.UpdateBossMemories += (orig, self) =>
-            //{
-            //    orig(self);
-            //    Debug.Log($"bossgroup--------{self.bestObservedName}");
-            //};
-            //On.RoR2.SceneDirector.Start += (orig, self) =>
-            //{
-            //    orig(self);
-            //    Debug.Log($"asddddddddddddddddddddddddddd--------{self.teleporterSpawnCard.name}");
-            //    foreach (var item in self.teleporterSpawnCard.prefab.GetComponents<Component>())
-            //    {
-            //        Debug.Log($"asddddddddddddddddddddddddddd--------{item}");
-            //    }
-            //    self.teleporterSpawnCard.prefab.GetComponent<BossGroup>().InvokeMethod("Start");
-            //    Debug.Log($"bossgroup--------{self.teleporterSpawnCard.prefab.GetComponent<BossGroup>().bestObservedName}");
-            //};
+            if (float.Parse(ModSettingsManager.getOptionValue("Respawn SFX")) == 1)
+                EnemyReplacements.LoadBNK("Respawn");
         }
 
         public static void DifficultyIcons()
@@ -190,6 +176,12 @@ namespace MoistureUpset
             {
                 EnemyReplacements.kindlyKillYourselfRune = true;
                 AkSoundEngine.SetRTPCValue("Dicks", 0);
+                if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
+                {
+                    var fab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/BeetleWard");
+                    fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");
+                    fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.mat");
+                }
                 if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) == 1)
                     EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
                 if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
