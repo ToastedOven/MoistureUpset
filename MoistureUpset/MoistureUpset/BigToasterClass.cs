@@ -16,7 +16,7 @@ using RiskOfOptions;
 
 namespace MoistureUpset
 {
-    public static class BigToasterClass
+    public static class BigToasterClass // Why do we still call this "Big Toaster Class"?
     {
         public static void RunAll()
         {

@@ -151,10 +151,10 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
     [TargetRpc]
     private void TargetPlaySound(NetworkConnection target, string soundIDString, int playerIndex)
     {
-        //MinecraftHurt <<< rune u gay?
+        //MinecraftHurt <<< rune u gay? <<< not yet but it's because it uses a player index to play off of.
         //Debug.Log($"--------{soundIDString}");
 
-        if (soundIDString == "MinecraftHurt" && !MineCraftHurt)
+        if (soundIDString == "MinecraftHurt" && !MineCraftHurt) // Because people don't actually like the minecraft oof sound.
         {
             return;
         }

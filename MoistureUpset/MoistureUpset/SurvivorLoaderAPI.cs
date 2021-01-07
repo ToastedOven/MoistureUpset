@@ -15,7 +15,7 @@ using RoR2.Projectile;
 
 namespace MoistureUpset
 {
-    public static class SurvivorLoaderAPI
+    public static class SurvivorLoaderAPI // Why we call this class, is beyond me, we originally wanted this to be some easy functions to call to add skins. and now it's filled with stuff mostly for the Engi skin.
     {
         public static void LoadSurvivors()
         {
@@ -218,8 +218,6 @@ namespace MoistureUpset
 
                             self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat");
 
-                            //Debug.Log(self.ghost.gameObject.GetComponentInChildren<TrailRenderer>().material.color);
-
                             meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                         }
                         else if (self.ghost.name == "SpiderMineGhost(Clone)")
@@ -262,6 +260,8 @@ namespace MoistureUpset
         //This is one of the worst code practices I've ever done. But I have no better ideas so ¯\_(ツ)_/¯
 
         // It really do be like that sometimes
+
+        // I finally found a better idea check out DisplayFix.cs
 
 
 
@@ -364,6 +364,8 @@ namespace MoistureUpset
         //    }
         //}
 
+
+        // Gotta do this jank mess in order to make the blueprint look like the custom skinned turrets, not my best idea, but it works.
         private static void PlaceTurret_OnEnter(On.EntityStates.Engi.EngiWeapon.PlaceTurret.orig_OnEnter orig, EntityStates.Engi.EngiWeapon.PlaceTurret self)
         {
             var cb = self.outer.GetComponentInChildren<CharacterBody>();

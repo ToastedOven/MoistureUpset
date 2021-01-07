@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace MoistureUpset
 {
-    class AnimeBubbleOnDeath : MonoBehaviour
+    class AnimeBubbleOnDeath : MonoBehaviour // Nothing to see here.
     {
         void Start()
         {
