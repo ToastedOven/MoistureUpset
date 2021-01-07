@@ -48,69 +48,40 @@ namespace MoistureUpset
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
         }
 
-        [ConCommand(commandName = "debugtime", flags = ConVarFlags.None, helpText = "Does the magic")]
-        private static void DebugCommand(ConCommandArgs args)
-        {
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "no_enemies");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "kill_all");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_money 1000000");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item AlienHead 100");
-        }
+        //[ConCommand(commandName = "debugtime", flags = ConVarFlags.None, helpText = "Does the magic")]
+        //private static void DebugCommand(ConCommandArgs args)
+        //{
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "no_enemies");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "kill_all");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_money 1000000");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item AlienHead 100");
+        //}
 
-        [ConCommand(commandName = "slowmotime", flags = ConVarFlags.None, helpText = "Does the magic")]
-        private static void SlowmoCommand(ConCommandArgs args)
-        {
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_money 1000000");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
-            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "time_scale 0.1");
-        }
+        //[ConCommand(commandName = "slowmotime", flags = ConVarFlags.None, helpText = "Does the magic")]
+        //private static void SlowmoCommand(ConCommandArgs args)
+        //{
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_money 1000000");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
+        //    RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "time_scale 0.1");
+        //}
 
-        [ConCommand(commandName = "musicdebug", flags = ConVarFlags.None, helpText = "Spits currently playing music to console")]
-        private static void MusicTest(ConCommandArgs args)
-        {
-            var c = GameObject.FindObjectOfType<MusicController>();
-            Debug.Log($"-------------{c.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName}");
-        }
+        //[ConCommand(commandName = "musicdebug", flags = ConVarFlags.None, helpText = "Spits currently playing music to console")]
+        //private static void MusicTest(ConCommandArgs args)
+        //{
+        //    var c = GameObject.FindObjectOfType<MusicController>();
+        //    //Debug.Log($"-------------{c.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName}");
+        //}
 
-        [ConCommand(commandName = "getallgameobjects", flags = ConVarFlags.None, helpText = "yes")]
-        private static void GameObjects(ConCommandArgs args)
-        {
-            DebugClass.GetAllGameObjects();
-        }
-
-        [ConCommand(commandName = "braindamage", flags = ConVarFlags.None, helpText = "Grabs all the meshes")]
-        private static void RemoveThisLater(ConCommandArgs args)
-        {
-            var meshes = GameObject.FindObjectsOfType<MeshFilter>();
-
-
-            try
-            {
-                using (StreamWriter sw = new StreamWriter($"export/bigboi.obj"))
-                {
-                    foreach (var mf in meshes)
-                    {
-                        sw.WriteLine(MeshToString(mf));
-                    }
-                    
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-
-            //foreach (var mf in meshes)
-            //{
-                
-
-            //}            
-        }
+        //[ConCommand(commandName = "getallgameobjects", flags = ConVarFlags.None, helpText = "yes")]
+        //private static void GameObjects(ConCommandArgs args)
+        //{
+        //    DebugClass.GetAllGameObjects();
+        //}
 
         private static string MeshToString(MeshFilter mf)
         {
@@ -171,7 +142,7 @@ namespace MoistureUpset
 
             var anim = fab.GetComponentInChildren<Animator>();
 
-            Debug.Log($"++++++++++++++++++++++++++++++++++++++++{anim}");
+            //Debug.Log($"++++++++++++++++++++++++++++++++++++++++{anim}");
 
             //AnimatorController anim = new AnimatorController
             AnimatorOverrideController aoc = new AnimatorOverrideController(anim.runtimeAnimatorController);
@@ -219,7 +190,7 @@ namespace MoistureUpset
             {
                 if (item.text == "Locked In")
                 {
-                    Debug.Log(item.transform.parent.name);
+                    //Debug.Log(item.transform.parent.name);
                 }
             }
         }

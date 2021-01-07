@@ -384,7 +384,7 @@ namespace MoistureUpset
         }
         public static void HitMarker(float _Vol)
         {
-            Debug.Log($"Set hitmarker volume {_Vol}");
+            //Debug.Log($"Set hitmarker volume {_Vol}");
             AkSoundEngine.SetRTPCValue("RuneBadNoise", _Vol);
         }
         public static void OnHit()
