@@ -217,8 +217,6 @@ namespace MoistureUpset
 
                             self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat");
 
-                            Debug.Log(self.ghost.gameObject.GetComponentInChildren<TrailRenderer>().material.color);
-
                             meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                         }
                         else if (self.ghost.name == "SpiderMineGhost(Clone)")
