@@ -9,7 +9,7 @@ namespace MoistureUpset
     {
         void Start()
         {
-            Debug.Log($"-------------spawned");
+            //Debug.Log($"-------------spawned");
         }
 
         void FixedUpdate()

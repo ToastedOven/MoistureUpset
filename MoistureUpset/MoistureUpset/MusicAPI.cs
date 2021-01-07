@@ -88,7 +88,7 @@ namespace MoistureUpset
             try
             {
                 string song = controller.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
-                Debug.Log($"--currently playing song------{song}");
+                //Debug.Log($"--currently playing song------{song}");
             }
             catch (Exception)
             {

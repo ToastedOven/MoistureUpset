@@ -392,7 +392,7 @@ namespace MoistureUpset
                 }
                 else
                 {
-                    Debug.LogWarning("is null");
+                    //Debug.LogWarning("is null");
                 }
 
             }

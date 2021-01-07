@@ -45,7 +45,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                Debug.Log($"Couldn't replace sprite: {e}");
+                //Debug.Log($"Couldn't replace sprite: {e}");
             }
         }
         public static void ReplaceTexture2D(string path, string png)
@@ -58,7 +58,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                Debug.Log($"Couldn't replace sprite: {e}");
+                //Debug.Log($"Couldn't replace sprite: {e}");
             }
         }
     }

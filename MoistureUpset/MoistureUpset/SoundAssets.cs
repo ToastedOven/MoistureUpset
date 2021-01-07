@@ -155,7 +155,7 @@ namespace MoistureUpset
 
                 if (damageReport.victimTeamIndex == TeamIndex.Player)
                 {
-                    Debug.Log(damageReport.victimBody.name);
+                    //Debug.Log(damageReport.victimBody.name);
                     if (damageReport.victimBody.isSkin("THE_TF2_ENGINEER_SKIN") && damageReport.victimBody.name == "EngiBody(Clone)")
                     {
                         //Debug.Log(damageReport.victimBody.transform.position);
@@ -163,7 +163,7 @@ namespace MoistureUpset
                     }
                     else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && (damageReport.victimBody.name == "EngiWalkerTurretBody(Clone)" || damageReport.victimBody.name == "EngiTurretBody(Clone)"))
                     {
-                        Debug.Log(damageReport.attackerBody.name);
+                        //Debug.Log(damageReport.attackerBody.name);
                     }
                 }
                 else if (damageReport.victimTeamIndex == TeamIndex.Monster)

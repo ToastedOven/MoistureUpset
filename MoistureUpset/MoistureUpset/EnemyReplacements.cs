@@ -243,7 +243,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                //Debug.Log(e);
             }
         }
         public static void DEBUG()
@@ -1443,7 +1443,7 @@ namespace MoistureUpset
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e);
+                    //Debug.Log(e);
                 }
                 orig(self);
             };
@@ -1470,7 +1470,7 @@ namespace MoistureUpset
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(e);
+                    //Debug.Log(e);
                 }
                 orig(self);
             };
@@ -1553,7 +1553,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                //Debug.Log(e);
             }
             On.EntityStates.TitanMonster.DeathState.OnEnter += (orig, self) =>
             {
@@ -1627,7 +1627,7 @@ namespace MoistureUpset
                         }
                         catch (Exception e)
                         {
-                            Debug.Log(e);
+                            //Debug.Log(e);
                         }
                     }
                 }
@@ -1728,7 +1728,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                //Debug.Log(e);
             }
             //On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
             //{
@@ -1783,7 +1783,7 @@ namespace MoistureUpset
                 orig(self);
                 if (self.outer.gameObject.name.Contains("Gold"))
                 {
-                    Debug.Log($"----{self.outer.commonComponents.teamComponent.teamIndex}");
+                    //Debug.Log($"----{self.outer.commonComponents.teamComponent.teamIndex}");
                     if (self.outer.commonComponents.teamComponent.teamIndex == TeamIndex.Player)
                     {
                         AkSoundEngine.PostEvent("AlexSpawnAlly", self.outer.gameObject);

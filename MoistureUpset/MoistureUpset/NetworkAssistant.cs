@@ -165,7 +165,7 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            //Debug.Log(e);
         }
         
     }
@@ -179,7 +179,7 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            //Debug.Log(e);
         }
         
     }
@@ -209,7 +209,7 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            //Debug.Log(e);
         }
 
     }
@@ -221,11 +221,11 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
         {
             if (item.master.GetBody().transform.position == location)
             {
-                Debug.Log($"Player found at {location}");
+                //Debug.Log($"Player found at {location}");
             }
             else
             {
-                Debug.Log($"Player not");
+                //Debug.Log($"Player not");
             }
         }
     }
