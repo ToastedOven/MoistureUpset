@@ -15,8 +15,6 @@ namespace MoistureUpset
         private static bool inPortal = false;
         private static bool portalFinished = false;
 
-        public static bool doMinecraftHurtSounds = false;
-
         public static void RegisterSoundEvents()
         {
             On.RoR2.GlobalEventManager.OnCharacterHitGround += GlobalEventManager_OnCharacterHitGround;

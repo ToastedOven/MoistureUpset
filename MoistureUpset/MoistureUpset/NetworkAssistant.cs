@@ -19,7 +19,7 @@ namespace MoistureUpset
         public static GameObject CentralNetworkObject;
         public static GameObject _centralNetworkObjectSpawned;
 
-        private static NetworkedModComponent _nsc;
+        private static MoistureUpsetNetworkedComponent _nsc;
 
         public static void InitSNA()
         {
@@ -31,7 +31,7 @@ namespace MoistureUpset
 
             GameObject.Destroy(tempObject);
 
-            _nsc = CentralNetworkObject.AddComponent<NetworkedModComponent>();
+            _nsc = CentralNetworkObject.AddComponent<MoistureUpsetNetworkedComponent>();
         }
 
         public static void playSound(string soundIDString, int index)
@@ -46,7 +46,7 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedModComponent.Invoke(user, soundIDString, index);
+                    MoistureUpsetNetworkedComponent.Invoke(user, soundIDString, index);
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedModComponent.Invoke(user, soundIDString, identity);
+                    MoistureUpsetNetworkedComponent.Invoke(user, soundIDString, identity);
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedModComponent.Invoke(user, soundIDString, location);
+                    MoistureUpsetNetworkedComponent.Invoke(user, soundIDString, location);
                 }
             }
         }
@@ -97,16 +97,16 @@ namespace MoistureUpset
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    NetworkedModComponent.Invoke(user, location);
+                    MoistureUpsetNetworkedComponent.Invoke(user, location);
                 }
             }
         }
     }
 }
 
-internal class NetworkedModComponent : NetworkBehaviour
+public class MoistureUpsetNetworkedComponent : NetworkBehaviour
 {
-    private static NetworkedModComponent _instance;
+    internal static MoistureUpsetNetworkedComponent _instance;
 
     internal static GameObject soundPlayer;
 
@@ -153,6 +153,12 @@ internal class NetworkedModComponent : NetworkBehaviour
     {
         //MinecraftHurt <<< rune u gay?
         //Debug.Log($"--------{soundIDString}");
+
+        if (soundIDString == "MinecraftHurt" && !MineCraftHurt)
+        {
+            return;
+        }
+
         try
         {
             AkSoundEngine.PostEvent(soundIDString, NetworkUser.readOnlyInstancesList[playerIndex].master.GetBody().gameObject);

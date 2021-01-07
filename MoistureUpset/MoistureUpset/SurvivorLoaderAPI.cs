@@ -21,37 +21,47 @@ namespace MoistureUpset
         {
             PopulateAssets();
             EngiDisplayFix();
-            AnimeBubble();
+            //AnimeBubble();
         }
 
         private static void AnimeBubble()
         {
-            On.EntityStates.Engi.EngiBubbleShield.Deployed.OnEnter += (orig, self) =>
-            {
-                orig(self);
-                //
-                //
-                if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
-                {
-                    AkSoundEngine.PostEvent("PlayBubble", self.outer.gameObject);
-                }
-            };
+            //On.EntityStates.Engi.EngiBubbleShield.Deployed.OnEnter += (orig, self) =>
+            //{
+            //    orig(self);
+            //    //
+            //    //
+            //    if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
+            //    {
+            //        AkSoundEngine.PostEvent("PlayBubble", self.outer.gameObject.AddComponent<AnimeBubbleOnDeath>().gameObject);
+            //    }
+            //};
 
-            On.EntityStates.Engi.EngiBubbleShield.Deployed.OnExit += (orig, self) =>
-            {
-                if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
-                {
-                    AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
-                }
+            //On.EntityStates.Engi.EngiBubbleShield.Deployed.OnExit += (orig, self) =>
+            //{
+            //    if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
+            //    {
+            //        //AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
+            //    }
 
-                orig(self);
-            };
+            //    orig(self);
+            //};
 
-            On.EntityStates.EntityState.Destroy += (orig, obj) =>
-            {
-                Debug.Log(obj.name);
-                orig(obj);
-            };
+            //On.EntityStates.Engi.EngiBubbleShield.Undeployed.OnEnter += (orig, self) =>
+            //{
+            //    if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
+            //    {
+            //        AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
+            //    }
+
+            //    orig(self);
+            //};
+
+            //On.EntityStates.EntityState.Destroy += (orig, obj) =>
+            //{
+            //    Debug.Log(obj.name);
+            //    orig(obj);
+            //};
         }
         private static void EngiDisplayFix()
         {

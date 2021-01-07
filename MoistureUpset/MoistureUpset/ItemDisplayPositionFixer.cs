@@ -44,149 +44,102 @@ namespace MoistureUpset
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
             // TopazBrooch
-            //TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localPos = new Vector3(0.046f, 0.213f, -0.133f);
-            //TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localAngles = new Vector3(-90f, 0, 90f);
-            //TF2_Engi_IDRS.FindItemDisplayRuleGroup("WardOnLevel").rules[0].localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        }
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("BarrierOnKill").rules[0].localPos = new Vector3(-0.0998f, 0.0842f, 0.176f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("BarrierOnKill").rules[0].localAngles = new Vector3(74.32f, -19.18f, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("BarrierOnKill").rules[0].localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
-        private static void ItemDisplay_SetVisibilityLevel(On.RoR2.ItemDisplay.orig_SetVisibilityLevel orig, ItemDisplay self, VisibilityLevel newVisibilityLevel)
-        {
-            orig(self, newVisibilityLevel);
+            // ShieldGenerator AKA the worst item.
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("PersonalShield").rules[0].localPos = new Vector3(0, 0.2565f, 0.1201f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("PersonalShield").rules[0].localAngles = new Vector3(-66.67f, 0, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("PersonalShield").rules[0].localScale = new Vector3(0.15f, 0.15f, 0.15f);
 
-            try
+            // Hoof Fast Feet
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Hoof").rules[0].localPos = new Vector3(-0.058f, 0.303f, -0.118f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Hoof").rules[0].localAngles = new Vector3(75.08206f, 19.42f, 4.364746e-06f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Hoof").rules[0].localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            // Crit Scythe
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("HealOnCrit").rules[0].localPos = new Vector3(0.095f, 0.231f, -0.52f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("HealOnCrit").rules[0].localAngles = new Vector3(-53.836f, 76.72601f, -72.995f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("HealOnCrit").rules[0].localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
+            // Yooka Laylee
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ChainLightning").rules[0].localPos = new Vector3(-0.286f, -0.246f, -0.355f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ChainLightning").rules[0].localAngles = new Vector3(-8.4f, -86.51f, -12.2f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ChainLightning").rules[0].localScale = new Vector3(0.7f, 0.7f, 0.7f);
+
+            // Stealth Warkit
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Phasing").rules[0].localPos = new Vector3(0, -0.3532f, 0.2324f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Phasing").rules[0].localAngles = new Vector3(-79.43f, 0, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Phasing").rules[0].localScale = new Vector3(0.25f, 0.25f, 0.25f);
+
+            // Bandolier AKA Disappointment
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Bandolier").rules[0].localPos = new Vector3(-0.006f, 0.015f, 0.004f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Bandolier").rules[0].localAngles = new Vector3(-35.005f, 260.099f, -256.226f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Bandolier").rules[0].localScale = new Vector3(0.8584043f, 0.8584043f, 0.8584043f);
+
+            // Berserkers Pauldron
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("WarCryOnMultiKill").rules[0].localPos = new Vector3(-0.432f, 0.159f, -0.052f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("WarCryOnMultiKill").rules[0].localAngles = new Vector3(-105.448f, 205.158f, -120.289f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("WarCryOnMultiKill").rules[0].localScale = new Vector3(0.9f, 0.9f, 0.9f);
+
+            // Desk Plant AKA The best legendary.
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Plant").rules[0].localPos = new Vector3(0.0771f, 0.2637f, 0.1765f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Plant").rules[0].localAngles = new Vector3(64.464f, 43.791f, 201.998f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Plant").rules[0].localScale = new Vector3(0.06175016f, 0.06175017f, 0.06175017f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Plant").rules[0].childName = "ThighL";
+
+            // Lucky Clover
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Clover").rules[0].localPos = new Vector3(0, 0.6163f, 0.089f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Clover").rules[0].localAngles = new Vector3(0, 0, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Clover").rules[0].localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+            // Maskathan
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("GhostOnKill").rules[0].localPos = new Vector3(0, 0.4361f, 0.2255f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("GhostOnKill").rules[0].localAngles = new Vector3(11.26f, 0, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("GhostOnKill").rules[0].localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("GhostOnKill").rules[1] = new ItemDisplayRule();
+
+            // Tesla Coil
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShockNearby").rules[0].localPos = new Vector3(0, 0.396f, -0.008f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShockNearby").rules[0].localAngles = new Vector3(-45.24f, 0, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShockNearby").rules[0].localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+            // Hammer
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ArmorReductionOnHit").rules[0].localPos = new Vector3(0.267f, -0.1719f, 0.0881f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ArmorReductionOnHit").rules[0].localAngles = new Vector3(-60.839f, 3.967f, -100.761f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("ArmorReductionOnHit").rules[0].localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            // Brilliant Behemoth
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Behemoth").rules[0].localPos = new Vector3(0.416f, -0.153f, -0.343f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Behemoth").rules[0].localAngles = new Vector3(4.388f, 86.051f, 196.102f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Behemoth").rules[0].localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            // ATG
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Missile").rules[0].localPos = new Vector3(-0.074f, 0.559f, -0.362f);
+
+            // Brittle Crown
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("GoldOnHit").rules[0].localPos = new Vector3(0, 0.459f, 0.1336f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("GoldOnHit").rules[0].localAngles = new Vector3(0, 0, 0);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("GoldOnHit").rules[0].localScale = new Vector3(1, 1, 1);
+
+            // Shield Bug
             {
-                Transform parent = GetParent(self.gameObject.transform);
+                Vector3 bug1, bug2;
+                bug1 = TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShieldOnly").rules[0].localPos;
+                bug2 = TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShieldOnly").rules[1].localPos;
 
-                if (parent.GetComponent<ModelSkinController>().currentSkinIndex == 2 && parent.name == "mdlEngi")
-                {
-                    
-                    if (self.name == "DisplayMissileLauncher(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.074f, 0.559f, -0.362f);
-                    }
-                    else if (self.name == "DisplayBrooch(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.0998f, 0.0842f, 0.176f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(74.32f, -19.18f, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-                    }
-                    else if (self.name == "DisplayShieldGenerator(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, 0.2565f, 0.1201f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-66.67f, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-                    }
-                    else if (self.name == "DisplayHoof(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.059f, 0.155f, -0.175f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(180f, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.09f, 0.09f, 0.09f);
-                    }
-                    else if (self.name == "DisplayScythe(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0.095f, 0.231f, -0.52f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-53.836f, 76.72601f, -72.995f);
-                        self.gameObject.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-                    }
-                    else if (self.name == "DisplayUkulele(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.286f, -0.246f, -0.355f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-8.4f, -86.51f, -12.2f);
-                        self.gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-                    }
-                    else if (self.name == "DisplayStealthkit(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, -0.3532f, 0.2324f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-79.43f, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-                    }
-                    else if (self.name == "DisplayBandolier(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.006f, 0.015f, 0.004f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-35.005f, 260.099f, -256.226f);
-                        self.gameObject.transform.localScale = new Vector3(0.8584043f, 0.8584043f, 0.8584043f);
-                    }
-                    else if (self.name == "DisplayPauldron(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(-0.432f, 0.159f, -0.052f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-105.448f, 205.158f, -120.289f);
-                        self.gameObject.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
-                    }
-                    else if (self.name == "DisplayInterstellarDeskPlant(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0.2452f, 0.15f, -0.154f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(90, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                    }
-                    else if (self.name == "DisplayClover(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, 0.6163f, 0.089f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                    }
-                    else if (self.name == "DisplayMask(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, 0.4361f, 0.2255f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(11.26f, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    }
-                    else if (self.name == "DisplayTeslaCoil(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, 0.396f, -0.008f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-45.24f, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    }
-                    else if (self.name == "DisplayWarhammer(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0.267f, -0.1719f, 0.0881f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-60.839f, 3.967f, -100.761f);
-                        self.gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                    }
-                    else if (self.name == "DisplayBehemoth(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0.416f, -0.153f, -0.343f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(4.388f, 86.051f, 196.102f);
-                        self.gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                    }
-                    else if (self.name == "DisplayBoneCrown(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, 0.459f, 0.1336f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
-                        self.gameObject.transform.localScale = new Vector3(1, 1, 1);
-                    }
-                    else if (self.name == "DisplayShieldBug(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(self.gameObject.transform.localPosition.x, 0.6f, self.gameObject.transform.localPosition.z);
-                    }
-                    else if (self.name == "DisplayLunarDagger(Clone)")
-                    {
-                        self.gameObject.transform.localPosition = new Vector3(0, -0.05f, -0.543f);
-                        self.gameObject.transform.localEulerAngles = new Vector3(-97.196f, 0, -1.525f);
-                        self.gameObject.transform.localScale = new Vector3(1, 1, 1);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                //self.gameObject.transform.localPosition = new Vector3();
-                //self.gameObject.transform.localEulerAngles = new Vector3();
-                //self.gameObject.transform.localScale = new Vector3();
-            }
-        }
-
-        private static Transform GetParent(Transform transform)
-        {
-            Transform parent = transform.parent;
-
-            Transform lastParent = null;
-
-            while (parent != null)
-            {
-                lastParent = parent;
-                parent = parent.parent;
+                TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShieldOnly").rules[0].localPos = new Vector3(bug1.x, 0.6f, bug1.z);
+                TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShieldOnly").rules[1].localPos = new Vector3(bug2.x, 0.6f, bug2.z);
             }
 
-            return lastParent;
+            // Shaped Glass
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("LunarDagger").rules[0].localPos = new Vector3(0, -0.05f, -0.543f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("LunarDagger").rules[0].localAngles = new Vector3(-97.196f, 0, -1.525f);
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("LunarDagger").rules[0].localScale = new Vector3(1, 1, 1);
+
+            // Tougher Times
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Bear").rules[0].localPos = new Vector3(-0.004f, 0.381f, -0.253f);
         }
     }
 }
