@@ -433,7 +433,10 @@ namespace MoistureUpset
                     bool resetThanos = true;
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     bool stop = false;
-                    StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
+                    if (!(self.baseNameToken.StartsWith("Umbra of")))
+                    {
+                        StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
+                    }
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
@@ -622,7 +625,7 @@ namespace MoistureUpset
                 orig(self, tracker);
                 try
                 {
-                    AkSoundEngine.SetRTPCValue("Dicks", (tracker.ToString() == "RoR2.HoldoutZoneController+ChargeHoldoutZoneObjectiveTracker" ? 0f : 1f));
+                    AkSoundEngine.SetRTPCValue("Dicks", (tracker.ToString() == "RoR2.HoldoutZoneController+ChargeHoldoutZoneObjectiveTracker" || tracker.ToString() == "RoR2.UI.ObjectivePanelController+ClearArena" ? 0f : 1f));
                 }
                 catch (Exception)
                 {
