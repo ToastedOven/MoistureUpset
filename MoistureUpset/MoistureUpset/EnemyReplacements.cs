@@ -1450,7 +1450,14 @@ namespace MoistureUpset
             };
             On.EntityStates.GolemMonster.ClapState.OnEnter += (orig, self) =>
             {
-                EntityStates.GolemMonster.ClapState.attackSoundString = "GolemMelee";
+                try
+                {
+
+                    EntityStates.GolemMonster.ClapState.attackSoundString = "GolemMelee";
+                }
+                catch (Exception)
+                {
+                }
                 orig(self);
             };
             ReplaceModel("prefabs/characterbodies/GolemBody", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");

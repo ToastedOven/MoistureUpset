@@ -140,6 +140,7 @@ namespace MoistureUpset
             EnemyReplacements.LoadResource("demopill");
             EnemyReplacements.LoadResource("rocket");
             EnemyReplacements.LoadResource("mines");
+            EnemyReplacements.LoadResource("oopsideletedtheoldresource");
 
 
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
@@ -450,7 +451,7 @@ namespace MoistureUpset
             orig();
 
             AddStarPlatinumSkinToLoader();
-            EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_engi:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
+            EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
             //EngineerStuff("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_mike:assets/engimesh.mesh", RoR2.SurvivorIndex.Engi);
             EditDropPod();
 
