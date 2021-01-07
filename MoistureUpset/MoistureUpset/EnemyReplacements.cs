@@ -18,17 +18,6 @@ namespace MoistureUpset
 {
     public static class EnemyReplacements
     {
-        public static T CopyComponent<T>(T original, GameObject destination) where T : Component
-        {
-            System.Type type = original.GetType();
-            Component copy = destination.AddComponent(type);
-            System.Reflection.FieldInfo[] fields = type.GetFields();
-            foreach (System.Reflection.FieldInfo field in fields)
-            {
-                field.SetValue(copy, field.GetValue(original));
-            }
-            return copy as T;
-        }
         public static void ReplaceModel(string prefab, string mesh, string png, int position = 0, bool replaceothers = false)
         {
             var fab = Resources.Load<GameObject>(prefab);
@@ -469,6 +458,43 @@ namespace MoistureUpset
                     if (token == "PLAYER_PING_COOLDOWN")
                     {
                         st = "<style=cEvent>Stop</style>";
+                    }
+                }
+                if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) == 1)
+                {
+                    if (token == "FAMILY_GOLEM")
+                    {
+                        st = "[WARNING] It feels like 2008 in here..";
+                    }
+                }
+                if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) == 1)
+                {
+                    if (token == "FAMILY_JELLYFISH")
+                    {
+                        st = "[WARNING] You hear a distant laugh track..";
+                    }
+                }
+                if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) == 1)
+                {
+                    if (token == "FAMILY_WISP")
+                    {
+                        st = "[WARNING] Habadabadaga..";
+                    }
+                }
+                if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) == 1)
+                {
+                    if (token == "FAMILY_IMP")
+                    {
+                        st = "[WARNING] Doot doot..";
+                    }
+                }
+
+
+                if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+                {
+                    if (token == "BAZAAR_SEER_GOLDSHORES")
+                    {
+                        st = "<style=cWorldEvent>You dream of fake news.</style>";
                     }
                 }
                 orig(self, token, st);
