@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
-    public static class SkinHelper
+    public static class SkinHelper // Originally we used skinIndex == 2, but I realized that that may be incompatible with other skins for the engi, so we do this jank instead.
     {
         public static Dictionary<string, string> skinNametoskinMeshName = new Dictionary<string, string>();
 

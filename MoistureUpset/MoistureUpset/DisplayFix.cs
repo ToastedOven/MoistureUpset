@@ -6,6 +6,8 @@ using RoR2;
 
 namespace MoistureUpset
 {
+
+    // Still not the best idea, but much better than what I was doing previously. Technically there is like a few frames where you can see the old models, but oh well.
     class DisplayFix : MonoBehaviour
     {
         private static Mesh engiturretmesh;
@@ -27,9 +29,6 @@ namespace MoistureUpset
 
             foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
             {
-                //Debug.Log(smr.sharedMesh.name);
-                //Debug.Log(SkinHelper.skinNametoskinMeshName["THE_TF2_ENGINEER_SKIN"]);
-                //
                 if (smr.sharedMesh.name == SkinHelper.skinNametoskinMeshName["THE_TF2_ENGINEER_SKIN"])
                 {
                     isTF2Skin = true;

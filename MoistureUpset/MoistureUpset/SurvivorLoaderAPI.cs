@@ -15,7 +15,7 @@ using RoR2.Projectile;
 
 namespace MoistureUpset
 {
-    public static class SurvivorLoaderAPI
+    public static class SurvivorLoaderAPI // Why we call this class, is beyond me, we originally wanted this to be some easy functions to call to add skins. and now it's filled with stuff mostly for the Engi skin.
     {
         public static void LoadSurvivors()
         {
@@ -261,6 +261,8 @@ namespace MoistureUpset
 
         // It really do be like that sometimes
 
+        // I finally found a better idea check out DisplayFix.cs
+
 
 
         //private static List<NetworkUser> GetSortedNetworkUsersList()
@@ -362,6 +364,8 @@ namespace MoistureUpset
         //    }
         //}
 
+
+        // Gotta do this jank mess in order to make the blueprint look like the custom skinned turrets, not my best idea, but it works.
         private static void PlaceTurret_OnEnter(On.EntityStates.Engi.EngiWeapon.PlaceTurret.orig_OnEnter orig, EntityStates.Engi.EngiWeapon.PlaceTurret self)
         {
             var cb = self.outer.GetComponentInChildren<CharacterBody>();

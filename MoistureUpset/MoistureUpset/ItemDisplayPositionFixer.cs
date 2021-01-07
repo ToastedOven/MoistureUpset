@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MoistureUpset
 {
-    public static class ItemDisplayPositionFixer
+    public static class ItemDisplayPositionFixer // This is what I think is the best way to do item positions for skins and characters.
     {
         public static ItemDisplayRuleSet TF2_Engi_IDRS;
         public static void Init()
@@ -54,6 +54,9 @@ namespace MoistureUpset
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("PersonalShield").rules[0].localScale = new Vector3(0.15f, 0.15f, 0.15f);
 
             // Hoof Fast Feet
+            // Hey you! Yeah you!
+            // If you know how limb masks work and know how to implement them for custom skins, hit me up.
+            // I want to make the hoof look correct.
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("Hoof").rules[0].localPos = new Vector3(-0.058f, 0.303f, -0.118f);
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("Hoof").rules[0].localAngles = new Vector3(75.08206f, 19.42f, 4.364746e-06f);
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("Hoof").rules[0].localScale = new Vector3(0.1f, 0.1f, 0.1f);
@@ -140,6 +143,22 @@ namespace MoistureUpset
 
             // Tougher Times
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("Bear").rules[0].localPos = new Vector3(-0.004f, 0.381f, -0.253f);
+
+            // Monster Tooth
+            // For some god forsaken reason, monster tooth is 6 item display rules instead of just 1 single rule with a single mesh.
+            // As long as it looks close enough no one will notice.
+
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[0].localPos = TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[0].localPos - new Vector3(0, 0.15f, 0);
+
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[1].localPos = TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[1].localPos - new Vector3(0, 0.15f, 0);
+
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[2].localPos = TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[2].localPos - new Vector3(0, 0.15f, 0);
+
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[3].localPos = TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[3].localPos - new Vector3(0, 0.15f, 0);
+
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[4].localPos = TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[4].localPos - new Vector3(0, 0.15f, 0);
+
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[5].localPos = TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[5].localPos - new Vector3(0, 0.15f, 0);
         }
     }
 }
