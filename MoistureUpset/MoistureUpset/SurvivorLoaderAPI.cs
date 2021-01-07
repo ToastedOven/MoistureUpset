@@ -472,10 +472,10 @@ namespace MoistureUpset
         }
         private static void EditDropPod()
         {
-            On.RoR2.UI.LogBook.LogBookController.GetMonsterStatus += (orig, profile, entry) =>
-            {
-                return RoR2.UI.LogBook.EntryStatus.Available;
-            };
+            //On.RoR2.UI.LogBook.LogBookController.GetMonsterStatus += (orig, profile, entry) =>
+            //{
+            //    return RoR2.UI.LogBook.EntryStatus.Available;
+            //};
         }
         private static void EngineerStuff(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
         {
