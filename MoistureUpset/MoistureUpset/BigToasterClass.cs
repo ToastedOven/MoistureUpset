@@ -427,16 +427,17 @@ namespace MoistureUpset
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
+                if (self.baseNameToken == "COMMANDO_BODY_NAME" || self.baseNameToken == "MERC_BODY_NAME" || self.baseNameToken == "ENGI_BODY_NAME" || self.baseNameToken == "HUNTRESS_BODY_NAME" || self.baseNameToken == "MAGE_BODY_NAME" || self.baseNameToken == "TOOLBOT_BODY_NAME" || self.baseNameToken == "TREEBOT_BODY_NAME" || self.baseNameToken == "LOADER_BODY_NAME" || self.baseNameToken == "CROCO_BODY_NAME" || self.baseNameToken == "CAPTAIN_BODY_NAME")
+                {
+                    return orig(self);
+                }
                 if (self.master && self.master.isBoss)
                 {
                     var c = GameObject.FindObjectOfType<MusicController>();
                     bool resetThanos = true;
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     bool stop = false;
-                    if (!(self.baseNameToken.StartsWith("Umbra of")))
-                    {
-                        StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
-                    }
+                    StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311 });
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
