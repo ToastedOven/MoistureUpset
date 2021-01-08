@@ -1829,9 +1829,11 @@ namespace MoistureUpset
                 return;
             LoadBNK("vulture");
             LoadResource("lemmesmash");
+            ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/lemmesmasheyes.mesh", "@MoistureUpset_lemmesmash:assets/lemmesmash.png");
             ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/lemmesmasheyes.mesh", "@MoistureUpset_NA:assets/blank.png", 1);
             ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/kevinishomosex/vulturemesh.mesh", "@MoistureUpset_lemmesmash:assets/lemmesmash.png", 2);
             //I know this is shitty but it works and at this point im too scared to change it
+            //Also this only happens at startup so who cares amirite?
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/VultureBody");
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var item in meshes)
