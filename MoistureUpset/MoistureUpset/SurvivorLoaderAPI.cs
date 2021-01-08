@@ -67,7 +67,7 @@ namespace MoistureUpset
         {
             var fab = Resources.Load<GameObject>("prefabs/characterdisplays/EngiDisplay");
 
-            fab.AddComponent<DisplayFix>();
+            fab.AddComponent<DisplayFix>(); // Still not a great system, but it works.
         }
 
         private static void PopulateAssets()
@@ -454,6 +454,7 @@ namespace MoistureUpset
         {
             orig();
 
+            // :7Sadge: We will fix you eventually. :7Sadge:
             //AddStarPlatinumSkinToLoader();
             EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
             //EngineerStuff("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_mike:assets/engimesh.mesh", RoR2.SurvivorIndex.Engi);

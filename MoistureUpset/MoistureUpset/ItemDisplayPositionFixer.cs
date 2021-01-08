@@ -127,6 +127,7 @@ namespace MoistureUpset
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("GoldOnHit").rules[0].localScale = new Vector3(1, 1, 1);
 
             // Shield Bug
+            // I can understand this being 2 seperate rules, but I can't understand why monster tooth is 6 rules.
             {
                 Vector3 bug1, bug2;
                 bug1 = TF2_Engi_IDRS.FindItemDisplayRuleGroup("ShieldOnly").rules[0].localPos;
@@ -144,9 +145,13 @@ namespace MoistureUpset
             // Tougher Times
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("Bear").rules[0].localPos = new Vector3(-0.004f, 0.381f, -0.253f);
 
+
             // Monster Tooth
             // For some god forsaken reason, monster tooth is 6 item display rules instead of just 1 single rule with a single mesh.
-            // As long as it looks close enough no one will notice.
+            // ~~As long as it looks close enough no one will notice.~~
+            // Well I noticed that the string is missing while doing this. I'm not sure why, I honestly have no clue why, but moving the decal causes the string to disappear.
+            // Why couldn't they just make this a single mesh????
+            // I might just make it be a single tooth and put it in the engi's mouth.
 
             TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[0].localPos = TF2_Engi_IDRS.FindItemDisplayRuleGroup("Tooth").rules[0].localPos - new Vector3(0, 0.15f, 0);
 
