@@ -115,6 +115,13 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi", MainAssetBundle));
             }
 
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.tf2_engineer_icon"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_icon", MainAssetBundle));
+            }
+
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.unifiedturret"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
@@ -553,6 +560,7 @@ namespace MoistureUpset
             //        renderer = engiWalkerTurretBodyRenderer[0]
             //    }
             //};
+            //
 
             //On.RoR2.SkinDef.Awake -= SkinDef_Awake;
 
@@ -628,7 +636,8 @@ namespace MoistureUpset
 
             var skin = new LoadoutAPI.SkinDefInfo
             {
-                Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
+                //Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
+                Icon = Resources.Load<Sprite>("@MoistureUpset_engi_icon:assets/tf2_engineer_icon.png"),
                 Name = _name,
                 NameToken = _nameToken,
                 RootObject = mdl,
