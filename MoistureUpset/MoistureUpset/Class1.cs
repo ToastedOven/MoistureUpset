@@ -50,9 +50,17 @@ namespace MoistureUpset
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
-            LoadIntro();
+            ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
+        }
 
-            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        public void IntroReplaceAction()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Replace Intro Scene")) == 1)
+            {
+                LoadIntro();
+
+                SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+            }
         }
 
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -169,7 +177,11 @@ namespace MoistureUpset
 
         public void Start()
         {
-            RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
+            if (float.Parse(ModSettingsManager.getOptionValue("Replace Intro Scene")) == 1)
+            {
+                RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
+            }
+            
         }
 
         private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
