@@ -15,6 +15,10 @@ using RoR2.UI;
 using RiskOfOptions;
 using System.Text;
 using System.IO;
+using UnityEngine.Video;
+using RoR2.PostProcessing;
+using UnityEngine.Rendering.PostProcessing;
+using LeTai.Asset.TranslucentImage;
 
 namespace MoistureUpset
 {
@@ -45,6 +49,61 @@ namespace MoistureUpset
             ItemDisplayPositionFixer.Init();
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
+
+            LoadIntro();
+
+            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        }
+
+        private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            if (arg0.name == "intro")
+            {
+                var cutsceneController = GameObject.Find("CutsceneController");
+
+                cutsceneController.GetComponentInChildren<StartEvent>().action.RemoveAllListeners();
+
+                //GameObject.Find("SkipVoteOverlay").GetComponentInChildren<InputResponse>().onPress.AddListener(delegate { RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene title"); });
+
+                //DestroyImmediate(cutsceneController);
+                DestroyImmediate(GameObject.Find("Set 2 - Cabin"));
+                DestroyImmediate(GameObject.Find("Set 4 - Cargo"));
+                DestroyImmediate(GameObject.Find("Set 1 - Space"));
+                DestroyImmediate(GameObject.Find("Set 3 - Space, Small Planet"));
+                DestroyImmediate(GameObject.Find("cutscene intro"));
+                DestroyImmediate(GameObject.Find("MainArea"));
+                DestroyImmediate(GameObject.Find("Cutscene Space Skybox"));
+
+                DestroyImmediate(GameObject.Find("GlobalPostProcessVolume"));
+                DestroyImmediate(GameObject.Find("Scene Camera").GetComponent<BlurOptimized>());
+                DestroyImmediate(GameObject.Find("Scene Camera").GetComponent<TranslucentImageSource>());
+                DestroyImmediate(GameObject.Find("Scene Camera").GetComponent<PostProcessLayer>());
+
+                var videoPlayer = Instantiate(Resources.Load<GameObject>("@MoistureUpset_Intro:assets/video/introplayer.prefab"));
+
+                videoPlayer.GetComponentInChildren<VideoPlayer>().targetCamera = GameObject.Find("Scene Camera").GetComponent<Camera>();
+
+                videoPlayer.GetComponentInChildren<VideoPlayer>().loopPointReached += IntroFinished;
+
+                videoPlayer.GetComponentInChildren<VideoPlayer>().targetCameraAlpha = 1;
+
+                videoPlayer.GetComponentInChildren<VideoPlayer>().Play();
+            }
+        }
+
+        private void IntroFinished(VideoPlayer source)
+        {
+            RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene title");
+        }
+
+        private static void LoadIntro()
+        {
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.mu2intro"))
+            {
+                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_Intro", MainAssetBundle));
+            }
         }
 
         //[ConCommand(commandName = "debugtime", flags = ConVarFlags.None, helpText = "Does the magic")]
@@ -82,53 +141,6 @@ namespace MoistureUpset
         //    DebugClass.GetAllGameObjects();
         //}
 
-        private static string MeshToString(MeshFilter mf)
-        {
-            Mesh m = mf.mesh;
-            Material[] mats = new Material[0];
-
-            if (mf.gameObject.GetComponent<MeshRenderer>() != null)
-            {
-                mats = mf.gameObject.GetComponent<MeshRenderer>().sharedMaterials;
-            }
-            else
-            {
-                mats = mf.gameObject.GetComponent<SkinnedMeshRenderer>().sharedMaterials;
-            }
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append("o ").Append(mf.name).Append("\n");
-            foreach (Vector3 v in m.vertices)
-            {
-                sb.Append(string.Format("v {0} {1} {2}\n", v.x + mf.transform.position.x, v.y + mf.transform.position.y, v.z + mf.transform.position.z));
-            }
-            sb.Append("\n");
-            foreach (Vector3 v in m.normals)
-            {
-                sb.Append(string.Format("vn {0} {1} {2}\n", v.x, v.y, v.z));
-            }
-            sb.Append("\n");
-            foreach (Vector3 v in m.uv)
-            {
-                sb.Append(string.Format("vt {0} {1}\n", v.x, v.y));
-            }
-            for (int material = 0; material < m.subMeshCount; material++)
-            {
-                sb.Append("\n");
-                sb.Append("usemtl ").Append(mats[material].name).Append("\n");
-                sb.Append("usemap ").Append(mats[material].name).Append("\n");
-
-                int[] triangles = m.GetTriangles(material);
-                for (int i = 0; i < triangles.Length; i += 3)
-                {
-                    sb.Append(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}\n",
-                        triangles[i] + 1, triangles[i + 1] + 1, triangles[i + 2] + 1));
-                }
-            }
-            return sb.ToString();
-        }
-
         public static void ligmaballs()
         {
             var fortniteDance = Resources.Load<AnimationClip>("@MoistureUpset_fortnite:assets/dancemoves.anim");
@@ -157,7 +169,7 @@ namespace MoistureUpset
 
         public void Start()
         {
-            RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene title");
+            RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
         }
 
         private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
