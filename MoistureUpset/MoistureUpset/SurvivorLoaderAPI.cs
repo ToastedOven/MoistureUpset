@@ -372,7 +372,7 @@ namespace MoistureUpset
         //}
 
 
-        // Gotta do this jank mess in order to make the blueprint look like the custom skinned turrets, not my best idea, but it works.
+        // Gotta do this jank mess in order to make the blueprint look like the custom skinned turrets, but it works.
         private static void PlaceTurret_OnEnter(On.EntityStates.Engi.EngiWeapon.PlaceTurret.orig_OnEnter orig, EntityStates.Engi.EngiWeapon.PlaceTurret self)
         {
             var cb = self.outer.GetComponentInChildren<CharacterBody>();
@@ -463,19 +463,16 @@ namespace MoistureUpset
 
             // :7Sadge: We will fix you eventually. :7Sadge:
             //AddStarPlatinumSkinToLoader();
-            EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
-            //EngineerStuff("The Engineer", "THE_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_mike:assets/engimesh.mesh", RoR2.SurvivorIndex.Engi);
+
+            // Yes I know the Token isn't supposed to be the name.
+            //EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
+            EngineerStuff("The Engineer", "The Engineer", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
             EditDropPod();
 
 
             foreach (var item in SurvivorCatalog.allSurvivorDefs)
             {
                 item.bodyPrefab.AddComponent<SkinReloader>();
-
-                //foreach (var display in item.displayPrefab.GetComponentsInChildren<Component>())
-                //{
-                //    Debug.Log($"--------------------{display.gameObject.name} ---------------");
-                //}
             }
         }
         private static void EditDropPod()
@@ -567,8 +564,8 @@ namespace MoistureUpset
             var turretSkinDef = new LoadoutAPI.SkinDefInfo
             {
                 Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
-                Name = _name,
-                NameToken = _nameToken,
+                Name = "Level 2 Sentry",
+                NameToken = "EngiTurretBody",
                 RootObject = TurretSkinController.gameObject,
                 BaseSkins = new SkinDef[0],
                 UnlockableName = "",
@@ -600,8 +597,8 @@ namespace MoistureUpset
             var walkerTurretSkinDef = new LoadoutAPI.SkinDefInfo
             {
                 Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
-                Name = _name,
-                NameToken = _nameToken,
+                Name = "Level 1 Sentry",
+                NameToken = "EngiWalkerTurretBody",
                 RootObject = WalkerTurretSkinController.gameObject,
                 BaseSkins = new SkinDef[0],
                 UnlockableName = "",
@@ -638,7 +635,7 @@ namespace MoistureUpset
             {
                 //Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
                 Icon = Resources.Load<Sprite>("@MoistureUpset_engi_icon:assets/tf2_engineer_icon.png"),
-                Name = _name,
+                Name = _name,  // Doesn't seem to work?
                 NameToken = _nameToken,
                 RootObject = mdl,
                 BaseSkins = new SkinDef[0],
