@@ -28,6 +28,7 @@ namespace MoistureUpset
             DeathRespawn();
             PlayerDeath();
             DifficultyIcons();
+            EnemyReplacements.LoadBNK("MusicReplacements");
         }
         public static void DeathRespawn()
         {
