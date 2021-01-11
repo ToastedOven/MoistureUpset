@@ -1189,6 +1189,15 @@ namespace MoistureUpset
                     t.Add(item);
                 }
             }
+            Transform temp = t[14];
+            t[14] = t[11];
+            t[11] = temp;
+            temp = t[15];
+            t[15] = t[12];
+            t[12] = temp;
+            temp = t[16];
+            t[16] = t[13];
+            t[13] = temp; 
             foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 item.bones = t.ToArray();

@@ -88,6 +88,8 @@ namespace MoistureUpset
                 videoPlayer.GetComponentInChildren<VideoPlayer>().targetCameraAlpha = 1;
 
                 videoPlayer.GetComponentInChildren<VideoPlayer>().Play();
+
+                AkSoundEngine.PostEvent("PlayOpening", GameObject.FindObjectOfType<GameObject>());
             }
         }
 
