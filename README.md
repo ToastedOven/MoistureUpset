@@ -27,7 +27,9 @@ Model Specific Questions, send them to Unsaved Trash#0001
 Anything Else, send them to Metrosexual Fruitcake#6969 or Rune#0001
 
 
- # Changelog
+# Changelog
+ 
+ 1.0.3: I am a stupid donkey and broke the bazaar/defeat music with the last patch. It's fixed now, feel free to ignore this update if that doesn't bother you.
  
  1.0.2: Actually uploaded the dll this time, sorry everyone. You should have your sliders now!
  
