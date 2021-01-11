@@ -24,7 +24,26 @@ namespace MoistureUpset
         }
         private static void Setup()
         {
-            ModSettingsManager.setPanelDescription("Dude I'm so moist right now.");
+            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nModel Credits:\n" +
+                "https://sketchfab.com/3d-models/mike-wazowski-2d21dc059bc446aaba3489015dd188bd\n" +
+                "https://www.myminifactory.com/object/3d-print-the-dog-116937\n" +
+                "https://www.models-resource.com/mobile/jojosbizarreadventurediamondrecords/model/31115/\n" +
+                "https://www.youtube.com/watch?v=E7Ayz75AQpk\n" +
+                "https://www.roblox.com/library/885909033/The-Buff-Noob\n" +
+                "Obama for having a face\n" +
+                "https://www.models-resource.com/3ds/supermario3dland/model/15874/\n" +
+                "https://sketchfab.com/3d-models/trumpet-free-02d9fe6d3fed47d886f1e9f2a9491faa#download\n" +
+                "https://www.models-resource.com/pc_computer/elderscrollsivoblivion/model/16964/\n" +
+                "https://sketchfab.com/3d-models/toad-00c841e7a2ab4f048d823de2cebb6761\n" +
+                "https://www.cgtrader.com/free-3d-models/animals/mammal/winston\n" +
+                "https://www.models-resource.com/wii_u/thelegendofzeldabreathofthewild/model/22323/\n" +
+                "https://sketchfab.com/3d-models/sans-3891e805dca04e4e9ba8d1edca26ba41#download\n" +
+                "Alex Jones for being a joke\n" +
+                "basemesh used to make alex jones http://wiki.polycount.com/wiki/File:Basemesh_arshlevon_shoes.obj\n" +
+                "head mesh grafted to basemesh http://wiki.polycount.com/wiki/File:Basemesh_01.obj.zip\n" +
+                "https://sketchfab.com/3d-models/mens-two-piece-suit-8cafbab7a73e4fb7966a00659a4e31ef\n" +
+                "https://www.models-resource.com/wii/supersmashbrosbrawl/model/2843/\n" +
+                "https://www.models-resource.com/pc_computer/fortnite/model/31882/\n");
             ModSettingsManager.setPanelTitle("Moisture Upset");
         }
         private static void HitMarker()
@@ -50,7 +69,7 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Heavy", "Replaces clay templars with heavy's", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Ghast", "Replaces greater wisps with ghasts", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Roflcopter", "Replaces flying lunar chimeras with Roflcopters", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Bowser", "Replaces elder lemurians with bowsers", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Bowser", "Replaces elder lemurians with slightly furry bowsers", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Hagrid", "Replaces parents with hagrid", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Thanos", "Replaces mithrix with thanos", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Rob", "Replaces grounded lunar chimeras with Rob", "1"));
@@ -79,14 +98,14 @@ namespace MoistureUpset
         }
         private static void Misc()
         {
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "NSFW", "Turn this off to disable stuff that is obviously (in my eyes) NSFW, such as Jizzle replacing Drizzle. Defaults to being turned off just in case", "0"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "NSFW", "Toggles 'NSFW' content. Not actually NSFW like boobies, just some questionable words if you aren't into that kinda thing", "0"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Fanfare", "Adds fanfare to the end of the teleporter event", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Pizza Roll", "Replaces that diamond UI element with a pizza roll", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Roblox Cursor", "Replaces the cursor with a roblox cursor", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Logo", "Replaces the logo with moisture upset", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Generic boss music", "Replaces generic boss music (horde of basic enemies) with custom music", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Awp UI", "Replaces clicks on the UI with awp shots and reloads", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Chest noises", "Replaces vShrine Changesarious chest noises", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Chest noises", "Replaces chest noises", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Player death sound", "Replaces player death sound", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Player death chat", "Complains about the game in chat so you don't have to", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Difficulty Icons", "Replaces difficulty icons with much more accurate images", "1"));

@@ -201,6 +201,7 @@ namespace MoistureUpset
                     EnemyReplacements.ReplaceTexture("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.png");
                 if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
                     EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
+                AkSoundEngine.ExecuteActionOnEvent(454706293, AkActionOnEventType.AkActionOnEventType_Stop);
                 orig(oldS, newS);
                 try
                 {
@@ -253,6 +254,15 @@ namespace MoistureUpset
             {
                 //muMenu
                 orig(self);
+                var c = GameObject.FindObjectOfType<MusicController>();
+                MusicAPI.StopSong(ref c, "muIntroCutscene");
+                if (float.Parse(ModSettingsManager.getOptionValue("Logo")) == 1)
+                    UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png");
+                if (float.Parse(ModSettingsManager.getOptionValue("Roblox Cursor")) == 1)
+                {
+                    UImods.ReplaceUIObject("MousePointer", "MoistureUpset.Resources.robloxhover.png");
+                    UImods.ReplaceUIObject("MouseHover", "MoistureUpset.Resources.roblox.png");
+                }
                 try
                 {
                     string song = self.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
@@ -547,7 +557,7 @@ namespace MoistureUpset
                             MusicAPI.StopSong(ref c, "muSong05");
                             MusicAPI.StopSong(ref c, "muSong23");
                             MusicAPI.StopSong(ref c, "muSong13");
-                            MusicAPI.GetCurrentSong(ref c);
+                            //MusicAPI.GetCurrentSong(ref c);
                             //AkSoundEngine.exec
                             AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
                             var con = GameObject.FindObjectOfType<MusicController>();
