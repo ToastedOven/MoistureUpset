@@ -1,10 +1,32 @@
 # Moisture Upset
  Moisture Upset is a passion project we have been working on for the last 5 months.
  
-# Contact
-Programming Questions, send them to Metrosexual Fruitcake#6969 or Rune#0001
+ Check out one or both of these trailers to get a good feel for what we have created.
+ 
+ https://www.youtube.com/watch?v=AyslWZm0lCg (cinematic)
+ 
+ https://www.youtube.com/watch?v=oXVEEjPcCws (more showcase oriented)
+ 
+ 
+ 
+It's hard to say exactly what this mod changes since we do so much. As a general statement, all enemies in the vanilla game, have had a "makeover" (complete with sound effects!)
 
+In addition to enemies we also have a custom TF2 skin for the engi (complete with his own sounds as well!)
+
+There are also a few changes here and there, such as the cursor being much more... uhh... visible.
+
+If you want a complete "list" of sorts of what changed, this gif should give you a decent overview of what you are getting yourself into: https://gfycat.com/ignorantpettykagu
+
+As you may have noticed in that gif, we have an options menu! When Rune released risk of options forever ago, it was originaly with Moisture Upset in mind. We know not everyone is on the same wavelength as us in what they find funny, so the good news is, minus the engi skin due to complications, everything in the mod can be toggled off if desired, just check your settings menu in game. Some of these settings change models, please understand that for the sake of performance, model replacements are done at startup, so if you toggle on/off a model you will need to restart your game for it to take full effect. In general though, the sound sliders are done in real time.
+
+As far as we know, there aren't any current issues with either single or multiplayer, but please don't hesitate to message us if you find something wrong.
+ 
+# Contact
 Model Specific Questions, send them to Unsaved Trash#0001
+
+Anything Else, send them to Metrosexual Fruitcake#6969 or Rune#0001
+
+
  
  
 # Model Credits
