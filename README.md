@@ -27,7 +27,11 @@ Model Specific Questions, send them to Unsaved Trash#0001
 Anything Else, send them to Metrosexual Fruitcake#6969 or Rune#0001
 
 
+ # Changelog
  
+ 1.0.2: Actually uploaded the dll this time, sorry everyone. You should have your sliders now!
+ 
+ 1.0.1: Updated ReadMe, added extra volume sliders for more customization
  
 # Model Credits
 Anything not specified has been custom made by Unsaved Trash#0001
