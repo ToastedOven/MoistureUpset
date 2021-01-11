@@ -19,6 +19,8 @@ namespace MoistureUpset
         public static void PingAll()
         {
             BigToasterClass.HitMarker(float.Parse(ModSettingsManager.getOptionValue("HitMarker Volume")));
+            BigToasterClass.Modded_MSX(float.Parse(ModSettingsManager.getOptionValue("Modded Music Volume")));
+            BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume")));
             EnemyReplacements.RunAll();
             BigToasterClass.RunAll();
         }
@@ -50,6 +52,10 @@ namespace MoistureUpset
         {
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "HitMarker Volume", "This sound is also tied to SFX, but has a seperate slider if you want it to be less noisy", "100"));
             ModSettingsManager.addListener(ModSettingsManager.getOption("HitMarker Volume"), new UnityEngine.Events.UnityAction<float>(BigToasterClass.HitMarker));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "Modded Music Volume", "The default music slider also work for modded music, but this effects modded music only. Incase you want a different audio balance", "50"));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Modded Music Volume"), new UnityEngine.Events.UnityAction<float>(BigToasterClass.Modded_MSX));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "Modded SFX Volume", "The default sound slider also work for modded SFX, but this effects modded sfx only. Incase you want a different audio balance", "50"));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Modded SFX Volume"), new UnityEngine.Events.UnityAction<float>(BigToasterClass.Modded_SFX));
         }
         private static void EnemyOptions()
         {
