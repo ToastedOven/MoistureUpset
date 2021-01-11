@@ -397,6 +397,14 @@ namespace MoistureUpset
             //Debug.Log($"Set hitmarker volume {_Vol}");
             AkSoundEngine.SetRTPCValue("RuneBadNoise", _Vol);
         }
+        public static void Modded_MSX(float _Vol)
+        {
+            AkSoundEngine.SetRTPCValue("Modded_MSX", _Vol);
+        }
+        public static void Modded_SFX(float _Vol)
+        {
+            AkSoundEngine.SetRTPCValue("Modded_SFX", _Vol);
+        }
         public static void OnHit()
         {
             On.RoR2.UI.CrosshairManager.RefreshHitmarker += (orig, self, crit) =>
