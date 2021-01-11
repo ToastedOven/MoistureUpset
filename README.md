@@ -28,6 +28,8 @@ Anything Else, send them to Metrosexual Fruitcake#6969 or Rune#0001
 
 
 # Changelog
+
+ 1.0.4: Fixed a conflict with rob's Twitch mod, if you have Moisture Upset and rob's Twitch mod installed I 100% recommend you update!
  
  1.0.3: I am a stupid donkey and broke the bazaar/defeat music with the last patch. It's fixed now, feel free to ignore this update if that doesn't bother you.
  
