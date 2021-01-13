@@ -52,6 +52,8 @@ namespace MoistureUpset
 
             ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
 
+            Skins.TF2Engi.Init();
+
             //Skins.JotaroCaptain.Init();
 
             //Skins.StarPlatinumLoader.Init();

@@ -47,18 +47,6 @@ namespace MoistureUpset
 
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_chips", MainAssetBundle));
             }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Models.na"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_NA", MainAssetBundle));
-            }
-
-            
-
-            
-
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.unifiedturret"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
@@ -80,125 +68,18 @@ namespace MoistureUpset
             //    ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_sentry2", MainAssetBundle));
             //}
 
-            EnemyReplacements.LoadResource("dispener");
-            EnemyReplacements.LoadResource("demopill");
-            EnemyReplacements.LoadResource("rocket");
-            EnemyReplacements.LoadResource("mines");
-            EnemyReplacements.LoadResource("oopsideletedtheoldresource");
+            
 
 
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
 
             On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += PlaceTurret_OnEnter;
 
-            On.RoR2.Projectile.ProjectileController.Start += ProjectileController_Start;
+            
 
         }
 
-        private static void ProjectileController_Start(On.RoR2.Projectile.ProjectileController.orig_Start orig, ProjectileController self)
-        {
-            orig(self);
-            try
-            {
-                var cb = self.owner.GetComponentInChildren<CharacterBody>();
-
-                if (cb != null)
-                {
-                    //Debug.Log("--------------");
-                    //Debug.Log(self.owner.name);
-                    //Debug.Log(self.ghost.name);
-                    if (self.owner.name == "EngiBody(Clone)" && cb.isSkin("THE_TF2_ENGINEER_SKIN"))
-                    {
-                        if (self.ghost.name == "EngiSeekerGrenadeGhost(Clone)")
-                        {
-                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_dispener:assets/dispenser.mesh");
-                            meshes[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
-                            meshes[2].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
-
-                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png");
-                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_dispener:assets/dispenser.png"));
-                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_NormalTex", null);
-
-                            meshes[0].transform.localScale = new Vector3(0.5f, 0.55f, 0.5f);
-                            meshes[0].transform.localPosition += new Vector3(0f, 0f, 0.5f);
-
-                            GameObject.DestroyImmediate(self.ghost.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>());
-
-                            for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
-                            {
-                                if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cb)
-                                {
-                                    NetworkAssistant.playSound("EngiBuildsDispenser", i);
-                                }
-                            }
-
-                            //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
-                            //{
-                            //    Debug.Log($"---------------------{}");
-                            //}
-                        }
-                        else if (self.ghost.name == "EngiGrenadeGhost(Clone)")
-                        {
-                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_demopill:assets/demopill.mesh");
-
-                            self.ghost.gameObject.GetComponentInChildren<Renderer>().material = Resources.Load<Material>("@MoistureUpset_demopill:assets/demopill.mat");
-
-                            meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                        }
-                        else if (self.ghost.name == "EngiHarpoonGhost(Clone)")
-                        {
-                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_rocket:assets/rocket.mesh");
-
-                            //foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
-                            //{
-                            //    Debug.Log($"---------------------{comp}");
-                            //}
-
-                            self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat");
-
-                            meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                        }
-                        else if (self.ghost.name == "SpiderMineGhost(Clone)")
-                        {
-                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/spidermine.mesh");
-
-                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
-                        }
-                        else if (self.ghost.name == "EngiMineGhost(Clone)")
-                        {
-                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-                            meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/harpoon.mesh");
-
-                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
-                        }
-                    }
-                    //else if (self.owner.name == "GravekeeperBody(Clone)")
-                    //{
-                    //    if (self.ghost.name == "GravekeeperHookGhost(Clone)")
-                    //    {
-                    //        Debug.Log($"---------------------");
-                    //        foreach (var comp in self.ghost.GetComponentsInChildren<Component>())
-                    //        {
-                    //            Debug.Log($"---------------------{comp}");
-                    //        }
-                    //        Debug.Log($"---------------------");
-                    //    }
-                    //}
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
+        
 
 
 
@@ -242,59 +123,11 @@ namespace MoistureUpset
             }
         }
 
-        //private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
-        //{
-        //    CharacterMaster cm = orig(self);
-
-        //    try
-        //    {
-        //        if (cm.minionOwnership.ownerMaster != null)
-        //        {
-        //            if (cm.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && cm.GetBody().name.Contains("Engi"))
-        //            {
-        //                for (int i = 0; i < cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
-        //                {
-        //                    //cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
-        //                    //cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterials[i].SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
-        //                }
-        //                Debug.Log($"{cm.name}--------{cm.GetBody().name}");
-
-        //                Debug.Log(cm.GetBody().GetComponentInChildren<ModelSkinController>().skins.Length);
-
-        //                switch (cm.name)
-        //                {
-        //                    case "EngiWalkerTurretMaster(Clone)":
-        //                        //cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
-        //                        cm.GetBody().GetComponentInChildren<ModelSkinController>().ApplySkin(2);
-        //                        break;
-        //                    case "EngiTurretMaster(Clone)":
-        //                        //cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
-        //                        cm.GetBody().GetComponentInChildren<ModelSkinController>().ApplySkin(2);
-        //                        break;
-        //                }
-
-
-        //                //cm.GetBody().GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
-        //            }
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.Log(e);
-        //    }
-
-
-        //    return cm;
-        //}
-
         private static void SurvivorCatalog_Init(On.RoR2.SurvivorCatalog.orig_Init orig)
         {
             orig();
 
-            // :7Sadge: We will fix you eventually. :7Sadge:
-            //AddStarPlatinumSkinToLoader();
-
-            EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
+            //EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
             EditDropPod();
 
 
@@ -310,230 +143,165 @@ namespace MoistureUpset
             //    return RoR2.UI.LogBook.EntryStatus.Available;
             //};
         }
-        private static void EngineerStuff(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
-        {
-            var survivorDef = SurvivorCatalog.GetSurvivorDef(_survivorIndex);
-            var bodyPrefab = survivorDef.bodyPrefab;
+        //private static void EngineerStuff(string _name, string _nameToken, string _mat1, string _mesh1, RoR2.SurvivorIndex _survivorIndex)
+        //{
+        //    var survivorDef = SurvivorCatalog.GetSurvivorDef(_survivorIndex);
+        //    var bodyPrefab = survivorDef.bodyPrefab;
 
-            var engiTurretBodyPrefab = BodyCatalog.GetBodyPrefab(36);
-            var engiTurretBodyRenderer = engiTurretBodyPrefab.GetComponentsInChildren<Renderer>();
+        //    var engiTurretBodyPrefab = BodyCatalog.GetBodyPrefab(36);
+        //    var engiTurretBodyRenderer = engiTurretBodyPrefab.GetComponentsInChildren<Renderer>();
 
-            var engiWalkerTurretBodyPrefab = BodyCatalog.GetBodyPrefab(37);
-            var engiWalkerTurretBodyRenderer = engiWalkerTurretBodyPrefab.GetComponentsInChildren<Renderer>();
+        //    var engiWalkerTurretBodyPrefab = BodyCatalog.GetBodyPrefab(37);
+        //    var engiWalkerTurretBodyRenderer = engiWalkerTurretBodyPrefab.GetComponentsInChildren<Renderer>();
 
-            var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
-            var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
+        //    var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
+        //    var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            var mdl = skinController.gameObject;
+        //    var mdl = skinController.gameObject;
 
-            var TurretSkinController = engiTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
-            var WalkerTurretSkinController = engiWalkerTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
+        //    var TurretSkinController = engiTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
+        //    var WalkerTurretSkinController = engiWalkerTurretBodyPrefab.GetComponentInChildren<ModelSkinController>();
 
+        //    var turretSkinDef = new LoadoutAPI.SkinDefInfo
+        //    {
+        //        Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
+        //        Name = "Level 2 Sentry",
+        //        NameToken = "EngiTurretBody",
+        //        RootObject = TurretSkinController.gameObject,
+        //        BaseSkins = new SkinDef[0],
+        //        UnlockableName = "",
+        //        GameObjectActivations = new SkinDef.GameObjectActivation[0],
 
-            //On.RoR2.SkinDef.Awake += SkinDef_Awake;
+        //        RendererInfos = new CharacterModel.RendererInfo[]
+        //        {
+        //            new CharacterModel.RendererInfo
+        //            {
+        //                defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
+        //                defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+        //                ignoreOverlays = false,
+        //                renderer = engiTurretBodyRenderer[0]
+        //            }
 
-            //var turretSkinDef = ScriptableObject.CreateInstance<RoR2.SkinDef>();
+        //        },
+        //        MeshReplacements = new SkinDef.MeshReplacement[]
+        //        {
+        //            new SkinDef.MeshReplacement
+        //            {
+        //                mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh"),
+        //                renderer = engiTurretBodyRenderer[0]
+        //            }
+        //        },
+        //        ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+        //        MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
+        //    };
 
-            //turretSkinDef.name = _name;
-            //turretSkinDef.nameToken = _nameToken;
+        //    var walkerTurretSkinDef = new LoadoutAPI.SkinDefInfo
+        //    {
+        //        Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
+        //        Name = "Level 1 Sentry",
+        //        NameToken = "EngiWalkerTurretBody",
+        //        RootObject = WalkerTurretSkinController.gameObject,
+        //        BaseSkins = new SkinDef[0],
+        //        UnlockableName = "",
+        //        GameObjectActivations = new SkinDef.GameObjectActivation[0],
 
-            //turretSkinDef.rootObject = TurretSkinController.gameObject;
+        //        RendererInfos = new CharacterModel.RendererInfo[]
+        //        {
+        //            new CharacterModel.RendererInfo
+        //            {
+        //                defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
+        //                defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+        //                ignoreOverlays = false,
+        //                renderer = engiWalkerTurretBodyRenderer[0]
+        //            }
 
-            //turretSkinDef.rendererInfos = new CharacterModel.RendererInfo[]
-            //{
-            //    new CharacterModel.RendererInfo
-            //    {
-            //        defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
-            //        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-            //        ignoreOverlays = false,
-            //        renderer = engiTurretBodyRenderer[0]
-            //    }
-            //};
+        //        },
+        //        MeshReplacements = new SkinDef.MeshReplacement[]
+        //        {
+        //            new SkinDef.MeshReplacement
+        //            {
+        //                mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh"),
+        //                renderer = engiWalkerTurretBodyRenderer[0]
+        //            }
+        //        },
+        //        ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+        //        MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
+        //    };
 
-            //turretSkinDef.meshReplacements = new SkinDef.MeshReplacement[]
-            //{
-            //    new SkinDef.MeshReplacement
-            //    {
-            //        mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh"),
-            //        renderer = engiTurretBodyRenderer[0]
-            //    }
-            //};
-
-            //var walkerTurretSkinDef = ScriptableObject.CreateInstance<RoR2.SkinDef>();
-
-            //walkerTurretSkinDef.name = _name;
-            //walkerTurretSkinDef.nameToken = _nameToken;
-
-            //walkerTurretSkinDef.rootObject = WalkerTurretSkinController.gameObject;
-
-            //walkerTurretSkinDef.rendererInfos = new CharacterModel.RendererInfo[]
-            //{
-            //    new CharacterModel.RendererInfo
-            //    {
-            //        defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
-            //        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-            //        ignoreOverlays = false,
-            //        renderer = engiWalkerTurretBodyRenderer[0]
-            //    }
-            //};
-
-            //walkerTurretSkinDef.meshReplacements = new SkinDef.MeshReplacement[]
-            //{
-            //    new SkinDef.MeshReplacement
-            //    {
-            //        mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh"),
-            //        renderer = engiWalkerTurretBodyRenderer[0]
-            //    }
-            //};
-            //
-
-            //On.RoR2.SkinDef.Awake -= SkinDef_Awake;
-
-            var turretSkinDef = new LoadoutAPI.SkinDefInfo
-            {
-                Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
-                Name = "Level 2 Sentry",
-                NameToken = "EngiTurretBody",
-                RootObject = TurretSkinController.gameObject,
-                BaseSkins = new SkinDef[0],
-                UnlockableName = "",
-                GameObjectActivations = new SkinDef.GameObjectActivation[0],
-
-                RendererInfos = new CharacterModel.RendererInfo[]
-                {
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = engiTurretBodyRenderer[0]
-                    }
-
-                },
-                MeshReplacements = new SkinDef.MeshReplacement[]
-                {
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh"),
-                        renderer = engiTurretBodyRenderer[0]
-                    }
-                },
-                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
-            };
-
-            var walkerTurretSkinDef = new LoadoutAPI.SkinDefInfo
-            {
-                Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
-                Name = "Level 1 Sentry",
-                NameToken = "EngiWalkerTurretBody",
-                RootObject = WalkerTurretSkinController.gameObject,
-                BaseSkins = new SkinDef[0],
-                UnlockableName = "",
-                GameObjectActivations = new SkinDef.GameObjectActivation[0],
-
-                RendererInfos = new CharacterModel.RendererInfo[]
-                {
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = engiWalkerTurretBodyRenderer[0]
-                    }
-
-                },
-                MeshReplacements = new SkinDef.MeshReplacement[]
-                {
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh"),
-                        renderer = engiWalkerTurretBodyRenderer[0]
-                    }
-                },
-                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
-            };
-
-            var bruh = LoadoutAPI.CreateNewSkinDef(turretSkinDef);
-            var ligma = LoadoutAPI.CreateNewSkinDef(walkerTurretSkinDef);
+        //    var bruh = LoadoutAPI.CreateNewSkinDef(turretSkinDef);
+        //    var ligma = LoadoutAPI.CreateNewSkinDef(walkerTurretSkinDef);
 
 
-            var skin = new LoadoutAPI.SkinDefInfo
-            {
-                //Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
-                Icon = Resources.Load<Sprite>("@MoistureUpset_engi_icon:assets/tf2_engineer_icon.png"),
-                Name = _name,  // Doesn't seem to work?
-                NameToken = _nameToken,
-                RootObject = mdl,
-                BaseSkins = new SkinDef[0],
-                UnlockableName = "",
-                GameObjectActivations = new SkinDef.GameObjectActivation[0],
+        //    var skin = new LoadoutAPI.SkinDefInfo
+        //    {
+        //        //Icon = LoadoutAPI.CreateSkinIcon(new Color(.75f, .14f, .37f, 1f), new Color(.003f, .05f, .14f, 1f), new Color(.25f, .04f, .15f, 1f), new Color(.96f, .66f, .45f, 1f)),
+        //        Icon = Resources.Load<Sprite>("@MoistureUpset_engi_icon:assets/tf2_engineer_icon.png"),
+        //        Name = _name,  // Doesn't seem to work? nvm I'm just an idiot.
+        //        NameToken = _nameToken,
+        //        RootObject = mdl,
+        //        BaseSkins = new SkinDef[0],
+        //        UnlockableName = "",
+        //        GameObjectActivations = new SkinDef.GameObjectActivation[0],
 
-                RendererInfos = new CharacterModel.RendererInfo[]
-                {
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Resources.Load<Material>(_mat1),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = renderers[0]
-                    }
+        //        RendererInfos = new CharacterModel.RendererInfo[]
+        //        {
+        //            new CharacterModel.RendererInfo
+        //            {
+        //                defaultMaterial = Resources.Load<Material>(_mat1),
+        //                defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+        //                ignoreOverlays = false,
+        //                renderer = renderers[0]
+        //            }
 
-                },
-                MeshReplacements = new SkinDef.MeshReplacement[]
-                {
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>(_mesh1),
-                        renderer = renderers[0]
-                    }
-                },
-                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[]
-                {
-                    new SkinDef.MinionSkinReplacement
-                    {
-                        minionBodyPrefab = engiTurretBodyPrefab,
-                        minionSkin = bruh
-                    },
-                    new SkinDef.MinionSkinReplacement
-                    {
-                        minionBodyPrefab = engiWalkerTurretBodyPrefab,
-                        minionSkin = ligma
-                    }
-                }
-            };
+        //        },
+        //        MeshReplacements = new SkinDef.MeshReplacement[]
+        //        {
+        //            new SkinDef.MeshReplacement
+        //            {
+        //                mesh = Resources.Load<Mesh>(_mesh1),
+        //                renderer = renderers[0]
+        //            }
+        //        },
+        //        ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+        //        MinionSkinReplacements = new SkinDef.MinionSkinReplacement[]
+        //        {
+        //            new SkinDef.MinionSkinReplacement
+        //            {
+        //                minionBodyPrefab = engiTurretBodyPrefab,
+        //                minionSkin = bruh
+        //            },
+        //            new SkinDef.MinionSkinReplacement
+        //            {
+        //                minionBodyPrefab = engiWalkerTurretBodyPrefab,
+        //                minionSkin = ligma
+        //            }
+        //        }
+        //    };
 
-            engiTurretBodyPrefab.AddComponent<SkinReloader>();
-            engiWalkerTurretBodyPrefab.AddComponent<SkinReloader>();
+        //    engiTurretBodyPrefab.AddComponent<SkinReloader>();
+        //    engiWalkerTurretBodyPrefab.AddComponent<SkinReloader>();
 
-            Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
-            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
+        //    Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
+        //    skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
 
-            Array.Resize(ref TurretSkinController.skins, TurretSkinController.skins.Length + 1);
-            TurretSkinController.skins[TurretSkinController.skins.Length - 1] = bruh;
+        //    Array.Resize(ref TurretSkinController.skins, TurretSkinController.skins.Length + 1);
+        //    TurretSkinController.skins[TurretSkinController.skins.Length - 1] = bruh;
 
-            Array.Resize(ref WalkerTurretSkinController.skins, WalkerTurretSkinController.skins.Length + 1);
-            WalkerTurretSkinController.skins[WalkerTurretSkinController.skins.Length - 1] = ligma;
+        //    Array.Resize(ref WalkerTurretSkinController.skins, WalkerTurretSkinController.skins.Length + 1);
+        //    WalkerTurretSkinController.skins[WalkerTurretSkinController.skins.Length - 1] = ligma;
 
-            var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
+        //    var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
 
-            skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
-            skinsField[BodyCatalog.FindBodyIndex(engiTurretBodyPrefab)] = TurretSkinController.skins;
-            skinsField[BodyCatalog.FindBodyIndex(engiWalkerTurretBodyPrefab)] = WalkerTurretSkinController.skins;
+        //    skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
+        //    skinsField[BodyCatalog.FindBodyIndex(engiTurretBodyPrefab)] = TurretSkinController.skins;
+        //    skinsField[BodyCatalog.FindBodyIndex(engiWalkerTurretBodyPrefab)] = WalkerTurretSkinController.skins;
 
-            Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
+        //    Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
 
-            LanguageAPI.Add(_nameToken, _name);
+        //    LanguageAPI.Add(_nameToken, _name);
 
-            SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
-        }
-
-        private static void SkinDef_Awake(On.RoR2.SkinDef.orig_Awake orig, RoR2.SkinDef self)
-        {
-
-        }
+        //    SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
+        //}
 
         
     }

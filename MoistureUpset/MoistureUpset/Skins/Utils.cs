@@ -11,18 +11,17 @@ namespace MoistureUpset.Skins
     {
         public static void LoadAsset(string ResourceStream, string name = null)
         {
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceStream))
+            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{ResourceStream}"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
                 if (name == null)
                 {
-                    ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{ResourceStream.Replace("MoustureUpset.", "")}", MainAssetBundle));
+                    name = $"@MoistureUpset_{ResourceStream.Replace(".", "_")}";
                 }
-                else
-                {
-                    ResourcesAPI.AddProvider(new AssetBundleResourcesProvider(name, MainAssetBundle));
-                }
+
+                DebugClass.Log($"Loading Asset: {ResourceStream}");
+                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider(name, MainAssetBundle));
             }
         }
     }

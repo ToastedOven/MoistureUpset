@@ -16,6 +16,10 @@ namespace MoistureUpset
 {
     public static class DebugClass
     {
+        public static void Log(object message)
+        {
+            Debug.Log($"[MoistureUpset]: {message}");
+        }
         public static void GetHeirarchy(string name)
         {
             GameObject g = GameObject.Find(name);
@@ -29,13 +33,13 @@ namespace MoistureUpset
             catch (Exception)
             {
             }
-            Debug.Log("nutting");
+            Log("nutting");
             Heirarchy(g, "");
         }
         public static void Heirarchy(GameObject g, string depth)
         {
             depth += "--"; 
-            Debug.Log($"{depth}{g.name}");
+            Log($"{depth}{g.name}");
             foreach (Transform item in g.transform)
             {
                 Heirarchy(item.gameObject, depth);
@@ -46,24 +50,24 @@ namespace MoistureUpset
             GameObject g = GameObject.Find(name);
             try
             {
-                Debug.Log($"-------------{g.transform.parent.gameObject}");
+                Log($"-------------{g.transform.parent.gameObject}");
                 return true;
             }
             catch (Exception)
             {
-                Debug.Log($"-------------no parent");
+                Log($"-------------no parent");
                 return false;
             }
         }
         public static void UIdebug()
         {
             UnityEngine.UI.Image[] objects = GameObject.FindObjectsOfType<UnityEngine.UI.Image>();
-            Debug.Log($"--------------uicomponents----------------");
+            Log($"--------------uicomponents----------------");
             foreach (var item in objects)
             {
-                Debug.Log(item);
+                Log(item);
             }
-            Debug.Log($"------------------------------------------");
+            Log($"------------------------------------------");
         }
         public static void UIdebugReplace()
         {
@@ -82,7 +86,7 @@ namespace MoistureUpset
             SkinnedMeshRenderer[] objects = GameObject.FindObjectsOfType<SkinnedMeshRenderer>();
             for (int i = 0; i < objects.Length; i++)
             {
-                Debug.Log($"------{objects[i].name}");
+                Log($"------{objects[i].name}");
                 if (objects[i].name == "golem")
                 {
                     foreach (var item in objects[i].sharedMaterials)
@@ -93,40 +97,40 @@ namespace MoistureUpset
                 }
                 //objects[i] = t;
             }
-            Debug.Log($"------end of list------");
+            Log($"------end of list------");
         }
         public static void ListComponents(string name)
         {
             GameObject g = GameObject.Find(name);
             if (!g)
             {
-                Debug.Log($"----------------components----------------");
-                Debug.Log($"GameObject not found");
-                Debug.Log($"------------------------------------------");
+                Log($"----------------components----------------");
+                Log($"GameObject not found");
+                Log($"------------------------------------------");
                 return;
             }
-            Debug.Log($"----------------components----------------");
+            Log($"----------------components----------------");
             foreach (var item in g.GetComponents<Component>())
             {
-                Debug.Log(item);
+                Log(item);
             }
-            Debug.Log($"------------------------------------------");
+            Log($"------------------------------------------");
         }
         public static void ListComponents(GameObject g)
         {
             if (!g)
             {
-                Debug.Log($"----------------components----------------");
-                Debug.Log($"GameObject not found");
-                Debug.Log($"------------------------------------------");
+                Log($"----------------components----------------");
+                Log($"GameObject not found");
+                Log($"------------------------------------------");
                 return;
             }
-            Debug.Log($"----------------components----------------");
+            Log($"----------------components----------------");
             foreach (var item in g.GetComponentsInChildren<Component>())
             {
-                Debug.Log(item);
+                Log(item);
             }
-            Debug.Log($"------------------------------------------");
+            Log($"------------------------------------------");
         }
         public static void DebugBones(string resource)
         {
@@ -153,7 +157,7 @@ namespace MoistureUpset
                 sb.Append("]");
             }
             sb.Append("\n\n");
-            Debug.Log(sb.ToString());
+            Log(sb.ToString());
         }
         public static void DebugBones(GameObject fab)
         {
@@ -168,14 +172,14 @@ namespace MoistureUpset
             }
             sb.Remove(sb.Length - 2, 2);
             sb.Append("]");
-            Debug.Log(sb.ToString());
+            Log(sb.ToString());
         }
         public static void GetAllGameObjects()
         {
             GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
             foreach (var item in objects)
             {
-                ////Debug.Log($"-------sex----{item.name}");
+                ////Log($"-------sex----{item.name}");
                 //if (item.name == "Mesh")
                 //{
                 //    try
@@ -186,14 +190,14 @@ namespace MoistureUpset
                 //    {
                 //    }
                 //}
-                Debug.Log($"-------------{item}");
+                Log($"-------------{item}");
             }
         }
         public static void GetAllGameObjects(GameObject g)
         {
             foreach (var item in g.GetComponents<GameObject>())
             {
-                Debug.Log($"-------sex----{item}");
+                Log($"-------sex----{item}");
             }
         }
     }
