@@ -9,7 +9,9 @@ using UnityEngine;
 
 namespace MoistureUpset.Skins
 {
-    public static class StarPlatinumLoader // If you see this, this hasn't been fully implemented yet. Keep it a secret. - Rune
+    // If you see this, this hasn't been fully implemented yet. Keep it a secret. - Rune
+    // We have assets made for this skin, but there are numerous issues that make us feel that this skin isn't ready.
+    public static class StarPlatinumLoader
     {
         private static readonly string Name = "Star Platinum";
         private static readonly string NameToken = "MOISTURE_UPSET_STAR_PLATINUM_LOADER_SKIN";

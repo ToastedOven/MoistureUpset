@@ -8,7 +8,10 @@ using UnityEngine;
 
 namespace MoistureUpset.Skins
 {
-    public static class JotaroCaptain // If you see this, this hasn't been fully implemented yet. Keep it a secret. - Rune
+    // If you see this, this hasn't been fully implemented yet. Keep it a secret. - Rune
+    // We don't have any assets made for this skin. I'm just doing some prototyping right now.
+    // Please don't expect anything just because you see this.
+    public static class JotaroCaptain 
     {
         private static readonly string Name = "Jotaro";
         private static readonly string NameToken = "MOISTURE_UPSET_JOTARO_CAPTAIN_SKIN";
