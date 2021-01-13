@@ -136,6 +136,12 @@ namespace MoistureUpset
             }
             meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
         }
+        public static void ReplaceMeshFilter(GameObject prefab, string mesh, int position = 0)
+        {
+            var fab = prefab;
+            var meshes = fab.GetComponentsInChildren<MeshFilter>();
+            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
+        }
         public static void ReplaceMeshFilter(string prefab, string mesh, int position = 0)
         {
             var fab = Resources.Load<GameObject>(prefab);
@@ -239,6 +245,7 @@ namespace MoistureUpset
                 Rob();
                 Nyan();
                 Imposter();
+                Collab();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -248,16 +255,6 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            //On.RoR2.CharacterModel.OnEnable += (orig, self) =>
-            //{
-            //    Debug.Log($"-------------{self.name}");
-            //    orig(self);
-            //};
-            //On.RoR2.SkinDef.Apply += (orig, self, g) =>
-            //{
-            //    orig(self, g);
-            //    Debug.Log($"-------------{self.name}");
-            //};
         }
         private static void Icons()
         {
@@ -2362,7 +2359,6 @@ namespace MoistureUpset
             LoadResource("moisture_twitch");
             LoadResource("twitch2");
             LoadBNK("Twitch");
-            Texture[] textures = { Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/yep.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/trihard.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/poggers.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/pjsalt.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/pepehands.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/monkaw.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/monkagiga.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/lul.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/kreygasm.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/kappa.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/jebaited.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/heyguys.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/dansgame.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/biblethump.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/babyrage.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/4head.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/5head.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/ayayaya.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/D.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/kekw.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/lulw.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/peepohappy.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/pepega.png"), Resources.Load<Texture>("@MoistureUpset_moisture_twitch:assets/twitch/sadge.png"), Resources.Load<Texture>("@MoistureUpset_twitch2:assets/twitch2/feelsweirdman.png") };
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_moisture_twitch:assets/twitch.mesh", "@MoistureUpset_moisture_twitch:assets/twitch.png", 2);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
@@ -2374,6 +2370,7 @@ namespace MoistureUpset
 
             fab = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperTrackingFireballGhost");
             fab.GetComponentInChildren<MeshRenderer>().gameObject.SetActive(false);
+            fab.AddComponent<Collabs.RandomTwitch>();
             var particle = fab.GetComponentsInChildren<ParticleSystemRenderer>()[0];
             try
             {
@@ -2407,8 +2404,6 @@ namespace MoistureUpset
 
             On.EntityStates.GravekeeperMonster.Weapon.GravekeeperBarrage.OnEnter += (orig, self) =>
             {
-                var fab2 = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperTrackingFireballGhost");
-                fab2.GetComponentInChildren<ParticleSystemRenderer>().material.mainTexture = textures[UnityEngine.Random.Range(0, textures.Length)];
                 Util.PlaySound("TwitchMemes", self.outer.gameObject);
                 orig(self);
             };
@@ -2512,6 +2507,88 @@ namespace MoistureUpset
             ImposterChanger("ScavLunar4Body");
 
             ReplaceModel("prefabs/networkedobjects/ScavLunarBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png");
+        }
+        private static void Collab()
+        {
+            Direseeker();
+            PlayableLemurian();
+            PlayableGrovetender();
+            PlayableScavenger();
+            PlayableTemplar();
+            PlayableMithrix();
+            PlayableLemurian();
+        }
+        private static void Direseeker()
+        {
+            try
+            {
+                Collabs.Direseeker.Run();
+                Debug.Log($"Direseeker installed, modifying");
+            }
+            catch (Exception)
+            {
+                Debug.Log($"Direseeker not installed, skipping");
+            }
+        }
+        private static void PlayableLemurian()
+        {
+            try
+            {
+                Collabs.PlayableLemurian.Run();
+                Debug.Log($"Playable Lemurian installed, modifying");
+            }
+            catch (Exception)
+            {
+                Debug.Log($"Playable Lemurian not installed, skipping");
+            }
+        }
+        private static void PlayableGrovetender()
+        {
+            try
+            {
+                Collabs.m_PlayableGrovetender.Run();
+                Debug.Log($"PlayableGrovetender installed, modifying");
+            }
+            catch (Exception)
+            {
+                Debug.Log($"PlayableGrovetender not installed, skipping");
+            }
+        }
+        private static void PlayableScavenger()
+        {
+            try
+            {
+                Collabs.PlayableScavenger.Run();
+                Debug.Log($"PlayableScavenger installed, modifying");
+            }
+            catch (Exception)
+            {
+                Debug.Log($"PlayableScavenger not installed, skipping");
+            }
+        }
+        private static void PlayableTemplar()
+        {
+            try
+            {
+                Collabs.m_PlayableTemplar.Run();
+                Debug.Log($"PlayableTemplar installed, modifying");
+            }
+            catch (Exception)
+            {
+                Debug.Log($"PlayableTemplar not installed, skipping");
+            }
+        }
+        private static void PlayableMithrix()
+        {
+            try
+            {
+                Collabs.PlayableMithrix.Run();
+                Debug.Log($"PlayableMithrix installed, modifying");
+            }
+            catch (Exception)
+            {
+                Debug.Log($"PlayableMithrix not installed, skipping");
+            }
         }
     }
 }
