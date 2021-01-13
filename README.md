@@ -26,8 +26,21 @@ Model Specific Questions, send them to Unsaved Trash#0001
 
 Anything Else, send them to Metrosexual Fruitcake#6969 or Rune#0001
 
+# Known Bugs
+
+None, we are perfect coders :)
+
+# Compatibility
+
+In general this mod should work with other mods, however here is a list you might be interested in.
+
+Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithrix(CDClarke){side note this mod is already buggy on it's own}, PlayableScavenger(RyanPallesen){same as mithrix}
+
+Direseeker support coming soon!
 
 # Changelog
+
+ 1.0.5: Added support for a few of the "play as" mods. Fixed a bug with music not stopping in the bazaar. Direseeker support coming soon!
 
  1.0.4: Fixed a conflict with rob's Twitch mod, if you have Moisture Upset and rob's Twitch mod installed I 100% recommend you update!
  
