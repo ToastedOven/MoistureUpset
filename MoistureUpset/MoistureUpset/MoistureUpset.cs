@@ -25,8 +25,8 @@ namespace MoistureUpset
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("com.rune580.riskofoptions")]
     [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", "1.0.0")]
-    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI")]
-    public class BigTest : BaseUnityPlugin
+    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI")]
+    public class MoistureUpset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public void Awake()
         {
@@ -51,6 +51,10 @@ namespace MoistureUpset
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
             ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
+
+            //Skins.JotaroCaptain.Init();
+
+            //Skins.StarPlatinumLoader.Init();
         }
 
         public void IntroReplaceAction()

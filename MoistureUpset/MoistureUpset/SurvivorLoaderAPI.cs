@@ -15,59 +15,13 @@ using RoR2.Projectile;
 
 namespace MoistureUpset
 {
-    public static class SurvivorLoaderAPI // Why we call this class, is beyond me, we originally wanted this to be some easy functions to call to add skins. and now it's filled with stuff mostly for the Engi skin.
+    // Definently need to clean this up later.
+    // Moved all Skin related stuff into a more origanized format. everything else here needs to be moved somewhere else
+    public static class SurvivorLoaderAPI // Why we call this class "SurvivorLoaderAPI" is beyond me, we originally wanted this to be some easy functions to call to add skins. and now it's filled with stuff mostly for the Engi skin and stuff that isn't even skin related.
     {
         public static void LoadSurvivors()
         {
             PopulateAssets();
-            EngiDisplayFix();
-            //AnimeBubble();
-        }
-
-        private static void AnimeBubble()
-        {
-            //On.EntityStates.Engi.EngiBubbleShield.Deployed.OnEnter += (orig, self) =>
-            //{
-            //    orig(self);
-            //    //
-            //    //
-            //    if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
-            //    {
-            //        AkSoundEngine.PostEvent("PlayBubble", self.outer.gameObject.AddComponent<AnimeBubbleOnDeath>().gameObject);
-            //    }
-            //};
-
-            //On.EntityStates.Engi.EngiBubbleShield.Deployed.OnExit += (orig, self) =>
-            //{
-            //    if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
-            //    {
-            //        //AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
-            //    }
-
-            //    orig(self);
-            //};
-
-            //On.EntityStates.Engi.EngiBubbleShield.Undeployed.OnEnter += (orig, self) =>
-            //{
-            //    if (self.outer.gameObject.GetComponentInChildren<RoR2.Deployable>().ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
-            //    {
-            //        AkSoundEngine.PostEvent("PauseBubble", self.outer.gameObject);
-            //    }
-
-            //    orig(self);
-            //};
-
-            //On.EntityStates.EntityState.Destroy += (orig, obj) =>
-            //{
-            //    Debug.Log(obj.name);
-            //    orig(obj);
-            //};
-        }
-        private static void EngiDisplayFix()
-        {
-            var fab = Resources.Load<GameObject>("prefabs/characterdisplays/EngiDisplay");
-
-            fab.AddComponent<DisplayFix>(); // Still not a great system, but it works.
         }
 
         private static void PopulateAssets()
@@ -101,26 +55,9 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_NA", MainAssetBundle));
             }
 
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+            
 
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.engineer"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi", MainAssetBundle));
-            }
-
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.tf2_engineer_icon"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_icon", MainAssetBundle));
-            }
+            
 
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.unifiedturret"))
             {
@@ -136,12 +73,12 @@ namespace MoistureUpset
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_turret2", MainAssetBundle));
             }
 
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sentry2"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+            //using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sentry2"))
+            //{
+            //    var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_sentry2", MainAssetBundle));
-            }
+            //    ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_engi_sentry2", MainAssetBundle));
+            //}
 
             EnemyReplacements.LoadResource("dispener");
             EnemyReplacements.LoadResource("demopill");
@@ -264,113 +201,6 @@ namespace MoistureUpset
         }
 
 
-        //This is one of the worst code practices I've ever done. But I have no better ideas so ¯\_(ツ)_/¯
-
-        // It really do be like that sometimes
-
-        // I finally found a better idea check out DisplayFix.cs
-
-
-
-        //private static List<NetworkUser> GetSortedNetworkUsersList()
-        //{
-        //    List<NetworkUser> networkUserList = new List<NetworkUser>(NetworkUser.readOnlyInstancesList.Count);
-        //    networkUserList.AddRange((IEnumerable<NetworkUser>)NetworkUser.readOnlyLocalPlayersList);
-        //    for (int index = 0; index < NetworkUser.readOnlyInstancesList.Count; ++index)
-        //    {
-        //        NetworkUser readOnlyInstances = NetworkUser.readOnlyInstancesList[index];
-        //        if (!networkUserList.Contains(readOnlyInstances))
-        //            networkUserList.Add(readOnlyInstances);
-        //    }
-        //    return networkUserList;
-        //}
-
-        //private static void CharacterSelectController_OnNetworkUserLoadoutChanged(On.RoR2.UI.CharacterSelectController.orig_OnNetworkUserLoadoutChanged orig, RoR2.UI.CharacterSelectController self, NetworkUser networkUser)
-        //{
-        //    int index = GetSortedNetworkUsersList().IndexOf(networkUser);
-        //    if (index == -1)
-        //        return;
-
-        //    CharacterPad safe1 = HGArrayUtilities.GetSafe<CharacterPad>(self.characterDisplayPads, index);
-        //    if (!(bool)(UnityEngine.Object)safe1.displayInstance)
-        //        return;
-        //    Loadout dest = new Loadout();
-        //    networkUser.networkLoadout.CopyLoadout(dest);
-        //    int fromSurvivorIndex = SurvivorCatalog.GetBodyIndexFromSurvivorIndex(safe1.displaySurvivorIndex);
-        //    int skinIndex = (int)dest.bodyLoadoutManager.GetSkinIndex(fromSurvivorIndex);
-
-        //    if (fromSurvivorIndex == 35 && skinIndex == 2)
-        //    {
-        //        var renderers = safe1.displayInstance.GetComponentsInChildren<SkinnedMeshRenderer>();
-        //        foreach (var item in renderers)
-        //        {
-        //            if (item.gameObject.name == "EngiTurretMesh")
-        //            {
-        //                item.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
-        //                item.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
-        //                item.material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
-        //            }
-        //            else if (item.gameObject.name == "EngiWalkerTurretMesh")
-        //            {
-        //                item.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
-        //                item.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png");
-        //                item.material.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_engi_turret2:assets/unified_turret_tex.png"));
-        //            }
-        //        }
-        //    }
-
-        //    SkinDef safe2 = HGArrayUtilities.GetSafe<SkinDef>(BodyCatalog.GetBodySkins(fromSurvivorIndex), skinIndex);
-        //    CharacterModel componentInChildren = safe1.displayInstance.GetComponentInChildren<CharacterModel>();
-        //    if (!(bool)(UnityEngine.Object)componentInChildren || safe2 == null)
-        //        return;
-        //    safe2.Apply(componentInChildren.gameObject);
-        //}
-
-        //private static void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
-        //{
-        //    try
-        //    {
-        //        //Debug.Log("bruh");
-        //        //foreach (var item in self.characterDisplayPads)
-        //        //{
-        //        //    foreach (var displayClone in item.displayInstance.GetComponents<Component>())
-        //        //    {
-        //        //        Debug.Log($">>>>>>>>>>>{displayClone}");
-        //        //        foreach (var displayCloneChildren in displayClone.GetComponentsInChildren<Renderer>())
-        //        //        {
-        //        //            Debug.Log($"{displayCloneChildren} ---> {displayCloneChildren.gameObject.name}");
-        //        //        }
-        //        //    }
-        //        //}
-
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.Log(e);
-        //    }
-        //    finally
-        //    {
-        //        orig(self, survivor);
-        //    }
-        //}
-
-        //private static void CharacterSelectController_Update(On.RoR2.UI.CharacterSelectController.orig_Update orig, RoR2.UI.CharacterSelectController self)
-        //{
-        //    try
-        //    {
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.Log(e);
-        //    }
-        //    finally
-        //    {
-        //        orig(self);
-        //    }
-        //}
-
 
         // Gotta do this jank mess in order to make the blueprint look like the custom skinned turrets, but it works.
         private static void PlaceTurret_OnEnter(On.EntityStates.Engi.EngiWeapon.PlaceTurret.orig_OnEnter orig, EntityStates.Engi.EngiWeapon.PlaceTurret self)
@@ -464,9 +294,7 @@ namespace MoistureUpset
             // :7Sadge: We will fix you eventually. :7Sadge:
             //AddStarPlatinumSkinToLoader();
 
-            // Yes I know the Token isn't supposed to be the name.
-            //EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
-            EngineerStuff("The Engineer", "The Engineer", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
+            EngineerStuff("The Engineer", "THE_TF2_ENGINEER_SKIN", "@MoistureUpset_engi:assets/models_player_engineer_engineer_red.mat", "@MoistureUpset_oopsideletedtheoldresource:assets/engi.mesh", RoR2.SurvivorIndex.Engi);
             EditDropPod();
 
 
@@ -697,6 +525,8 @@ namespace MoistureUpset
 
             Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
 
+            LanguageAPI.Add(_nameToken, _name);
+
             SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
         }
 
@@ -705,82 +535,6 @@ namespace MoistureUpset
 
         }
 
-        private static void AddStarPlatinumSkinToLoader()
-        {
-            var survivorDef = SurvivorCatalog.GetSurvivorDef(SurvivorIndex.Loader);
-            var bodyPrefab = survivorDef.bodyPrefab;
-
-            var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
-            var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
-
-            var mdl = skinController.gameObject;
-
-            var skin = new LoadoutAPI.SkinDefInfo
-            {
-                Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
-                Name = "Star Platinum",
-                NameToken = "STAR_PLATINUM_SKIN",
-                RootObject = mdl,
-                BaseSkins = new SkinDef[0],
-                UnlockableName = "",
-                GameObjectActivations = new SkinDef.GameObjectActivation[0],
-
-                RendererInfos = new CharacterModel.RendererInfo[]
-                {
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = renderers[0]
-                    },
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = renderers[1]
-                    },
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = renderers[2]
-                    },
-                },
-
-                MeshReplacements = new SkinDef.MeshReplacement[]
-                {
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
-                        renderer = renderers[0]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
-                        renderer = renderers[1]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
-                        renderer = renderers[2]
-                    }
-
-                },
-                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
-            };
-
-            Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
-            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
-
-            var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
-            skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
-            Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
-
-            
-        }
+        
     }
 }
