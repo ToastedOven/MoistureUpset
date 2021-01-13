@@ -47,16 +47,16 @@ namespace MoistureUpset
                             {
                                 engiturretmesh = smr.sharedMesh;
                             }
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
-                            smr.material = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat");
+                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/normal_sentry.mesh");
+                            smr.material = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat");
                             break;
                         case "EngiWalkerTurretMesh":
                             if (engiwalkerturretmesh == null)
                             {
                                 engiwalkerturretmesh = smr.sharedMesh;
                             }
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
-                            smr.material = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat");
+                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/walker_turret.mesh");
+                            smr.material = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat");
                             break;
                         case "EngiSpiderMineMesh":
                             if (engispiderminemesh == null)
@@ -65,8 +65,8 @@ namespace MoistureUpset
                             }
                             engiminetex = smr.material;
 
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/spidermine.mesh");
-                            smr.material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
+                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_Models_mines:assets/spidermine.mesh");
+                            smr.material = Resources.Load<Material>("@MoistureUpset_Models_mines:assets/harpeenis.mat");
                             break;
                         case "EngiMineMesh":
                             if (engiminemesh == null)
@@ -75,8 +75,8 @@ namespace MoistureUpset
                             }
                             engiminetex = smr.material;
 
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_mines:assets/harpoon.mesh");
-                            smr.material = Resources.Load<Material>("@MoistureUpset_mines:assets/harpeenis.mat");
+                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_Models_mines:assets/harpoon.mesh");
+                            smr.material = Resources.Load<Material>("@MoistureUpset_Models_mines:assets/harpeenis.mat");
                             break;
                     }
                 }

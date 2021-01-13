@@ -24,7 +24,7 @@ namespace MoistureUpset
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
             var texture = Resources.Load<Texture>(png);
-            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
             for (int i = 0; i < meshes[position].sharedMaterials.Length; i++)
             {
                 //Debug.Log($"-=============={meshes[position].sharedMaterials[i].shader.name}");
@@ -98,7 +98,7 @@ namespace MoistureUpset
             var fab = Resources.Load<GameObject>(prefab);
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             var texture = Resources.Load<Texture>(png);
-            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
             for (int i = 0; i < meshes[position].sharedMaterials.Length; i++)
             {
                 if (prefab == "prefabs/characterbodies/ShopkeeperBody" || prefab == "prefabs/characterbodies/TitanGoldBody")
@@ -180,7 +180,7 @@ namespace MoistureUpset
         }
         public static void LoadResource(string resource)
         {
-            Debug.Log($"Loading {resource}");
+            DebugClass.Log($"Loading {resource}");
             using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.Models.{resource}"))
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
@@ -191,7 +191,7 @@ namespace MoistureUpset
         public static void LoadBNK(string bnk)
         {
             string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
-            Debug.Log(s);
+            DebugClass.Log(s);
             using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
             {
                 var bytes = new byte[bankStream.Length];
@@ -1163,7 +1163,7 @@ namespace MoistureUpset
             {
                 sb.Append("====");
             }
-            Debug.Log($"{sb.ToString()}=={depth}======{t.name}");
+            DebugClass.Log($"{sb.ToString()}=={depth}======{t.name}");
             for (int i = 0; i < t.childCount; i++)
             {
                 GetChildren(t.GetChild(i), ref l, depth + 1);
@@ -1247,7 +1247,7 @@ namespace MoistureUpset
             {
                 if (i != 0 && i != 1)
                 {
-                    meshes[i].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na.mesh");
+                    meshes[i].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na.mesh");
                 }
             }
 
@@ -1375,13 +1375,13 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/RoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             ReplaceModel("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_obamaprism:assets/obamasphere.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
             ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_obamaprism:assets/crown.mesh", "@MoistureUpset_obamaprism:assets/crown.png");
-            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 1);
-            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 3);
-            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 4);
-            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 5);
-            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_NA:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 6);
-            //"@MoistureUpset_NA:assets/na1.mesh"
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 1);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 2);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 3);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 4);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 5);
+            ReplaceMeshFilter("prefabs/characterbodies/SuperRoboBallBossBody", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 6);
+            //"@MoistureUpset_na:assets/na1.mesh"
             On.EntityStates.RoboBallBoss.DeathState.OnEnter += (orig, self) =>
             {
                 Util.PlaySound("ObamaDeath", self.outer.gameObject);
@@ -1537,7 +1537,7 @@ namespace MoistureUpset
             }
             try
             {
-                Texture t = Resources.Load<Texture>("@MoistureUpset_NA:assets/solid.png");
+                Texture t = Resources.Load<Texture>("@MoistureUpset_na:assets/solid.png");
                 var meshes = fab.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < meshes.Length; i++)
                 {
@@ -1715,7 +1715,7 @@ namespace MoistureUpset
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/TitanGoldBody");
             try
             {
-                Texture t = Resources.Load<Texture>("@MoistureUpset_NA:assets/solid.png");
+                Texture t = Resources.Load<Texture>("@MoistureUpset_na:assets/solid.png");
                 var meshes = fab.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < meshes.Length; i++)
                 {
@@ -1836,7 +1836,7 @@ namespace MoistureUpset
             LoadBNK("vulture");
             LoadResource("lemmesmash");
             ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/lemmesmasheyes.mesh", "@MoistureUpset_lemmesmash:assets/lemmesmash.png");
-            ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/lemmesmasheyes.mesh", "@MoistureUpset_NA:assets/blank.png", 1);
+            ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/lemmesmasheyes.mesh", "@MoistureUpset_na:assets/blank.png", 1);
             ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/kevinishomosex/vulturemesh.mesh", "@MoistureUpset_lemmesmash:assets/lemmesmash.png", 2);
             //I know this is shitty but it works and at this point im too scared to change it
             //Also this only happens at startup so who cares amirite?
@@ -1959,7 +1959,7 @@ namespace MoistureUpset
             }
             ReplaceModel("prefabs/characterbodies/MagmaWormBody", "@MoistureUpset_noodle:assets/noodle.mesh", "@MoistureUpset_noodle:assets/noodle.png");
             var mesh = fab.GetComponentInChildren<SkinnedMeshRenderer>();
-            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
             for (int i = 0; i < mesh.sharedMaterials.Length; i++)
             {
                 mesh.sharedMaterials[i].SetTexture("_FlowHeightRamp", blank);
@@ -1983,7 +1983,7 @@ namespace MoistureUpset
             //ReplaceTexture("prefabs/characterbodies/HermitCrabBody", "@MoistureUpset_skeleton:assets/skeleton.png");
             ReplaceModel("prefabs/characterbodies/HermitCrabBody", "@MoistureUpset_skeleton:assets/skeleton.mesh", "@MoistureUpset_skeleton:assets/skeleton.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/HermitCrabBody");
-            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
             foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 foreach (var name in item.sharedMaterial.GetTexturePropertyNames())
@@ -2003,7 +2003,7 @@ namespace MoistureUpset
             LoadResource("crabrave");
             LoadBNK("crabrave");
             ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_crabrave:assets/crab.mesh", "@MoistureUpset_crabrave:assets/crab.png", 1);
-            ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_NA:assets/na.mesh", "@MoistureUpset_NA:assets/blank.png");
+            ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_na:assets/na.mesh", "@MoistureUpset_na:assets/blank.png");
         }
         private static void PUDDI()
         {
@@ -2014,7 +2014,7 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/ClayBossBody", "@MoistureUpset_puddi:assets/puddi.mesh", "@MoistureUpset_puddi:assets/puddi.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/ClayBossBody");
             var mesh = fab.GetComponentInChildren<SkinnedMeshRenderer>();
-            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
             for (int i = 0; i < mesh.sharedMaterials.Length; i++)
             {
                 mesh.sharedMaterials[i].SetTexture("_PrintRamp", blank);
@@ -2100,7 +2100,7 @@ namespace MoistureUpset
             }
             ReplaceModel("prefabs/characterbodies/ElectricWormBody", "@MoistureUpset_werm:assets/werm.mesh", "@MoistureUpset_werm:assets/werm.png");
             var mesh = fab.GetComponentInChildren<SkinnedMeshRenderer>();
-            var blank = Resources.Load<Texture>("@MoistureUpset_NA:assets/blank.png");
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
             for (int i = 0; i < mesh.sharedMaterials.Length; i++)
             {
                 mesh.sharedMaterials[i].SetTexture("_FlowHeightRamp", blank);
@@ -2151,9 +2151,9 @@ namespace MoistureUpset
 
             fab = Resources.Load<GameObject>("prefabs/projectileghosts/VagrantTrackingBombGhost");
             filter = fab.GetComponentsInChildren<MeshFilter>()[0];
-            filter.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
+            filter.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
             filter = fab.GetComponentsInChildren<MeshFilter>()[1];
-            filter.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_NA:assets/na1.mesh");
+            filter.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
 
             fab.GetComponentsInChildren<ParticleSystemRenderer>()[1].gameObject.SetActive(false);
             var particle = fab.GetComponentsInChildren<ParticleSystemRenderer>()[0];
@@ -2201,7 +2201,7 @@ namespace MoistureUpset
                 return;
             LoadResource("beetlequeen");
             LoadBNK("Nyam2");
-            ReplaceModel("prefabs/characterbodies/BeetleQueen2Body", "@MoistureUpset_beetlequeen:assets/bosses/nyancat.mesh", "@MoistureUpset_NA:assets/blank.png");
+            ReplaceModel("prefabs/characterbodies/BeetleQueen2Body", "@MoistureUpset_beetlequeen:assets/bosses/nyancat.mesh", "@MoistureUpset_na:assets/blank.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleQueen2Body");
             foreach (var item in fab.GetComponentsInChildren<Light>())
             {
@@ -2280,25 +2280,25 @@ namespace MoistureUpset
             LoadBNK("Thanos");
             ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/thanos.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 0);
             ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/infinityhammer.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
-            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 2);
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
-            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_NA:assets/na1.mesh", 4);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_na:assets/na1.mesh", 0);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherBody", "@MoistureUpset_na:assets/na1.mesh", 2);
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_na:assets/na1.mesh", 3);
+            ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_na:assets/na1.mesh", 4);
 
             ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_thanos:assets/bosses/thanos.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 0);
             ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_thanos:assets/bosses/infinityhammer.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 2);
-            ReplaceMeshFilter("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
-            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_na:assets/na1.mesh", 0);
+            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/BrotherGlassBody", "@MoistureUpset_na:assets/na1.mesh", 3);
 
 
             ReplaceModel("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_thanos:assets/bosses/thanos.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 0);
-            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
-            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
-            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 2);
-            ReplaceModel("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_na:assets/na1.mesh", 0);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_na:assets/na1.mesh", 2);
+            ReplaceModel("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_na:assets/na1.mesh", 1);
         }
         private static void Cereal()
         {
@@ -2359,10 +2359,10 @@ namespace MoistureUpset
             LoadResource("moisture_twitch");
             LoadResource("twitch2");
             LoadBNK("Twitch");
-            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_moisture_twitch:assets/twitch.mesh", "@MoistureUpset_moisture_twitch:assets/twitch.png", 2);
-            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 3);
-            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 0);
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_na:assets/na1.mesh", 3);
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_na:assets/na1.mesh", 0);
             ReplaceMeshFilter("prefabs/projectileghosts/GravekeeperHookGhost", "@MoistureUpset_moisture_twitch:assets/bosses/GAMER.mesh", "@MoistureUpset_moisture_twitch:assets/twitch.png");
             var fab = Resources.Load<GameObject>("prefabs/projectileghosts/GravekeeperHookGhost");
             fab.GetComponentInChildren<TrailRenderer>().material = Resources.Load<Material>("@MoistureUpset_moisture_twitch:assets/bosses/matt.mat");
@@ -2431,7 +2431,7 @@ namespace MoistureUpset
             LoadBNK("Abungus");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/networkedobjects/ScavBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh");
-            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/gun.mesh");
             ImposterChanger("ScavBody");
@@ -2483,25 +2483,25 @@ namespace MoistureUpset
             };
 
             ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
-            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar1Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar1Body");
 
             ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
-            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar2Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar2Body");
 
             ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
-            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar3Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar3Body");
 
             ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 0);
-            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/Body.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png", 2);
             ReplaceMeshFilter("prefabs/characterbodies/ScavLunar4Body", "@MoistureUpset_scavenger:assets/bosses/gun.mesh", 4);
             ImposterChanger("ScavLunar4Body");
@@ -2523,11 +2523,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.Direseeker.Run();
-                Debug.Log($"Direseeker installed, modifying");
+                DebugClass.Log($"Direseeker installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"Direseeker not installed, skipping");
+                DebugClass.Log($"Direseeker not installed, skipping");
             }
         }
         private static void PlayableLemurian()
@@ -2535,11 +2535,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.PlayableLemurian.Run();
-                Debug.Log($"Playable Lemurian installed, modifying");
+                DebugClass.Log($"Playable Lemurian installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"Playable Lemurian not installed, skipping");
+                DebugClass.Log($"Playable Lemurian not installed, skipping");
             }
         }
         private static void PlayableGrovetender()
@@ -2547,11 +2547,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.m_PlayableGrovetender.Run();
-                Debug.Log($"PlayableGrovetender installed, modifying");
+                DebugClass.Log($"PlayableGrovetender installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableGrovetender not installed, skipping");
+                DebugClass.Log($"PlayableGrovetender not installed, skipping");
             }
         }
         private static void PlayableScavenger()
@@ -2559,11 +2559,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.PlayableScavenger.Run();
-                Debug.Log($"PlayableScavenger installed, modifying");
+                DebugClass.Log($"PlayableScavenger installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableScavenger not installed, skipping");
+                DebugClass.Log($"PlayableScavenger not installed, skipping");
             }
         }
         private static void PlayableTemplar()
@@ -2571,11 +2571,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.m_PlayableTemplar.Run();
-                Debug.Log($"PlayableTemplar installed, modifying");
+                DebugClass.Log($"PlayableTemplar installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableTemplar not installed, skipping");
+                DebugClass.Log($"PlayableTemplar not installed, skipping");
             }
         }
         private static void PlayableMithrix()
@@ -2583,11 +2583,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.PlayableMithrix.Run();
-                Debug.Log($"PlayableMithrix installed, modifying");
+                DebugClass.Log($"PlayableMithrix installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableMithrix not installed, skipping");
+                DebugClass.Log($"PlayableMithrix not installed, skipping");
             }
         }
     }

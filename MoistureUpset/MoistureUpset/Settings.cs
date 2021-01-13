@@ -18,6 +18,8 @@ namespace MoistureUpset
         }
         public static void PingAll()
         {
+            EnemyReplacements.LoadResource("na");
+
             BigToasterClass.HitMarker(float.Parse(ModSettingsManager.getOptionValue("HitMarker Volume")));
             BigToasterClass.Modded_MSX(float.Parse(ModSettingsManager.getOptionValue("Modded Music Volume")));
             BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume")));

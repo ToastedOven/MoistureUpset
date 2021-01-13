@@ -5,6 +5,8 @@ using R2API.MiscHelpers;
 using R2API.Utils;
 using System.Reflection;
 using static R2API.SoundAPI;
+using UnityEngine;
+
 namespace MoistureUpset
 {
     public static class Assets
