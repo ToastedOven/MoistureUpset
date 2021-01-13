@@ -113,6 +113,8 @@ namespace MoistureUpset.Skins
             Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
 
             LanguageAPI.Add(NameToken, Name);
+
+            DebugClass.Log($"Adding skin: {Name}");
         }
     }
 }

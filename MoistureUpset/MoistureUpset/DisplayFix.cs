@@ -47,16 +47,16 @@ namespace MoistureUpset
                             {
                                 engiturretmesh = smr.sharedMesh;
                             }
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh");
-                            smr.material = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat");
+                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/normal_sentry.mesh");
+                            smr.material = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat");
                             break;
                         case "EngiWalkerTurretMesh":
                             if (engiwalkerturretmesh == null)
                             {
                                 engiwalkerturretmesh = smr.sharedMesh;
                             }
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh");
-                            smr.material = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat");
+                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/walker_turret.mesh");
+                            smr.material = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat");
                             break;
                         case "EngiSpiderMineMesh":
                             if (engispiderminemesh == null)

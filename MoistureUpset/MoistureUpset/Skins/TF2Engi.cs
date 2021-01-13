@@ -21,6 +21,7 @@ namespace MoistureUpset.Skins
             PopulateAssets();
             On.RoR2.SurvivorCatalog.Init += RegisterSkin;
             On.RoR2.Projectile.ProjectileController.Start += ModifyProjectiles;
+            On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += ModifyTurretBlueprint;
             EngiDisplayFix();
         }
 
@@ -34,6 +35,7 @@ namespace MoistureUpset.Skins
             Utils.LoadAsset("Models.rocket");
             Utils.LoadAsset("Models.mines");
             Utils.LoadAsset("Models.oopsideletedtheoldresource");
+            Utils.LoadAsset("unifiedturret");
         }
 
         // Skindef stuff here
@@ -72,7 +74,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = engiTurretBodyRenderer[0]
@@ -83,7 +85,7 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/normal_sentry.mesh"),
+                        mesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/normal_sentry.mesh"),
                         renderer = engiTurretBodyRenderer[0]
                     }
                 },
@@ -105,7 +107,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_engi_turret:assets/unifiedtex.mat"),
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = engiWalkerTurretBodyRenderer[0]
@@ -116,7 +118,7 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_engi_turret:assets/walker_turret.mesh"),
+                        mesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/walker_turret.mesh"),
                         renderer = engiWalkerTurretBodyRenderer[0]
                     }
                 },
@@ -195,6 +197,8 @@ namespace MoistureUpset.Skins
             LanguageAPI.Add(NameToken, Name);
 
             SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
+
+            DebugClass.Log($"Adding skin: {Name}");
         }
 
         // A working solution for the display elements to have the right skin.
@@ -283,6 +287,46 @@ namespace MoistureUpset.Skins
             }
             catch (Exception)
             {
+            }
+        }
+
+        // Gotta do this jank mess in order to make the blueprint look like the custom skinned turrets, but it works.
+        private static void ModifyTurretBlueprint(On.EntityStates.Engi.EngiWeapon.PlaceTurret.orig_OnEnter orig, EntityStates.Engi.EngiWeapon.PlaceTurret self)
+        {
+            var cb = self.outer.GetComponentInChildren<CharacterBody>();
+
+            GameObject tempPrefab = (GameObject)null;
+
+            if (cb.isSkin("THE_TF2_ENGINEER_SKIN"))
+            {
+                if (self.blueprintPrefab != null)
+                {
+                    tempPrefab = GameObject.Instantiate<GameObject>(self.blueprintPrefab);
+
+                    switch (self.blueprintPrefab.name)
+                    {
+                        case "EngiTurretBlueprints":
+                            tempPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/normal_sentry.mesh");
+                            break;
+                        case "EngiWalkerTurretBlueprints":
+                            tempPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/walker_turret.mesh");
+                            break;
+                    }
+
+                    self.blueprintPrefab = tempPrefab;
+                }
+                else
+                {
+                    //Debug.LogWarning("is null");
+                }
+
+            }
+
+            orig(self);
+
+            if (tempPrefab != null)
+            {
+                GameObject.Destroy(tempPrefab);
             }
         }
     }

@@ -2359,7 +2359,7 @@ namespace MoistureUpset
             LoadResource("moisture_twitch");
             LoadResource("twitch2");
             LoadBNK("Twitch");
-            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_NA:assets/na1.mesh", 1);
+            ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_moisture_twitch:assets/twitch.mesh", "@MoistureUpset_moisture_twitch:assets/twitch.png", 2);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_na:assets/na1.mesh", 3);
             ReplaceModel("prefabs/characterbodies/GravekeeperBody", "@MoistureUpset_na:assets/na1.mesh", 0);
@@ -2523,11 +2523,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.Direseeker.Run();
-                Debug.Log($"Direseeker installed, modifying");
+                DebugClass.Log($"Direseeker installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"Direseeker not installed, skipping");
+                DebugClass.Log($"Direseeker not installed, skipping");
             }
         }
         private static void PlayableLemurian()
@@ -2535,11 +2535,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.PlayableLemurian.Run();
-                Debug.Log($"Playable Lemurian installed, modifying");
+                DebugClass.Log($"Playable Lemurian installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"Playable Lemurian not installed, skipping");
+                DebugClass.Log($"Playable Lemurian not installed, skipping");
             }
         }
         private static void PlayableGrovetender()
@@ -2547,11 +2547,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.m_PlayableGrovetender.Run();
-                Debug.Log($"PlayableGrovetender installed, modifying");
+                DebugClass.Log($"PlayableGrovetender installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableGrovetender not installed, skipping");
+                DebugClass.Log($"PlayableGrovetender not installed, skipping");
             }
         }
         private static void PlayableScavenger()
@@ -2559,11 +2559,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.PlayableScavenger.Run();
-                Debug.Log($"PlayableScavenger installed, modifying");
+                DebugClass.Log($"PlayableScavenger installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableScavenger not installed, skipping");
+                DebugClass.Log($"PlayableScavenger not installed, skipping");
             }
         }
         private static void PlayableTemplar()
@@ -2571,11 +2571,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.m_PlayableTemplar.Run();
-                Debug.Log($"PlayableTemplar installed, modifying");
+                DebugClass.Log($"PlayableTemplar installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableTemplar not installed, skipping");
+                DebugClass.Log($"PlayableTemplar not installed, skipping");
             }
         }
         private static void PlayableMithrix()
@@ -2583,11 +2583,11 @@ namespace MoistureUpset
             try
             {
                 Collabs.PlayableMithrix.Run();
-                Debug.Log($"PlayableMithrix installed, modifying");
+                DebugClass.Log($"PlayableMithrix installed, modifying");
             }
             catch (Exception)
             {
-                Debug.Log($"PlayableMithrix not installed, skipping");
+                DebugClass.Log($"PlayableMithrix not installed, skipping");
             }
         }
     }

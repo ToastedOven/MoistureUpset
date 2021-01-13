@@ -26,7 +26,7 @@ namespace MoistureUpset.Skins
         // Load assets here
         private static void PopulateAssets()
         {
-
+            // lmao we don't have any assets to load.
         }
 
         // Skindef stuff here
@@ -65,6 +65,8 @@ namespace MoistureUpset.Skins
             Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
 
             LanguageAPI.Add(NameToken, Name);
+
+            DebugClass.Log($"Adding skin: {Name}");
         }
     }
 }

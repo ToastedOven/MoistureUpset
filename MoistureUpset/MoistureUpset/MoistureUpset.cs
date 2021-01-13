@@ -34,7 +34,7 @@ namespace MoistureUpset
 
             Assets.PopulateAssets();
 
-            SurvivorLoaderAPI.LoadSurvivors();
+            Skins.Utils.LoadAllSkins();
 
             SoundAssets.RegisterSoundEvents();
 
@@ -51,12 +51,6 @@ namespace MoistureUpset
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
             ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
-
-            Skins.TF2Engi.Init();
-
-            //Skins.JotaroCaptain.Init();
-
-            //Skins.StarPlatinumLoader.Init();
         }
 
         public void IntroReplaceAction()
