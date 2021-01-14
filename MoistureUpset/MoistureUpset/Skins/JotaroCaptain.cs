@@ -13,7 +13,7 @@ namespace MoistureUpset.Skins
     // Please don't expect anything just because you see this.
     public static class JotaroCaptain 
     {
-        private static readonly string Name = "Jotaro";
+        private static readonly string Name = "Jotaro Kujo";
         private static readonly string NameToken = "MOISTURE_UPSET_JOTARO_CAPTAIN_SKIN";
 
         // Runs on Awake
@@ -21,12 +21,13 @@ namespace MoistureUpset.Skins
         {
             PopulateAssets();
             On.RoR2.SurvivorCatalog.Init += RegisterSkin;
+            AddToPrefab();
         }
 
         // Load assets here
         private static void PopulateAssets()
         {
-            // lmao we don't have any assets to load.
+            Utils.LoadAsset("Skins.Jotaro.jotarosubtitle");
         }
 
         // Skindef stuff here
@@ -51,7 +52,7 @@ namespace MoistureUpset.Skins
                 BaseSkins = new SkinDef[0],
                 UnlockableName = "",
                 GameObjectActivations = new SkinDef.GameObjectActivation[0],
-                RendererInfos = new CharacterModel.RendererInfo[0],
+                RendererInfos = new CharacterModel.RendererInfo[0], // Captain has 7 renderers. ugh.
                 MeshReplacements = new SkinDef.MeshReplacement[0],
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
                 MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
@@ -67,6 +68,14 @@ namespace MoistureUpset.Skins
             LanguageAPI.Add(NameToken, Name);
 
             DebugClass.Log($"Adding skin: {Name}");
+        }
+
+        // Add stuff to the character prefab here
+        private static void AddToPrefab()
+        {
+            GameObject captainBody = Resources.Load<GameObject>("prefabs/characterbodies/captainbody"); // load captain prefab
+            captainBody.AddComponent<Jotaro.AddSubtitleBar>(); // add a script that will load the subtitle bar
+            captainBody.AddComponent<Jotaro.SubtitleController>();
         }
     }
 }

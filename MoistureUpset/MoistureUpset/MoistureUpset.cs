@@ -40,9 +40,9 @@ namespace MoistureUpset
 
             NetworkAssistant.InitSNA();
 
-            On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
+            //On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
 
-            On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
+            //On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
 
             //ligmaballs();
 
