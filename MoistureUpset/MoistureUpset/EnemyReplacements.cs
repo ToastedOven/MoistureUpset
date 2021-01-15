@@ -245,6 +245,7 @@ namespace MoistureUpset
                 Rob();
                 Nyan();
                 Imposter();
+                Chests();
                 Collab();
                 //SneakyFontReplacement();
             }
@@ -773,12 +774,13 @@ namespace MoistureUpset
 
                 else if (st.Contains("Scavenger"))
                 {
-                    if (true)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
                         st = st.Replace("Scavenger", "<color=#D9262C>Crewmate</color>");
                 }
                 else if (token == "SCAV_BODY_SUBTITLE")
                 {
-                    st = "Idk, seems pretty sus to me";
+                    if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                        st = "Idk, seems pretty sus to me";
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -1194,7 +1196,7 @@ namespace MoistureUpset
             t[12] = temp;
             temp = t[16];
             t[16] = t[13];
-            t[13] = temp; 
+            t[13] = temp;
             foreach (var item in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 item.bones = t.ToArray();
@@ -2447,7 +2449,7 @@ namespace MoistureUpset
                     {
                         r.sharedMaterial = self.gameObject.GetComponentInChildren<AbungusColors>().material;
                     }
-                    else if(m.ToString() == "matTrimSheetConstructionBlueScavenged (UnityEngine.Material)" || m.ToString() == "matTrimSheetConstructionBlueEmission (UnityEngine.Material)")
+                    else if (m.ToString() == "matTrimSheetConstructionBlueScavenged (UnityEngine.Material)" || m.ToString() == "matTrimSheetConstructionBlueEmission (UnityEngine.Material)")
                     {
                         r.sharedMaterial = mat;
                     }
@@ -2508,6 +2510,15 @@ namespace MoistureUpset
 
             ReplaceModel("prefabs/networkedobjects/ScavLunarBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png");
         }
+        private static void Chests()
+        {
+            if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) != 1)
+                return;
+            LoadBNK("Chest");
+            LoadResource("moisture_chests");
+            ReplaceModel("prefabs/networkedobjects/chest/Chest2", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.png");
+            ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
+        }
         private static void Collab()
         {
             Direseeker();
@@ -2522,8 +2533,11 @@ namespace MoistureUpset
         {
             try
             {
-                Collabs.Direseeker.Run();
-                DebugClass.Log($"Direseeker installed, modifying");
+                if (float.Parse(ModSettingsManager.getOptionValue("DireSeeker")) == 1)
+                {
+                    Collabs.Direseeker.Run();
+                    DebugClass.Log($"Direseeker installed, modifying");
+                }
             }
             catch (Exception)
             {
@@ -2534,8 +2548,11 @@ namespace MoistureUpset
         {
             try
             {
-                Collabs.PlayableLemurian.Run();
-                DebugClass.Log($"Playable Lemurian installed, modifying");
+                if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) == 1)
+                {
+                    Collabs.PlayableLemurian.Run();
+                    DebugClass.Log($"Playable Lemurian installed, modifying");
+                }
             }
             catch (Exception)
             {
@@ -2546,8 +2563,11 @@ namespace MoistureUpset
         {
             try
             {
-                Collabs.m_PlayableGrovetender.Run();
-                DebugClass.Log($"PlayableGrovetender installed, modifying");
+                if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+                {
+                    Collabs.m_PlayableGrovetender.Run();
+                    DebugClass.Log($"PlayableGrovetender installed, modifying");
+                }
             }
             catch (Exception)
             {
@@ -2558,8 +2578,11 @@ namespace MoistureUpset
         {
             try
             {
-                Collabs.PlayableScavenger.Run();
-                DebugClass.Log($"PlayableScavenger installed, modifying");
+                if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                {
+                    Collabs.PlayableScavenger.Run();
+                    DebugClass.Log($"PlayableScavenger installed, modifying");
+                }
             }
             catch (Exception)
             {
@@ -2570,8 +2593,11 @@ namespace MoistureUpset
         {
             try
             {
-                Collabs.m_PlayableTemplar.Run();
-                DebugClass.Log($"PlayableTemplar installed, modifying");
+                if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) == 1)
+                {
+                    Collabs.m_PlayableTemplar.Run();
+                    DebugClass.Log($"PlayableTemplar installed, modifying");
+                }
             }
             catch (Exception)
             {
@@ -2582,8 +2608,11 @@ namespace MoistureUpset
         {
             try
             {
-                Collabs.PlayableMithrix.Run();
-                DebugClass.Log($"PlayableMithrix installed, modifying");
+                if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                {
+                    Collabs.PlayableMithrix.Run();
+                    DebugClass.Log($"PlayableMithrix installed, modifying");
+                }
             }
             catch (Exception)
             {

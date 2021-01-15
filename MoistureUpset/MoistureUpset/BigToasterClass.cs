@@ -202,7 +202,7 @@ namespace MoistureUpset
                     EnemyReplacements.ReplaceTexture("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.png");
                 if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
                     EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
-                StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 454706293 });
+                StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 454706293, 541788247 });
                 orig(oldS, newS);
                 try
                 {
@@ -298,7 +298,7 @@ namespace MoistureUpset
                 orig(self, report);
                 try
                 {
-                    StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 1214003200 });
+                    StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 1214003200, 541788247 });
                     var c = GameObject.FindObjectOfType<Transform>();
                     if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
                     {
@@ -437,7 +437,7 @@ namespace MoistureUpset
                 orig(self);
                 if ((float.Parse(ModSettingsManager.getOptionValue("Thanos")) != 1))
                     return;
-                StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880 });
+                StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                 var c = GameObject.FindObjectOfType<MusicController>();
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref c, "muSong25");
@@ -456,7 +456,7 @@ namespace MoistureUpset
                     bool resetThanos = true;
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     bool stop = false;
-                    StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880 });
+                    StopBossMusic(new UInt32[] { 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
@@ -483,6 +483,11 @@ namespace MoistureUpset
                     else if (self.baseNameToken.StartsWith("SCAVLUNAR") && (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1))
                     {
 
+                    }
+                    else if (self.baseNameToken.StartsWith("DIRESEEKER_BOSS_BODY_NAME") && (float.Parse(ModSettingsManager.getOptionValue("DireSeeker")) == 1))
+                    {
+                        AkSoundEngine.PostEvent("DireSeekerMusic", mainBody.gameObject);
+                        stop = true;
                     }
                     else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME"))
                     {
