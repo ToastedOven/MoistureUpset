@@ -70,6 +70,51 @@ namespace MoistureUpset
                 }
             }
         }
+        public static void ReplaceModel(GameObject fab, string mesh, string png, int position = 0, bool replaceothers = false)
+        {
+            var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
+            meshes[position].sharedMesh = Resources.Load<Mesh>(mesh);
+            var texture = Resources.Load<Texture>(png);
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
+            for (int i = 0; i < meshes[position].sharedMaterials.Length; i++)
+            {
+                meshes[position].sharedMaterials[i].color = Color.white;
+                meshes[position].sharedMaterials[i].mainTexture = texture;
+                meshes[position].sharedMaterials[i].SetTexture("_EmTex", blank);
+                meshes[position].sharedMaterials[i].SetTexture("_NormalTex", null);
+                if (png.Contains("frog"))
+                {
+                    meshes[position].sharedMaterials[i].SetTexture("_FresnelRamp", null);
+                }
+                if (png.Contains("shop"))
+                {
+                    meshes[position].sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
+                    meshes[position].sharedMaterials[i].SetTexture("_FlowHeightmap", null);
+                }
+                //try
+                //{
+                //    foreach (var item in meshes[0].sharedMaterials[i].GetTexturePropertyNames())
+                //    {
+                //        Debug.Log($"---------{item}---------------{meshes[0].sharedMaterials[i].GetTexture(item)}");
+                //    }
+                //    Debug.Log($"------------------------{meshes[0].sharedMaterials[i]}");
+                //}
+                //catch (Exception e)
+                //{
+                //    Debug.Log(e);
+                //}
+            }
+            if (replaceothers)
+            {
+                for (int i = 0; i < meshes.Length; i++)
+                {
+                    if (i != position)
+                    {
+                        meshes[i].sharedMesh = Resources.Load<Mesh>(mesh);
+                    }
+                }
+            }
+        }
         public static void ReplaceModel(string prefab, string mesh, int position = 0)
         {
             var fab = Resources.Load<GameObject>(prefab);
@@ -2516,8 +2561,42 @@ namespace MoistureUpset
                 return;
             LoadBNK("Chest");
             LoadResource("moisture_chests");
-            ReplaceModel("prefabs/networkedobjects/chest/Chest2", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.png");
             ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
+            var fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest1");
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
+
+
+            ReplaceModel("prefabs/networkedobjects/chest/CategoryChestDamage", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/damagechest.png");
+            ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestDamage", "@MoistureUpset_na:assets/na1.mesh");
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestDamage");
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+
+            ReplaceModel("prefabs/networkedobjects/chest/CategoryChestHealing", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/healingchest.png");
+            ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestHealing", "@MoistureUpset_na:assets/na1.mesh");
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestHealing");
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+
+            ReplaceModel("prefabs/networkedobjects/chest/CategoryChestUtility", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/utilitychest.png");
+            ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestUtility", "@MoistureUpset_na:assets/na1.mesh");
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestUtility");
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+
+            ReplaceModel("prefabs/networkedobjects/chest/EquipmentBarrel", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/shulker.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/shulker.png");
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/EquipmentBarrel");
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetInt("_Cull", 0);
+            fab.AddComponent<equipmentbarrelfixer>();
+            fab.GetComponentInChildren<SfxLocator>().openSound = "EquipmentBarrel";
+
+            ReplaceModel("prefabs/networkedobjects/chest/Chest2", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.png");
+            ReplaceModel("prefabs/networkedobjects/chest/GoldChest", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/GoldChest");
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
+            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
+            fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
+            var particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+            particles.transform.SetParent(fab.transform);
+            particles.transform.localPosition = Vector3.zero;
+
         }
         private static void Collab()
         {

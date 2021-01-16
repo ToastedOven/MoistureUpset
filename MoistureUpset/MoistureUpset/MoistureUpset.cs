@@ -150,6 +150,18 @@ namespace MoistureUpset
         //{
         //    DebugClass.GetAllGameObjects();
         //}
+        [ConCommand(commandName = "getgoldchest", flags = ConVarFlags.None, helpText = "yes")]
+        private static void GameObjects(ConCommandArgs args)
+        {
+            GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+            foreach (var item in objects)
+            {
+                if (item.ToString() == "GoldChest (UnityEngine.GameObject)")
+                {
+                    Debug.Log($"--------{item}");
+                }
+            }
+        }
 
         public static void ligmaballs()
         {

@@ -173,6 +173,43 @@ namespace MoistureUpset
                 orig(self);
                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
             };
+            On.RoR2.UI.AssignStageToken.Start += (orig, self) =>
+            {
+                orig(self);
+                if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                {
+                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                    foreach (var fab in objects)
+                    {
+                        if (fab.ToString() == "GoldChest (UnityEngine.GameObject)")
+                        {
+                            GameObject particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+                            EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
+                            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
+                            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
+                            fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
+
+                            try
+                            {
+                                particles.transform.SetParent(fab.transform); //error
+                                particles.transform.localPosition = Vector3.zero;
+                            }
+                            catch (Exception)
+                            {
+                                Debug.Log($"--------{particles}");
+                            }
+                            try
+                            {
+                                GameObject.Instantiate(particles, fab.transform);
+                            }
+                            catch (Exception e)
+                            {
+                                DebugClass.Log(e);
+                            }
+                        }
+                    }
+                }
+            };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
                 EnemyReplacements.kindlyKillYourselfRune = true;
