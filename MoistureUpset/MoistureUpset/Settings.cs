@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using RiskOfOptions;
 
@@ -20,9 +21,9 @@ namespace MoistureUpset
         {
             EnemyReplacements.LoadResource("na");
 
-            BigToasterClass.HitMarker(float.Parse(ModSettingsManager.getOptionValue("HitMarker Volume")));
-            BigToasterClass.Modded_MSX(float.Parse(ModSettingsManager.getOptionValue("Modded Music Volume")));
-            BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume")));
+            BigToasterClass.HitMarker(float.Parse(ModSettingsManager.getOptionValue("HitMarker Volume"), CultureInfo.InvariantCulture));
+            BigToasterClass.Modded_MSX(float.Parse(ModSettingsManager.getOptionValue("Modded Music Volume"), CultureInfo.InvariantCulture));
+            BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume"), CultureInfo.InvariantCulture));
             EnemyReplacements.RunAll();
             BigToasterClass.RunAll();
         }
