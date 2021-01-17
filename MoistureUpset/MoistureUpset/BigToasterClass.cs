@@ -176,29 +176,6 @@ namespace MoistureUpset
             On.RoR2.UI.AssignStageToken.Start += (orig, self) =>
             {
                 orig(self);
-                if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
-                {
-                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
-                    foreach (var fab in objects)
-                    {
-                        if (fab.ToString() == "GoldChest (UnityEngine.GameObject)")
-                        {
-                            if (!InteractReplacements.Interactables.particles)
-                            {
-                                InteractReplacements.Interactables.particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
-                            }
-                            EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
-                            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
-                            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
-                            fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
-                            fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
-
-                            var obj = GameObject.Instantiate(InteractReplacements.Interactables.particles, fab.transform);
-                            obj.transform.SetParent(fab.transform);
-                            obj.transform.localPosition = Vector3.zero;
-                        }
-                    }
-                }
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
@@ -670,6 +647,32 @@ namespace MoistureUpset
                 }
                 catch (Exception)
                 {
+                }
+                if (tracker.ToString() == "RoR2.UI.ObjectivePanelController+FindTeleporterObjectiveTracker")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    {
+                        GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                        foreach (var fab in objects)
+                        {
+                            if (fab.ToString() == "GoldChest (UnityEngine.GameObject)")
+                            {
+                                if (!InteractReplacements.Interactables.particles)
+                                {
+                                    InteractReplacements.Interactables.particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+                                }
+                                EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
+                                fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
+                                fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
+                                fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
+                                fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
+
+                                var obj = GameObject.Instantiate(InteractReplacements.Interactables.particles, fab.transform);
+                                obj.transform.SetParent(fab.transform);
+                                obj.transform.localPosition = Vector3.zero;
+                            }
+                        }
+                    }
                 }
             };
             On.RoR2.UI.ObjectivePanelController.RemoveObjectiveTracker += (orig, self, tracker) =>
