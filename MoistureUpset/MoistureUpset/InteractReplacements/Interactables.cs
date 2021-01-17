@@ -88,7 +88,7 @@ namespace MoistureUpset.InteractReplacements
 
             Gradient gradient = col.color.gradient;
 
-            gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(spritz, 0.0f), new GradientColorKey(gradient.colorKeys[1].color, gradient.colorKeys[1].time) }, gradient.alphaKeys);
+            gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(spritz, 0.0f), new GradientColorKey(spritz, gradient.colorKeys[1].time) }, gradient.alphaKeys);
 
             col.color = gradient;
 
