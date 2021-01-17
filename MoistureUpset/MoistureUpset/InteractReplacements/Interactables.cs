@@ -79,7 +79,29 @@ namespace MoistureUpset.InteractReplacements
                 spritzPrefab.transform.SetParent(fab.transform);
                 spritzPrefab.transform.localPosition = new Vector3(0, 1.2f, -0.4f);
             }
+            fab.GetComponentInChildren<SfxLocator>().openSound = "Soda";
             On.RoR2.BarrelInteraction.OnInteractionBegin += SpraySoda;
+            On.RoR2.BarrelInteraction.OnDeserialize += SpraySoda;
+        }
+
+        private static void SpraySoda(On.RoR2.BarrelInteraction.orig_OnDeserialize orig, BarrelInteraction self, NetworkReader reader, bool initialState)
+        {
+            orig(self, reader, initialState);
+
+            if (self.GetFieldValue<bool>("opened"))
+            {
+                Color spritz = self.gameObject.GetComponentInChildren<RandomizeSoda>().getSpritzColor();
+
+                var col = self.gameObject.GetComponentInChildren<ParticleSystem>().colorOverLifetime;
+
+                Gradient gradient = col.color.gradient;
+
+                gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(spritz, 0.0f), new GradientColorKey(gradient.colorKeys[1].color, gradient.colorKeys[1].time) }, gradient.alphaKeys);
+
+                col.color = gradient;
+
+                self.gameObject.GetComponentInChildren<ParticleSystem>().Play();
+            }
         }
 
         private static void SpraySoda(On.RoR2.BarrelInteraction.orig_OnInteractionBegin orig, BarrelInteraction self, Interactor activator)
@@ -92,7 +114,7 @@ namespace MoistureUpset.InteractReplacements
 
             Gradient gradient = col.color.gradient;
 
-            gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(spritz, 0.0f), new GradientColorKey(spritz, gradient.colorKeys[1].time) }, gradient.alphaKeys);
+            gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(spritz, 0.0f), new GradientColorKey(gradient.colorKeys[1].color, gradient.colorKeys[1].time) }, gradient.alphaKeys);
 
             col.color = gradient;
 
