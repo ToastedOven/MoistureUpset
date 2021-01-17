@@ -34,11 +34,11 @@ None, we are perfect coders :)
 
 In general this mod should work with other mods, however here is a list you might be interested in.
 
-Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithrix(CDClarke){side note this mod is already buggy on it's own}, PlayableScavenger(RyanPallesen){same as mithrix}
-
-Direseeker support coming soon!
+Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithrix(CDClarke){side note this mod is already buggy on it's own}, PlayableScavenger(RyanPallesen){same as mithrix}, Direseeker(rob),
 
 # Changelog
+
+ 1.1.0: Added Direseeker support, be sure to check him out if you have it installed! Chests have been given a facelift. A few bug fixes.
 
  1.0.6: Fixed issue where with float parsing on computers that might expect a comma instead of a period.
 
@@ -92,6 +92,10 @@ https://sketchfab.com/3d-models/mens-two-piece-suit-8cafbab7a73e4fb7966a00659a4e
 https://www.models-resource.com/wii/supersmashbrosbrawl/model/2843/
 
 https://www.models-resource.com/pc_computer/fortnite/model/31882/
+
+https://sketchfab.com/3d-models/minecraft-chest-83c5b03288e9416fbe65616e45de2918
+
+https://www.models-resource.com/gamecube/ssbm/model/590/
 
 # Audio Credits
 If you have any questions about a specific SFX which isn't listed, ask me at Metrosexual Fruitcake#6969
@@ -173,3 +177,5 @@ https://www.youtube.com/watch?v=QP0mVv0OsCA - Twitch
 
 
 https://www.youtube.com/watch?v=yvlLgYOcWxE - Artifact
+
+https://www.youtube.com/watch?v=V-QVTbKNwRM - Direseeker
