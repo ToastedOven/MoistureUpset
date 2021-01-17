@@ -6,6 +6,7 @@ using R2API.Utils;
 using System.Reflection;
 using static R2API.SoundAPI;
 using UnityEngine;
+using MoistureUpset.InteractReplacements.SodaBarrel;
 
 namespace MoistureUpset
 {

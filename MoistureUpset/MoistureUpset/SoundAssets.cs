@@ -168,6 +168,7 @@ namespace MoistureUpset
                 }
                 else if (damageReport.victimTeamIndex == TeamIndex.Monster)
                 {
+                    DebugClass.Log($"{damageReport.attackerMaster.GetBody()}");
                     if (damageReport.attackerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.attackerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
                     {
                         try
@@ -181,6 +182,18 @@ namespace MoistureUpset
                         {
                             //Debug.Log(e);
                         }
+                    }
+                    else if (damageReport.attackerMaster.GetBody().name == "CaptainBody(Clone)" && damageReport.attackerMaster.GetBody().skinIndex == 2)
+                    {
+                        try
+                        {
+                            damageReport.attackerBody.gameObject.GetComponentInChildren<Skins.Jotaro.SubtitleController>().DoKillVoiceLine();
+                        }
+                        catch (Exception sds)
+                        {
+                            DebugClass.Log(sds);
+                        }
+                        
                     }
                     else if (damageReport.attackerMaster.minionOwnership != null)
                     {
