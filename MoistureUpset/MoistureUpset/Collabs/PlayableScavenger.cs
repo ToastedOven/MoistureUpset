@@ -21,6 +21,7 @@ namespace MoistureUpset.Collabs
     {
         public static void Run()
         {
+            PallesenProductions.PlayableScavenger s = new PallesenProductions.PlayableScavenger();
             foreach (var item in SurvivorAPI.SurvivorDefinitions)
             {
                 if (item.bodyPrefab.name == "ScavengerPlayer")
