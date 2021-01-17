@@ -826,6 +826,39 @@ namespace MoistureUpset
                     if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
                         st = "Idk, seems pretty sus to me";
                 }
+
+                else if (token == "GOLDCHEST_NAME")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                        st = "Ender Chest";
+                }
+                else if (token == "GOLDCHEST_CONTEXT")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                        st = "Open ender chest";
+                }
+
+                else if (token == "BARREL1_NAME")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                        st = "Can";
+                }
+                else if (token == "BARREL1_CONTEXT")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                        st = "Open can";
+                }
+
+                else if (token == "EQUIPMENTBARREL_NAME")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                        st = "Shulker Box";
+                }
+                else if (token == "EQUIPMENTBARREL_CONTEXT")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                        st = "Open shulker box";
+                }
                 //else if (st.Contains("Jellyfish"))
                 //{
                 //    st = st.Replace("Jellyfish", "Comedy");

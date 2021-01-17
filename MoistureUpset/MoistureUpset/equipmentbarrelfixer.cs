@@ -14,12 +14,12 @@ namespace MoistureUpset
             prevPos = t.localPosition;
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (prevPos != t.localPosition)
             {
                 prevPos = t.localPosition;
-                t.Rotate(new Vector3(0, -280 * Time.deltaTime, 0));
+                t.Rotate(new Vector3(0, -3.605f, 0));
             }
         }
     }

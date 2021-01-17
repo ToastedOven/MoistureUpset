@@ -23,10 +23,12 @@ namespace MoistureUpset.InteractReplacements
         {
             Chests();
         }
+        public static GameObject particles;
         private static void Chests()
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) != 1)
                 return;
+
             EnemyReplacements.LoadBNK("Chest");
             EnemyReplacements.LoadResource("moisture_chests");
             EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
@@ -61,7 +63,9 @@ namespace MoistureUpset.InteractReplacements
             fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
             fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
             fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
-            var particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+            fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
+
+            particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
             particles.transform.SetParent(fab.transform);
             particles.transform.localPosition = Vector3.zero;
 
