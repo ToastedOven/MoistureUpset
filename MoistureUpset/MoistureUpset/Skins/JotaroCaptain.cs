@@ -28,6 +28,7 @@ namespace MoistureUpset.Skins
         private static void PopulateAssets()
         {
             Utils.LoadAsset("Skins.Jotaro.jotarosubtitle");
+            EnemyReplacements.LoadResource("moisture_jotaro");
         }
 
         // Skindef stuff here
@@ -52,8 +53,36 @@ namespace MoistureUpset.Skins
                 BaseSkins = new SkinDef[0],
                 UnlockableName = "",
                 GameObjectActivations = new SkinDef.GameObjectActivation[0],
-                RendererInfos = new CharacterModel.RendererInfo[0], // Captain has 7 renderers. ugh.
-                MeshReplacements = new SkinDef.MeshReplacement[0],
+                RendererInfos = new CharacterModel.RendererInfo[]
+                {
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_moisture_jotaro:assets/jotaro.mat"),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[0]
+                    },
+                },
+
+                MeshReplacements = new SkinDef.MeshReplacement[]
+                {
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_jotaro:assets/jotaro.mesh"),
+                        renderer = renderers[0]
+                    }
+                    //new SkinDef.MeshReplacement
+                    //{
+                    //    mesh = Resources.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
+                    //    renderer = renderers[1]
+                    //},
+                    //new SkinDef.MeshReplacement
+                    //{
+                    //    mesh = Resources.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
+                    //    renderer = renderers[2]
+                    //}
+
+                },
                 ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
                 MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
             };

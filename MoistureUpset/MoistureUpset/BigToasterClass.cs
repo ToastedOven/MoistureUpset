@@ -709,11 +709,20 @@ namespace MoistureUpset
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("Shreks outhouse")) == 1)
-                    On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
+                On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
                 {
                     orig(self);
                     Util.PlaySound("somebody", self.outer.gameObject);
+                };
+                On.EntityStates.SurvivorPod.Landed.OnEnter += (orig, self) =>
+                {
+                    orig(self);
+                    AkSoundEngine.PostEvent("SomebodyLoop", self.outer.gameObject);
+                };
+                On.EntityStates.SurvivorPod.Release.OnEnter += (orig, self) =>
+                {
+                    orig(self);
+                    AkSoundEngine.PostEvent("SomebodyStop", self.outer.gameObject);
                 };
                 EnemyReplacements.LoadResource("shreklet");
                 foreach (var item in Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod").GetComponentsInChildren<ChildLocator>())
