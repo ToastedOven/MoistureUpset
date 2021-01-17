@@ -25,6 +25,7 @@ namespace MoistureUpset
             BigToasterClass.HitMarker(float.Parse(ModSettingsManager.getOptionValue("HitMarker Volume"), CultureInfo.InvariantCulture));
             BigToasterClass.Modded_MSX(float.Parse(ModSettingsManager.getOptionValue("Modded Music Volume"), CultureInfo.InvariantCulture));
             BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume"), CultureInfo.InvariantCulture));
+            InteractReplacements.Interactables.Init();
             EnemyReplacements.RunAll();
             BigToasterClass.RunAll();
         }
