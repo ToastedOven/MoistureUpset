@@ -10,12 +10,15 @@ namespace MoistureUpset.Skins.Jotaro
     class SubtitleController : MonoBehaviour
     {
         private TextMeshPro textMeshPro;
+
         private float timer = 0f;
 
-        private readonly string[] voiceLines = new string[] { "Good Grief", "Bigma Lalls", "Hahah heehee", "kill yourself" };
+
+        private readonly string[] voiceLines = new string[] { "Good Grief", "Bigma Lalls", "Hahah heehee", "kill yourself", "I can't beat the shit out of you without getting closer" };
+
         public void DoKillVoiceLine()
         {
-            SetSubtitle(voiceLines[UnityEngine.Random.Range(0, 4)], 4f);
+            SetSubtitle(voiceLines[UnityEngine.Random.Range(0, voiceLines.Length)], 4f);
         }
 
         public void SetSubtitle(string text, float duration)
@@ -24,17 +27,22 @@ namespace MoistureUpset.Skins.Jotaro
                 textMeshPro = GetComponentInChildren<AddSubtitleBar>().subtitleBar.GetComponentInChildren<TextMeshPro>();
 
             textMeshPro.text = text;
-            DebugClass.Log(text);
+
             timer = duration;
+
+            StopCoroutine(ClearText());
+
             StartCoroutine("ClearText");
         }
 
         IEnumerator ClearText()
         {
+
             while (timer > 0)
             {
-                timer -= 0.05f;
-                yield return new WaitForSeconds(0.05f);
+                timer -= 0.01f;
+
+                yield return new WaitForSeconds(0.01f);
             }
 
             textMeshPro.text = "";
