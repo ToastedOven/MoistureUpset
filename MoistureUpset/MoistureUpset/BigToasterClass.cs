@@ -169,10 +169,10 @@ namespace MoistureUpset
         public static void PreGame()
         {
             On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
-            {
-                orig(self);
-                AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
-            };
+                {
+                    orig(self);
+                    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+                };
             On.RoR2.UI.AssignStageToken.Start += (orig, self) =>
             {
                 orig(self);
@@ -183,29 +183,19 @@ namespace MoistureUpset
                     {
                         if (fab.ToString() == "GoldChest (UnityEngine.GameObject)")
                         {
-                            GameObject particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+                            if (!InteractReplacements.Interactables.particles)
+                            {
+                                InteractReplacements.Interactables.particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+                            }
                             EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
                             fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
                             fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
                             fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
+                            fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
 
-                            try
-                            {
-                                particles.transform.SetParent(fab.transform); //error
-                                particles.transform.localPosition = Vector3.zero;
-                            }
-                            catch (Exception)
-                            {
-                                Debug.Log($"--------{particles}");
-                            }
-                            try
-                            {
-                                GameObject.Instantiate(particles, fab.transform);
-                            }
-                            catch (Exception e)
-                            {
-                                DebugClass.Log(e);
-                            }
+                            var obj = GameObject.Instantiate(InteractReplacements.Interactables.particles, fab.transform);
+                            obj.transform.SetParent(fab.transform);
+                            obj.transform.localPosition = Vector3.zero;
                         }
                     }
                 }
