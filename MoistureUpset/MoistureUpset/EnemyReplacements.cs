@@ -1920,6 +1920,7 @@ namespace MoistureUpset
             //I know this is shitty but it works and at this point im too scared to change it
             //Also this only happens at startup so who cares amirite?
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/VultureBody");
+
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var item in meshes)
             {

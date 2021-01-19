@@ -135,11 +135,17 @@ namespace MoistureUpset
         //    //Debug.Log($"-------------{c.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName}");
         //}
 
-        //[ConCommand(commandName = "getallgameobjects", flags = ConVarFlags.None, helpText = "yes")]
-        //private static void GameObjects(ConCommandArgs args)
-        //{
-        //    DebugClass.GetAllGameObjects();
-        //}
+        [ConCommand(commandName = "getallgameobjects", flags = ConVarFlags.None, helpText = "yes")]
+        private static void GameObjects(ConCommandArgs args)
+        {
+            DebugClass.GetAllGameObjects();
+        }
+
+        [ConCommand(commandName = "getalltransforms", flags = ConVarFlags.None, helpText = "yes")]
+        private static void Transforms(ConCommandArgs args)
+        {
+            DebugClass.GetAllTransforms();
+        }
 
         public static void ligmaballs()
         {

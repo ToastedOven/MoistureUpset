@@ -193,6 +193,26 @@ namespace MoistureUpset
                 Log($"-------------{item}");
             }
         }
+
+        public static void GetAllTransforms()
+        {
+            Transform[] objects = GameObject.FindObjectsOfType<Transform>();
+            foreach (var item in objects)
+            {
+                ////Log($"-------sex----{item.name}");
+                //if (item.name == "Mesh")
+                //{
+                //    try
+                //    {
+                //        DebugBones(item);
+                //    }
+                //    catch (Exception)
+                //    {
+                //    }
+                //}
+                Log($"---{item}------parent:----{item.parent}");
+            }
+        }
         public static void GetAllGameObjects(GameObject g)
         {
             foreach (var item in g.GetComponents<GameObject>())
