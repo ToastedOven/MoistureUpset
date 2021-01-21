@@ -26,7 +26,6 @@ namespace MoistureUpset.Skins.Engi
                 return;
             }
 
-
             if (hc.combinedHealthFraction < 0.3f && !Hurt)
             {
                 medicIcon.gameObject.SetActive(true);
