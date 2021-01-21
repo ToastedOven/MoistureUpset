@@ -168,7 +168,7 @@ namespace MoistureUpset
                 }
                 else if (damageReport.victimTeamIndex == TeamIndex.Monster)
                 {
-                    DebugClass.Log($"{damageReport.attackerMaster.GetBody()}");
+                    //DebugClass.Log($"{damageReport.attackerMaster.GetBody()}");
                     if (damageReport.attackerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.attackerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
                     {
                         try
@@ -187,7 +187,11 @@ namespace MoistureUpset
                     {
                         try
                         {
-                            damageReport.attackerBody.gameObject.GetComponentInChildren<Skins.Jotaro.SubtitleController>().DoKillVoiceLine();
+                            if (index != -1)
+                            {
+                                NetworkAssistant.playSoundWithCallBack("JotaroKillsSomething", index);
+                                //damageReport.attackerBody.gameObject.GetComponentInChildren<Skins.Jotaro.SubtitleController>().DoKillVoiceLine(index);
+                            }
                         }
                         catch (Exception sds)
                         {

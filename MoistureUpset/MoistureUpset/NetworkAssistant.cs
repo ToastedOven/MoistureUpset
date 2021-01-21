@@ -85,6 +85,23 @@ namespace MoistureUpset
             }
         }
 
+        public static void playSoundWithCallBack(string soundIDString, int index)
+        {
+            if (NetworkServer.active)
+            {
+                if (!_centralNetworkObjectSpawned)
+                {
+                    _centralNetworkObjectSpawned = UnityEngine.Object.Instantiate(CentralNetworkObject);
+                    NetworkServer.Spawn(_centralNetworkObjectSpawned);
+                }
+
+                foreach (var user in NetworkUser.readOnlyInstancesList)
+                {
+                    MoistureUpsetNetworkedComponent.InvokewithCallback(user, soundIDString, index);
+                }
+            }
+        }
+
         public static void fuckMe(Vector3 location)
         {
             if (NetworkServer.active)
@@ -141,6 +158,11 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
     public static void Invoke(NetworkUser user, string soundIDString, Vector3 location)
     {
         _instance.TargetPlaySoundLocation(user.connectionToClient, soundIDString, location);
+    }
+
+    public static void InvokewithCallback(NetworkUser user, string soundIDString, int playerIndex)
+    {
+        _instance.TargetPlaySoundWithCallback(user.connectionToClient, soundIDString, playerIndex);
     }
 
     public static void Invoke(NetworkUser user, Vector3 location)
@@ -206,6 +228,23 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
             AkSoundEngine.PostEvent(soundIDString, tempAudio);
 
             Destroy(tempAudio, 5f);
+        }
+        catch (Exception e)
+        {
+            //Debug.Log(e);
+        }
+
+    }
+
+    [TargetRpc]
+    private void TargetPlaySoundWithCallback(NetworkConnection target, string soundIDString, int playerIndex)
+    {
+        // Man I sure hope we don't make anything else that needs callbacks later - Rune.
+        try
+        {
+            var player = NetworkUser.readOnlyInstancesList[playerIndex].master.GetBody().gameObject;
+
+            AkSoundEngine.PostEvent(soundIDString, player, (uint)AkCallbackType.AK_Marker, player.GetComponentInChildren<MoistureUpset.Skins.Jotaro.SubtitleController>().EventCallback, null);
         }
         catch (Exception e)
         {

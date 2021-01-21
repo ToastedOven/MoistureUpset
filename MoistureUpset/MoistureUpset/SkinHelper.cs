@@ -25,7 +25,7 @@ namespace MoistureUpset
             string meshName = skinNametoskinMeshName[skinName];
 
             foreach (var smr in cb.modelLocator.modelTransform.GetComponentsInChildren<SkinnedMeshRenderer>()) // I tried using the skincatalog previously, but for some reason the skincatalog keeps throwing a null reference exception.
-            {
+            {                                                                                                  // Future Rune here, I think the skin catalog is only available during the survivorcatlog initlization. but I may just be stupid.
                 //Debug.Log($"--------------------- {smr.sharedMesh.name}, {meshName}");
 
                 if (smr.sharedMesh.name == meshName)

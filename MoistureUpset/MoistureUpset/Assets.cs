@@ -12,6 +12,27 @@ namespace MoistureUpset
 {
     public static class Assets
     {
+        private static Material prefab;
+
+        public static Material CreateMaterial(string texture)
+        {
+            if (!prefab)
+                prefab = GameObject.Instantiate<Material>(Resources.Load<GameObject>("prefabs/characterbodies/commandobody").GetComponentInChildren<SkinnedMeshRenderer>().material);
+
+            Material newMat = GameObject.Instantiate<Material>(prefab);
+
+            newMat.mainTexture = Resources.Load<Texture>(texture);
+
+            newMat.SetColor("_Color", Color.white);
+            newMat.SetFloat("_EmPower", 0.01f);
+            newMat.SetColor("_EmColor", Color.white);
+            newMat.SetTexture("_EmTex", null);
+            newMat.SetFloat("_NormalStrength", 0.5f);
+            newMat.SetTexture("_NormalTex", null);
+
+            return newMat;
+        }
+
         public static void PopulateAssets()
         {
             using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ImMoist.bnk"))
