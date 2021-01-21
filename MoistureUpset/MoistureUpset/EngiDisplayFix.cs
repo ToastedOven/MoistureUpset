@@ -8,7 +8,7 @@ namespace MoistureUpset
 {
 
     // Still not the best idea, but much better than what I was doing previously. Technically there is like a few frames where you can see the old models, but oh well.
-    class DisplayFix : MonoBehaviour
+    class EngiDisplayFix : MonoBehaviour
     {
         private static Mesh engiturretmesh;
         private static Mesh engiwalkerturretmesh;
