@@ -12,8 +12,8 @@ namespace MoistureUpset.Skins
 {
     public static class TF2Engi
     {
-        private static readonly string Name = "The Engineer";
-        private static readonly string NameToken = "MOISTURE_UPSET_TF2_ENGINEER_ENGI_SKIN";
+        public static readonly string Name = "The Engineer";
+        public static readonly string NameToken = "MOISTURE_UPSET_TF2_ENGINEER_ENGI_SKIN";
 
         // Runs on Awake
         public static void Init()
@@ -23,6 +23,7 @@ namespace MoistureUpset.Skins
             On.RoR2.Projectile.ProjectileController.Start += ModifyProjectiles;
             On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += ModifyTurretBlueprint;
             EngiDisplayFix();
+            AddToPrefab();
         }
 
         // Load assets here
@@ -36,6 +37,7 @@ namespace MoistureUpset.Skins
             Utils.LoadAsset("Models.mines");
             Utils.LoadAsset("Models.oopsideletedtheoldresource");
             Utils.LoadAsset("unifiedturret");
+            Utils.LoadAsset("Resources.medic");
         }
 
         // Skindef stuff here
@@ -74,7 +76,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat"),
+                        defaultMaterial = Assets.CreateMaterial("@MoistureUpset_unifiedturret:assets/unified_turret_tex.png"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = engiTurretBodyRenderer[0]
@@ -107,7 +109,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_unifiedturret:assets/unifiedtex.mat"),
+                        defaultMaterial = Assets.CreateMaterial("@MoistureUpset_unifiedturret:assets/unified_turret_tex.png"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = engiWalkerTurretBodyRenderer[0]
@@ -143,7 +145,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_engineer:assets/models_player_engineer_engineer_red.mat"),
+                        defaultMaterial = Assets.CreateMaterial("@MoistureUpset_engineer:assets/models_player_engineer_engineer_red.png"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[0]
@@ -206,7 +208,7 @@ namespace MoistureUpset.Skins
         {
             var fab = Resources.Load<GameObject>("prefabs/characterdisplays/EngiDisplay");
 
-            fab.AddComponent<DisplayFix>(); // Still not a great system, but it works.
+            fab.AddComponent<EngiDisplayFix>(); // Still not a great system, but it works.
         }
 
         // Projectile Replacements
@@ -328,6 +330,14 @@ namespace MoistureUpset.Skins
             {
                 GameObject.Destroy(tempPrefab);
             }
+        }
+
+        // Add stuff to the character prefab here
+        private static void AddToPrefab()
+        {
+            GameObject engiBody = Resources.Load<GameObject>("prefabs/characterbodies/engibody"); // load captain prefab
+            engiBody.AddComponent<Engi.AddMedicIcon>();
+            engiBody.AddComponent<Engi.EngiHurt>();
         }
     }
 }

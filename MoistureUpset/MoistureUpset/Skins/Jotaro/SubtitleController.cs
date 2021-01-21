@@ -4,6 +4,14 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using AK;
+using AK.Wwise;
+/*
+ *  TODO:   * Fix ClearText timer accelerating with each clear.
+ *          
+ * 
+ * 
+ */ 
 
 namespace MoistureUpset.Skins.Jotaro
 {
@@ -13,12 +21,19 @@ namespace MoistureUpset.Skins.Jotaro
 
         private float timer = 0f;
 
+        private static readonly string[] voiceLines = new string[] { "Good Grief", "Bigma Lalls", "Hahah heehee", "kill yourself", "I can't beat the shit out of you without getting closer" };
 
-        private readonly string[] voiceLines = new string[] { "Good Grief", "Bigma Lalls", "Hahah heehee", "kill yourself", "I can't beat the shit out of you without getting closer" };
-
-        public void DoKillVoiceLine()
+        public void EventCallback(object in_cookie, AkCallbackType in_type, AkCallbackInfo in_info)
         {
-            SetSubtitle(voiceLines[UnityEngine.Random.Range(0, voiceLines.Length)], 4f);
+            if (in_type != AkCallbackType.AK_Marker)
+                return;
+            AkMarkerCallbackInfo akMarker = (AkMarkerCallbackInfo)in_info;
+
+            DebugClass.Log(akMarker.strLabel);
+
+            //SetSubtitle(voiceLines[UnityEngine.Random.Range(0, voiceLines.Length)], 4f);
+
+            SetSubtitle(akMarker.strLabel, 4f);
         }
 
         public void SetSubtitle(string text, float duration)
