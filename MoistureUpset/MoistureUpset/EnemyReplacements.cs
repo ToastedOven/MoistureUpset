@@ -300,6 +300,31 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+            LoadResource("moisture_pungas");
+            var fab = Resources.Load<GameObject>("prefabs/effects/CoinEmitter");
+            //foreach (var item in fab.GetComponentsInChildren<Component>())
+            //{
+            //    Debug.Log($"--------{item}");
+            //}
+            var b = fab.GetComponentInChildren<CoinBehavior>();
+            b.coinTiers[4].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/tix.png");
+            //b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/tix.png");
+            //foreach (var item in b.coinTiers)
+            //{
+            //    fab = item.particleSystem.gameObject;
+            //    foreach (var particle in fab.GetComponentsInChildren<ParticleSystemRenderer>())
+            //    {
+            //        Debug.Log($"--------{particle.material.mainTexture}");
+            //    }
+            //}
+            foreach (var item in b.coinTiers[3].particleSystem.gameObject.GetComponentsInChildren<ParticleSystemRenderer>())
+            {
+                Debug.Log($"--------{item.mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh")}");
+                
+            }
+
+            //replace 1 and 5
+            //0 is the moneybag
         }
         private static void Icons()
         {

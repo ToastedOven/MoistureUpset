@@ -27,7 +27,7 @@ namespace MoistureUpset
     [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", "1.0.0")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI")]
-    public class MoistureUpset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
+    public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public void Awake()
         {
