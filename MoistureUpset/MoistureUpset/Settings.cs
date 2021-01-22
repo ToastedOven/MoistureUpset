@@ -27,6 +27,7 @@ namespace MoistureUpset
             BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume"), CultureInfo.InvariantCulture));
             InteractReplacements.Interactables.Init();
             EnemyReplacements.RunAll();
+            HudChanges.RunAll();
             BigToasterClass.RunAll();
         }
         private static void Setup()
@@ -103,7 +104,7 @@ namespace MoistureUpset
         }
         private static void CollabOptions()
         {
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "DireSeeker", "Replaces DireSeeker with Giga Bowser", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "DireSeeker", "Replaces Direseeker with Giga Bowser (Requires Direseeker mod)", "1"));
         }
 
         private static void SoundOptions()
