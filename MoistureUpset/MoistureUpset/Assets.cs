@@ -24,7 +24,7 @@ namespace MoistureUpset
             newMat.mainTexture = Resources.Load<Texture>(texture);
 
             newMat.SetColor("_Color", Color.white);
-            newMat.SetFloat("_EmPower", 0.01f);
+            newMat.SetFloat("_EmPower", 0f);
             newMat.SetColor("_EmColor", Color.white);
             newMat.SetTexture("_EmTex", null);
             newMat.SetFloat("_NormalStrength", 0.5f);

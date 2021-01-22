@@ -264,7 +264,7 @@ namespace MoistureUpset.Skins
 
                             meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_Models_rocket:assets/rocket.mesh");
 
-                            self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_engineer:assets/models_player_engineer_engineer_red.mat");
+                            self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Assets.CreateMaterial("@MoistureUpset_engineer:assets/models_player_engineer_engineer_red.png");
 
                             meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                         }
@@ -274,7 +274,7 @@ namespace MoistureUpset.Skins
 
                             meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_Models_mines:assets/spidermine.mesh");
 
-                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_Models_mines:assets/harpeenis.mat");
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.CreateMaterial("@MoistureUpset_Models_mines:assets/mines.png");
                         }
                         else if (self.ghost.name == "EngiMineGhost(Clone)")
                         {
@@ -282,7 +282,7 @@ namespace MoistureUpset.Skins
 
                             meshes[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_Models_mines:assets/harpoon.mesh");
 
-                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<Material>("@MoistureUpset_Models_mines:assets/harpeenis.mat");
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.CreateMaterial("@MoistureUpset_Models_mines:assets/mines.png");
                         }
                     }
                 }
