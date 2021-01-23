@@ -48,7 +48,6 @@ namespace MoistureUpset
 
                 EnemyReplacements.ReplaceMeshFilter("prefabs/pickupmodels/PickupLunarCoin", "@MoistureUpset_moisture_pungas:assets/pungas/coin.mesh", "@MoistureUpset_moisture_pungas:assets/pungas/goldrobux_16.png");
 
-
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
                 {
                     if (token == "COST_MONEY_FORMAT")
@@ -92,6 +91,12 @@ namespace MoistureUpset
 
                 var fab = Resources.Load<GameObject>("prefabs/effects/CoinEmitter");
                 var b = fab.GetComponentInChildren<CoinBehavior>();
+                b.coinTiers[0].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
+                b.coinTiers[0].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Resources.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/obc.mat");
+                b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
+                b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Resources.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/tbc.mat");
+                b.coinTiers[2].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
+                b.coinTiers[2].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Resources.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/bc.mat");
                 b.coinTiers[4].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/tix.png");
                 foreach (var item in b.coinTiers[3].particleSystem.gameObject.GetComponentsInChildren<ParticleSystemRenderer>())
                 {
