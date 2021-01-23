@@ -32,26 +32,7 @@ namespace MoistureUpset
         }
         private static void Setup()
         {
-            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nModel Credits:\n" +
-                "https://sketchfab.com/3d-models/mike-wazowski-2d21dc059bc446aaba3489015dd188bd\n" +
-                "https://www.myminifactory.com/object/3d-print-the-dog-116937\n" +
-                "https://www.models-resource.com/mobile/jojosbizarreadventurediamondrecords/model/31115/\n" +
-                "https://www.youtube.com/watch?v=E7Ayz75AQpk\n" +
-                "https://www.roblox.com/library/885909033/The-Buff-Noob\n" +
-                "Obama for having a face\n" +
-                "https://www.models-resource.com/3ds/supermario3dland/model/15874/\n" +
-                "https://sketchfab.com/3d-models/trumpet-free-02d9fe6d3fed47d886f1e9f2a9491faa#download\n" +
-                "https://www.models-resource.com/pc_computer/elderscrollsivoblivion/model/16964/\n" +
-                "https://sketchfab.com/3d-models/toad-00c841e7a2ab4f048d823de2cebb6761\n" +
-                "https://www.cgtrader.com/free-3d-models/animals/mammal/winston\n" +
-                "https://www.models-resource.com/wii_u/thelegendofzeldabreathofthewild/model/22323/\n" +
-                "https://sketchfab.com/3d-models/sans-3891e805dca04e4e9ba8d1edca26ba41#download\n" +
-                "Alex Jones for being a joke\n" +
-                "basemesh used to make alex jones http://wiki.polycount.com/wiki/File:Basemesh_arshlevon_shoes.obj\n" +
-                "head mesh grafted to basemesh http://wiki.polycount.com/wiki/File:Basemesh_01.obj.zip\n" +
-                "https://sketchfab.com/3d-models/mens-two-piece-suit-8cafbab7a73e4fb7966a00659a4e31ef\n" +
-                "https://www.models-resource.com/wii/supersmashbrosbrawl/model/2843/\n" +
-                "https://www.models-resource.com/pc_computer/fortnite/model/31882/\n");
+            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion 1.1.1");
             ModSettingsManager.setPanelTitle("Moisture Upset");
         }
         private static void HitMarker()
@@ -101,6 +82,7 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Merchant", "Replaces shop keeper with beedle", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Cereal", "EAT EM UP EAT EM UP EAT EM UP!", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Minecraft Chests", "Replaces chests and barrels with minecraft items", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Currency Changes", "Replaces currency types with robux and tix", "1"));
         }
         private static void CollabOptions()
         {

@@ -19,7 +19,7 @@ namespace MoistureUpset
             if (prevPos != t.localPosition)
             {
                 prevPos = t.localPosition;
-                t.Rotate(new Vector3(0, -3.605f, 0));
+                t.Rotate(new Vector3(0, -5.4075f, 0));
             }
         }
     }

@@ -300,31 +300,6 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            LoadResource("moisture_pungas");
-            var fab = Resources.Load<GameObject>("prefabs/effects/CoinEmitter");
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"--------{item}");
-            //}
-            var b = fab.GetComponentInChildren<CoinBehavior>();
-            b.coinTiers[4].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/tix.png");
-            //b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/tix.png");
-            //foreach (var item in b.coinTiers)
-            //{
-            //    fab = item.particleSystem.gameObject;
-            //    foreach (var particle in fab.GetComponentsInChildren<ParticleSystemRenderer>())
-            //    {
-            //        Debug.Log($"--------{particle.material.mainTexture}");
-            //    }
-            //}
-            foreach (var item in b.coinTiers[3].particleSystem.gameObject.GetComponentsInChildren<ParticleSystemRenderer>())
-            {
-                Debug.Log($"--------{item.mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh")}");
-                
-            }
-
-            //replace 1 and 5
-            //0 is the moneybag
         }
         private static void Icons()
         {
@@ -466,14 +441,20 @@ namespace MoistureUpset
                     if (token == "SHRINE_BLOOD_CONTEXT")
                     {
                         st = "Free Money";
+                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                            st = "Free Tix";
                     }
                     else if (token == "SHRINE_BLOOD_USE_MESSAGE_2P")
                     {
                         st = "<style=cShrine>Wait it's not free. You have gained {1} gold.</color>";
+                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                            st = "<style=cShrine>Wait it's not free. You have gained {1} tix.</color>";
                     }
                     else if (token == "SHRINE_BLOOD_USE_MESSAGE")
                     {
                         st = "<style=cShrine>{0} got stabbed for money, and has gained {1} gold.</color>";
+                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                            st = "<style=cShrine>{0} got stabbed for money, and has gained {1} tix.</color>";
                     }
 
 
@@ -492,10 +473,14 @@ namespace MoistureUpset
                     else if (token == "SHRINE_CHANCE_FAIL_MESSAGE_2P")
                     {
                         st = "<style=cShrine>You lost money.</color>";
+                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                            st = "<style=cShrine>You lost tix.</color>";
                     }
                     else if (token == "SHRINE_CHANCE_FAIL_MESSAGE")
                     {
                         st = "<style=cShrine>{0} lost money.</color>";
+                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                            st = "<style=cShrine>{0} lost tix.</color>";
                     }
 
 
@@ -531,28 +516,28 @@ namespace MoistureUpset
                 {
                     if (token == "FAMILY_GOLEM")
                     {
-                        st = "[WARNING] It feels like 2008 in here..";
+                        st = "<style=cWorldEvent>[WARNING] It feels like 2008 in here..</style>";
                     }
                 }
                 if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) == 1)
                 {
                     if (token == "FAMILY_JELLYFISH")
                     {
-                        st = "[WARNING] You hear a distant laugh track..";
+                        st = "<style=cWorldEvent>[WARNING] You hear a distant laugh track..</style>";
                     }
                 }
                 if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) == 1)
                 {
                     if (token == "FAMILY_WISP")
                     {
-                        st = "[WARNING] Habadabadaga..";
+                        st = "<style=cWorldEvent>[WARNING] Habadabadaga..</style>";
                     }
                 }
                 if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) == 1)
                 {
                     if (token == "FAMILY_IMP")
                     {
-                        st = "[WARNING] Doot doot..";
+                        st = "<style=cWorldEvent>[WARNING] Doot doot..</style>";
                     }
                 }
 
@@ -562,6 +547,22 @@ namespace MoistureUpset
                     if (token == "BAZAAR_SEER_GOLDSHORES")
                     {
                         st = "<style=cWorldEvent>You dream of fake news.</style>";
+                    }
+                }
+
+                if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                {
+                    if (token == "VULTURE_EGG_WARNING")
+                    {
+                        st = "<style=cWorldEvent>You hear a distant press conference..</style>";
+                    }
+                }
+
+                if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                {
+                    if (token == "VULTURE_EGG_BEGIN")
+                    {
+                        st = "<style=cWorldEvent>The press conference begins.</style>";
                     }
                 }
                 orig(self, token, st);
@@ -1124,7 +1125,7 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_tacobell:assets/taco.mesh", "@MoistureUpset_tacobell:assets/taco.png");
             ReplaceMeshFilter("prefabs/projectileghosts/BellBallGhost", "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
         }
-        //private static void ReplaceFont(string ogFont, string newFont)
+        //public static void ReplaceFont(string ogFont, string newFont)
         //{
         //    var font = Resources.Load<Font>(ogFont);
         //    foreach (var item in font.material.GetTexturePropertyNames())
@@ -2613,7 +2614,7 @@ namespace MoistureUpset
 
             ReplaceModel("prefabs/networkedobjects/ScavLunarBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png");
         }
-        
+
         private static void Collab()
         {
             Direseeker();
@@ -2623,6 +2624,7 @@ namespace MoistureUpset
             PlayableTemplar();
             PlayableMithrix();
             PlayableLemurian();
+            ChipTheBeetle();
         }
         private static void Direseeker()
         {
@@ -2712,6 +2714,21 @@ namespace MoistureUpset
             catch (Exception)
             {
                 DebugClass.Log($"PlayableMithrix not installed, skipping");
+            }
+        }
+        private static void ChipTheBeetle()
+        {
+            try
+            {
+                if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) == 1)
+                {
+                    Collabs.PlayableBeetle.Run();
+                    DebugClass.Log($"ChipTheBeetle installed, modifying");
+                }
+            }
+            catch (Exception)
+            {
+                DebugClass.Log($"ChipTheBeetle not installed, skipping");
             }
         }
     }
