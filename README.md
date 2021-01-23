@@ -40,6 +40,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.1.2: Added the code for the big money amounts, oops.
+
  1.1.1: Added Chip the Beetle support! Adjusted Shulker Boxes to be orange so that they stand out about as well as the equipment barrels are supposed to. Currency has been changed up a bit to be more accurate to real life costs...
 
  1.1.0: Added Direseeker support, be sure to check him out if you have it installed! Chests have been given a facelift. A few bug fixes.
