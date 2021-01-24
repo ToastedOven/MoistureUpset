@@ -28,12 +28,32 @@ namespace MoistureUpset
             DeathRespawn();
             PlayerDeath();
             DifficultyIcons();
+            DoppelGangerFix();
             EnemyReplacements.LoadBNK("MusicReplacements");
         }
         public static void DeathRespawn()
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Respawn SFX")) == 1)
                 EnemyReplacements.LoadBNK("Respawn");
+        }
+
+        public static void DoppelGangerFix()
+        {
+            On.EntityStates.GenericCharacterDeath.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Player death sound")) == 1)
+                        if (self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>() && self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>().name == "PlayerPositionIndicator(Clone)")
+                        {
+                            AkSoundEngine.PostEvent("PlayerDeath", self.outer.gameObject);
+                        }
+                }
+                catch (Exception)
+                {
+                }
+            };
         }
 
         public static void DifficultyIcons()

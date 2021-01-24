@@ -96,6 +96,9 @@ namespace MoistureUpset.Skins
             BoneAdder.AppendAtoB("TailC", "pelvis");
             BoneAdder.AppendAtoB("EarC.R", "head");
             BoneAdder.AppendAtoB("EarC.L", "head");
+            //BoneAdder.AttachCollider(bodyPrefab, .5f, .5f, DynamicBoneCollider.Direction.Y, DynamicBoneCollider.Bound.Outside);
+            //BoneAdder.FinalizeColliders();
+            //bodyPrefab.AddComponent<UseAllColliders>();
 
             BoneAdder.boneList = survivorDef.displayPrefab.GetComponentInChildren<SkinnedMeshRenderer>().bones;
             BoneAdder.AddToBoneList("@MoistureUpset_moisture_puro:assets/puro/purobonesdisplay.prefab", "purobonesdisplay");

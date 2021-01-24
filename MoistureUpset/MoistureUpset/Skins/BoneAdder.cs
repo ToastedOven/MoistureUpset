@@ -5,6 +5,10 @@ public static class BoneAdder
 {
     public static Transform[] boneList;
 
+    public static List<DynamicBone> dynbones = new List<DynamicBone>();
+
+    public static List<DynamicBoneCollider> colliders = new List<DynamicBoneCollider>();
+
     public static void DebugDefaultBones()
     {
         foreach (var item in boneList)
@@ -69,6 +73,7 @@ public static class BoneAdder
                 {
                     var dynbone = bodyPrefab.AddComponent<DynamicBone>();
                     dynbone.m_Root = item.GetChild(root);
+                    dynbones.Add(dynbone);
                     return dynbone;
                 }
                 return null;
@@ -76,5 +81,105 @@ public static class BoneAdder
         }
         Debug.Log($"[{a}] not found");
         return null;
+    }
+
+
+
+    public static DynamicBoneCollider AttachCollider(Transform t, float radius, float height, DynamicBoneCollider.Direction direction, DynamicBoneCollider.Bound bound)
+    {
+        return AttachCollider(t.gameObject, radius, height, direction, bound, Vector3.zero);
+    }
+    public static DynamicBoneCollider AttachCollider(Transform t, float radius, float height, DynamicBoneCollider.Direction direction, DynamicBoneCollider.Bound bound, Vector3 center)
+    {
+        return AttachCollider(t.gameObject, radius, height, direction, bound, center);
+    }
+    public static DynamicBoneCollider AttachCollider(GameObject g, float radius, float height, DynamicBoneCollider.Direction direction, DynamicBoneCollider.Bound bound)
+    {
+        return AttachCollider(g, radius, height, direction, bound, Vector3.zero);
+    }
+    public static DynamicBoneCollider AttachCollider(GameObject g, float radius, float height, DynamicBoneCollider.Direction direction, DynamicBoneCollider.Bound bound, Vector3 center)
+    {
+        var collider = g.AddComponent<DynamicBoneCollider>();
+        collider.m_Radius = radius;
+        collider.m_Height = height;
+        collider.m_Direction = direction;
+        collider.m_Bound = bound;
+        collider.m_Center = center;
+        colliders.Add(collider);
+        return collider;
+    }
+    public static DynamicBoneCollider AttachCollider(Transform target, GameObject source, int pos = 0)
+    {
+        return AttachCollider(target.gameObject, source, pos);
+    }
+    public static DynamicBoneCollider AttachCollider(GameObject target, GameObject source, int pos = 0)
+    {
+        var collider = target.AddComponent<DynamicBoneCollider>();
+        var ogCollider = source.GetComponentsInChildren<DynamicBoneCollider>()[pos];
+        collider.m_Radius = ogCollider.m_Radius;
+        collider.m_Height = ogCollider.m_Height;
+        collider.m_Direction = ogCollider.m_Direction;
+        collider.m_Bound = ogCollider.m_Bound;
+        collider.m_Center = ogCollider.m_Center;
+        colliders.Add(collider);
+        return collider;
+    }
+
+    public static List<DynamicBone> FinalizeColliders() //run me after creating all of your dynbones and colliders
+    {
+        foreach (var dynbone in dynbones)
+        {
+            foreach (var collider in colliders)
+            {
+                dynbone.m_Colliders.Add(collider);
+            }
+        }
+        return dynbones;
+    }
+
+    public static bool ClearLists()
+    {
+        if (ClearColliders() == 0 && ClearDynbones() == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+    public static int ClearDynbones()
+    {
+        dynbones.Clear();
+        return dynbones.Count;
+    }
+    public static int ClearColliders()
+    {
+        colliders.Clear();
+        return colliders.Count;
+    }
+}
+
+public class UseAllColliders : MonoBehaviour //add me to the root gameobject if you want to work with all colliders in the scene
+{
+    float timer = 1;
+    bool run = false;
+    void Update()
+    {
+        if (!run)
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0) //waiting a second before grabbing all colliders cause idk how exactly Hopoo loads the scene and I don't want to miss anything
+            {
+                run = true;
+                var dynbones = GetComponentsInChildren<DynamicBone>();
+                DynamicBoneCollider[] colliders = GameObject.FindObjectsOfType<DynamicBoneCollider>();
+                foreach (var dynbone in dynbones)
+                {
+                    dynbone.m_Colliders.Clear();
+                    foreach (var collider in colliders)
+                    {
+                        dynbone.m_Colliders.Add(collider);
+                    }
+                }
+            }
+        }
     }
 }
