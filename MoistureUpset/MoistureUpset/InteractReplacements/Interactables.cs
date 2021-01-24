@@ -26,6 +26,10 @@ namespace MoistureUpset.InteractReplacements
         public static GameObject particles;
         public static void ReloadChests()
         {
+
+            if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) != 1)
+                return;
+
             var fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest1");
             EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
             fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
