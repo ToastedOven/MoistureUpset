@@ -30,11 +30,11 @@ namespace MoistureUpset.Skins
         // Add all the skins to load here
         public static void LoadAllSkins()
         {
-            On.RoR2.SurvivorCatalog.Init += AddSkinReloader;
             TF2Engi.Init();
             CommandoTest.Init();
             //JotaroCaptain.Init();
             //StarPlatinumLoader.Init();
+            On.RoR2.SurvivorCatalog.Init += AddSkinReloader;
         }
 
         // Add component SkinReloader to all survivors

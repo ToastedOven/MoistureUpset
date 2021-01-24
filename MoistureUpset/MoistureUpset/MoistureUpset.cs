@@ -31,6 +31,8 @@ namespace MoistureUpset
     {
         public void Awake()
         {
+            DebugClass.SetLogger(base.Logger);
+            
             Settings.RunAll();
 
             Assets.PopulateAssets();
