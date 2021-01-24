@@ -102,7 +102,6 @@ namespace MoistureUpset
                 {
                     item.mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
                 }
-                //0 is the moneybag
             }
         }
     }

@@ -1022,8 +1022,7 @@ namespace MoistureUpset
                 LoadBNK("awp");
             if (float.Parse(ModSettingsManager.getOptionValue("Chest noises")) == 1)
                 LoadBNK("chestinteraction");
-            if (float.Parse(ModSettingsManager.getOptionValue("Player death sound")) == 1)
-                LoadBNK("playerdeath");
+            LoadBNK("playerdeath");
         }
         private static void Sans()
         {
