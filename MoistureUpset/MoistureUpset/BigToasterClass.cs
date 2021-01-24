@@ -199,6 +199,13 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
+                if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
+                {
+                    Debug.Log($"--------reloading chests");
+                    InteractReplacements.Interactables.ReloadChests();
+                }
+
                 EnemyReplacements.kindlyKillYourselfRune = true;
                 AkSoundEngine.SetRTPCValue("Dicks", 0);
                 if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
