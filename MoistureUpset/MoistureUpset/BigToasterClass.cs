@@ -202,7 +202,7 @@ namespace MoistureUpset
                 var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
                 if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
                 {
-                    Debug.Log($"--------reloading chests");
+                    //Debug.Log($"--------reloading chests");
                     InteractReplacements.Interactables.ReloadChests();
                 }
 
