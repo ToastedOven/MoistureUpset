@@ -30,13 +30,19 @@ Anything Else, send them to Metrosexual Fruitcake#6969 or Rune#0001
 
 None, we are perfect coders :)
 
+Rex's r makes the nyan cat noise if nyan cat is enabled
+
 # Compatibility
 
 In general this mod should work with other mods, however here is a list you might be interested in.
 
-Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithrix(CDClarke){side note this mod is already buggy on it's own}, PlayableScavenger(RyanPallesen){same as mithrix}, Direseeker(rob),
+Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithrix(CDClarke){side note this mod is already buggy on it's own}, PlayableScavenger(RyanPallesen){same as mithrix}, Direseeker(rob), ChipTheBeetle(SleeperHavel)
 
 # Changelog
+
+ 1.1.2: Added the code for the big money amounts, oops.
+
+ 1.1.1: Added Chip the Beetle support! Adjusted Shulker Boxes to be orange so that they stand out about as well as the equipment barrels are supposed to. Currency has been changed up a bit to be more accurate to real life costs...
 
  1.1.0: Added Direseeker support, be sure to check him out if you have it installed! Chests have been given a facelift. A few bug fixes.
 

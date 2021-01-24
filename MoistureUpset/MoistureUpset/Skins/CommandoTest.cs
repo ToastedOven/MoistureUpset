@@ -26,20 +26,6 @@ namespace MoistureUpset.Skins
         private static void PopulateAssets()
         {
             EnemyReplacements.LoadResource("moisture_puro");
-
-
-            //GameObject fab = Resources.Load<GameObject>("prefabs/characterdisplays/CommandoDisplay");
-            //fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_test:assets/testing/commandomesh.mesh");
-            //var boner = fab.AddComponent<DynamicBone>();
-            //Transform b = fab.transform;
-            //GameObject fab2 = Resources.Load<GameObject>("@MoistureUpset_test:assets/testing/bone.prefab");
-            //Transform t = fab2.GetComponent<Transform>();
-            //t.parent = b;
-            //boner.m_Root = t;
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"--------{item}");
-            //}
         }
 
         // Skindef stuff here
@@ -110,6 +96,9 @@ namespace MoistureUpset.Skins
             BoneAdder.AppendAtoB("TailC", "pelvis");
             BoneAdder.AppendAtoB("EarC.R", "head");
             BoneAdder.AppendAtoB("EarC.L", "head");
+            //BoneAdder.AttachCollider(bodyPrefab, .5f, .5f, DynamicBoneCollider.Direction.Y, DynamicBoneCollider.Bound.Outside);
+            //BoneAdder.FinalizeColliders();
+            //bodyPrefab.AddComponent<UseAllColliders>();
 
             BoneAdder.boneList = survivorDef.displayPrefab.GetComponentInChildren<SkinnedMeshRenderer>().bones;
             BoneAdder.AddToBoneList("@MoistureUpset_moisture_puro:assets/puro/purobonesdisplay.prefab", "purobonesdisplay");
