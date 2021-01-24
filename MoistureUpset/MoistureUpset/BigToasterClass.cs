@@ -199,6 +199,8 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
+                Debug.Log($"--------{sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh}");
                 EnemyReplacements.kindlyKillYourselfRune = true;
                 AkSoundEngine.SetRTPCValue("Dicks", 0);
                 if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)

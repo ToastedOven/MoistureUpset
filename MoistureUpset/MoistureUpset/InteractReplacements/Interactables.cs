@@ -31,9 +31,24 @@ namespace MoistureUpset.InteractReplacements
 
             EnemyReplacements.LoadBNK("Chest");
             EnemyReplacements.LoadResource("moisture_chests");
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
             var fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest1");
+            Debug.Log($"--------{fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh}");
+            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
+            Debug.Log($"--------{fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh}");
             fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
+            var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
+            Debug.Log($"--------{sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh}");
+
+            On.RoR2.SpawnCard.DoSpawn += (orig, self, pos, rot, request) =>
+            {
+                SpawnCard.SpawnResult result = orig(self, pos, rot, request);
+                if (result.spawnedInstance && result.spawnedInstance.GetComponentInChildren<SkinnedMeshRenderer>())
+                {
+                    Debug.Log($"--------{result.spawnedInstance.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh}");
+                }
+                return result;
+            };
+
 
 
             EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/CategoryChestDamage", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/damagechest.png");
