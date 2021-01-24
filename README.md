@@ -40,6 +40,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.1.3: Fixed a critical error which caused the chest replacements to depend on debugtoolkit, to put it simply, it seems like some part of debugtoolkit modifies how the SpawnCards are handled, causing a reset which normally happens to not. For anyone who doesn't use debugtoolkit, which is probably most, enjoy your chest facelift, for real this time! We also fixed a material issue with the Engi skin.
+
  1.1.2: Added the code for the big money amounts, oops.
 
  1.1.1: Added Chip the Beetle support! Adjusted Shulker Boxes to be orange so that they stand out about as well as the equipment barrels are supposed to. Currency has been changed up a bit to be more accurate to real life costs...
