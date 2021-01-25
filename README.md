@@ -40,6 +40,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.1.4: Fixed issue with font's becoming lines... yeah I'm kinda stupid
+
  1.1.3: Fixed a critical error which caused the chest replacements to depend on debugtoolkit, to put it simply, it seems like some part of debugtoolkit modifies how the SpawnCards are handled, causing a reset which normally happens to not. For anyone who doesn't use debugtoolkit, which is probably most, enjoy your chest facelift, for real this time! We also fixed a material issue with the Engi skin.
 
  1.1.2: Added the code for the big money amounts, oops.
