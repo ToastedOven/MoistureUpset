@@ -300,6 +300,7 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+            //DebugClass.DebugBones("prefabs/networkedobjects/captainsupplydrops/CaptainSupplyDrop");
         }
         private static void Icons()
         {
