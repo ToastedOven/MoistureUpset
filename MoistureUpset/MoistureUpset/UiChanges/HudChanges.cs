@@ -32,16 +32,16 @@ namespace MoistureUpset
             EnemyReplacements.LoadResource("moisture_pungas");
             if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
             {
-                var newfont = Resources.Load<Font>("@MoistureUpset_moisture_pungas:assets/pungas/bombardierwithtix.ttf");
+                //var newfont = Resources.Load<Font>("@MoistureUpset_moisture_pungas:assets/pungas/bombardierwithtix.ttf");
 
-                var tex = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/testatlas.png");
-                var mat = Resources.Load<Material>("tmpfonts/bombardier/tmpbombdropshadow");
-                mat.mainTexture = newfont.material.mainTexture;
-                mat.mainTexture = tex;
+                //var tex = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/testatlas.png");
+                //var mat = Resources.Load<Material>("tmpfonts/bombardier/tmpbombdropshadow");
+                //mat.mainTexture = newfont.material.mainTexture;
+                //mat.mainTexture = tex;
 
-                mat = Resources.Load<Material>("tmpfonts/bombardier/tmpBombDropshadowHologram");
-                mat.mainTexture = newfont.material.mainTexture;
-                mat.mainTexture = tex;
+                //mat = Resources.Load<Material>("tmpfonts/bombardier/tmpBombDropshadowHologram");
+                //mat.mainTexture = newfont.material.mainTexture;
+                //mat.mainTexture = tex;
 
                 var setting = Resources.Load<TMPro.TMP_Settings>("TMP Settings");
                 setting.SetFieldValue("m_defaultSpriteAsset", Resources.Load<TMPro.TMP_SpriteAsset>("@MoistureUpset_moisture_pungas:assets/pungas/texInlineSprites.asset"));
@@ -50,6 +50,10 @@ namespace MoistureUpset
 
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
                 {
+                    if (!token.Contains("LORE") && st.Contains("$"))
+                    {
+                        st = st.Replace("$", "<sprite index=6>");
+                    }
                     if (token == "COST_MONEY_FORMAT")
                     {
                         st = "<sprite index=6>{0}";
