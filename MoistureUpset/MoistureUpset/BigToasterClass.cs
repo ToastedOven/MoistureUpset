@@ -356,6 +356,8 @@ namespace MoistureUpset
                         {
                             AkSoundEngine.PostEvent("ScavVictory", c.gameObject);
                         }
+                    var controller = GameObject.FindObjectOfType<MusicController>();
+                    controller.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                 }
                 catch (Exception)
                 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public static class BoneAdder
+public static class BoneAdder //if you manage to find this class, feel free to use it for adding bones to models, I haven't released this cause I don't want to step on other people's toes. I just feel this works better
 {
     public static Transform[] boneList;
 
@@ -85,9 +85,9 @@ public static class BoneAdder
 
 
 
-    public static DynamicBoneCollider AttachCollider(Transform t, float radius, float height, DynamicBoneCollider.Direction direction, DynamicBoneCollider.Bound bound)
+    public static DynamicBoneCollider AttachCollider(Transform t, float radius, float height, DynamicBoneCollider.Direction direction, DynamicBoneCollider.Bound bound) //default values for Vector3 seem to not work, so I just seperate it into 2 functions
     {
-        return AttachCollider(t.gameObject, radius, height, direction, bound, Vector3.zero);
+        return AttachCollider(t.gameObject, radius, height, direction, bound, Vector3.zero); //default to Vector3.zero if unstated. This is most likely what you want so I let you type less
     }
     public static DynamicBoneCollider AttachCollider(Transform t, float radius, float height, DynamicBoneCollider.Direction direction, DynamicBoneCollider.Bound bound, Vector3 center)
     {

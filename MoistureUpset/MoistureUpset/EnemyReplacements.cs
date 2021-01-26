@@ -300,7 +300,6 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            //DebugClass.DebugBones("prefabs/networkedobjects/captainsupplydrops/CaptainSupplyDrop");
         }
         private static void Icons()
         {
@@ -2101,6 +2100,10 @@ namespace MoistureUpset
                 }
             }
             ReplaceMeshFilter("prefabs/projectileghosts/HermitCrabBombGhost", "@MoistureUpset_skeleton:assets/arrow.mesh", "@MoistureUpset_skeleton:assets/arrow.png");
+            fab = Resources.Load<GameObject>("prefabs/projectileghosts/HermitCrabBombGhost");
+            fab.AddComponent<ArrowFixer>();
+            fab.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>().speed = Rewired.ComponentControls.Effects.RotateAroundAxis.Speed.Stopped;
+            fab.GetComponentInChildren<ParticleSystemRenderer>().enabled = false;
         }
         private static void CrabRave()
         {

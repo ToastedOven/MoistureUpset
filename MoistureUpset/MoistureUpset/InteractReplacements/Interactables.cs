@@ -87,6 +87,11 @@ namespace MoistureUpset.InteractReplacements
 
             EnemyReplacements.LoadBNK("Chest");
             EnemyReplacements.LoadResource("moisture_chests");
+            Skins.Utils.LoadAsset("InteractReplacements.SodaBarrel.sodaspritz");
+            On.RoR2.BarrelInteraction.OnInteractionBegin += SpraySoda;
+            On.RoR2.BarrelInteraction.OnDeserialize += SpraySoda;
+
+
             var fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest1");
             EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
             fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
@@ -126,7 +131,6 @@ namespace MoistureUpset.InteractReplacements
             particles.transform.SetParent(fab.transform);
             particles.transform.localPosition = Vector3.zero;
 
-            Skins.Utils.LoadAsset("InteractReplacements.SodaBarrel.sodaspritz");
             EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Barrel1", "@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/cylinder.mesh");
             fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Barrel1");
             fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/sodaSplatmap.png"));
@@ -137,8 +141,6 @@ namespace MoistureUpset.InteractReplacements
                 spritzPrefab.transform.localPosition = new Vector3(0, 1.2f, -0.4f);
             }
             fab.GetComponentInChildren<SfxLocator>().openSound = "Soda";
-            On.RoR2.BarrelInteraction.OnInteractionBegin += SpraySoda;
-            On.RoR2.BarrelInteraction.OnDeserialize += SpraySoda;
         }
 
         private static void SpraySoda(On.RoR2.BarrelInteraction.orig_OnDeserialize orig, BarrelInteraction self, NetworkReader reader, bool initialState)
