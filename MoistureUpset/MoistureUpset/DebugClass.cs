@@ -174,6 +174,18 @@ namespace MoistureUpset
             sb.Append("]");
             Log(sb.ToString());
         }
+        public static void DebugBones(SkinnedMeshRenderer mesh)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+            foreach (var bone in mesh.bones)
+            {
+                sb.Append($"'{bone.name}', ");
+            }
+            sb.Remove(sb.Length - 2, 2);
+            sb.Append("]");
+            Log(sb.ToString());
+        }
         public static void GetAllGameObjects()
         {
             GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
