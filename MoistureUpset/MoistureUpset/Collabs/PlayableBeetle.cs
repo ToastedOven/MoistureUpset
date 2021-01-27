@@ -21,6 +21,7 @@ namespace MoistureUpset.Collabs
     {
         public static void Run()
         {
+            Chip.Beetlegod beetlegod = new Beetlegod();
             foreach (var item in SurvivorAPI.SurvivorDefinitions)
             {
                 if (item.bodyPrefab.name == "Chip")

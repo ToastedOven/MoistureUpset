@@ -79,6 +79,25 @@ namespace MoistureUpset.InteractReplacements
                 spritzPrefab.transform.localPosition = new Vector3(0, 1.2f, -0.4f);
             }
             fab.GetComponentInChildren<SfxLocator>().openSound = "Soda";
+
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/TripleShopLarge");
+            fab.GetComponentInChildren<MeshFilter>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinner.mesh");
+            fab.GetComponentInChildren<MeshRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinner.png");
+            fab.AddComponent<Fixers.spinnerfixer>().scale = .01f;
+
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/TripleShop");
+            fab.GetComponentInChildren<MeshFilter>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinner.mesh");
+            fab.GetComponentInChildren<MeshRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinner.png");
+            fab.AddComponent<Fixers.spinnerfixer>().scale = .01f;
+
+            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/TripleShopEquipment");
+            fab.GetComponentInChildren<MeshFilter>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinner.mesh");
+            fab.GetComponentInChildren<MeshRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinner.png");
+            fab.AddComponent<Fixers.spinnerfixer>().scale = .01f;
+
+
+
+            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/MultiShopTerminal", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerpart.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinner.png");
         }
         private static void Chests()
         {
@@ -91,56 +110,17 @@ namespace MoistureUpset.InteractReplacements
             On.RoR2.BarrelInteraction.OnInteractionBegin += SpraySoda;
             On.RoR2.BarrelInteraction.OnDeserialize += SpraySoda;
 
-
-            var fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest1");
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
-
-
-
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/CategoryChestDamage", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/damagechest.png");
-            EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestDamage", "@MoistureUpset_na:assets/na1.mesh");
-            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestDamage");
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
-
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/CategoryChestHealing", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/healingchest.png");
-            EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestHealing", "@MoistureUpset_na:assets/na1.mesh");
-            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestHealing");
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
-
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/CategoryChestUtility", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/utilitychest.png");
-            EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestUtility", "@MoistureUpset_na:assets/na1.mesh");
-            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestUtility");
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
-
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/EquipmentBarrel", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/shulker.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/shulker.png");
-            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/EquipmentBarrel");
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetInt("_Cull", 0);
-            fab.AddComponent<equipmentbarrelfixer>();
-            fab.GetComponentInChildren<SfxLocator>().openSound = "EquipmentBarrel";
-
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest2", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.png");
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/GoldChest", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
-            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/GoldChest");
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
-            fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
-            fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
-
-            particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
-            particles.transform.SetParent(fab.transform);
-            particles.transform.localPosition = Vector3.zero;
-
-            EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Barrel1", "@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/cylinder.mesh");
-            fab = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Barrel1");
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/sodaSplatmap.png"));
-            fab.AddComponent<RandomizeSoda>();
+            On.RoR2.MultiShopController.DisableAllTerminals += (orig, self, i) =>
             {
-                GameObject spritzPrefab = Resources.Load<GameObject>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/soda spritz.prefab");
-                spritzPrefab.transform.SetParent(fab.transform);
-                spritzPrefab.transform.localPosition = new Vector3(0, 1.2f, -0.4f);
-            }
-            fab.GetComponentInChildren<SfxLocator>().openSound = "Soda";
+                orig(self, i);
+                foreach (var item in self.GetFieldValue<GameObject[]>("terminalGameObjects"))
+                {
+                    item.AddComponent<Fixers.terminalfixer>().center = self.transform.position;
+                }
+            };
+
+
+            ReloadChests();
         }
 
         private static void SpraySoda(On.RoR2.BarrelInteraction.orig_OnDeserialize orig, BarrelInteraction self, NetworkReader reader, bool initialState)

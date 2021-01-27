@@ -70,6 +70,28 @@ namespace MoistureUpset
                 }
             }
         }
+        public static void ReplaceModel(SkinnedMeshRenderer meshes, string mesh, string png)
+        {
+            meshes.sharedMesh = Resources.Load<Mesh>(mesh);
+            var texture = Resources.Load<Texture>(png);
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
+            for (int i = 0; i < meshes.sharedMaterials.Length; i++)
+            {
+                meshes.sharedMaterials[i].color = Color.white;
+                meshes.sharedMaterials[i].mainTexture = texture;
+                meshes.sharedMaterials[i].SetTexture("_EmTex", blank);
+                meshes.sharedMaterials[i].SetTexture("_NormalTex", null);
+                if (png.Contains("frog"))
+                {
+                    meshes.sharedMaterials[i].SetTexture("_FresnelRamp", null);
+                }
+                if (png.Contains("shop"))
+                {
+                    meshes.sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
+                    meshes.sharedMaterials[i].SetTexture("_FlowHeightmap", null);
+                }
+            }
+        }
         public static void ReplaceModel(GameObject fab, string mesh, string png, int position = 0, bool replaceothers = false)
         {
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
