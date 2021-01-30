@@ -81,7 +81,7 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Squirmles", "Replaces overloading worms with Squirmles", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Merchant", "Replaces shop keeper with beedle", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Cereal", "EAT EM UP EAT EM UP EAT EM UP!", "1"));
-            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Minecraft Chests", "Replaces chests and barrels with minecraft items", "1"));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Interactables", "Replaces chests and barrels with minecraft items", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Currency Changes", "Replaces currency types with robux and tix", "1"));
         }
         private static void CollabOptions()
