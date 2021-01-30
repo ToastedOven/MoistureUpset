@@ -8,11 +8,12 @@ namespace MoistureUpset.Fixers
     class spinnerfixer : MonoBehaviour
     {
         public float scale = 1;
+        public float pos = 4;
         void Start()
         {
             transform.localScale = new Vector3(scale, scale, scale);
             //transform.eulerAngles = Vector3.zero;
-            GetComponentInChildren<RoR2.Hologram.HologramProjector>().hologramPivot.localPosition = new Vector3(0, 3, 0);
+            GetComponentInChildren<RoR2.Hologram.HologramProjector>().hologramPivot.localPosition = new Vector3(0, pos, 0);
         }
         void Update()
         {
