@@ -70,6 +70,28 @@ namespace MoistureUpset
                 }
             }
         }
+        public static void ReplaceModel(SkinnedMeshRenderer meshes, string mesh, string png)
+        {
+            meshes.sharedMesh = Resources.Load<Mesh>(mesh);
+            var texture = Resources.Load<Texture>(png);
+            var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
+            for (int i = 0; i < meshes.sharedMaterials.Length; i++)
+            {
+                meshes.sharedMaterials[i].color = Color.white;
+                meshes.sharedMaterials[i].mainTexture = texture;
+                meshes.sharedMaterials[i].SetTexture("_EmTex", blank);
+                meshes.sharedMaterials[i].SetTexture("_NormalTex", null);
+                if (png.Contains("frog"))
+                {
+                    meshes.sharedMaterials[i].SetTexture("_FresnelRamp", null);
+                }
+                if (png.Contains("shop"))
+                {
+                    meshes.sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
+                    meshes.sharedMaterials[i].SetTexture("_FlowHeightmap", null);
+                }
+            }
+        }
         public static void ReplaceModel(GameObject fab, string mesh, string png, int position = 0, bool replaceothers = false)
         {
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -855,35 +877,46 @@ namespace MoistureUpset
 
                 else if (token == "GOLDCHEST_NAME")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                         st = "Ender Chest";
                 }
                 else if (token == "GOLDCHEST_CONTEXT")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                         st = "Open ender chest";
                 }
 
                 else if (token == "BARREL1_NAME")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                         st = "Can";
                 }
                 else if (token == "BARREL1_CONTEXT")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                         st = "Open can";
                 }
 
                 else if (token == "EQUIPMENTBARREL_NAME")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                         st = "Shulker Box";
                 }
                 else if (token == "EQUIPMENTBARREL_CONTEXT")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                         st = "Open shulker box";
+                }
+
+                else if (token == "MULTISHOP_TERMINAL_NAME")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                        st = "Fidget Spinner";
+                }
+                else if (token == "MULTISHOP_TERMINAL_CONTEXT")
+                {
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                        st = "SPEEEEEEEEEEEEN";
                 }
                 //else if (st.Contains("Jellyfish"))
                 //{
@@ -2100,6 +2133,10 @@ namespace MoistureUpset
                 }
             }
             ReplaceMeshFilter("prefabs/projectileghosts/HermitCrabBombGhost", "@MoistureUpset_skeleton:assets/arrow.mesh", "@MoistureUpset_skeleton:assets/arrow.png");
+            fab = Resources.Load<GameObject>("prefabs/projectileghosts/HermitCrabBombGhost");
+            fab.AddComponent<ArrowFixer>();
+            fab.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>().speed = Rewired.ComponentControls.Effects.RotateAroundAxis.Speed.Stopped;
+            fab.GetComponentInChildren<ParticleSystemRenderer>().enabled = false;
         }
         private static void CrabRave()
         {

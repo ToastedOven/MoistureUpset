@@ -199,6 +199,13 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
+                if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
+                {
+                    //Debug.Log($"--------reloading chests");
+                    InteractReplacements.Interactables.ReloadChests();
+                }
+
                 EnemyReplacements.kindlyKillYourselfRune = true;
                 AkSoundEngine.SetRTPCValue("Dicks", 0);
                 if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
@@ -349,6 +356,8 @@ namespace MoistureUpset
                         {
                             AkSoundEngine.PostEvent("ScavVictory", c.gameObject);
                         }
+                    var controller = GameObject.FindObjectOfType<MusicController>();
+                    controller.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                 }
                 catch (Exception)
                 {
@@ -670,7 +679,7 @@ namespace MoistureUpset
                 }
                 if (tracker.ToString() == "RoR2.UI.ObjectivePanelController+FindTeleporterObjectiveTracker")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Minecraft Chests")) == 1)
+                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                     {
                         GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
                         foreach (var fab in objects)
@@ -690,6 +699,29 @@ namespace MoistureUpset
                                 var obj = GameObject.Instantiate(InteractReplacements.Interactables.particles, fab.transform);
                                 obj.transform.SetParent(fab.transform);
                                 obj.transform.localPosition = Vector3.zero;
+                            }
+                            else if (fab.ToString().StartsWith("NewtStatue"))
+                            {
+                                if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                                {
+                                    GameObject g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab"));
+                                    g.transform.parent = fab.transform;
+                                    g.transform.localPosition = new Vector3(0, -1.15f, 0);
+                                    g.transform.localScale = new Vector3(.5f, .5f, .5f);
+                                    g.transform.localEulerAngles = Vector3.zero;
+                                    Texture t = g.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
+                                    g.GetComponentInChildren<SkinnedMeshRenderer>().material = fab.GetComponentInChildren<MeshRenderer>().material;
+                                    g.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = t;
+                                    foreach (var item in fab.GetComponentsInChildren<MeshRenderer>())
+                                    {
+                                        item.enabled = false;
+                                    }
+                                    fab.transform.Find("mdlNewtStatue").Find("HologramPivot").localPosition = new Vector3(0, -1.4f, 0);
+                                    var fixer = fab.AddComponent<Fixers.robloxfixer>();
+                                    fixer.g = fab.transform.Find("mdlNewtStatue").Find("HologramPivot").gameObject;
+                                    fixer.a = g.GetComponentInChildren<Animator>();
+                                    fab.GetComponent<Highlight>().targetRenderer = g.GetComponentInChildren<SkinnedMeshRenderer>();
+                                }
                             }
                         }
                     }

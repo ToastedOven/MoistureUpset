@@ -79,16 +79,16 @@ namespace MoistureUpset
             EnemyReplacements.LoadResource("moisture_pungas");
             if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
             {
-                var newfont = Resources.Load<Font>("@MoistureUpset_moisture_pungas:assets/pungas/bombardierwithtix.ttf");
+                //var newfont = Resources.Load<Font>("@MoistureUpset_moisture_pungas:assets/pungas/bombardierwithtix.ttf");
 
-                var tex = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/testatlas.png");
-                var mat = Resources.Load<Material>("tmpfonts/bombardier/tmpbombdropshadow");
-                mat.mainTexture = newfont.material.mainTexture;
-                mat.mainTexture = tex;
+                //var tex = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/testatlas.png");
+                //var mat = Resources.Load<Material>("tmpfonts/bombardier/tmpbombdropshadow");
+                //mat.mainTexture = newfont.material.mainTexture;
+                //mat.mainTexture = tex;
 
-                mat = Resources.Load<Material>("tmpfonts/bombardier/tmpBombDropshadowHologram");
-                mat.mainTexture = newfont.material.mainTexture;
-                mat.mainTexture = tex;
+                //mat = Resources.Load<Material>("tmpfonts/bombardier/tmpBombDropshadowHologram");
+                //mat.mainTexture = newfont.material.mainTexture;
+                //mat.mainTexture = tex;
 
                 var setting = Resources.Load<TMPro.TMP_Settings>("TMP Settings");
                 setting.SetFieldValue("m_defaultSpriteAsset", Resources.Load<TMPro.TMP_SpriteAsset>("@MoistureUpset_moisture_pungas:assets/pungas/texInlineSprites.asset"));
@@ -97,6 +97,10 @@ namespace MoistureUpset
 
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
                 {
+                    if (!token.Contains("LORE") && st.Contains("$"))
+                    {
+                        st = st.Replace("$", "<sprite index=6>");
+                    }
                     if (token == "COST_MONEY_FORMAT")
                     {
                         st = "<sprite index=6>{0}";
@@ -111,7 +115,7 @@ namespace MoistureUpset
                     }
                     if (token == "NEWT_STATUE_CONTEXT")
                     {
-                        st = "Get VIP Pass";
+                        st = "Purchase Bazaar Pass";
                     }
                     if (st.ToUpper().Contains("GOLD") && token != "PORTAL_GOLDSHORES_NAME" && token != "PORTAL_GOLDSHORES_CONTEXT" && token != "PORTAL_GOLDSHORES_WILL_OPEN" && token != "PORTAL_GOLDSHORES_OPEN")
                     {
@@ -120,7 +124,8 @@ namespace MoistureUpset
                     }
                     orig(self, token, st);
                 };
-
+                GameObject g = new GameObject();
+                GameObject context = new GameObject();
                 On.RoR2.UI.HUD.Awake += (orig, self) =>
                 {
                     orig(self);
@@ -132,6 +137,48 @@ namespace MoistureUpset
                         if (item.name == "DollarSign")
                         {
                             item.text = "";
+                        }
+                    }
+
+                    g = new GameObject();
+                    //g.tag = "gamepass";
+                    g.transform.parent = self.mainContainer.transform;
+                    g.transform.localPosition = new Vector3(0, 1000, 0);
+                    image = g.AddComponent<UnityEngine.UI.Image>();
+                    image.sprite = Resources.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/gamepass.png");
+                    image.preserveAspect = true;
+                    g.transform.localScale = new Vector3(3, 3, 3);
+
+
+                    context = self.mainContainer.transform.Find("MainUIArea").Find("RightCluster").Find("ContextNotification").Find("ContextDisplay").gameObject;
+                };
+
+                On.RoR2.PurchaseInteraction.GetContextString += (orig, self, i) =>
+                {
+                    try
+                    {
+                        if (Language.GetString(self.contextToken) == "Purchase Bazaar Pass")
+                        {
+                            g.transform.localPosition = Vector3.Lerp(g.transform.localPosition, Vector3.zero, Time.deltaTime * 6);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    return orig(self, i);
+                };
+
+                On.RoR2.UI.HUD.Update += (orig, self) =>
+                {
+                    orig(self);
+                    if (!context.activeSelf)
+                    {
+                        try
+                        {
+                            g.transform.localPosition = new Vector3(0, 1000, 0);
+                        }
+                        catch (Exception)
+                        {
                         }
                     }
                 };

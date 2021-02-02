@@ -24,7 +24,7 @@ namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("com.rune580.riskofoptions")]
-    [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", "1.0.0")]
+    [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", "1.1.4")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
