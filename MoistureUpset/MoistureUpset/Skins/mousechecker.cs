@@ -34,7 +34,7 @@ public class mousechecker : MonoBehaviour
     }
     void Update()
     {
-        Vector3 v = new Vector3(-10, 0, 0);
+        Vector3 v = new Vector3(0, 0, 0);
         if (transform.localPosition == v)
         {
             float dist = 99999;

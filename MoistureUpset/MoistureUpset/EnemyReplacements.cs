@@ -273,6 +273,7 @@ namespace MoistureUpset
             {
                 ThanosQuotes();
                 LoadBNK("ImWettest");
+                LoadBNK("ImWettest2");
                 DEBUG();
                 Twitch();
                 Cereal();
