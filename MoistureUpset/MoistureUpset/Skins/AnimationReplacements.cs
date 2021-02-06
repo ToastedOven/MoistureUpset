@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
+using R2API.Networking.Interfaces;
 
 namespace MoistureUpset.Skins
 {
@@ -107,6 +108,9 @@ namespace MoistureUpset.Skins
         public void PlayAnim(string s)
         {
             a2.Play(s, -1, 0f);
+
+            a1.enabled = true;
+            a2.enabled = true;
         }
         void Start()
         {
@@ -230,6 +234,49 @@ namespace MoistureUpset.Skins
             }
             DebugClass.Log($"couldnt find bone [{name}]");
             return bones[0];
+        }
+    }
+
+    public class SyncAnimation : INetMessage
+    {
+        NetworkInstanceId netId;
+        string animation;
+
+        public SyncAnimation()
+        {
+
+        }
+
+        public SyncAnimation(NetworkInstanceId netId, string animation)
+        {
+            this.netId = netId;
+            this.animation = animation;
+        }
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadNetworkId();
+            animation = reader.ReadString();
+        }
+
+        public void OnReceived()
+        {
+            GameObject bodyObject = Util.FindNetworkObject(netId);
+            if (!bodyObject)
+            {
+                DebugClass.Log($"Body is null!!!");
+            }
+
+            //DebugClass.Log($"Recieved message to play {animation} on client.");
+            //DebugClass.Log($"Client Body is {bodyObject.name}");
+
+            bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim(animation);
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.Write(netId);
+            writer.Write(animation);
         }
     }
 }
