@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
+using TMPro;
 
 namespace MoistureUpset.Skins
 {
@@ -38,6 +39,12 @@ namespace MoistureUpset.Skins
 
 
                 GameObject g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/emotewheel/emotewheel.prefab"));
+                foreach (var item in g.GetComponentsInChildren<TextMeshProUGUI>())
+                {
+                    item.font = self.mainContainer.transform.Find("MainUIArea").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().font;
+                    item.fontMaterial = self.mainContainer.transform.Find("MainUIArea").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontMaterial;
+                    item.fontSharedMaterial = self.mainContainer.transform.Find("MainUIArea").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontSharedMaterial;
+                }
                 g.transform.SetParent(self.mainContainer.transform);
                 g.transform.localPosition = new Vector3(0, 0, 0);
                 var s = g.AddComponent<mousechecker>();
@@ -99,13 +106,35 @@ namespace MoistureUpset.Skins
         public Animator a1, a2;
         public HealthComponent h;
         public List<BonePair> pairs = new List<BonePair>();
-        public List<Vector3> oldpos = new List<Vector3>();
-        public List<Quaternion> oldrot = new List<Quaternion>();
-        public List<Vector3> oldscale = new List<Vector3>();
         public float timer = 0;
+        public static float caramellCount = 0;
+        public static float caramellTimer = 0;
 
         public void PlayAnim(string s)
         {
+            if (s == "Caramelldansen")
+            {
+                AkSoundEngine.PostEvent("PlayCaramell", gameObject);
+                if (a2.GetCurrentAnimatorStateInfo(0).IsName("Caramelldansen"))
+                {
+                    return;
+                }
+                caramellCount++;
+                a2.PlayInFixedTime(s, -1, caramellTimer);
+                return;
+            }
+            else
+            {
+                AkSoundEngine.PostEvent("StopCaramell", gameObject);
+                if (a2.GetCurrentAnimatorStateInfo(0).IsName("Caramelldansen"))
+                {
+                    caramellCount--;
+                    if (caramellCount == 0)
+                    {
+                        caramellTimer = 0;
+                    }
+                }
+            }
             a2.Play(s, -1, 0f);
         }
         void Start()
@@ -113,34 +142,28 @@ namespace MoistureUpset.Skins
         }
         void Update()
         {
+            if (caramellCount != 0)
+            {
+                caramellTimer += Time.deltaTime;
+            }
             if (pairs.Count == 0 && a2.enabled)
             {
-                if (a1.enabled)
-                {
-                    foreach (var item in smr2.bones)
-                    {
-                        oldpos.Add(item.position);
-                        oldrot.Add(item.rotation);
-                        oldscale.Add(item.localScale);
-                    }
-                }
-                else if (oldpos.Count != 0)
-                {
-                    oldpos.Clear();
-                }
-                for (int i = 0; i < smr1.bones.Length; i++)
+                for (int i = 0; i < smr2.bones.Length; i++)
                 {
                     try
                     {
+                        //Debug.Log($"{i}--{smr2.bones[i]}------{smr1.bones[i]}");
                         smr2.bones[i].position = smr1.bones[i].position;
                         smr2.bones[i].rotation = smr1.bones[i].rotation;
                         smr2.bones[i].localScale = smr1.bones[i].localScale;
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        //Debug.Log($"--------{e}");
                         break;
                     }
                 }
+                //Debug.Log($"\n\n\n\n");
             }
             else
             {
@@ -151,37 +174,10 @@ namespace MoistureUpset.Skins
                     item.original.localScale = item.newiginal.localScale;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                //a1.enabled = !a1.enabled;
-                //if (!a1.enabled)
-                //{
-                //    a2.Play("dance", -1, 0f);
-                //}
-
-            }
             if (a2.GetCurrentAnimatorStateInfo(0).IsName("none"))
             {
-                if (timer > 0)
-                {
-                    timer -= Time.deltaTime;
-                    for (int i = 0; i < oldpos.Count; i++)
-                    {
-                        smr2.bones[i].position = Vector3.Lerp(smr2.bones[i].position, oldpos[i], Time.deltaTime);
-                        smr2.bones[i].rotation = Quaternion.Lerp(smr2.bones[i].rotation, oldrot[i], Time.deltaTime);
-                        smr2.bones[i].localScale = Vector3.Lerp(smr2.bones[i].localScale, oldscale[i], Time.deltaTime);
-                    }
-                    a2.enabled = false;
-                }
-                if (timer <= 0)
-                {
-                }
-                    a1.enabled = true;
-            }
-            else
-            {
-                a1.enabled = false;
-                timer = 1f;
+                a2.enabled = false;
+                a1.enabled = true;
             }
             if (h.health <= 0)
             {

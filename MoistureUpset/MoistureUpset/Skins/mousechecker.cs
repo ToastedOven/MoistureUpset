@@ -33,7 +33,7 @@ public class mousechecker : MonoBehaviour
     }
     void Update()
     {
-        Vector3 v = new Vector3(-10, 0, 0);
+        Vector3 v = new Vector3(0, 0, 0);
         if (transform.localPosition == v)
         {
             float dist = 99999;
@@ -65,8 +65,8 @@ public class mousechecker : MonoBehaviour
                 {
                     DebugClass.Log($"playing {selected.GetComponent<TextMeshProUGUI>().text}");
                     var bonemapper = (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().modelLocator.modelTransform.GetComponentInChildren<BoneMapper>());
-                    bonemapper.a2.Play(selected.GetComponent<TextMeshProUGUI>().text, -1, 0f);
-                    bonemapper.a1.enabled = true;
+                    bonemapper.PlayAnim(selected.GetComponent<TextMeshProUGUI>().text);
+                    bonemapper.a1.enabled = false;
                     bonemapper.a2.enabled = true;
                 }
                 catch (Exception e)
