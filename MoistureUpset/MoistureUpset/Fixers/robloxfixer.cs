@@ -9,16 +9,19 @@ namespace MoistureUpset.Fixers
     {
         public GameObject g;
         public Animator a;
-        public bool waved = false, bought = false;
+        public bool waved = false, bought = false, standing = false;
         void Update()
         {
             if (g.GetComponentsInChildren<Component>().Length != 1 && !waved && !bought)
             {
+                standing = false;
                 waved = true;
-                a.Play("Waving");
+                a.CrossFade("Waving", .1f);
             }
-            else if (g.GetComponentsInChildren<Component>().Length == 1)
+            else if (g.GetComponentsInChildren<Component>().Length == 1 && !standing && !bought)
             {
+                a.CrossFade("Breathing Idle", .4f);
+                standing = true;
                 waved = false;
             }
         }
