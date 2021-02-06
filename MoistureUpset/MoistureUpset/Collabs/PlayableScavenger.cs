@@ -27,12 +27,12 @@ namespace MoistureUpset.Collabs
                 if (item.bodyPrefab.name == "ScavengerPlayer")
                 {
                     EnemyReplacements.ReplaceModel(item.bodyPrefab, "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", 0);
-                    EnemyReplacements.ReplaceModel(item.bodyPrefab, "@MoistureUpset_NA:assets/na1.mesh", 1);
+                    EnemyReplacements.ReplaceModel(item.bodyPrefab, "@MoistureUpset_na:assets/na1.mesh", 1);
                     EnemyReplacements.ReplaceModel(item.bodyPrefab, "@MoistureUpset_scavenger:assets/bosses/Body.mesh", 2);
                     EnemyReplacements.ReplaceMeshFilter(item.bodyPrefab, "@MoistureUpset_scavenger:assets/bosses/gun.mesh");
 
                     EnemyReplacements.ReplaceModel(item.displayPrefab, "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", 0);
-                    EnemyReplacements.ReplaceModel(item.displayPrefab, "@MoistureUpset_NA:assets/na1.mesh", 1);
+                    EnemyReplacements.ReplaceModel(item.displayPrefab, "@MoistureUpset_na:assets/na1.mesh", 1);
                     EnemyReplacements.ReplaceModel(item.displayPrefab, "@MoistureUpset_scavenger:assets/bosses/Body.mesh", 2);
                     EnemyReplacements.ReplaceMeshFilter(item.displayPrefab, "@MoistureUpset_scavenger:assets/bosses/gun.mesh");
                 }

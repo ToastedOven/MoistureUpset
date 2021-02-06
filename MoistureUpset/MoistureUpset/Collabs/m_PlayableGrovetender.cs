@@ -23,16 +23,16 @@ namespace MoistureUpset.Collabs
         public static void Run()
         {
 
-            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.myCharacter, "@MoistureUpset_NA:assets/na1.mesh", 0);
-            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.myCharacter, "@MoistureUpset_NA:assets/na1.mesh", 1);
+            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.myCharacter, "@MoistureUpset_na:assets/na1.mesh", 0);
+            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.myCharacter, "@MoistureUpset_na:assets/na1.mesh", 1);
             EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.myCharacter, "@MoistureUpset_moisture_twitch:assets/twitch.mesh", 2);
-            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.myCharacter, "@MoistureUpset_NA:assets/na1.mesh", 3);
+            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.myCharacter, "@MoistureUpset_na:assets/na1.mesh", 3);
 
 
-            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.characterDisplay, "@MoistureUpset_NA:assets/na1.mesh", 0);
-            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.characterDisplay, "@MoistureUpset_NA:assets/na1.mesh", 1);
+            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.characterDisplay, "@MoistureUpset_na:assets/na1.mesh", 0);
+            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.characterDisplay, "@MoistureUpset_na:assets/na1.mesh", 1);
             EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.characterDisplay, "@MoistureUpset_moisture_twitch:assets/twitch.mesh", 2);
-            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.characterDisplay, "@MoistureUpset_NA:assets/na1.mesh", 3);
+            EnemyReplacements.ReplaceModel(PlayableGrovetender.GrovetenderPlugin.characterDisplay, "@MoistureUpset_na:assets/na1.mesh", 3);
 
 
             var fab = PlayableGrovetender.GrovetenderPlugin.healWispGhost;

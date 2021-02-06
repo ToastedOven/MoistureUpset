@@ -167,7 +167,14 @@ namespace MoistureUpset.InteractReplacements
                     {
                         if (self.gameObject.ToString().StartsWith("NewtStatue"))
                         {
-                            self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play("Backflip");
+                            if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "AToasterOven(Clone)")
+                            {
+                                self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play("Backflip");
+                            }
+                            else
+                            {
+                                self.gameObject.GetComponent<Fixers.robloxfixer>().a.CrossFade("Backflip", .4f);
+                            }
                             self.gameObject.GetComponent<Fixers.robloxfixer>().bought = true;
                         }
                     }

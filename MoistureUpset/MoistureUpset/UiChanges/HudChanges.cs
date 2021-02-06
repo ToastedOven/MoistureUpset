@@ -79,17 +79,6 @@ namespace MoistureUpset
             EnemyReplacements.LoadResource("moisture_pungas");
             if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
             {
-                //var newfont = Resources.Load<Font>("@MoistureUpset_moisture_pungas:assets/pungas/bombardierwithtix.ttf");
-
-                //var tex = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/testatlas.png");
-                //var mat = Resources.Load<Material>("tmpfonts/bombardier/tmpbombdropshadow");
-                //mat.mainTexture = newfont.material.mainTexture;
-                //mat.mainTexture = tex;
-
-                //mat = Resources.Load<Material>("tmpfonts/bombardier/tmpBombDropshadowHologram");
-                //mat.mainTexture = newfont.material.mainTexture;
-                //mat.mainTexture = tex;
-
                 var setting = Resources.Load<TMPro.TMP_Settings>("TMP Settings");
                 setting.SetFieldValue("m_defaultSpriteAsset", Resources.Load<TMPro.TMP_SpriteAsset>("@MoistureUpset_moisture_pungas:assets/pungas/texInlineSprites.asset"));
 
@@ -123,6 +112,16 @@ namespace MoistureUpset
                         st = st.Replace("gold", "tix");
                     }
                     orig(self, token, st);
+                };
+                On.RoR2.Chat.PlayerDeathChatMessage.ConstructChatString += (orig, self) =>
+                {
+                    string text = orig(self);
+                    StringBuilder sb = new StringBuilder(text);
+                    sb.Remove(0, "<style=cDeath>".Length);
+                    sb.Remove(sb.Length - 8, 8);
+                    sb.Insert(29, "<style=cDeath>");
+                    sb.Insert(sb.Length-29, "</style>");
+                    return sb.ToString();
                 };
                 GameObject g = new GameObject();
                 GameObject context = new GameObject();
