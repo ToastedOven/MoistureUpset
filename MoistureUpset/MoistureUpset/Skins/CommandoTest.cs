@@ -107,57 +107,18 @@ namespace MoistureUpset.Skins
             BoneAdder.AppendAtoB("EarC.R", "head");
             BoneAdder.AppendAtoB("EarC.L", "head");
 
-            bodyPrefab.AddComponent<test>().a = bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.GetComponent<Animator>();
-            //Debug.Log("------------------" + bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.GetComponent<Animator>());
-            //foreach (var item in bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.GetComponent<Animator>().parameters)
-            //{
-            //    Debug.Log("------------------" + item.type + "      " + item.name);
-            //}
-            //Debug.Log("------------------" + bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.GetComponent<Animator>().GetBool("isMoving"));
-            //need to add to child locator to make this work I think
-            //ItemDisplayRuleSet IDRS = bodyPrefab.GetComponentInChildren<CharacterModel>().itemDisplayRuleSet;
-
-            //IDRS.FindItemDisplayRuleGroup("Mushroom").rules[0].localPos = new Vector3(0.009687734f, 0.07507756f, -0.1626426f);
-            //IDRS.FindItemDisplayRuleGroup("Mushroom").rules[0].localAngles = new Vector3(-148.959f, 0f, 180f);
-            //IDRS.FindItemDisplayRuleGroup("Mushroom").rules[0].localScale = new Vector3(0.04764923f, 0.0476492f, 0.04764921f);
-            //IDRS.FindItemDisplayRuleGroup("Mushroom").rules[0].childName = "Tail.001";
-        }
-    }
-
-    public class test : MonoBehaviour
-    {
-        public Animator a;
-        AnimatorOverrideController yes;
-        AnimationClip clip = Resources.Load<AnimationClip>("@MoistureUpset_moisture_puro:assets/puro/purodies.anim");
-
-        void Start()
-        {
-            yes = new AnimatorOverrideController(a.runtimeAnimatorController);
-            a.runtimeAnimatorController = yes;
-        }
-        void Update()
-        {
-            //Debug.Log(a.GetCurrentAnimatorClipInfo(0)[0].clip.name);
-            //foreach (var item in a.parameters)
-            //{
-            //    Debug.Log("------------------" + item.type + "      " + item.name);
-            //}    
-            //Debug.Log("------------------" + a.GetCurrentAnimatorClipInfo(0)[0].clip);
-            //Debug.Log("------------------" + a.GetCurrentAnimatorClipInfo(0)[0].GetPropertyValue<AnimationClip>("clip"));
-            //a.GetCurrentAnimatorClipInfo(0)[0].SetPropertyValue<AnimationClip>("clip", clip);
-            yes[a.GetCurrentAnimatorClipInfo(0)[0].clip.name] = clip;
-            //if (a.GetCurrentAnimatorClipInfo(0)[0].clip.name != "CommandoArmature|ThrowGrenade")
-            //{
-            //    a.Play("");
-            //}
-            //a.speed = 1f;
-            //a.Update(0f);
-            //int index = 0;
-            //a.SetFloat("FireFMJ.playbackRate", 1f);
-            //a.PlayInFixedTime("ThrowGrenade", index, 0f);
-            //a.Update(0f);
-            //float length = a.GetCurrentAnimatorStateInfo(index).length;
-            //a.SetFloat("FireFMJ.playbackRate", length / EntityStates.Commando.CommandoWeapon.FireGrenade.baseDuration);
+            //GameObject animcontroller = Resources.Load<GameObject>("@MoistureUpset_moisture_puro:assets/puro/IGOTITPOGGGGG.prefab");
+            //animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
+            //animcontroller.transform.localPosition = Vector3.zero;
+            //animcontroller.transform.localEulerAngles = Vector3.zero;
+            //SkinnedMeshRenderer smr1 = animcontroller.GetComponentInChildren<SkinnedMeshRenderer>();
+            //SkinnedMeshRenderer smr2 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>();
+            //var test = animcontroller.AddComponent<BoneMapper>();
+            //test.smr1 = smr1;
+            //test.smr2 = smr2;
+            //test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
+            //test.a2 = animcontroller.GetComponentInChildren<Animator>();
+            //test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
         }
     }
 }
