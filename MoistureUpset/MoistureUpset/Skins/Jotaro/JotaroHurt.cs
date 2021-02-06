@@ -21,39 +21,47 @@ namespace MoistureUpset.Skins.Jotaro
 
         void FixedUpdate()
         {
-            if (smr == null)
+            try
             {
-                foreach (var item in GetComponentInChildren<ModelLocator>().modelTransform.GetComponentsInChildren<SkinnedMeshRenderer>())
+                if (smr == null)
                 {
-                    //DebugClass.Log($"{item.sharedMaterial.name}, {SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken]}");
-                    if (item.sharedMaterial.mainTexture.name.ToLower() == SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken].ToLower())
+                    foreach (var item in GetComponentInChildren<ModelLocator>().modelTransform.GetComponentsInChildren<SkinnedMeshRenderer>())
                     {
-                        smr = item;
+                        //DebugClass.Log($"{item.sharedMaterial.name}, {SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken]}");
+                        if (item.sharedMaterial.mainTexture.name.ToLower() == SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken].ToLower())
+                        {
+                            smr = item;
+                        }
+                        else if (item.sharedMaterial.mainTexture.name.ToLower() == $"{SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken]}hurt".ToLower())
+                        {
+                            hurtsmr = item;
+                        }
                     }
-                    else if (item.sharedMaterial.mainTexture.name.ToLower() == $"{SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken]}hurt".ToLower())
+                    if (hurtsmr != null)
                     {
-                        hurtsmr = item;
+                        hurtsmr.gameObject.SetActive(false);
                     }
                 }
-                if (hurtsmr != null)
+
+                if (hc.combinedHealthFraction < 0.3f && !Hurt)
+                {
+                    smr.gameObject.SetActive(false);
+                    hurtsmr.gameObject.SetActive(true);
+                    AkSoundEngine.PostEvent("JotaroHurt", gameObject);
+                    Hurt = true;
+                }
+                else if (hc.combinedHealthFraction > 0.50f && Hurt)
                 {
                     hurtsmr.gameObject.SetActive(false);
+                    smr.gameObject.SetActive(true);
+                    Hurt = false;
                 }
             }
+            catch (Exception)
+            {
 
-            if (hc.combinedHealthFraction < 0.3f && !Hurt)
-            {
-                smr.gameObject.SetActive(false);
-                hurtsmr.gameObject.SetActive(true);
-                AkSoundEngine.PostEvent("JotaroHurt", gameObject);
-                Hurt = true;
             }
-            else if (hc.combinedHealthFraction > 0.50f && Hurt)
-            {
-                hurtsmr.gameObject.SetActive(false);
-                smr.gameObject.SetActive(true);
-                Hurt = false;
-            }
+
         }
     }
 }

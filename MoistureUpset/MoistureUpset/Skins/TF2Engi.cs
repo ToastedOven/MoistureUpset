@@ -24,6 +24,21 @@ namespace MoistureUpset.Skins
             On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += ModifyTurretBlueprint;
             EngiDisplayFix();
             AddToPrefab();
+
+            //On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
+        }
+
+        private static void KillCamTest(On.RoR2.CharacterMaster.orig_OnBodyDeath orig, CharacterMaster self, CharacterBody body)
+        {
+            orig(self, body);
+
+            if (body.isSkin("THE_TF2_ENGINEER_SKIN"))
+            {
+                if (!self.preventGameOver)
+                {
+                    DebugClass.Log($"The Engi is Dead");
+                }
+            }
         }
 
         // Load assets here

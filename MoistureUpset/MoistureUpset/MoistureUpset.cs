@@ -19,6 +19,7 @@ using UnityEngine.Video;
 using RoR2.PostProcessing;
 using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
+using R2API.Networking;
 
 namespace MoistureUpset
 {
@@ -26,11 +27,15 @@ namespace MoistureUpset
     [BepInDependency("com.rune580.riskofoptions")]
     [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", "1.1.4")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
-    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI")]
+    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public void Awake()
         {
+            DebugClass.SetLogger(base.Logger);
+
+            NetworkingAPI.RegisterMessageType<Skins.SyncAnimation>();
+            
             Settings.RunAll();
 
             Assets.PopulateAssets();

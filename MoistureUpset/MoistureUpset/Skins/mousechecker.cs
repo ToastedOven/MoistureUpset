@@ -16,6 +16,7 @@ using RiskOfOptions;
 using TMPro;
 using MoistureUpset.Skins;
 using MoistureUpset;
+using R2API.Networking.Interfaces;
 
 public class mousechecker : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class mousechecker : MonoBehaviour
                 events.cursorOpenerForGamepadCount += 1;
                 events.cursorOpenerCount += 1;
             }
-            transform.localPosition = v;
+            transform.localPosition = v; 
         }
         else
         {
@@ -65,12 +66,20 @@ public class mousechecker : MonoBehaviour
                 {
                     DebugClass.Log($"playing {selected.GetComponent<TextMeshProUGUI>().text}");
                     var bonemapper = (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().modelLocator.modelTransform.GetComponentInChildren<BoneMapper>());
-                    bonemapper.PlayAnim(selected.GetComponent<TextMeshProUGUI>().text);
-                    bonemapper.a1.enabled = false;
-                    bonemapper.a2.enabled = true;
+                    //bonemapper.a2.Play(selected.GetComponent<TextMeshProUGUI>().text, -1, 0f);
+
+                    //bonemapper.PlayAnim(selected.GetComponent<TextMeshProUGUI>().text);
+
+                    var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
+
+                    new SyncAnimation(identity.netId, selected.GetComponent<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
+
+                    //bonemapper.a1.enabled = true;
+                    //bonemapper.a2.enabled = true;
                 }
                 catch (Exception e)
                 {
+                    DebugClass.Log(e);
                 }
                 if (events.cursorOpenerForGamepadCount != 0)
                 {
