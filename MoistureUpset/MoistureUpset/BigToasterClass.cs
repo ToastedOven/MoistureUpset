@@ -705,14 +705,18 @@ namespace MoistureUpset
                                 if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
                                 {
                                     GameObject g;
-                                    int num = UnityEngine.Random.Range(0, 2);
+                                    int num = UnityEngine.Random.Range(0, 3);
                                     if (num == 0)
                                     {
                                         g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab"));
                                     }
-                                    else
+                                    else if(num == 1)
                                     {
                                         g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/kevinaltar.prefab"));
+                                    }
+                                    else
+                                    {
+                                        g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/RuneMasterGaming580808080808080ADHD.prefab"));
                                     }
                                     g.transform.parent = fab.transform;
                                     g.transform.localPosition = new Vector3(0, -1.15f, 0);
