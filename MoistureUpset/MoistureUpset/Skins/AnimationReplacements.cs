@@ -15,6 +15,8 @@ using System.Text;
 using RiskOfOptions;
 using TMPro;
 using R2API.Networking.Interfaces;
+using UnityEngine.Animations;
+using UnityEngine.UI;
 
 namespace MoistureUpset.Skins
 {
@@ -48,6 +50,7 @@ namespace MoistureUpset.Skins
                 }
                 g.transform.SetParent(self.mainContainer.transform);
                 g.transform.localPosition = new Vector3(0, 0, 0);
+                g.transform.localScale = new Vector3(self.GetComponent<CanvasScaler>().referenceResolution.x / Screen.width, self.GetComponent<CanvasScaler>().referenceResolution.y / Screen.height, 1);
                 var s = g.AddComponent<mousechecker>();
                 foreach (var item in g.GetComponentsInChildren<Transform>())
                 {
@@ -84,6 +87,7 @@ namespace MoistureUpset.Skins
                 test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
                 test.a2 = animcontroller.GetComponentInChildren<Animator>();
                 test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
+                test.model = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
 
                 //bodyPrefab = survivorDef.displayPrefab;
                 //animcontroller = Resources.Load<GameObject>(resource);
@@ -110,9 +114,12 @@ namespace MoistureUpset.Skins
         public float timer = 0;
         public static float caramellCount = 0;
         public static float caramellTimer = 0;
+        public GameObject model;
+        List<string> ignore = new List<string>();
 
         public void PlayAnim(string s)
         {
+            a2.enabled = true;
             if (s == "Caramelldansen")
             {
                 AkSoundEngine.PostEvent("PlayCaramell", gameObject);
@@ -121,6 +128,19 @@ namespace MoistureUpset.Skins
                     return;
                 }
                 caramellCount++;
+                for (int i = 0; i < smr2.bones.Length; i++)
+                {
+                    try
+                    {
+                        if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
+                        {
+                            smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = true;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
                 a2.PlayInFixedTime(s, -1, caramellTimer);
                 return;
             }
@@ -136,13 +156,64 @@ namespace MoistureUpset.Skins
                     }
                 }
             }
+            for (int i = 0; i < smr2.bones.Length; i++)
+            {
+                try
+                {
+                    if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
+                    {
+                        smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = true;
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
             a2.Play(s, -1, 0f);
-
-            a1.enabled = true;
-            a2.enabled = true;
+        }
+        void AddIgnore(DynamicBone dynbone, Transform t)
+        {
+            for (int i = 0; i < t.childCount; i++)
+            {
+                if (!dynbone.m_Exclusions.Contains(t.GetChild(i)))
+                {
+                    ignore.Add(t.GetChild(i).name);
+                    AddIgnore(dynbone, t.GetChild(i));
+                }
+            }
         }
         void Start()
         {
+            foreach (var item in model.GetComponents<DynamicBone>())
+            {
+                try
+                {
+                    if (!item.m_Exclusions.Contains(item.m_Root))
+                    {
+                        ignore.Add(item.m_Root.name);
+                    }
+                    AddIgnore(item, item.m_Root);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            for (int i = 0; i < smr2.bones.Length; i++)
+            {
+                try
+                {
+                    if (!ignore.Contains(smr2.bones[i].name))
+                    {
+                        var s = new ConstraintSource();
+                        s.sourceTransform = smr1.bones[i];
+                        s.weight = 1;
+                        smr2.bones[i].gameObject.AddComponent<ParentConstraint>().AddSource(s);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
         void Update()
         {
@@ -150,41 +221,45 @@ namespace MoistureUpset.Skins
             {
                 caramellTimer += Time.deltaTime;
             }
-            if (pairs.Count == 0 && a2.enabled)
+            if (a2.GetCurrentAnimatorStateInfo(0).IsName("none"))
+            {
+                a1.enabled = true;
+                a2.enabled = false;
+                for (int i = 0; i < smr2.bones.Length; i++)
+                {
+                    try
+                    {
+                        if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
+                        {
+                            smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = false;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                a1.enabled = false;
+            }
+            if (h.health <= 0)
             {
                 for (int i = 0; i < smr2.bones.Length; i++)
                 {
                     try
                     {
-                        //Debug.Log($"{i}--{smr2.bones[i]}------{smr1.bones[i]}");
-                        smr2.bones[i].position = smr1.bones[i].position;
-                        smr2.bones[i].rotation = smr1.bones[i].rotation;
-                        smr2.bones[i].localScale = smr1.bones[i].localScale;
+                        if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
+                        {
+                            smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = false;
+                        }
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        //Debug.Log($"--------{e}");
                         break;
                     }
                 }
-                //Debug.Log($"\n\n\n\n");
-            }
-            else
-            {
-                foreach (var item in pairs)
-                {
-                    item.original.position = item.newiginal.position;
-                    item.original.rotation = item.newiginal.rotation;
-                    item.original.localScale = item.newiginal.localScale;
-                }
-            }
-            if (a2.GetCurrentAnimatorStateInfo(0).IsName("none"))
-            {
-                a2.enabled = false;
-                a1.enabled = true;
-            }
-            if (h.health <= 0)
-            {
                 GameObject.Destroy(gameObject);
             }
         }

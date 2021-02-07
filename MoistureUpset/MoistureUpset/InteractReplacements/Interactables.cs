@@ -171,6 +171,11 @@ namespace MoistureUpset.InteractReplacements
                             {
                                 self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play("Backflip");
                             }
+                            else if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "RuneMasterGaming580808080808080ADHD(Clone)")
+                            {
+                                int num = UnityEngine.Random.Range(0, 4);
+                                self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play($"r_death{num+1}");
+                            }
                             else
                             {
                                 self.gameObject.GetComponent<Fixers.robloxfixer>().a.CrossFade("Backflip", .4f);
