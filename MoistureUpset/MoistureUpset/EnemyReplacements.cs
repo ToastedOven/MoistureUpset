@@ -598,13 +598,17 @@ namespace MoistureUpset
                 orig(self, activator);
                 if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
                 {
-                    NetworkAssistant.playSound("ChanceFailure", activator.gameObject.transform.position);
+                    //NetworkAssistant.playSound("ChanceFailure", activator.gameObject.transform.position);
                     //AkSoundEngine.PostEvent("ChanceFailure", mainBody.gameObject);
+
+                    SoundAssets.PlaySound("ChanceFailure", activator.netId);
                 }
                 else
                 {
-                    NetworkAssistant.playSound("ChanceSuccess", activator.gameObject.transform.position);
+                    //NetworkAssistant.playSound("ChanceSuccess", activator.gameObject.transform.position);
                     //AkSoundEngine.PostEvent("ChanceSuccess", mainBody.gameObject);
+
+                    SoundAssets.PlaySound("ChanceSuccess", activator.netId);
                 }
             };
         }
@@ -1129,7 +1133,8 @@ namespace MoistureUpset
             ReplaceModel("prefabs/characterbodies/JellyfishBody", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
             On.EntityStates.JellyfishMonster.JellyNova.Detonate += (orig, self) =>
             {
-                NetworkAssistant.playSound("JellyDetonate", self.outer.gameObject.transform.position);
+                SoundAssets.PlaySound("JellyDetonate", self.outer.gameObject);
+                //NetworkAssistant.playSound("JellyDetonate", self.outer.gameObject.transform.position);
                 orig(self);
             };
         }
@@ -2047,7 +2052,8 @@ namespace MoistureUpset
                 orig(self, point, normal);
                 if (self.name == "MagmaWormBody(Clone)")
                 {
-                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
+                    SoundAssets.PlaySound("NoodleSplash", self.netId);
+                    //NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
                 }
             };
             On.RoR2.WormBodyPositions2.OnExitSurface += (orig, self, point, normal) =>
@@ -2055,7 +2061,8 @@ namespace MoistureUpset
                 orig(self, point, normal);
                 if (self.name == "MagmaWormBody(Clone)")
                 {
-                    NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
+                    SoundAssets.PlaySound("NoodleSplash", self.netId);
+                    //NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
                 }
             };
             if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) != 1)

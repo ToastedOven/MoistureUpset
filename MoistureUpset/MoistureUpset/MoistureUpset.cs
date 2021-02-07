@@ -34,7 +34,7 @@ namespace MoistureUpset
         {
             DebugClass.SetLogger(base.Logger);
 
-            NetworkingAPI.RegisterMessageType<Skins.SyncAnimation>();
+            NetMessages.Register.Init();
             
             Settings.RunAll();
 
