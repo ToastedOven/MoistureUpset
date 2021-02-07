@@ -77,7 +77,10 @@ namespace MoistureUpset
                             if (!inPortal && !TeleporterInteraction.instance.isCharged)
                             {
                                 inPortal = true;
-                                PlaySound("EngiChargingTeleporter", targetBody.gameObject);
+                                if (targetBody.isSkin("THE_TF2_ENGINEER_SKIN"))
+                                {
+                                    PlaySound("EngiChargingTeleporter", targetBody.gameObject);
+                                }
                             }
                         }
                         else if (!teleporter.holdoutZoneController.IsBodyInChargingRadius(targetBody) && inPortal)
@@ -92,8 +95,10 @@ namespace MoistureUpset
                                 if (!portalFinished)
                                 {
                                     portalFinished = true;
-                                    PlaySound("EngiChargingTeleporter", targetBody.gameObject);
-
+                                    if (targetBody.isSkin("THE_TF2_ENGINEER_SKIN"))
+                                    {
+                                        PlaySound("EngiTeleporterComplete", targetBody.gameObject);
+                                    }
                                 }
                             }
                             catch (Exception e)
