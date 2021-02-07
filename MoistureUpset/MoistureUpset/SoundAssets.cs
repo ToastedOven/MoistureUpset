@@ -1,4 +1,6 @@
-﻿using RoR2;
+﻿using MoistureUpset.NetMessages;
+using R2API.Networking.Interfaces;
+using RoR2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +28,19 @@ namespace MoistureUpset
             On.RoR2.MusicController.UpdateTeleporterParameters += MusicController_UpdateTeleporterParameters;
         }
 
+        public static void PlaySound(string soundId, GameObject gameObject)
+        {
+            new SyncAudio(gameObject.GetComponent<NetworkIdentity>().netId, soundId).Send(R2API.Networking.NetworkDestination.Clients);
+        }
+        public static void PlaySound(string soundId, NetworkInstanceId netId)
+        {
+            new SyncAudio(netId, soundId).Send(R2API.Networking.NetworkDestination.Clients);
+        }
+        public static void PlayJotaroSound(string soundId, GameObject gameObject)
+        {
+            new SyncAudioWithJotaroSubtitles(gameObject.GetComponent<NetworkIdentity>().netId, soundId).Send(R2API.Networking.NetworkDestination.Clients);
+        }
+
         private static CharacterMaster MasterSummon_Perform(On.RoR2.MasterSummon.orig_Perform orig, MasterSummon self)
         {
             CharacterMaster cm = orig(self);
@@ -36,13 +51,8 @@ namespace MoistureUpset
                 {
                     if (cm.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (cm.name == "EngiWalkerTurretMaster(Clone)" || cm.name == "EngiTurretMaster(Clone)"))
                     {
-                        for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
-                        {
-                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cm.minionOwnership.ownerMaster.GetBody())
-                            {
-                                NetworkAssistant.playSound("EngiBuildsTurret", i);
-                            }
-                        }
+                        PlaySound("EngiBuildsTurret", cm.minionOwnership.ownerMaster.GetBody().gameObject);
+
                     }
                 }
             }
@@ -60,29 +70,16 @@ namespace MoistureUpset
             {
                 if (TeleporterInteraction.instance != null)
                 {
-                    int index = -1;
-
-                    for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
-                    {
-                        if (targetBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() && targetBody.name == "EngiBody(Clone)" && targetBody.isSkin("THE_TF2_ENGINEER_SKIN"))
-                        {
-                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
-                            {
-                                index = i;
-                            }
-                        }
-                    }
-
                     try
                     {
                         if (teleporter.holdoutZoneController.IsBodyInChargingRadius(targetBody))
                         {
                             if (!inPortal && !TeleporterInteraction.instance.isCharged)
                             {
-                                if (index != -1)
+                                inPortal = true;
+                                if (targetBody.isSkin("THE_TF2_ENGINEER_SKIN"))
                                 {
-                                    inPortal = true;
-                                    NetworkAssistant.playSound("EngiChargingTeleporter", index);
+                                    PlaySound("EngiChargingTeleporter", targetBody.gameObject);
                                 }
                             }
                         }
@@ -97,10 +94,10 @@ namespace MoistureUpset
                             {
                                 if (!portalFinished)
                                 {
-                                    if (index != -1)
+                                    portalFinished = true;
+                                    if (targetBody.isSkin("THE_TF2_ENGINEER_SKIN"))
                                     {
-                                        portalFinished = true;
-                                        NetworkAssistant.playSound("EngiTeleporterComplete", index);
+                                        PlaySound("EngiTeleporterComplete", targetBody.gameObject);
                                     }
                                 }
                             }
@@ -133,33 +130,13 @@ namespace MoistureUpset
         {
             try
             {
-                int index = -1;
-
-                for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
-                {
-                    if (damageReport.attackerBody == NetworkUser.readOnlyInstancesList[i].master.GetBody() || damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody() == NetworkUser.readOnlyInstancesList[i].master.GetBody())
-                    {
-                        if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
-                        {
-                            try
-                            {
-                                index = i;
-                            }
-                            catch
-                            {
-
-                            }
-                        }
-                    }
-                }
 
                 if (damageReport.victimTeamIndex == TeamIndex.Player)
                 {
                     //Debug.Log(damageReport.victimBody.name);
                     if (damageReport.victimBody.isSkin("THE_TF2_ENGINEER_SKIN") && damageReport.victimBody.name == "EngiBody(Clone)")
                     {
-                        //Debug.Log(damageReport.victimBody.transform.position);
-                        NetworkAssistant.playSound("EngiDying", damageReport.victimBody.transform.position);
+                        PlaySound("EngiDying", damageReport.victimBody.gameObject);
                     }
                     else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN") && (damageReport.victimBody.name == "EngiWalkerTurretBody(Clone)" || damageReport.victimBody.name == "EngiTurretBody(Clone)"))
                     {
@@ -173,10 +150,7 @@ namespace MoistureUpset
                     {
                         try
                         {
-                            if (index != -1)
-                            {
-                                NetworkAssistant.playSound("EngiKillsSomething", index);
-                            }
+                            PlaySound("EngiKillsSomething", damageReport.attackerBody.gameObject);
                         }
                         catch (Exception e)
                         {
@@ -187,11 +161,7 @@ namespace MoistureUpset
                     {
                         try
                         {
-                            if (index != -1)
-                            {
-                                NetworkAssistant.playSoundWithCallBack("JotaroKillsSomething", index);
-                                //damageReport.attackerBody.gameObject.GetComponentInChildren<Skins.Jotaro.SubtitleController>().DoKillVoiceLine(index);
-                            }
+                            PlayJotaroSound("JotaroKillsSomething", damageReport.attackerBody.gameObject);
                         }
                         catch (Exception sds)
                         {
@@ -205,10 +175,11 @@ namespace MoistureUpset
                         {
                             try
                             {
-                                if (index != -1)
-                                {
-                                    NetworkAssistant.playSound("EngiTurretKillsSomething", index);
-                                }
+                                PlaySound("EngiTurretKillsSomething", damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().gameObject);
+                                //if (index != -1)
+                                //{
+                                //    NetworkAssistant.playSound("EngiTurretKillsSomething", index);
+                                //}
                             }
                             catch (Exception e)
                             {
@@ -236,51 +207,15 @@ namespace MoistureUpset
             {
                 if (damageReport.victimTeamIndex == TeamIndex.Player)
                 {
-                    int index = -1;
+                    PlaySound("MinecraftHurt", damageReport.victimBody.gameObject);
 
-                    for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
-                    {
-                        if (damageReport.victimBody == NetworkUser.readOnlyInstancesList[i].master.GetBody())
-                        {
-                            if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
-                            {
-                                try
-                                {
-                                    index = i;
-                                    NetworkAssistant.playSound("MinecraftHurt", i);
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-                        }
-                        //else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody() == NetworkUser.readOnlyInstancesList[i].master.GetBody())
-                        //{
-                        //    if (NetworkUser.readOnlyInstancesList[i].master.GetBody() != null)
-                        //    {
-                        //        try
-                        //        {
-                        //            index = i;
-                        //            NetworkAssistant.playSound("MinecraftHurt", damageReport.victimBody.transform.position);
-                        //        }
-                        //        catch
-                        //        {
-
-                        //        }
-                        //    }
-                        //}
-                    }
                     try
                     {
                         if (damageReport.victimBody.name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) < (damageReport.victim.fullHealth * .3f) && damageReport.victimBody.isSkin("THE_TF2_ENGINEER_SKIN"))
                         {
                             try
                             {
-                                if (index != -1)
-                                {
-                                    NetworkAssistant.playSound("EngiNeedsMedic", index);
-                                }
+                                PlaySound("EngiNeedsMedic", damageReport.victimBody.gameObject);
                             }
                             catch (Exception e)
                             {
@@ -293,10 +228,10 @@ namespace MoistureUpset
                             {
                                 try
                                 {
-                                    if (index != -1)
-                                    {
-                                        //NetworkAssistant.playSound("EngiTurretDies", index);
-                                    }
+                                    //if (index != -1)
+                                    //{
+                                    //    //NetworkAssistant.playSound("EngiTurretDies", index);
+                                    //}
                                 }
                                 catch (Exception e)
                                 {

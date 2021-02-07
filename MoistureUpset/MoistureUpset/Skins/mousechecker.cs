@@ -17,6 +17,7 @@ using TMPro;
 using MoistureUpset.Skins;
 using MoistureUpset;
 using R2API.Networking.Interfaces;
+using MoistureUpset.NetMessages;
 
 public class mousechecker : MonoBehaviour
 {
@@ -72,7 +73,9 @@ public class mousechecker : MonoBehaviour
 
                     var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
 
+                    SoundAssets.PlaySound("Stop", identity.netId);
                     new SyncAnimation(identity.netId, selected.GetComponent<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
+                    SoundAssets.PlaySound(selected.GetComponent<TextMeshProUGUI>().text.Replace(" ", ""), identity.netId);
 
                     //bonemapper.a1.enabled = true;
                     //bonemapper.a2.enabled = true;

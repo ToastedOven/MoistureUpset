@@ -255,13 +255,8 @@ namespace MoistureUpset.Skins
 
                             GameObject.DestroyImmediate(self.ghost.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>());
 
-                            for (int i = 0; i < NetworkUser.readOnlyInstancesList.Count; i++)
-                            {
-                                if (NetworkUser.readOnlyInstancesList[i].master.GetBody() == cb)
-                                {
-                                    NetworkAssistant.playSound("EngiBuildsDispenser", i);
-                                }
-                            }
+                            SoundAssets.PlaySound("EngiBuildsDispenser", cb.gameObject);
+
                         }
                         else if (self.ghost.name == "EngiGrenadeGhost(Clone)")
                         {

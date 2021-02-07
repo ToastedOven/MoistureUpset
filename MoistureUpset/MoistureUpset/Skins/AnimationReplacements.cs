@@ -307,47 +307,4 @@ namespace MoistureUpset.Skins
             return bones[0];
         }
     }
-
-    public class SyncAnimation : INetMessage
-    {
-        NetworkInstanceId netId;
-        string animation;
-
-        public SyncAnimation()
-        {
-
-        }
-
-        public SyncAnimation(NetworkInstanceId netId, string animation)
-        {
-            this.netId = netId;
-            this.animation = animation;
-        }
-
-        public void Deserialize(NetworkReader reader)
-        {
-            netId = reader.ReadNetworkId();
-            animation = reader.ReadString();
-        }
-
-        public void OnReceived()
-        {
-            GameObject bodyObject = Util.FindNetworkObject(netId);
-            if (!bodyObject)
-            {
-                DebugClass.Log($"Body is null!!!");
-            }
-
-            //DebugClass.Log($"Recieved message to play {animation} on client.");
-            //DebugClass.Log($"Client Body is {bodyObject.name}");
-
-            bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim(animation);
-        }
-
-        public void Serialize(NetworkWriter writer)
-        {
-            writer.Write(netId);
-            writer.Write(animation);
-        }
-    }
 }
