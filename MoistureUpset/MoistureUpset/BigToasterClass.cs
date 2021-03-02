@@ -199,6 +199,7 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+
                 var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
                 if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
                 {
@@ -233,6 +234,7 @@ namespace MoistureUpset
                     EnemyReplacements.ReplaceTexture("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.png");
                 if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
                     EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
+                StopBossMusic(new UInt32[] { 311764514, 405315856, 829504566, 1557982612, 4106775434 });
                 StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 454706293, 541788247 });
                 orig(oldS, newS);
                 try
@@ -329,6 +331,7 @@ namespace MoistureUpset
                 orig(self, report);
                 try
                 {
+                    StopBossMusic(new UInt32[] { 311764514, 405315856, 829504566, 1557982612, 4106775434 });
                     StopBossMusic(new UInt32[] { 2369706651, 2369706648, 2369706649, 2369706654, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 1214003200, 541788247 });
                     var c = GameObject.FindObjectOfType<Transform>();
                     if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
@@ -678,67 +681,71 @@ namespace MoistureUpset
                 {
                 }
                 if (tracker.ToString() == "RoR2.UI.ObjectivePanelController+FindTeleporterObjectiveTracker")
-                {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    try
                     {
-                        GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
-                        foreach (var fab in objects)
+                        if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
                         {
-                            if (fab.ToString() == "GoldChest (UnityEngine.GameObject)")
+                            GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                            foreach (var fab in objects)
                             {
-                                if (!InteractReplacements.Interactables.particles)
+                                if (fab.ToString() == "GoldChest (UnityEngine.GameObject)")
                                 {
-                                    InteractReplacements.Interactables.particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
-                                }
-                                EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
-                                fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
-                                fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
-                                fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
-                                fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
+                                    if (!InteractReplacements.Interactables.particles)
+                                    {
+                                        InteractReplacements.Interactables.particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+                                    }
+                                    EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
+                                    fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
+                                    fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
+                                    fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
+                                    fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
 
-                                var obj = GameObject.Instantiate(InteractReplacements.Interactables.particles, fab.transform);
-                                obj.transform.SetParent(fab.transform);
-                                obj.transform.localPosition = Vector3.zero;
-                            }
-                            else if (fab.ToString().StartsWith("NewtStatue"))
-                            {
-                                if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                                    var obj = GameObject.Instantiate(InteractReplacements.Interactables.particles, fab.transform);
+                                    obj.transform.SetParent(fab.transform);
+                                    obj.transform.localPosition = Vector3.zero;
+                                }
+                                else if (fab.ToString().StartsWith("NewtStatue"))
                                 {
-                                    GameObject g;
-                                    int num = UnityEngine.Random.Range(0, 3);
-                                    if (num == 0)
+                                    if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1 && fab.GetComponentsInChildren<Fixers.robloxfixer>().Length == 0)
                                     {
-                                        g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab"));
+                                        int num = UnityEngine.Random.Range(0, 3);
+                                        GameObject g;
+                                        if (num == 0)
+                                        {
+                                            g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab"));
+                                        }
+                                        else if (num == 1)
+                                        {
+                                            g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/kevinaltar.prefab"));
+                                        }
+                                        else
+                                        {
+                                            g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/RuneMasterGaming580808080808080ADHD.prefab"));
+                                        }
+                                        g.transform.parent = fab.transform;
+                                        g.transform.localPosition = new Vector3(0, -1.15f, 0);
+                                        g.transform.localScale = new Vector3(.5f, .5f, .5f);
+                                        g.transform.localEulerAngles = Vector3.zero;
+                                        Texture t = g.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
+                                        g.GetComponentInChildren<SkinnedMeshRenderer>().material = fab.GetComponentInChildren<MeshRenderer>().material;
+                                        g.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = t;
+                                        foreach (var item in fab.GetComponentsInChildren<MeshRenderer>())
+                                        {
+                                            item.enabled = false;
+                                        }
+                                        fab.transform.Find("mdlNewtStatue").Find("HologramPivot").localPosition = new Vector3(0, -1.4f, 0);
+                                        var fixer = fab.AddComponent<Fixers.robloxfixer>();
+                                        fixer.g = fab.transform.Find("mdlNewtStatue").Find("HologramPivot").gameObject;
+                                        fixer.a = g.GetComponentInChildren<Animator>();
+                                        fab.GetComponent<Highlight>().targetRenderer = g.GetComponentInChildren<SkinnedMeshRenderer>();
                                     }
-                                    else if(num == 1)
-                                    {
-                                        g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/kevinaltar.prefab"));
-                                    }
-                                    else
-                                    {
-                                        g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/RuneMasterGaming580808080808080ADHD.prefab"));
-                                    }
-                                    g.transform.parent = fab.transform;
-                                    g.transform.localPosition = new Vector3(0, -1.15f, 0);
-                                    g.transform.localScale = new Vector3(.5f, .5f, .5f);
-                                    g.transform.localEulerAngles = Vector3.zero;
-                                    Texture t = g.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
-                                    g.GetComponentInChildren<SkinnedMeshRenderer>().material = fab.GetComponentInChildren<MeshRenderer>().material;
-                                    g.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = t;
-                                    foreach (var item in fab.GetComponentsInChildren<MeshRenderer>())
-                                    {
-                                        item.enabled = false;
-                                    }
-                                    fab.transform.Find("mdlNewtStatue").Find("HologramPivot").localPosition = new Vector3(0, -1.4f, 0);
-                                    var fixer = fab.AddComponent<Fixers.robloxfixer>();
-                                    fixer.g = fab.transform.Find("mdlNewtStatue").Find("HologramPivot").gameObject;
-                                    fixer.a = g.GetComponentInChildren<Animator>();
-                                    fab.GetComponent<Highlight>().targetRenderer = g.GetComponentInChildren<SkinnedMeshRenderer>();
                                 }
                             }
                         }
                     }
-                }
+                    catch (Exception)
+                    {
+                    }
             };
             On.RoR2.UI.ObjectivePanelController.RemoveObjectiveTracker += (orig, self, tracker) =>
             {
