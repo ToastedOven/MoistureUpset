@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
 using MoistureUpset.InteractReplacements.SodaBarrel;
+using R2API.Networking.Interfaces;
 
 namespace MoistureUpset.InteractReplacements
 {
@@ -119,12 +120,15 @@ namespace MoistureUpset.InteractReplacements
                 g.transform.localPosition = Vector3.zero;
                 g.transform.localEulerAngles = Vector3.zero;
             }
+
+            EnemyReplacements.ReplaceMeshRenderer("prefabs/networkedobjects/shrines/ShrineChance", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/lego.mesh", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/lego.png", 0);
+            EnemyReplacements.ReplaceMeshRenderer("prefabs/networkedobjects/shrines/ShrineChance", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/chancesymbol.png", 1);
         }
         private static void Chests()
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) != 1)
                 return;
-
+            EnemyReplacements.LoadResource("moisture_lego");
             EnemyReplacements.LoadBNK("Chest");
             EnemyReplacements.LoadResource("moisture_chests");
             EnemyReplacements.LoadResource("moisture_newtaltar");
@@ -132,14 +136,20 @@ namespace MoistureUpset.InteractReplacements
             On.RoR2.BarrelInteraction.OnInteractionBegin += SpraySoda;
             On.RoR2.BarrelInteraction.OnDeserialize += SpraySoda;
 
+
             On.RoR2.MultiShopController.DisableAllTerminals += (orig, self, i) =>
             {
                 orig(self, i);
-                foreach (var item in self.GetFieldValue<GameObject[]>("terminalGameObjects"))
+                List<NetworkInstanceId> ids = new List<NetworkInstanceId>();
+                ids.Add(self.GetComponent<NetworkIdentity>().netId);
+                foreach (var item in self.GetFieldValue<GameObject[]>("terminalGameObjects")) //these have networkidentities, find netID?
                 {
-                    item.AddComponent<Fixers.terminalfixer>().center = self.transform.position;
+                    ids.Add(item.GetComponent<NetworkIdentity>().netId);
                 }
+                new SyncFidget(ids[0], ids[1], ids[2], ids[3]).Send(R2API.Networking.NetworkDestination.Clients);
             };
+
+
             Texture[] textures = new Texture[] { Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerred.png"), Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerred.png"), Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinneryellow.png"), Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerorange.png"), Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnermagenta.png"), Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnergreen.png"), Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerblue.png"), Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnercyan.png") };
             On.RoR2.MultiShopController.CreateTerminals += (orig, self) =>
             {
@@ -165,7 +175,7 @@ namespace MoistureUpset.InteractReplacements
                     }
                     try
                     {
-                        if (self.gameObject.ToString().StartsWith("NewtStatue"))
+                        if (self.gameObject.ToString().Contains("NewtStatue"))
                         {
                             if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "AToasterOven(Clone)")
                             {
@@ -174,7 +184,7 @@ namespace MoistureUpset.InteractReplacements
                             else if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "RuneMasterGaming580808080808080ADHD(Clone)")
                             {
                                 int num = UnityEngine.Random.Range(0, 4);
-                                self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play($"r_death{num+1}");
+                                self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play($"r_death{num + 1}");
                             }
                             else
                             {
@@ -185,6 +195,27 @@ namespace MoistureUpset.InteractReplacements
                     }
                     catch (Exception)
                     {
+                    }
+                };
+                On.RoR2.PurchaseInteraction.OnDeserialize += (orig, self, r, i) =>
+                {
+                    orig(self, r, i);
+                    if (self.gameObject.ToString().Contains("NewtStatue") && !self.available)
+                    {
+                        if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "AToasterOven(Clone)")
+                        {
+                            self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play("Backflip");
+                        }
+                        else if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "RuneMasterGaming580808080808080ADHD(Clone)")
+                        {
+                            int num = UnityEngine.Random.Range(0, 4);
+                            self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play($"r_death{num + 1}");
+                        }
+                        else
+                        {
+                            self.gameObject.GetComponent<Fixers.robloxfixer>().a.CrossFade("Backflip", .4f);
+                        }
+                        self.gameObject.GetComponent<Fixers.robloxfixer>().bought = true;
                     }
                 };
             }
@@ -227,6 +258,55 @@ namespace MoistureUpset.InteractReplacements
             col.color = gradient;
 
             self.gameObject.GetComponentInChildren<ParticleSystem>().Play();
+        }
+    }
+
+    public class SyncFidget : INetMessage
+    {
+        NetworkInstanceId baseterminal;
+        NetworkInstanceId terminal1;
+        NetworkInstanceId terminal2;
+        NetworkInstanceId terminal3;
+
+        public SyncFidget()
+        {
+
+        }
+
+        public SyncFidget(NetworkInstanceId netId, NetworkInstanceId t1, NetworkInstanceId t2, NetworkInstanceId t3)
+        {
+            baseterminal = netId;
+            terminal1 = t1;
+            terminal2 = t2;
+            terminal3 = t3;
+            Debug.Log($"{netId}-{t1}-{t2}-{t3}-----syncing");
+        }
+
+        public void Deserialize(NetworkReader reader)
+        {
+            baseterminal = reader.ReadNetworkId();
+            terminal1 = reader.ReadNetworkId();
+            terminal2 = reader.ReadNetworkId();
+            terminal3 = reader.ReadNetworkId();
+            Debug.Log($"{baseterminal}-{terminal1}-{terminal2}-{terminal3}-----got it lmao");
+        }
+
+        public void OnReceived()
+        {
+            GameObject bodyObject = Util.FindNetworkObject(baseterminal);
+            Util.FindNetworkObject(terminal1).AddComponent<Fixers.terminalfixer>().center = bodyObject.transform.position;
+            Util.FindNetworkObject(terminal2).AddComponent<Fixers.terminalfixer>().center = bodyObject.transform.position;
+            Util.FindNetworkObject(terminal3).AddComponent<Fixers.terminalfixer>().center = bodyObject.transform.position;
+            Debug.Log($"{baseterminal}-{terminal1}-{terminal2}-{terminal3}-----received it it it it lmao");
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.Write(baseterminal);
+            writer.Write(terminal1);
+            writer.Write(terminal2);
+            writer.Write(terminal3);
+            Debug.Log($"{baseterminal}-{terminal1}-{terminal2}-{terminal3}-----sending it lmao");
         }
     }
 }

@@ -50,14 +50,13 @@ namespace MoistureUpset.Skins
                 }
                 g.transform.SetParent(self.mainContainer.transform);
                 g.transform.localPosition = new Vector3(0, 0, 0);
-                g.transform.localScale = new Vector3(self.GetComponent<CanvasScaler>().referenceResolution.x / Screen.width, self.GetComponent<CanvasScaler>().referenceResolution.y / Screen.height, 1);
+                //g.transform.localScale = new Vector3(self.GetComponent<CanvasScaler>().referenceResolution.x / Screen.width, self.GetComponent<CanvasScaler>().referenceResolution.y / Screen.height, 1);
                 var s = g.AddComponent<mousechecker>();
                 foreach (var item in g.GetComponentsInChildren<Transform>())
                 {
                     if (item.gameObject.name.StartsWith("Emote"))
                     {
                         s.gameObjects.Add(item.gameObject);
-
                     }
                     if (item.gameObject.name.StartsWith("MousePos"))
                     {
@@ -77,8 +76,7 @@ namespace MoistureUpset.Skins
                 animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
                 animcontroller.transform.localPosition = Vector3.zero;
                 animcontroller.transform.localEulerAngles = Vector3.zero;
-                animcontroller.transform.localScale = Vector3.one
-                ;
+                animcontroller.transform.localScale = Vector3.one;
                 SkinnedMeshRenderer smr1 = animcontroller.GetComponentInChildren<SkinnedMeshRenderer>();
                 SkinnedMeshRenderer smr2 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>();
                 var test = animcontroller.AddComponent<BoneMapper>();
@@ -116,12 +114,14 @@ namespace MoistureUpset.Skins
         public static float caramellTimer = 0;
         public GameObject model;
         List<string> ignore = new List<string>();
+        bool twopart = false;
 
         public void PlayAnim(string s)
         {
             a2.enabled = true;
             if (s == "Caramelldansen")
             {
+                AkSoundEngine.PostEvent("StopEmotes", gameObject);
                 AkSoundEngine.PostEvent("PlayCaramell", gameObject);
                 if (a2.GetCurrentAnimatorStateInfo(0).IsName("Caramelldansen"))
                 {
@@ -142,11 +142,14 @@ namespace MoistureUpset.Skins
                     }
                 }
                 a2.PlayInFixedTime(s, -1, caramellTimer);
+                twopart = false;
                 return;
             }
             else
             {
                 AkSoundEngine.PostEvent("StopCaramell", gameObject);
+                AkSoundEngine.PostEvent("StopEmotes", gameObject);
+                AkSoundEngine.PostEvent(s.Replace(" ", ""), gameObject);
                 if (a2.GetCurrentAnimatorStateInfo(0).IsName("Caramelldansen"))
                 {
                     caramellCount--;
@@ -170,6 +173,7 @@ namespace MoistureUpset.Skins
                 }
             }
             a2.Play(s, -1, 0f);
+            twopart = false;
         }
         void AddIgnore(DynamicBone dynbone, Transform t)
         {
@@ -198,6 +202,31 @@ namespace MoistureUpset.Skins
                 {
                 }
             }
+            if (model.name.StartsWith("mdlLoader"))
+            {
+                Transform LClav = model.transform, RClav = model.transform;
+                foreach (var item in model.GetComponentsInChildren<Transform>())
+                {
+                    if (item.name == "clavicle.l")
+                    {
+                        LClav = item;
+                        ignore.Add(LClav.name);
+                    }
+                    if (item.name == "clavicle.r")
+                    {
+                        RClav = item;
+                        ignore.Add(RClav.name);
+                    }
+                }
+                foreach (var item in LClav.GetComponentsInChildren<Transform>())
+                {
+                    ignore.Add(item.name);
+                }
+                foreach (var item in RClav.GetComponentsInChildren<Transform>())
+                {
+                    ignore.Add(item.name);
+                }
+            }
             for (int i = 0; i < smr2.bones.Length; i++)
             {
                 try
@@ -219,33 +248,52 @@ namespace MoistureUpset.Skins
         {
             if (caramellCount != 0)
             {
-                caramellTimer += Time.deltaTime;
+                caramellTimer += Time.deltaTime / caramellCount;
+            }
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                a2.Play("none");
             }
             if (a2.GetCurrentAnimatorStateInfo(0).IsName("none"))
             {
-                a1.enabled = true;
-                a2.enabled = false;
-                for (int i = 0; i < smr2.bones.Length; i++)
+                if (!twopart)
                 {
-                    try
+                    twopart = true;
+                }
+                else
+                {
+                    if (a2.enabled)
                     {
-                        if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
+                        AkSoundEngine.PostEvent("StopEmotes", gameObject);
+                        AkSoundEngine.PostEvent("StopCaramell", gameObject);
+                        for (int i = 0; i < smr2.bones.Length; i++)
                         {
-                            smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = false;
+                            try
+                            {
+                                if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
+                                {
+                                    smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = false;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                break;
+                            }
                         }
                     }
-                    catch (Exception)
-                    {
-                        break;
-                    }
+                    a1.enabled = true;
+                    a2.enabled = false;
                 }
             }
             else
             {
                 a1.enabled = false;
+                twopart = false;
             }
             if (h.health <= 0)
             {
+                AkSoundEngine.PostEvent("StopEmotes", gameObject);
+                AkSoundEngine.PostEvent("StopCaramell", gameObject);
                 for (int i = 0; i < smr2.bones.Length; i++)
                 {
                     try
