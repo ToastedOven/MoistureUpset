@@ -220,30 +220,47 @@ namespace MoistureUpset
             var meshes = fab.GetComponentsInChildren<ParticleSystemRenderer>();
             meshes[spot].mesh = Resources.Load<Mesh>(mesh);
         }
-        public static void ReplaceMeshRenderer(string prefab, string mesh)
+        public static void ReplaceMeshRenderer(string f, string mesh, string png, int spot = 0)
         {
-            var fab = Resources.Load<GameObject>(prefab);
+            var fab = Resources.Load<GameObject>(f);
+            var renderers = fab.GetComponentsInChildren<Renderer>();
             var meshes = fab.GetComponentsInChildren<MeshFilter>();
-            meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
+            var texture = Resources.Load<Texture>(png);
+            for (int i = 0; i < renderers[spot].sharedMaterials.Length; i++)
+            {
+                renderers[spot].sharedMaterials[i].color = Color.white;
+                renderers[spot].sharedMaterials[i].mainTexture = texture;
+                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[spot].sharedMaterials[i].SetTexture("_NormalTex", null);
+            }
+            meshes[spot].sharedMesh = Resources.Load<Mesh>(mesh);
         }
-        public static void ReplaceMeshRenderer(GameObject fab, string mesh)
+        public static void ReplaceMeshRenderer(string f, string png, int spot = 0)
         {
-            var meshes = fab.GetComponentsInChildren<MeshFilter>();
-            meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
+            var fab = Resources.Load<GameObject>(f);
+            var renderers = fab.GetComponentsInChildren<Renderer>();
+            var texture = Resources.Load<Texture>(png);
+            for (int i = 0; i < renderers[spot].sharedMaterials.Length; i++)
+            {
+                renderers[spot].sharedMaterials[i].color = Color.white;
+                renderers[spot].sharedMaterials[i].mainTexture = texture;
+                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[spot].sharedMaterials[i].SetTexture("_NormalTex", null);
+            }
         }
-        public static void ReplaceMeshRenderer(GameObject fab, string mesh, string png)
+        public static void ReplaceMeshRenderer(GameObject fab, string mesh, string png, int spot = 0)
         {
             var renderers = fab.GetComponentsInChildren<Renderer>();
             var meshes = fab.GetComponentsInChildren<MeshFilter>();
             var texture = Resources.Load<Texture>(png);
-            for (int i = 0; i < renderers[0].sharedMaterials.Length; i++)
+            for (int i = 0; i < renderers[spot].sharedMaterials.Length; i++)
             {
-                renderers[0].sharedMaterials[i].color = Color.white;
-                renderers[0].sharedMaterials[i].mainTexture = texture;
-                renderers[0].sharedMaterials[i].SetTexture("_EmTex", texture);
-                renderers[0].sharedMaterials[i].SetTexture("_NormalTex", null);
+                renderers[spot].sharedMaterials[i].color = Color.white;
+                renderers[spot].sharedMaterials[i].mainTexture = texture;
+                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[spot].sharedMaterials[i].SetTexture("_NormalTex", null);
             }
-            meshes[0].sharedMesh = Resources.Load<Mesh>(mesh);
+            meshes[spot].sharedMesh = Resources.Load<Mesh>(mesh);
         }
         public static void LoadResource(string resource)
         {

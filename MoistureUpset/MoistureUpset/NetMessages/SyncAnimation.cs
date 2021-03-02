@@ -41,9 +41,8 @@ namespace MoistureUpset.NetMessages
                 DebugClass.Log($"Body is null!!!");
             }
 
-            //DebugClass.Log($"Recieved message to play {animation} on client.");
+            DebugClass.Log($"Recieved message to play {animation} on client. Playing on {bodyObject.GetComponent<ModelLocator>().modelTransform}");
             //DebugClass.Log($"Client Body is {bodyObject.name}");
-
             bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim(animation);
         }
 

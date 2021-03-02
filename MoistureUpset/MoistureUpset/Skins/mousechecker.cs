@@ -28,6 +28,7 @@ public class mousechecker : MonoBehaviour
     public RoR2.UI.MPInput input = GameObject.Find("MPEventSystem Player0").GetComponent<RoR2.UI.MPInput>();
     public RoR2.UI.MPEventSystem events;
     GameObject selected;
+    float XScale = 1, YScale = 1;
     void Start()
     {
         selected = gameObjects[0];
@@ -38,17 +39,26 @@ public class mousechecker : MonoBehaviour
         Vector3 v = new Vector3(0, 0, 0);
         if (transform.localPosition == v)
         {
-            float dist = 99999;
-            foreach (var item in gameObjects)
+            XScale = Screen.width / 1980f;
+            YScale = Screen.height / 1080f;
+            if (!(Math.Abs(Input.mousePosition.x - (Screen.width / 2.0f)) < 30f * XScale && Math.Abs(Input.mousePosition.y - (Screen.height / 2.0f)) < 30f * YScale))
             {
-                if (dist > Vector2.Distance(new Vector2(item.GetComponent<RectTransform>().localPosition.x + (Screen.width / 2), item.GetComponent<RectTransform>().localPosition.y + (Screen.height / 2)), (Vector2)Input.mousePosition))
+                float dist = 99999;
+                foreach (var item in gameObjects)
                 {
-                    dist = Vector2.Distance(new Vector2(item.GetComponent<RectTransform>().localPosition.x + (Screen.width / 2), item.GetComponent<RectTransform>().localPosition.y + (Screen.height / 2)), (Vector2)Input.mousePosition);
-                    selected = item;
+                    if (dist > Vector2.Distance(new Vector2(item.GetComponent<RectTransform>().localPosition.x + (Screen.width / 2), item.GetComponent<RectTransform>().localPosition.y + (Screen.height / 2)), (Vector2)Input.mousePosition))
+                    {
+                        dist = Vector2.Distance(new Vector2(item.GetComponent<RectTransform>().localPosition.x + (Screen.width / 2), item.GetComponent<RectTransform>().localPosition.y + (Screen.height / 2)), (Vector2)Input.mousePosition);
+                        selected = item;
+                    }
+                    item.GetComponent<RectTransform>().localScale = new Vector3(0.6771638f, 0.6771638f, 0.6771638f);
                 }
-                item.GetComponent<RectTransform>().localScale = new Vector3(0.6771638f, 0.6771638f, 0.6771638f);
+                selected.GetComponent<RectTransform>().localScale = new Vector3(0.9771638f, 0.9771638f, 0.9771638f);
             }
-            selected.GetComponent<RectTransform>().localScale = new Vector3(0.9771638f, 0.9771638f, 0.9771638f);
+            else
+            {
+                selected.GetComponent<RectTransform>().localScale = new Vector3(0.6771638f, 0.6771638f, 0.6771638f);
+            }
         }
         if (Input.GetKey(KeyCode.C))
         {
@@ -65,20 +75,20 @@ public class mousechecker : MonoBehaviour
             {
                 try
                 {
-                    DebugClass.Log($"playing {selected.GetComponent<TextMeshProUGUI>().text}");
-                    var bonemapper = (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().modelLocator.modelTransform.GetComponentInChildren<BoneMapper>());
-                    //bonemapper.a2.Play(selected.GetComponent<TextMeshProUGUI>().text, -1, 0f);
-
-                    //bonemapper.PlayAnim(selected.GetComponent<TextMeshProUGUI>().text);
-
-                    var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
-
-                    SoundAssets.PlaySound("Stop", identity.netId);
-                    new SyncAnimation(identity.netId, selected.GetComponent<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
-                    SoundAssets.PlaySound(selected.GetComponent<TextMeshProUGUI>().text.Replace(" ", ""), identity.netId);
-
-                    //bonemapper.a1.enabled = true;
-                    //bonemapper.a2.enabled = true;
+                    XScale = Screen.width / 1980f;
+                    YScale = Screen.height / 1080f;
+                    if (Math.Abs(Input.mousePosition.x - (Screen.width / 2.0f)) < 30f * XScale && Math.Abs(Input.mousePosition.y - (Screen.height / 2.0f)) < 30f * YScale)
+                    {
+                        var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
+                        SoundAssets.PlaySound("Stop", identity.netId);
+                        new SyncAnimation(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Clients);
+                    }
+                    else
+                    {
+                        var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
+                        SoundAssets.PlaySound("Stop", identity.netId);
+                        new SyncAnimation(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
+                    }
                 }
                 catch (Exception e)
                 {
