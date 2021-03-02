@@ -31,6 +31,8 @@ namespace MoistureUpset.NetMessages
 
         public void Deserialize(NetworkReader reader)
         {
+            reader.SeekZero();
+
             netId = reader.ReadNetworkId();
             soundId = reader.ReadString();
         }
