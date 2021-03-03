@@ -17,13 +17,28 @@ namespace MoistureUpset
                 if (GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster == null)
                 {
                     skinIndex = (int)GetComponentInChildren<CharacterBody>().skinIndex;
+                    skinController.ApplySkin(skinIndex);
                 }
-                else
+                else if (GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster.GetBody().isSkin("THE_TF2_ENGINEER_SKIN"))
                 {
-                    skinIndex = (int)GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster.GetBody().skinIndex;
+                    if (SkinHelper.engiTurretSkinIndex < 0)
+                    {
+                        var skins = GetComponentInChildren<CharacterBody>().modelLocator.modelTransform.GetComponentInChildren<ModelSkinController>().skins;
+
+                        for (int i = 0; i < skins.Length; i++)
+                        {
+                            if (skins[i].name == "Level 1 Sentry" || skins[i].name == "Level 2 Sentry")
+                            {
+                                SkinHelper.engiTurretSkinIndex = i;
+                            }
+                        }
+                    }
+
+                    //skinIndex = (int)GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster.GetBody().skinIndex;
+                    skinIndex = SkinHelper.engiTurretSkinIndex;
                     GetComponentInChildren<CharacterBody>().skinIndex = (uint)skinIndex; //I feel like I should be able to do this at a better time, like when initializing this stuff, but it don't work and/or I'm not smart enough to figure it out
+                    skinController.ApplySkin(skinIndex);
                 }
-                skinController.ApplySkin(skinIndex);
 
                 if (GetComponentInChildren<CharacterBody>().isSkin("THE_TF2_ENGINEER_SKIN"))
                 {

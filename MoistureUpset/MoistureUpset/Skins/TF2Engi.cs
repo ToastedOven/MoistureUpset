@@ -345,7 +345,7 @@ namespace MoistureUpset.Skins
         // Add stuff to the character prefab here
         private static void AddToPrefab()
         {
-            GameObject engiBody = Resources.Load<GameObject>("prefabs/characterbodies/engibody"); // load captain prefab
+            GameObject engiBody = Resources.Load<GameObject>("prefabs/characterbodies/engibody"); // load engibody prefab
             engiBody.AddComponent<Engi.AddMedicIcon>();
             engiBody.AddComponent<Engi.EngiHurt>();
         }
