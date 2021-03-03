@@ -27,7 +27,7 @@ namespace MoistureUpset.NetMessages
 
         public void Deserialize(NetworkReader reader)
         {
-            reader.SeekZero();
+            DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
 
             netId = reader.ReadNetworkId();
             animation = reader.ReadString();
