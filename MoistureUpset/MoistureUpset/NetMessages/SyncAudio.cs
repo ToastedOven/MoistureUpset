@@ -32,7 +32,7 @@ namespace MoistureUpset.NetMessages
 
         public void Deserialize(NetworkReader reader)
         {
-            DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
+            //DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
 
             netId = reader.ReadNetworkId();
             soundId = reader.ReadString();
@@ -40,7 +40,7 @@ namespace MoistureUpset.NetMessages
 
         public void OnReceived()
         {
-            if ((doMinecraftOofSound && soundId == "MinecraftHurt") || (doShrineSound && (soundId == "ChanceFailure" || soundId == "ChanceSuccess")))
+            if ((!doMinecraftOofSound && soundId == "MinecraftHurt") || (doShrineSound && (soundId == "ChanceFailure" || soundId == "ChanceSuccess")))
                 return;
 
             GameObject bodyObject = Util.FindNetworkObject(netId);

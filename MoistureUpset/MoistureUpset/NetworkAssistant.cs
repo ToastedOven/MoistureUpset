@@ -209,18 +209,18 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
     [TargetRpc]
     private void TargetPlaySoundLocation(NetworkConnection target, string soundIDString, Vector3 location)
     {
-        if ((soundIDString == "ChanceFailure" || soundIDString == "ChanceSuccess") && float.Parse(ModSettingsManager.getOptionValue("Shrine Changes")) != 1)
-        {
-            return;
-        }
-        if (soundIDString == "NoodleSplash" && float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) != 1)
-        {
-            return;
-        }
-        if (soundIDString == "PlayerDeath" && float.Parse(ModSettingsManager.getOptionValue("Player death sound")) != 1)
-        {
-            return;
-        }
+        //if ((soundIDString == "ChanceFailure" || soundIDString == "ChanceSuccess") && BigJank.getOptionValue("Shrine Changes") != 1)
+        //{
+        //    return;
+        //}
+        //if (soundIDString == "NoodleSplash" && BigJank.getOptionValue("Pool Noodle") != 1)
+        //{
+        //    return;
+        //}
+        //if (soundIDString == "PlayerDeath" && BigJank.getOptionValue("Player death sound") != 1)
+        //{
+        //    return;
+        //}
         try
         {
             GameObject tempAudio = Instantiate(soundPlayer, location, Quaternion.identity);

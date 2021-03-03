@@ -23,9 +23,9 @@ namespace MoistureUpset
         {
             EnemyReplacements.LoadResource("na");
 
-            BigToasterClass.HitMarker(float.Parse(ModSettingsManager.getOptionValue("HitMarker Volume"), CultureInfo.InvariantCulture));
-            BigToasterClass.Modded_MSX(float.Parse(ModSettingsManager.getOptionValue("Modded Music Volume"), CultureInfo.InvariantCulture));
-            BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume"), CultureInfo.InvariantCulture));
+            BigToasterClass.HitMarker(BigJank.getOptionValue("HitMarker Volume"));
+            BigToasterClass.Modded_MSX(BigJank.getOptionValue("Modded Music Volume"));
+            BigToasterClass.Modded_SFX(BigJank.getOptionValue("Modded SFX Volume"));
             InteractReplacements.Interactables.Init();
             EnemyReplacements.RunAll();
             HudChanges.RunAll();
@@ -33,11 +33,12 @@ namespace MoistureUpset
         }
         private static void Setup()
         {
-            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion 1.1.1");
+            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion 1.2.0");
             ModSettingsManager.setPanelTitle("Moisture Upset");
         }
         private static void HitMarker()
         {
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Only Survivor Skins", "Only survivor skins are enabled. Restart required!", "0"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "HitMarker Volume", "This sound is also tied to SFX, but has a seperate slider if you want it to be less noisy", "100"));
             ModSettingsManager.addListener(ModSettingsManager.getOption("HitMarker Volume"), new UnityEngine.Events.UnityAction<float>(BigToasterClass.HitMarker));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "Modded Music Volume", "The default music slider also work for modded music, but this effects modded music only. Incase you want a different audio balance", "50"));
@@ -95,8 +96,8 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Minecraft Oof Sounds", "Adds Minecraft oof sounds whenever you get hurt.", "1"));
 
             // Yeah I know this looks jank, but it sort of works.
-            ModSettingsManager.addListener(ModSettingsManager.getOption("Minecraft Oof Sounds"), new UnityEngine.Events.UnityAction<bool>(delegate(bool temp) { SyncAudio.doMinecraftOofSound = temp; }));
-            ModSettingsManager.addListener(ModSettingsManager.getOption("Shrine Changes"), new UnityEngine.Events.UnityAction<bool>(delegate (bool temp) { SyncAudio.doShrineSound = temp; }));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Minecraft Oof Sounds"), new UnityEngine.Events.UnityAction<bool>(delegate(bool temp) { if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) != 1) SyncAudio.doMinecraftOofSound = temp; }));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Shrine Changes"), new UnityEngine.Events.UnityAction<bool>(delegate (bool temp) { if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) != 1) SyncAudio.doShrineSound = temp; }));
         }
         private static void Misc()
         {

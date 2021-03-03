@@ -343,82 +343,82 @@ namespace MoistureUpset
         }
         private static void Icons()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) == 1)
+            if (BigJank.getOptionValue("Froggy Chair") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Winston")) == 1)
+            if (BigJank.getOptionValue("Winston") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardBody", "MoistureUpset.Resources.winston.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Winston")) == 1)
+            if (BigJank.getOptionValue("Winston") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/BeetleGuardAllyBody", "MoistureUpset.Resources.winston.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) == 1)
+            if (BigJank.getOptionValue("Taco Bell") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/BellBody", "MoistureUpset.Resources.tacobell.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Thomas")) == 1)
+            if (BigJank.getOptionValue("Thomas") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/BisonBody", "MoistureUpset.Resources.thomas.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) == 1)
+            if (BigJank.getOptionValue("Heavy") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ClayBruiserBody", "MoistureUpset.Resources.heavy.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) == 1)
+            if (BigJank.getOptionValue("Robloxian") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/GolemBody", "MoistureUpset.Resources.oof.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Ghast")) == 1)
+            if (BigJank.getOptionValue("Ghast") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/GreaterWispBody", "MoistureUpset.Resources.ghast.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) == 1)
+            if (BigJank.getOptionValue("Trumpet Skeleton") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ImpBody", "MoistureUpset.Resources.doot.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
+            if (BigJank.getOptionValue("Sans") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ImpBossBody", "MoistureUpset.Resources.sans.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) == 1)
+            if (BigJank.getOptionValue("Comedy") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/JellyfishBody", "MoistureUpset.Resources.joy.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) == 1)
+            if (BigJank.getOptionValue("Mike Wazowski") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/LemurianBody", "MoistureUpset.Resources.mike.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Bowser")) == 1)
+            if (BigJank.getOptionValue("Bowser") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/LemurianBruiserBody", "MoistureUpset.Resources.bowser.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+            if (BigJank.getOptionValue("Obama Prism") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/RoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+            if (BigJank.getOptionValue("Obama Prism") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/RoboBallMiniBody", "MoistureUpset.Resources.obamaprism.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Obama prism")) == 1)
+            if (BigJank.getOptionValue("Obama prism") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/SuperRoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) == 1)
+            if (BigJank.getOptionValue("Dogplane") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/WispBody", "MoistureUpset.Resources.dogplane.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
+            if (BigJank.getOptionValue("Toad") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/MiniMushroomBody", "MoistureUpset.Resources.toad.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+            if (BigJank.getOptionValue("Alex Jones") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/TitanGoldBody", "MoistureUpset.Resources.alexjones.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Hagrid")) == 1)
+            if (BigJank.getOptionValue("Hagrid") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ParentBody", "MoistureUpset.Resources.hagrid.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) == 1)
+            if (BigJank.getOptionValue("Roblox Titan") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/TitanBody", "MoistureUpset.Resources.buffroblox.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Lemme Smash")) == 1)
+            if (BigJank.getOptionValue("Lemme Smash") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/VultureBody", "MoistureUpset.Resources.lemmesmash.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Crab Rave")) == 1)
+            if (BigJank.getOptionValue("Crab Rave") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/NullifierBody", "MoistureUpset.Resources.crab.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Skeleton Crab")) == 1)
+            if (BigJank.getOptionValue("Skeleton Crab") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/HermitCrabBody", "MoistureUpset.Resources.jockey.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) == 1)
+            if (BigJank.getOptionValue("Pool Noodle") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/MagmaWormBody", "MoistureUpset.Resources.noodle.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Squirmles")) == 1)
+            if (BigJank.getOptionValue("Squirmles") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ElectricWormBody", "MoistureUpset.Resources.werm.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1)
+            if (BigJank.getOptionValue("Giga Puddi") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ClayBossBody", "MoistureUpset.Resources.puddi.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) == 1)
+            if (BigJank.getOptionValue("WanderingAtEveryone") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/VagrantBody", "MoistureUpset.Resources.discord.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) == 1)
+            if (BigJank.getOptionValue("Roflcopter") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/LunarWispBody", "MoistureUpset.Resources.rofl.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Rob")) == 1)
+            if (BigJank.getOptionValue("Rob") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/LunarGolemBody", "MoistureUpset.Resources.rob.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
+            if (BigJank.getOptionValue("Nyan Cat") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/BeetleQueen2Body", "MoistureUpset.Resources.nyancat.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+            if (BigJank.getOptionValue("Thanos") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/texBrotherIcon", "MoistureUpset.Resources.thanos.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+            if (BigJank.getOptionValue("Twitch") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/GravekeeperBody", "MoistureUpset.Resources.twitch.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+            if (BigJank.getOptionValue("Imposter") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ScavBody", "MoistureUpset.Resources.imposter.png");
-            if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+            if (BigJank.getOptionValue("Imposter") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/ScavLunarBody", "MoistureUpset.Resources.imposter.png");
         }
         private static void NonEnemyNames()
         {
             On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("NSFW")) == 1 && float.Parse(ModSettingsManager.getOptionValue("Difficulty Names")) == 1)
+                if (BigJank.getOptionValue("NSFW") == 1 && BigJank.getOptionValue("Difficulty Names") == 1)
                 {
                     if (st == "Drizzle")
                     {
@@ -433,7 +433,7 @@ namespace MoistureUpset
                         st = "Jizzoon";
                     }
                 }
-                if (float.Parse(ModSettingsManager.getOptionValue("In-Run Difficulty Names")) == 1)
+                if (BigJank.getOptionValue("In-Run Difficulty Names") == 1)
                 {
                     if (token == "DIFFICULTY_BAR_0")
                     {
@@ -476,24 +476,24 @@ namespace MoistureUpset
                         st = " and they dont stop coming ";
                     }
                 }
-                if (float.Parse(ModSettingsManager.getOptionValue("Shrine Changes")) == 1)
+                if (BigJank.getOptionValue("Shrine Changes") == 1)
                 {
                     if (token == "SHRINE_BLOOD_CONTEXT")
                     {
                         st = "Free Money";
-                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                        if (BigJank.getOptionValue("Currency Changes") == 1)
                             st = "Free Tix";
                     }
                     else if (token == "SHRINE_BLOOD_USE_MESSAGE_2P")
                     {
                         st = "<style=cShrine>Wait it's not free. You have gained {1} gold.</color>";
-                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                        if (BigJank.getOptionValue("Currency Changes") == 1)
                             st = "<style=cShrine>Wait it's not free. You have gained {1} tix.</color>";
                     }
                     else if (token == "SHRINE_BLOOD_USE_MESSAGE")
                     {
                         st = "<style=cShrine>{0} got stabbed for money, and has gained {1} gold.</color>";
-                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                        if (BigJank.getOptionValue("Currency Changes") == 1)
                             st = "<style=cShrine>{0} got stabbed for money, and has gained {1} tix.</color>";
                     }
 
@@ -513,13 +513,13 @@ namespace MoistureUpset
                     else if (token == "SHRINE_CHANCE_FAIL_MESSAGE_2P")
                     {
                         st = "<style=cShrine>You lost money.</color>";
-                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                        if (BigJank.getOptionValue("Currency Changes") == 1)
                             st = "<style=cShrine>You lost tix.</color>";
                     }
                     else if (token == "SHRINE_CHANCE_FAIL_MESSAGE")
                     {
                         st = "<style=cShrine>{0} lost money.</color>";
-                        if (float.Parse(ModSettingsManager.getOptionValue("Currency Changes")) == 1)
+                        if (BigJank.getOptionValue("Currency Changes") == 1)
                             st = "<style=cShrine>{0} lost tix.</color>";
                     }
 
@@ -545,35 +545,35 @@ namespace MoistureUpset
                         st = "<style=cShrine>Your bravery is rewarded!</style>";
                     }
                 }
-                if (float.Parse(ModSettingsManager.getOptionValue("Misc")) == 1)
+                if (BigJank.getOptionValue("Misc") == 1)
                 {
                     if (token == "PLAYER_PING_COOLDOWN")
                     {
                         st = "<style=cEvent>Stop</style>";
                     }
                 }
-                if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) == 1)
+                if (BigJank.getOptionValue("Robloxian") == 1)
                 {
                     if (token == "FAMILY_GOLEM")
                     {
                         st = "<style=cWorldEvent>[WARNING] It feels like 2008 in here..</style>";
                     }
                 }
-                if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) == 1)
+                if (BigJank.getOptionValue("Comedy") == 1)
                 {
                     if (token == "FAMILY_JELLYFISH")
                     {
                         st = "<style=cWorldEvent>[WARNING] You hear a distant laugh track..</style>";
                     }
                 }
-                if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) == 1)
+                if (BigJank.getOptionValue("Dogplane") == 1)
                 {
                     if (token == "FAMILY_WISP")
                     {
                         st = "<style=cWorldEvent>[WARNING] Habadabadaga..</style>";
                     }
                 }
-                if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) == 1)
+                if (BigJank.getOptionValue("Trumpet Skeleton") == 1)
                 {
                     if (token == "FAMILY_IMP")
                     {
@@ -582,7 +582,7 @@ namespace MoistureUpset
                 }
 
 
-                if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+                if (BigJank.getOptionValue("Alex Jones") == 1)
                 {
                     if (token == "BAZAAR_SEER_GOLDSHORES")
                     {
@@ -590,7 +590,7 @@ namespace MoistureUpset
                     }
                 }
 
-                if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                if (BigJank.getOptionValue("Obama Prism") == 1)
                 {
                     if (token == "VULTURE_EGG_WARNING")
                     {
@@ -598,7 +598,7 @@ namespace MoistureUpset
                     }
                 }
 
-                if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                if (BigJank.getOptionValue("Obama Prism") == 1)
                 {
                     if (token == "VULTURE_EGG_BEGIN")
                     {
@@ -636,198 +636,198 @@ namespace MoistureUpset
             {
                 if (st.Contains("Imp Overlord"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
+                    if (BigJank.getOptionValue("Sans") == 1)
                         st = st.Replace("Imp Overlord", "Sans");
                 }
                 else if (st == "Lord of the Red Plane")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Sans")) == 1)
+                    if (BigJank.getOptionValue("Sans") == 1)
                         st = "You're gonna have a bad time";
                 }
                 else if (st.Contains("Imp") && !st.Contains("Overlord") && !st.Contains("Impossible") && !st.Contains("Important") && !st.Contains("Improves"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) == 1)
+                    if (BigJank.getOptionValue("Trumpet Skeleton") == 1)
                         st = st.Replace("Imp", "Trumpet Skeleton");
                 }
                 else if (st.Contains("Lesser Wisp"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) == 1)
+                    if (BigJank.getOptionValue("Dogplane") == 1)
                         st = st.Replace("Lesser Wisp", "Dogplane");
                 }
                 else if (st.Contains("Jellyfish"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) == 1)
+                    if (BigJank.getOptionValue("Comedy") == 1)
                         st = st.Replace("Jellyfish", "Comedy");
                 }
 
 
                 else if (st.Contains("Beetle Guard"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Winston")) == 1)
+                    if (BigJank.getOptionValue("Winston") == 1)
                         st = st.Replace("Beetle Guard", "Winston");
                 }
                 else if (st.Contains("Beetle") && !st.Contains("Queen") && !st.Contains("Guard"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) == 1)
+                    if (BigJank.getOptionValue("Froggy Chair") == 1)
                         st = st.Replace("Beetle", "Froggy Chair");
                 }
 
 
                 else if (st.Contains("Elder Lemurian"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Bowser")) == 1)
+                    if (BigJank.getOptionValue("Bowser") == 1)
                         st = st.Replace("Elder Lemurian", "Bowser");
                 }
                 else if (st.Contains("Lemurian") && !st.Contains("Elder"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) == 1)
+                    if (BigJank.getOptionValue("Mike Wazowski") == 1)
                         st = st.Replace("Lemurian", "Mike Wazowski");
                 }
                 else if (st.Contains("Solus Probe"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                    if (BigJank.getOptionValue("Obama Prism") == 1)
                         st = st.Replace("Solus Probe", "Obama Prism");
                 }
                 else if (st.Contains("Brass Contraption"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) == 1)
+                    if (BigJank.getOptionValue("Taco Bell") == 1)
                         st = st.Replace("Brass Contraption", "Taco Bell");
                 }
                 else if (st.Contains("Bighorn Bison"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Thomas")) == 1)
+                    if (BigJank.getOptionValue("Thomas") == 1)
                         st = st.Replace("Bighorn Bison", "Thomas");
                 }
                 else if (st.Contains("Stone Golem"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) == 1)
+                    if (BigJank.getOptionValue("Robloxian") == 1)
                         st = st.Replace("Stone Golem", "Robloxian");
                 }
                 else if (st.Contains("Clay Templar"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) == 1)
+                    if (BigJank.getOptionValue("Heavy") == 1)
                         st = st.Replace("Clay Templar", "Heavy");
                 }
                 else if (st.Contains("Greater Wisp"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Ghast")) == 1)
+                    if (BigJank.getOptionValue("Ghast") == 1)
                         st = st.Replace("Greater Wisp", "Ghast");
                 }
                 else if (st.Contains("Solus Control Unit"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                    if (BigJank.getOptionValue("Obama Prism") == 1)
                         st = st.Replace("Solus Control Unit", "Obama Sphere");
                 }
                 else if (st == "Corrupted AI")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                    if (BigJank.getOptionValue("Obama Prism") == 1)
                         st = "Bringer of the Prisms";
                 }
                 else if (st == "Friend of Vultures")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                    if (BigJank.getOptionValue("Obama Prism") == 1)
                         st = "Friend of Prisms";
                 }
                 else if (st.Contains("Alloy Worship Unit"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) == 1)
+                    if (BigJank.getOptionValue("Obama Prism") == 1)
                         st = st.Replace("Alloy Worship Unit", "Obamium Worship Unit");
                 }
                 else if (st.Contains("Mini Mushrum"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Toad")) == 1)
+                    if (BigJank.getOptionValue("Toad") == 1)
                         st = st.Replace("Mini Mushrum", "Toad");
                 }
                 else if (st.Contains("Aurelionite"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+                    if (BigJank.getOptionValue("Alex Jones") == 1)
                         st = st.Replace("Aurelionite", "Alex Jones");
                 }
                 else if (token == "TITANGOLD_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) == 1)
+                    if (BigJank.getOptionValue("Alex Jones") == 1)
                         st = "Prince of the Social Media Shadow Realm";
                 }
                 else if (st.Contains("Stone Titan"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) == 1)
+                    if (BigJank.getOptionValue("Roblox Titan") == 1)
                         st = st.Replace("Stone Titan", "Buff Robloxian");
                 }
                 else if (token == "TITAN_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) == 1)
+                    if (BigJank.getOptionValue("Roblox Titan") == 1)
                         st = "Oooooooooooooooooooooooooooof";
                 }
 
 
                 else if (st.Contains("Parent"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Hagrid")) == 1)
+                    if (BigJank.getOptionValue("Hagrid") == 1)
                         st = st.Replace("Parent", "Hagrid");
                 }
 
 
                 else if (st.Contains("Alloy Vulture"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Lemme Smash")) == 1)
+                    if (BigJank.getOptionValue("Lemme Smash") == 1)
                         st = st.Replace("Alloy Vulture", "Ron");
                 }
                 else if (st.Contains("Void Reaver"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Crab Rave")) == 1)
+                    if (BigJank.getOptionValue("Crab Rave") == 1)
                         st = st.Replace("Void Reaver", "Crab Rave");
                 }
                 else if (st.Contains("Hermit Crab"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Skeleton Crab")) == 1)
+                    if (BigJank.getOptionValue("Skeleton Crab") == 1)
                         st = st.Replace("Hermit Crab", "Spider Jockey");
                 }
                 else if (st.Contains("Magma Worm"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) == 1)
+                    if (BigJank.getOptionValue("Pool Noodle") == 1)
                         st = st.Replace("Magma Worm", "Pool Noodle");
                 }
                 else if (token == "MAGMAWORM_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) == 1)
+                    if (BigJank.getOptionValue("Pool Noodle") == 1)
                         st = "Defender of the pool";
                 }
                 else if (st.Contains("Overloading Worm"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Squirmles")) == 1)
+                    if (BigJank.getOptionValue("Squirmles") == 1)
                         st = st.Replace("Overloading Worm", "Squirmle");
                 }
                 else if (token == "ELECTRICWORM_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Squirmles")) == 1)
+                    if (BigJank.getOptionValue("Squirmles") == 1)
                         st = "String not included";
                 }
 
                 else if (st.Contains("Clay Dunestrider"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1)
+                    if (BigJank.getOptionValue("Giga Puddi") == 1)
                         st = st.Replace("Clay Dunestrider", "Giga Puddi");
                 }
                 else if (token == "CLAYBOSS_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) == 1)
+                    if (BigJank.getOptionValue("Giga Puddi") == 1)
                         st = "Sugoku Dekkai, Giga Puddi!";
                 }
 
                 else if (st.Contains("Beetle Queen"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
+                    if (BigJank.getOptionValue("Nyan Cat") == 1)
                         st = st.Replace("Beetle Queen", "Nyan Cat");
                 }
                 else if (token == "BEETLEQUEEN_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) == 1)
+                    if (BigJank.getOptionValue("Nyan Cat") == 1)
                         st = "Nyan nyan nyan nyan nyan nyan nyan nyan nyan nyan!";
                 }
 
                 else if (token.Contains("LUNARGOLEM"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Rob")) == 1)
+                    if (BigJank.getOptionValue("Rob") == 1)
                     {
                         st = st.Replace("Lunar Chimera", "Rob");
                         st = st.Replace("Zenith", "Meme");
@@ -835,7 +835,7 @@ namespace MoistureUpset
                 }
                 else if (token.Contains("LUNARWISP"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) == 1)
+                    if (BigJank.getOptionValue("Roflcopter") == 1)
                     {
                         st = st.Replace("Lunar Chimera", "Roflcopter");
                         st = st.Replace("Zenith", "Meme");
@@ -844,100 +844,100 @@ namespace MoistureUpset
 
                 else if (st.Contains("Mithrix"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                    if (BigJank.getOptionValue("Thanos") == 1)
                         st = st.Replace("Mithrix", "Thanos");
                 }
                 else if (token == "BROTHER_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                    if (BigJank.getOptionValue("Thanos") == 1)
                         st = "King of Balance";
                 }
 
                 else if (st.Contains("Grovetender"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+                    if (BigJank.getOptionValue("Twitch") == 1)
                         st = st.Replace("Grovetender", "Twitch.exe");
                 }
                 else if (token == "GRAVEKEEPER_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+                    if (BigJank.getOptionValue("Twitch") == 1)
                         st = "Meme Cultivator";
                 }
 
                 else if (st.Contains("Artifact Reliquary"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Cereal")) == 1)
+                    if (BigJank.getOptionValue("Cereal") == 1)
                         st = st.Replace("Artifact Reliquary", "Reese's puffs");
                 }
                 else if (token == "ARTIFACTSHELL_BODY_DESCRIPTION")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Cereal")) == 1)
+                    if (BigJank.getOptionValue("Cereal") == 1)
                         st = "Eat em up eat em up eat em up eat em up!";
                 }
 
                 else if (st.Contains("Wandering Vagrant"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) == 1)
+                    if (BigJank.getOptionValue("WanderingAtEveryone") == 1)
                         st = st.Replace("Wandering Vagrant", "@Everyone");
                 }
                 else if (token == "VAGRANT_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) == 1)
+                    if (BigJank.getOptionValue("WanderingAtEveryone") == 1)
                         st = "PING!";
                 }
 
                 else if (st.Contains("Scavenger"))
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                    if (BigJank.getOptionValue("Imposter") == 1)
                         st = st.Replace("Scavenger", "<color=#D9262C>Crewmate</color>");
                 }
                 else if (token == "SCAV_BODY_SUBTITLE")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                    if (BigJank.getOptionValue("Imposter") == 1)
                         st = "Idk, seems pretty sus to me";
                 }
 
                 else if (token == "GOLDCHEST_NAME")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "Ender Chest";
                 }
                 else if (token == "GOLDCHEST_CONTEXT")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "Open ender chest";
                 }
 
                 else if (token == "BARREL1_NAME")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "Can";
                 }
                 else if (token == "BARREL1_CONTEXT")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "Open can";
                 }
 
                 else if (token == "EQUIPMENTBARREL_NAME")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "Shulker Box";
                 }
                 else if (token == "EQUIPMENTBARREL_CONTEXT")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "Open shulker box";
                 }
 
                 else if (token == "MULTISHOP_TERMINAL_NAME")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "Fidget Spinner";
                 }
                 else if (token == "MULTISHOP_TERMINAL_CONTEXT")
                 {
-                    if (float.Parse(ModSettingsManager.getOptionValue("Interactables")) == 1)
+                    if (BigJank.getOptionValue("Interactables") == 1)
                         st = "SPEEEEEEEEEEEEN";
                 }
                 //else if (st.Contains("Jellyfish"))
@@ -949,7 +949,7 @@ namespace MoistureUpset
         }
         private static void ThanosQuotes()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+            if (BigJank.getOptionValue("Thanos") == 1)
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
             {
                 if (token == "BROTHER_SPAWN_PHASE1_1")
@@ -1073,15 +1073,15 @@ namespace MoistureUpset
         }
         private static void _UI()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Awp UI")) == 1)
+            if (BigJank.getOptionValue("Awp UI") == 1)
                 LoadBNK("awp");
-            if (float.Parse(ModSettingsManager.getOptionValue("Chest noises")) == 1)
+            if (BigJank.getOptionValue("Chest noises") == 1)
                 LoadBNK("chestinteraction");
             LoadBNK("playerdeath");
         }
         private static void Sans()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Sans")) != 1)
+            if (BigJank.getOptionValue("Sans") != 1)
                 return;
             LoadBNK("sans");
             LoadResource("sans");
@@ -1090,14 +1090,14 @@ namespace MoistureUpset
         }
         private static void Shop()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Merchant")) != 1)
+            if (BigJank.getOptionValue("Merchant") != 1)
                 return;
             LoadResource("shop");
             ReplaceModel("prefabs/characterbodies/ShopkeeperBody", "@MoistureUpset_shop:assets/shop.mesh", "@MoistureUpset_shop:assets/shop.png");
         }
         private static void BeetleGuard()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Winston")) != 1)
+            if (BigJank.getOptionValue("Winston") != 1)
                 return;
             LoadBNK("beetleguard");
             LoadResource("winston");
@@ -1144,7 +1144,7 @@ namespace MoistureUpset
         }
         private static void Jelly()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Comedy")) != 1)
+            if (BigJank.getOptionValue("Comedy") != 1)
                 return;
             LoadBNK("comedy");
             LoadResource("jelly");
@@ -1158,7 +1158,7 @@ namespace MoistureUpset
         }
         private static void TacoBell()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Taco Bell")) != 1)
+            if (BigJank.getOptionValue("Taco Bell") != 1)
                 return;
             LoadBNK("tacobell");
             LoadResource("tacobell");
@@ -1234,7 +1234,7 @@ namespace MoistureUpset
         //}
         private static void MiniMushroom()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Toad")) != 1)
+            if (BigJank.getOptionValue("Toad") != 1)
                 return;
             LoadBNK("toad");
             LoadResource("toad1");
@@ -1300,7 +1300,7 @@ namespace MoistureUpset
         }
         private static void Imp()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Trumpet Skeleton")) != 1)
+            if (BigJank.getOptionValue("Trumpet Skeleton") != 1)
                 return;
             LoadResource("dooter");
             ReplaceModel("prefabs/characterbodies/ImpBody", "@MoistureUpset_dooter:assets/dooter.mesh", "@MoistureUpset_dooter:assets/dooter.png");
@@ -1333,7 +1333,7 @@ namespace MoistureUpset
         }
         private static void Beetle()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) != 1)
+            if (BigJank.getOptionValue("Froggy Chair") != 1)
                 return;
             LoadBNK("beetle");
             LoadResource("frog");
@@ -1365,7 +1365,7 @@ namespace MoistureUpset
         }
         private static void ElderLemurian()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Bowser")) != 1)
+            if (BigJank.getOptionValue("Bowser") != 1)
                 return;
             LoadBNK("bowser");
             LoadResource("bowser");
@@ -1396,7 +1396,7 @@ namespace MoistureUpset
         }
         private static void Templar()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) != 1)
+            if (BigJank.getOptionValue("Heavy") != 1)
                 return;
             LoadBNK("heavy");
             LoadResource("heavy");
@@ -1445,7 +1445,7 @@ namespace MoistureUpset
         }
         private static void GreaterWisp()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Ghast")) != 1)
+            if (BigJank.getOptionValue("Ghast") != 1)
                 return;
             LoadBNK("ghast");
             LoadResource("ghast");
@@ -1490,7 +1490,7 @@ namespace MoistureUpset
         }
         private static void Wisp()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Dogplane")) != 1)
+            if (BigJank.getOptionValue("Dogplane") != 1)
                 return;
             LoadBNK("dogplane");
             LoadResource("dogplane");
@@ -1529,7 +1529,7 @@ namespace MoistureUpset
         }
         private static void SolusUnit()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Obama Prism")) != 1)
+            if (BigJank.getOptionValue("Obama Prism") != 1)
                 return;
             LoadBNK("prism");
             LoadResource("obamaprism");
@@ -1567,7 +1567,7 @@ namespace MoistureUpset
         }
         private static void Lemurian()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) != 1)
+            if (BigJank.getOptionValue("Mike Wazowski") != 1)
                 return;
             LoadResource("mike");
             On.EntityStates.LemurianMonster.Bite.OnEnter += (orig, self) =>
@@ -1584,7 +1584,7 @@ namespace MoistureUpset
         }
         private static void Golem()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Robloxian")) != 1)
+            if (BigJank.getOptionValue("Robloxian") != 1)
                 return;
             LoadBNK("oof");
             LoadResource("noob");
@@ -1658,7 +1658,7 @@ namespace MoistureUpset
         }
         private static void Bison()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Thomas")) != 1)
+            if (BigJank.getOptionValue("Thomas") != 1)
                 return;
             LoadResource("thomas");
             On.EntityStates.Bison.Charge.OnEnter += (orig, self) =>
@@ -1675,7 +1675,7 @@ namespace MoistureUpset
         }
         private static void RobloxTitan()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Roblox Titan")) != 1)
+            if (BigJank.getOptionValue("Roblox Titan") != 1)
                 return;
             LoadResource("roblox");
             ReplaceModel("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.mesh", "@MoistureUpset_roblox:assets/robloxtitan.png");
@@ -1870,7 +1870,7 @@ namespace MoistureUpset
         }
         private static void Alex()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Alex Jones")) != 1)
+            if (BigJank.getOptionValue("Alex Jones") != 1)
                 return;
             LoadResource("alexjones");
             ReplaceModel("prefabs/characterbodies/TitanGoldBody", "@MoistureUpset_alexjones:assets/alexjones.mesh", "@MoistureUpset_alexjones:assets/alexjones.png");
@@ -1993,7 +1993,7 @@ namespace MoistureUpset
         }
         private static void LemmeSmash()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Lemme Smash")) != 1)
+            if (BigJank.getOptionValue("Lemme Smash") != 1)
                 return;
             LoadBNK("vulture");
             LoadResource("lemmesmash");
@@ -2022,7 +2022,7 @@ namespace MoistureUpset
         }
         private static void Hagrid()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Hagrid")) != 1)
+            if (BigJank.getOptionValue("Hagrid") != 1)
                 return;
             LoadResource("hagrid");
             LoadBNK("hagrid");
@@ -2083,7 +2083,7 @@ namespace MoistureUpset
                     //NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
                 }
             };
-            if (float.Parse(ModSettingsManager.getOptionValue("Pool Noodle")) != 1)
+            if (BigJank.getOptionValue("Pool Noodle") != 1)
                 return;
             LoadResource("noodle");
 
@@ -2141,7 +2141,7 @@ namespace MoistureUpset
         }
         private static void Skeleton()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Skeleton Crab")) != 1)
+            if (BigJank.getOptionValue("Skeleton Crab") != 1)
                 return;
             LoadBNK("jockey");
             LoadResource("skeleton");
@@ -2167,7 +2167,7 @@ namespace MoistureUpset
         }
         private static void CrabRave()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Crab Rave")) != 1)
+            if (BigJank.getOptionValue("Crab Rave") != 1)
                 return;
             LoadResource("crabrave");
             LoadBNK("crabrave");
@@ -2176,7 +2176,7 @@ namespace MoistureUpset
         }
         private static void PUDDI()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Giga Puddi")) != 1)
+            if (BigJank.getOptionValue("Giga Puddi") != 1)
                 return;
             LoadResource("puddi");
             LoadBNK("puddi");
@@ -2229,7 +2229,7 @@ namespace MoistureUpset
         }
         private static void StringWorm()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Squirmles")) != 1)
+            if (BigJank.getOptionValue("Squirmles") != 1)
                 return;
             LoadResource("werm");
             LoadBNK("werm");
@@ -2284,7 +2284,7 @@ namespace MoistureUpset
         }
         private static void Discord()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("WanderingAtEveryone")) != 1)
+            if (BigJank.getOptionValue("WanderingAtEveryone") != 1)
                 return;
             LoadResource("discord");
             LoadBNK("discord");
@@ -2344,7 +2344,7 @@ namespace MoistureUpset
         }
         private static void Copter()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Roflcopter")) != 1)
+            if (BigJank.getOptionValue("Roflcopter") != 1)
                 return;
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/LunarWispBody");
             fab.AddComponent<Helicopter>();
@@ -2358,7 +2358,7 @@ namespace MoistureUpset
         }
         private static void Rob()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Rob")) != 1)
+            if (BigJank.getOptionValue("Rob") != 1)
                 return;
             LoadResource("rob");
             ReplaceModel("prefabs/characterbodies/LunarGolemBody", "@MoistureUpset_rob:assets/rob.mesh", "@MoistureUpset_rob:assets/rob.png");
@@ -2366,7 +2366,7 @@ namespace MoistureUpset
         }
         private static void Nyan()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Nyan Cat")) != 1)
+            if (BigJank.getOptionValue("Nyan Cat") != 1)
                 return;
             LoadResource("beetlequeen");
             LoadBNK("Nyam2");
@@ -2443,7 +2443,7 @@ namespace MoistureUpset
         }
         private static void Thanos()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) != 1)
+            if (BigJank.getOptionValue("Thanos") != 1)
                 return;
             LoadResource("thanos");
             LoadBNK("Thanos");
@@ -2471,7 +2471,7 @@ namespace MoistureUpset
         }
         private static void Cereal()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Cereal")) != 1)
+            if (BigJank.getOptionValue("Cereal") != 1)
                 return;
             LoadResource("artifact");
             ReplaceMeshFilter("prefabs/characterbodies/ArtifactShellBody", "@MoistureUpset_artifact:assets/bosses/bowl.mesh");
@@ -2523,7 +2523,7 @@ namespace MoistureUpset
         }
         private static void Twitch()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) != 1)
+            if (BigJank.getOptionValue("Twitch") != 1)
                 return;
             LoadResource("moisture_twitch");
             LoadResource("twitch2");
@@ -2594,7 +2594,7 @@ namespace MoistureUpset
         public static bool kindlyKillYourselfRune = true;
         private static void Imposter()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) != 1)
+            if (BigJank.getOptionValue("Imposter") != 1)
                 return;
             LoadResource("scavenger");
             LoadBNK("Abungus");
@@ -2693,7 +2693,7 @@ namespace MoistureUpset
         {
             try
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("DireSeeker")) == 1)
+                if (BigJank.getOptionValue("DireSeeker") == 1)
                 {
                     Collabs.Direseeker.Run();
                     DebugClass.Log($"Direseeker installed, modifying");
@@ -2708,7 +2708,7 @@ namespace MoistureUpset
         {
             try
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("Mike Wazowski")) == 1)
+                if (BigJank.getOptionValue("Mike Wazowski") == 1)
                 {
                     Collabs.PlayableLemurian.Run();
                     DebugClass.Log($"Playable Lemurian installed, modifying");
@@ -2723,7 +2723,7 @@ namespace MoistureUpset
         {
             try
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("Twitch")) == 1)
+                if (BigJank.getOptionValue("Twitch") == 1)
                 {
                     Collabs.m_PlayableGrovetender.Run();
                     DebugClass.Log($"PlayableGrovetender installed, modifying");
@@ -2738,7 +2738,7 @@ namespace MoistureUpset
         {
             try
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("Imposter")) == 1)
+                if (BigJank.getOptionValue("Imposter") == 1)
                 {
                     Collabs.PlayableScavenger.Run();
                     DebugClass.Log($"PlayableScavenger installed, modifying");
@@ -2753,7 +2753,7 @@ namespace MoistureUpset
         {
             try
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("Heavy")) == 1)
+                if (BigJank.getOptionValue("Heavy") == 1)
                 {
                     Collabs.m_PlayableTemplar.Run();
                     DebugClass.Log($"PlayableTemplar installed, modifying");
@@ -2768,7 +2768,7 @@ namespace MoistureUpset
         {
             try
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("Thanos")) == 1)
+                if (BigJank.getOptionValue("Thanos") == 1)
                 {
                     Collabs.PlayableMithrix.Run();
                     DebugClass.Log($"PlayableMithrix installed, modifying");
@@ -2783,7 +2783,7 @@ namespace MoistureUpset
         {
             try
             {
-                if (float.Parse(ModSettingsManager.getOptionValue("Froggy Chair")) == 1)
+                if (BigJank.getOptionValue("Froggy Chair") == 1)
                 {
                     Collabs.PlayableBeetle.Run();
                     DebugClass.Log($"ChipTheBeetle installed, modifying");
