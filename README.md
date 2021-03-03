@@ -40,6 +40,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.2.0: Fixed issues with the FrankasaurusEngi mod (and probably other engi mods) Changed the chance shrine and the triple shops. Added a setting which disables everything except the survivor skins, make sure to check this if you only want to use the survivor skins we implement! (Also increases load times dramatically since we don't load stuff you don't want)
+
  1.1.4: Fixed issue with font's becoming lines... yeah I'm kinda stupid
 
  1.1.3: Fixed a critical error which caused the chest replacements to depend on debugtoolkit, to put it simply, it seems like some part of debugtoolkit modifies how the SpawnCards are handled, causing a reset which normally happens to not. For anyone who doesn't use debugtoolkit, which is probably most, enjoy your chest facelift, for real this time! We also fixed a material issue with the Engi skin.
