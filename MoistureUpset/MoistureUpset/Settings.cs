@@ -33,11 +33,12 @@ namespace MoistureUpset
         }
         private static void Setup()
         {
-            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion 1.1.1");
+            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion 1.2.0");
             ModSettingsManager.setPanelTitle("Moisture Upset");
         }
         private static void HitMarker()
         {
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Only Survivor Skins", "Only survivor skins are enabled. Restart required!", "0"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "HitMarker Volume", "This sound is also tied to SFX, but has a seperate slider if you want it to be less noisy", "100"));
             ModSettingsManager.addListener(ModSettingsManager.getOption("HitMarker Volume"), new UnityEngine.Events.UnityAction<float>(BigToasterClass.HitMarker));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Slider, "Modded Music Volume", "The default music slider also work for modded music, but this effects modded music only. Incase you want a different audio balance", "50"));
