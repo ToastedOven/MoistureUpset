@@ -23,9 +23,9 @@ namespace MoistureUpset
         {
             EnemyReplacements.LoadResource("na");
 
-            BigToasterClass.HitMarker(float.Parse(ModSettingsManager.getOptionValue("HitMarker Volume"), CultureInfo.InvariantCulture));
-            BigToasterClass.Modded_MSX(float.Parse(ModSettingsManager.getOptionValue("Modded Music Volume"), CultureInfo.InvariantCulture));
-            BigToasterClass.Modded_SFX(float.Parse(ModSettingsManager.getOptionValue("Modded SFX Volume"), CultureInfo.InvariantCulture));
+            BigToasterClass.HitMarker(BigJank.getOptionValue("HitMarker Volume"));
+            BigToasterClass.Modded_MSX(BigJank.getOptionValue("Modded Music Volume"));
+            BigToasterClass.Modded_SFX(BigJank.getOptionValue("Modded SFX Volume"));
             InteractReplacements.Interactables.Init();
             EnemyReplacements.RunAll();
             HudChanges.RunAll();
@@ -96,8 +96,8 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Minecraft Oof Sounds", "Adds Minecraft oof sounds whenever you get hurt.", "1"));
 
             // Yeah I know this looks jank, but it sort of works.
-            ModSettingsManager.addListener(ModSettingsManager.getOption("Minecraft Oof Sounds"), new UnityEngine.Events.UnityAction<bool>(delegate(bool temp) { SyncAudio.doMinecraftOofSound = temp; }));
-            ModSettingsManager.addListener(ModSettingsManager.getOption("Shrine Changes"), new UnityEngine.Events.UnityAction<bool>(delegate (bool temp) { SyncAudio.doShrineSound = temp; }));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Minecraft Oof Sounds"), new UnityEngine.Events.UnityAction<bool>(delegate(bool temp) { if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) != 1) SyncAudio.doMinecraftOofSound = temp; }));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Shrine Changes"), new UnityEngine.Events.UnityAction<bool>(delegate (bool temp) { if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) != 1) SyncAudio.doShrineSound = temp; }));
         }
         private static void Misc()
         {

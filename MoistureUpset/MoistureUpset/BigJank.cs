@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using RiskOfOptions;
 
@@ -7,13 +8,13 @@ namespace MoistureUpset
 {
     public static class BigJank
     {
-        public static bool getOptionValue(string option)
+        public static int getOptionValue(string option)
         {
             if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) == 1)
             {
-                return false;
+                return 0;
             }
-            return float.Parse(ModSettingsManager.getOptionValue(option)) == 1;
+            return (int)float.Parse(ModSettingsManager.getOptionValue(option), CultureInfo.InvariantCulture);
         }
     }
 }

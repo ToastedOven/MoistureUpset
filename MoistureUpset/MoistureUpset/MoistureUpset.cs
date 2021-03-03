@@ -20,6 +20,7 @@ using RoR2.PostProcessing;
 using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using R2API.Networking;
+using MoistureUpset.NetMessages;
 
 namespace MoistureUpset
 {
@@ -61,7 +62,12 @@ namespace MoistureUpset
 
         public void IntroReplaceAction()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Replace Intro Scene")) == 1)
+            if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) == 1)
+            {
+                SyncAudio.doMinecraftOofSound = false;
+                SyncAudio.doShrineSound = false;
+            }
+            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
             {
                 LoadIntro();
 
@@ -181,7 +187,7 @@ namespace MoistureUpset
 
         public void Start()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Replace Intro Scene")) == 1)
+            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
             {
                 RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
             }

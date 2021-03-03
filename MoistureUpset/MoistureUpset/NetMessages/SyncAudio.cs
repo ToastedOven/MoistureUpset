@@ -40,7 +40,7 @@ namespace MoistureUpset.NetMessages
 
         public void OnReceived()
         {
-            if ((doMinecraftOofSound && soundId == "MinecraftHurt") || (doShrineSound && (soundId == "ChanceFailure" || soundId == "ChanceSuccess")))
+            if ((!doMinecraftOofSound && soundId == "MinecraftHurt") || (doShrineSound && (soundId == "ChanceFailure" || soundId == "ChanceSuccess")))
                 return;
 
             GameObject bodyObject = Util.FindNetworkObject(netId);
