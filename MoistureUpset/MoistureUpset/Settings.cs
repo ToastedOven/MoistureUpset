@@ -93,8 +93,10 @@ namespace MoistureUpset
         private static void SoundOptions()
         {
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Minecraft Oof Sounds", "Adds Minecraft oof sounds whenever you get hurt.", "1"));
+
             // Yeah I know this looks jank, but it sort of works.
             ModSettingsManager.addListener(ModSettingsManager.getOption("Minecraft Oof Sounds"), new UnityEngine.Events.UnityAction<bool>(delegate(bool temp) { SyncAudio.doMinecraftOofSound = temp; }));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Shrine Changes"), new UnityEngine.Events.UnityAction<bool>(delegate (bool temp) { SyncAudio.doShrineSound = temp; }));
         }
         private static void Misc()
         {

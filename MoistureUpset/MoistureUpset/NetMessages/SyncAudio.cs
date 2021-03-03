@@ -12,6 +12,7 @@ namespace MoistureUpset.NetMessages
     class SyncAudio : INetMessage
     {
         public static bool doMinecraftOofSound = false;
+        public static bool doShrineSound = false;
 
         NetworkInstanceId netId;
         string soundId;
@@ -39,7 +40,7 @@ namespace MoistureUpset.NetMessages
 
         public void OnReceived()
         {
-            if (!doMinecraftOofSound && soundId == "MinecraftHurt")
+            if ((doMinecraftOofSound && soundId == "MinecraftHurt") || (doShrineSound && (soundId == "ChanceFailure" || soundId == "ChanceSuccess")))
                 return;
 
             GameObject bodyObject = Util.FindNetworkObject(netId);
