@@ -38,7 +38,7 @@ namespace MoistureUpset
             DebugClass.SetLogger(base.Logger);
 
             NetMessages.Register.Init();
-            
+
             Settings.RunAll();
 
             Assets.PopulateAssets();
@@ -67,29 +67,13 @@ namespace MoistureUpset
         }
         private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         {
-            if (self.text == "start")
-            {
-                testingaudio = true;
-
-                //AkExternalSourceInfo source = new AkExternalSourceInfo();
-                //source.iExternalSrcCookie = AkSoundEngine.GetIDFromString("TestTTSAudio");
-                //source.szFile = "joemama.wav";
-                //source.idCodec = AkSoundEngine.AKCODECID_PCM;
-
-                //AkSoundEngine.PostEvent("TestTTSAudio", GameObject.FindObjectOfType<GameObject>(), 0, null, null, 1, source);
-
-                AkAudioInputManager.PostAudioInputEvent("TestLiveAudio", GameObject.FindObjectOfType<GameObject>(), fuckmeiguess, fuckmetoo);
-            }
-            else
-            {
-                testingaudio = false;
-                AkSoundEngine.ExecuteActionOnEvent(899853287, AkActionOnEventType.AkActionOnEventType_Stop);
-            }
-
+            GameObject blank = new GameObject();
+            BonziBuddy b = blank.AddComponent<BonziBuddy>();
+            b.StartCoroutine(b.loadsong(self.text));
             return orig(self);
         }
 
-        
+
 
         private bool testingaudio = true;
         private uint length = 0;
@@ -99,8 +83,9 @@ namespace MoistureUpset
             //uint Frequency = 420;
 
             float[] left, right;
-
-            readWav("joemama.wav", out left, out right);
+            Debug.Log($"--------reading wav");
+            readWav("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav", out left, out right);
+            Debug.Log($"--------read wav");
 
             if (length >= (uint)left.Length)
             {
@@ -126,10 +111,10 @@ namespace MoistureUpset
             }
             catch (Exception)
             {
-
+                Debug.Log($"--------end of audio???");
                 throw;
             }
-            
+
 
             //samples = wavtofloatarray("joemama.wav");
             //for (uint i = 0; i < samples.Length; ++i)
@@ -145,8 +130,9 @@ namespace MoistureUpset
         private void fuckmetoo(uint playingID, AkAudioFormat format)
         {
             uint samplerate, channels;
-
-            getSampleRate("joemama.wav", out samplerate, out channels);
+            Debug.Log($"--------getting sample rate");
+            getSampleRate("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav", out samplerate, out channels);
+            Debug.Log($"--------got sample rate {samplerate}     {channels}");
 
             format.channelConfig.uNumChannels = channels;
             format.uSampleRate = samplerate;
@@ -534,7 +520,7 @@ namespace MoistureUpset
             {
                 RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
             }
-            
+
         }
 
         private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
