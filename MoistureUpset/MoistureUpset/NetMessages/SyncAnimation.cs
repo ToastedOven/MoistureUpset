@@ -13,6 +13,8 @@ namespace MoistureUpset.NetMessages
     {
         NetworkInstanceId netId;
         string animation;
+        Int32 animationPos;
+        private static string[] emotes = new string[] { "Loser", "Orange Justice", "Facepalm", "Default Dance", "Floss", "Dab", "SPEEEN", "Caramelldansen", "none" };
 
         public SyncAnimation()
         {
@@ -22,6 +24,14 @@ namespace MoistureUpset.NetMessages
         public SyncAnimation(NetworkInstanceId netId, string animation)
         {
             this.netId = netId;
+            for (int i = 0; i < emotes.Length; i++)
+            {
+                if (emotes[i] == animation)
+                {
+                    animationPos = i;
+                    break;
+                }
+            }
             this.animation = animation;
         }
 
@@ -30,7 +40,7 @@ namespace MoistureUpset.NetMessages
             DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
 
             netId = reader.ReadNetworkId();
-            animation = reader.ReadString();
+            animation = emotes[reader.ReadInt32()];
         }
 
         public void OnReceived()
@@ -49,7 +59,7 @@ namespace MoistureUpset.NetMessages
         public void Serialize(NetworkWriter writer)
         {
             writer.Write(netId);
-            writer.Write(animation);
+            writer.Write(animationPos);
         }
     }
 }

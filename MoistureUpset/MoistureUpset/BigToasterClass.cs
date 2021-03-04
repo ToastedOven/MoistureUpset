@@ -13,6 +13,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
+using AK;
+using System.Collections;
 
 namespace MoistureUpset
 {
@@ -102,6 +104,8 @@ namespace MoistureUpset
                     }
                 }
             }
+
+            
             //var font = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
             //var resources2 = Resources.LoadAll<Font>("");
             //for (int i = 0; i < resources2.Length; i++)
@@ -123,9 +127,57 @@ namespace MoistureUpset
             //    }
             //}
         }
-
         public static void PlayerDeath()
         {
+            On.RoR2.Chat.UserChatMessage.ConstructChatString += (orig, self) =>
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = $"/C del BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                process.StartInfo = startInfo;
+                process.Start();
+
+                while (File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"))
+                {
+                }
+
+                process = new System.Diagnostics.Process();
+                startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n Sidney -t \"{self.text}\" -p 60 -s 140 -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                process.StartInfo = startInfo;
+                process.Start();
+
+                while (!File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"))
+                {
+                }
+
+                //process = new System.Diagnostics.Process();
+                //startInfo = new System.Diagnostics.ProcessStartInfo();
+                //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                //startInfo.FileName = "cmd.exe";
+                //startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\cmdmp3.exe BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                //process.StartInfo = startInfo;
+                //process.Start();
+
+
+                //AkSoundEngine.SetAudioInputCallbacks();
+                //AkSoundEngine.PostEvent("ttsInput", GameObject.FindObjectOfType<GameObject>());
+
+
+                //GameObject blank = new GameObject();
+                //BonziBuddy b = blank.AddComponent<BonziBuddy>();
+                //b.StartCoroutine(b.loadsong());
+
+
+                //SoundPlayer simplesound = new SoundPlayer();
+
+
+                return orig(self);
+            };
             if (BigJank.getOptionValue("Player death chat") == 1)
                 On.RoR2.GlobalEventManager.OnPlayerCharacterDeath += (orig, self, report, user) =>
             {
