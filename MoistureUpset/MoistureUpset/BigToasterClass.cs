@@ -131,29 +131,7 @@ namespace MoistureUpset
         {
             On.RoR2.Chat.UserChatMessage.ConstructChatString += (orig, self) =>
             {
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = $"/C del BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
-                process.StartInfo = startInfo;
-                process.Start();
 
-                while (File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"))
-                {
-                }
-
-                process = new System.Diagnostics.Process();
-                startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n Sidney -t \"{self.text}\" -p 60 -s 140 -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
-                process.StartInfo = startInfo;
-                process.Start();
-
-                while (!File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"))
-                {
-                }
 
                 //process = new System.Diagnostics.Process();
                 //startInfo = new System.Diagnostics.ProcessStartInfo();
