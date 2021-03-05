@@ -33,8 +33,10 @@ namespace MoistureUpset
 
                 for (i = 0; i < samples.Length; ++i)
                 {
-                    if (i >= left.Length)
+                    if (i + length >= left.Length)
                     {
+                        testingaudio = false;
+                        AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
                         break;
                     }
                     samples[i] = left[i + length];
@@ -110,6 +112,8 @@ namespace MoistureUpset
             }
         }
 
+
+        // Brought to you by StackOverflow
         static bool readWav(string filename, out float[] L, out float[] R)
         {
             L = R = null;
@@ -254,6 +258,7 @@ namespace MoistureUpset
             startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
+            
             startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n Sidney -t \"{text}\" -p 60 -s 140 -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
             process.StartInfo = startInfo;
             process.Start();
