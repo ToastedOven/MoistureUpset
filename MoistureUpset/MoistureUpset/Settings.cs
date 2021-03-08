@@ -101,6 +101,8 @@ namespace MoistureUpset
         }
         private static void Misc()
         {
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Original Bonzi Buddy TTS", "Gives Bonzi Buddy his original TTS voice. For 99% of users, the first time you turn this on it will require an admin prompt to move the tts engine to the required folder. If you do not feel safe doing this you can either leave this unchecked or download and install spchapi.exe (SAPI4) manually from the internet.", "0"));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Original Bonzi Buddy TTS"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "NSFW", "Toggles 'NSFW' content. Not actually NSFW like boobies, just some questionable words if you aren't into that kinda thing", "0"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Fanfare", "Adds fanfare to the end of the teleporter event", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Pizza Roll", "Replaces that diamond UI element with a pizza roll", "1"));

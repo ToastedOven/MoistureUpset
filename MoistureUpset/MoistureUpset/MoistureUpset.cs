@@ -64,12 +64,26 @@ namespace MoistureUpset
             //AkSoundEngine.SetAudioInputCallbacks(fuckmeiguess, fuckmetoo);
 
             On.RoR2.Chat.UserChatMessage.ConstructChatString += PlaySound;
+            EnemyReplacements.LoadResource("moisture_bonzibuddy");
+            On.RoR2.RoR2Application.OnLoad += (orig, self) =>
+            {
+                orig(self);
+
+
+                GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+                DontDestroyOnLoad(bonzi);
+                bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+                bonzi.SetActive(true);
+                bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+                bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+                bonzi.layer = 5;
+                BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
+            };
         }
         private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         {
-            GameObject blank = new GameObject();
-            BonziBuddy b = blank.AddComponent<BonziBuddy>();
-            b.StartCoroutine(b.loadsong(self.text));
+
+            BonziBuddy.buddy.StartCoroutine(BonziBuddy.buddy.Speak(self.text));
             return orig(self);
         }
 
