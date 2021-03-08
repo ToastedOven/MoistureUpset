@@ -18,6 +18,8 @@ namespace MoistureUpset
         private static bool testingaudio = false;
         private uint length = 0;
 
+        float[] left, right;
+
         public static void FixTTS(bool yeet)
         {
             if (!yeet)
@@ -37,13 +39,12 @@ namespace MoistureUpset
                 }
             }
         }
-        private bool fuckmeiguess(uint playingID, uint channelIndex, float[] samples)
+        private bool WavBufferToWwise(uint playingID, uint channelIndex, float[] samples)
         {
-            //uint Frequency = 420;
-
-            float[] left, right;
-
-            readWav("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav", out left, out right);
+            if (left.Length <= 0)
+            {
+                DebugClass.Log("There was an error playing the audio file, The audio buffer is empty!");
+            }
 
             if (length >= (uint)left.Length)
             {
@@ -52,7 +53,6 @@ namespace MoistureUpset
 
             // DebugClass.Log($"Samples: {samples.Length}, Left: {left.Length}, Current: {length}");
 
-            //samples = left;
             try
             {
                 uint i = 0;
@@ -66,6 +66,7 @@ namespace MoistureUpset
                         twostep = false;
                         AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
                         length = 0;
+                        left = right = new float[0];
                         break;
                     }
                     samples[i] = left[i + length];
@@ -85,30 +86,31 @@ namespace MoistureUpset
                 twostep = false;
             }
 
-            //samples = wavtofloatarray("joemama.wav");
-            //for (uint i = 0; i < samples.Length; ++i)
-            //
-            //    samples[i] = UnityEngine.Mathf.Sin(Frequency * 2 * UnityEngine.Mathf.PI * (i + 0) / 48000);
-
-            channelIndex = 1;
-
             //DebugClass.Log($"id:{playingID}, samples: {samples}, channlIndex: {channelIndex}");
 
             return testingaudio;
         }
-        private void fuckmetoo(uint playingID, AkAudioFormat format)
+        private void BeforePlayingAudio(uint playingID, AkAudioFormat format)
         {
             uint samplerate, channels;
-            getSampleRate("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav", out samplerate, out channels);
+
+            left = right = new float[0];
+
+            readWav("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav", out left, out right, out samplerate, out channels);
 
             format.channelConfig.uNumChannels = channels;
             format.uSampleRate = samplerate;
         }
 
-        static void getSampleRate(string filename, out uint samplerate, out uint channels)
+
+        // Brought to you by StackOverflow, modified by brain damage.
+        static bool readWav(string filename, out float[] L, out float[] R, out uint samplerate, out uint channels)
         {
+            L = R = null;
+
             samplerate = 0;
             channels = 0;
+
             try
             {
                 using (FileStream fs = File.Open(filename, FileMode.Open))
@@ -135,43 +137,6 @@ namespace MoistureUpset
 
                     samplerate = (uint)sampleRate;
                     channels = (uint)Channels;
-                }
-            }
-            catch
-            {
-                Debug.Log("...Failed to load: " + filename);
-            }
-        }
-
-
-        // Brought to you by StackOverflow
-        static bool readWav(string filename, out float[] L, out float[] R)
-        {
-            L = R = null;
-
-            try
-            {
-                using (FileStream fs = File.Open(filename, FileMode.Open))
-                {
-                    BinaryReader reader = new BinaryReader(fs);
-
-                    // chunk 0
-                    int chunkID = reader.ReadInt32();
-                    int fileSize = reader.ReadInt32();
-                    int riffType = reader.ReadInt32();
-
-
-                    // chunk 1
-                    int fmtID = reader.ReadInt32();
-                    int fmtSize = reader.ReadInt32(); // bytes for this chunk (expect 16 or 18)
-
-                    // 16 bytes coming...
-                    int fmtCode = reader.ReadInt16();
-                    int channels = reader.ReadInt16();
-                    int sampleRate = reader.ReadInt32();
-                    int byteRate = reader.ReadInt32();
-                    int fmtBlockAlign = reader.ReadInt16();
-                    int bitDepth = reader.ReadInt16();
 
                     if (fmtSize == 18)
                     {
@@ -273,7 +238,7 @@ namespace MoistureUpset
 
         bool AlmostEqual(float a, float b, float threshold)
         {
-            return ((a - b) < 0 ? ((a - b) * -1) : (a - b)) <= threshold;
+            return Math.Abs(a - b) <= threshold;
         }
         void Update()
         {
@@ -525,7 +490,7 @@ namespace MoistureUpset
                     //AkSoundEngine.PostEvent("TestTTSAudio", GameObject.FindObjectOfType<GameObject>(), 0, null, null, 1, source);
                     //Debug.Log($"--------postaudioevent");
 
-                    AkAudioInputManager.PostAudioInputEvent("ttsInput", GameObject.FindObjectOfType<GameObject>(), fuckmeiguess, fuckmetoo);
+                    AkAudioInputManager.PostAudioInputEvent("ttsInput", GameObject.FindObjectOfType<GameObject>(), WavBufferToWwise, BeforePlayingAudio);
                 }
             }
         }
