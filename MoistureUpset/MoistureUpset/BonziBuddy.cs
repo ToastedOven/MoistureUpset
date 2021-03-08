@@ -59,6 +59,7 @@ namespace MoistureUpset
                     if (i + length >= left.Length)
                     {
                         testingaudio = false;
+                        a.SetBool("speaking", false);
                         twostep = false;
                         AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
                         length = 0;
@@ -77,6 +78,7 @@ namespace MoistureUpset
             {
                 length = (uint)left.Length;
                 testingaudio = false;
+                a.SetBool("speaking", false);
                 twostep = false;
             }
 
@@ -248,6 +250,9 @@ namespace MoistureUpset
         float prevY = 0, prevX = 0;
         bool moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
         string currentClip = "";
+        public bool atDest = true;
+        public Vector2 dest;
+        public Vector2 screenPos;
         void Start()////////////////overflow is buggy
         {
             a = GetComponentInChildren<Animator>();
@@ -258,85 +263,133 @@ namespace MoistureUpset
             text.gameObject.layer = 5;
             textBox.layer = 5;
             text.gameObject.transform.localPosition = new Vector3(0.06f, 0, -.1f);
+            dest = new Vector2(.5f,.5f);
             textBox.SetActive(false);
-            //this is a really long test 1this is a really long test2this is a really long test3this is a really long test4this is a really long test5this is a really long test6this is a really long test7this is a really long test8 this is a really long test9this is a really long test10
         }
 
+        bool AlmostEqual(float a, float b, float threshold)
+        {
+            return ((a - b) < 0 ? ((a - b) * -1) : (a - b)) <= threshold;
+        }
         void Update()
         {
             if (firstTime)
             {
+                Vector2 temp = RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position);
+                screenPos = new Vector2(temp.x / (float)Screen.width, temp.y / (float)Screen.height);
                 if (a.GetCurrentAnimatorClipInfo(0).Length != 0)
                 {
                     currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
                 }
-                if (prevY > transform.position.y || moveDown)
-                {
-                    //down
-                    if (currentClip != "flydown" && currentClip != "flydownstart")
-                    {
-                        a.Play("flydownstart");
-                    }
-                    a.SetBool("moving", true);
-                }
-                else if (prevY < transform.position.y || moveUp)
-                {
-                    //up
-                    if (currentClip != "flyup" && currentClip != "flyupstart")
-                    {
-                        a.Play("flyupstart");
-                    }
-                    a.SetBool("moving", true);
-                }
-                else if (prevX > transform.position.x || moveLeft)
-                {
-                    //left
-                    if (currentClip != "flyleft" && currentClip != "flyleftstart")
-                    {
-                        a.Play("flyleftstart");
-                    }
-                    a.SetBool("moving", true);
-                }
-                else if (prevX < transform.position.x || moveRight)
-                {
-                    //right
-                    if (currentClip != "flyright" && currentClip != "flyrightstart")
-                    {
-                        a.Play("flyrightstart");
-                    }
-                    a.SetBool("moving", true);
-                }
-                else
-                {
-                    a.SetBool("moving", false);
-                }
-                prevX = transform.position.x;
-                prevY = transform.position.y;
+
+                bool equalX = AlmostEqual(dest.x, screenPos.x, .05f);
+                bool equalY = AlmostEqual(dest.y, screenPos.y, .05f);
+                atDest = equalX && equalY;
                 moveDown = moveUp = moveLeft = moveRight = false;
-                if (Input.GetKey(KeyCode.I))
+                if (!atDest && currentClip != "entrance" && currentClip != "leave")
                 {
-                    moveUp = true;
-                    if (currentClip == "flyup")
-                        transform.position += new Vector3(0, 2 * Time.deltaTime, 0);
+                    if (dest.x > screenPos.x && !equalX)
+                    {
+                        moveRight = true;
+                        if (currentClip == "flyright")
+                            transform.position += new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                    }
+                    else if (dest.x < screenPos.x && !equalX)
+                    {
+                        moveLeft = true;
+                        if (currentClip == "flyleft")
+                            transform.position -= new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                    }
+                    else if (dest.y > screenPos.y && !equalY)
+                    {
+                        moveUp = true;
+                        if (currentClip == "flyup")
+                            transform.position += new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                    }
+                    else if (dest.y < screenPos.y && !equalY)
+                    {
+                        moveDown = true;
+                        if (currentClip == "flydown")
+                            transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                    }
                 }
-                if (Input.GetKey(KeyCode.J))
+                //DebugMovement();
+
+
+
+                MovingAnimations();
+            }
+        }
+        private void MovingAnimations()
+        {
+            if (prevY > transform.position.y || moveDown)
+            {
+                //down
+                if (currentClip != "flydown" && currentClip != "flydownstart")
                 {
-                    moveLeft = true;
-                    if (currentClip == "flyleft")
-                        transform.position -= new Vector3(2 * Time.deltaTime, 0, 0);
+                    a.Play("flydownstart");
                 }
-                if (Input.GetKey(KeyCode.K))
+                a.SetBool("moving", true);
+            }
+            else if (prevY < transform.position.y || moveUp)
+            {
+                //up
+                if (currentClip != "flyup" && currentClip != "flyupstart")
                 {
-                    moveDown = true;
-                    if (currentClip == "flydown")
-                        transform.position -= new Vector3(0, 2 * Time.deltaTime, 0);
+                    a.Play("flyupstart");
                 }
-                if (Input.GetKey(KeyCode.L))
+                a.SetBool("moving", true);
+            }
+            else if (prevX > transform.position.x || moveLeft)
+            {
+                //left
+                if (currentClip != "flyleft" && currentClip != "flyleftstart")
                 {
-                    moveRight = true;
-                    if (currentClip == "flyright")
-                        transform.position += new Vector3(2 * Time.deltaTime, 0, 0);
+                    a.Play("flyleftstart");
                 }
+                a.SetBool("moving", true);
+            }
+            else if (prevX < transform.position.x || moveRight)
+            {
+                //right
+                if (currentClip != "flyright" && currentClip != "flyrightstart")
+                {
+                    a.Play("flyrightstart");
+                }
+                a.SetBool("moving", true);
+            }
+            else
+            {
+                a.SetBool("moving", false);
+            }
+            prevX = transform.position.x;
+            prevY = transform.position.y;
+        }
+        private void DebugMovement()
+        {
+            if (Input.GetKey(KeyCode.I))
+            {
+                moveUp = true;
+                if (currentClip == "flyup")
+                    transform.position += new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+            }
+            if (Input.GetKey(KeyCode.J))
+            {
+                moveLeft = true;
+                if (currentClip == "flyleft")
+                    transform.position -= new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+            }
+            if (Input.GetKey(KeyCode.K))
+            {
+                moveDown = true;
+                if (currentClip == "flydown")
+                    transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+            }
+            if (Input.GetKey(KeyCode.L))
+            {
+                moveRight = true;
+                if (currentClip == "flyright")
+                    transform.position += new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
             }
         }
         public void StartAnimation()
@@ -352,8 +405,9 @@ namespace MoistureUpset
         {
             textBox.SetActive(true);
             text.text = whatToSay;
+            yield return new WaitForSeconds(.1f);
+            //this is a really long test 1this is a really long test2this is a really long test3this is a really long test4this is a really long test5this is a really long test6this is a really long test7this is a really long test8 this is a really long test9this is a really long test10
             int num = text.firstOverflowCharacterIndex;
-            Debug.Log($"--------[{num}]");
             if (text.isTextOverflowing)
             {
                 text.text = whatToSay.Remove(num);
@@ -361,6 +415,7 @@ namespace MoistureUpset
                 twostep = true;
                 StartCoroutine(loadsong(text.text));
                 yield return new WaitUntil(() => !testingaudio && !twostep);
+                textBox.SetActive(false);
                 StartCoroutine(Speak(whatToSay));
             }
             else
@@ -369,7 +424,6 @@ namespace MoistureUpset
                 twostep = true;
                 StartCoroutine(loadsong(text.text));
                 yield return new WaitUntil(() => !testingaudio && !twostep);
-                text.text = "";
                 textBox.SetActive(false);
             }
         }
@@ -431,13 +485,15 @@ namespace MoistureUpset
                 if (text == "stop")
                 {
                     testingaudio = false;
+                    a.SetBool("speaking", false);
                     twostep = false;
                     AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
 
                 }
                 else
                 {
-
+                    a.Play("speaking");
+                    a.SetBool("speaking", true);
                     testingaudio = true;
 
                     //AkExternalSourceInfo source = new AkExternalSourceInfo();
