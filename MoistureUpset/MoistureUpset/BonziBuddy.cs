@@ -2,21 +2,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using TMPro;
 using UnityEngine;
 
 namespace MoistureUpset
 {
     public class BonziBuddy : MonoBehaviour
     {
-        private bool testingaudio = true;
+        public static BonziBuddy buddy;
+        private static bool testingaudio = false;
         private uint length = 0;
 
+        public static void FixTTS(bool yeet)
+        {
+            if (!yeet)
+            {
+                string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+                string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                if (!File.Exists(s + "\\Speech\\speech.dll"))
+                {
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                    startInfo.Verb = "runas";
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = $"/C copy \"{path}\\MetrosexualFruitcake-MoistureUpset\\speech.notadeeellell\" \"{s + "\\Speech\\speech.dll"}\"";
+                    process.StartInfo = startInfo;
+                    process.Start();
+                }
+            }
+        }
         private bool fuckmeiguess(uint playingID, uint channelIndex, float[] samples)
         {
             //uint Frequency = 420;
 
             float[] left, right;
+
             readWav("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav", out left, out right);
 
             if (length >= (uint)left.Length)
@@ -24,7 +47,7 @@ namespace MoistureUpset
                 length = (uint)left.Length;
             }
 
-            DebugClass.Log($"Samples: {samples.Length}, Left: {left.Length}, Current: {length}");
+            // DebugClass.Log($"Samples: {samples.Length}, Left: {left.Length}, Current: {length}");
 
             //samples = left;
             try
@@ -36,7 +59,9 @@ namespace MoistureUpset
                     if (i + length >= left.Length)
                     {
                         testingaudio = false;
+                        twostep = false;
                         AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
+                        length = 0;
                         break;
                     }
                     samples[i] = left[i + length];
@@ -52,6 +77,7 @@ namespace MoistureUpset
             {
                 length = (uint)left.Length;
                 testingaudio = false;
+                twostep = false;
             }
 
             //samples = wavtofloatarray("joemama.wav");
@@ -214,12 +240,138 @@ namespace MoistureUpset
             return false;
         }
 
-        AudioSource song;
-        string songName;
-
-        void Start()
+        Animator a;
+        GameObject textBox;
+        TextMeshPro text;
+        bool foundMe = true;
+        bool firstTime = false;
+        float prevY = 0, prevX = 0;
+        bool moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
+        string currentClip = "";
+        void Start()////////////////overflow is buggy
         {
-            song = gameObject.AddComponent<AudioSource>();
+            a = GetComponentInChildren<Animator>();
+            prevX = transform.position.x;
+            prevY = transform.position.y;
+            text = GetComponentInChildren<TextMeshPro>();
+            textBox = text.gameObject.transform.parent.gameObject;
+            text.gameObject.layer = 5;
+            textBox.layer = 5;
+            text.gameObject.transform.localPosition = new Vector3(0.06f, 0, -.1f);
+            textBox.SetActive(false);
+            //this is a really long test 1this is a really long test2this is a really long test3this is a really long test4this is a really long test5this is a really long test6this is a really long test7this is a really long test8 this is a really long test9this is a really long test10
+        }
+
+        void Update()
+        {
+            if (firstTime)
+            {
+                if (a.GetCurrentAnimatorClipInfo(0).Length != 0)
+                {
+                    currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+                }
+                if (prevY > transform.position.y || moveDown)
+                {
+                    //down
+                    if (currentClip != "flydown" && currentClip != "flydownstart")
+                    {
+                        a.Play("flydownstart");
+                    }
+                    a.SetBool("moving", true);
+                }
+                else if (prevY < transform.position.y || moveUp)
+                {
+                    //up
+                    if (currentClip != "flyup" && currentClip != "flyupstart")
+                    {
+                        a.Play("flyupstart");
+                    }
+                    a.SetBool("moving", true);
+                }
+                else if (prevX > transform.position.x || moveLeft)
+                {
+                    //left
+                    if (currentClip != "flyleft" && currentClip != "flyleftstart")
+                    {
+                        a.Play("flyleftstart");
+                    }
+                    a.SetBool("moving", true);
+                }
+                else if (prevX < transform.position.x || moveRight)
+                {
+                    //right
+                    if (currentClip != "flyright" && currentClip != "flyrightstart")
+                    {
+                        a.Play("flyrightstart");
+                    }
+                    a.SetBool("moving", true);
+                }
+                else
+                {
+                    a.SetBool("moving", false);
+                }
+                prevX = transform.position.x;
+                prevY = transform.position.y;
+                moveDown = moveUp = moveLeft = moveRight = false;
+                if (Input.GetKey(KeyCode.I))
+                {
+                    moveUp = true;
+                    if (currentClip == "flyup")
+                        transform.position += new Vector3(0, 2 * Time.deltaTime, 0);
+                }
+                if (Input.GetKey(KeyCode.J))
+                {
+                    moveLeft = true;
+                    if (currentClip == "flyleft")
+                        transform.position -= new Vector3(2 * Time.deltaTime, 0, 0);
+                }
+                if (Input.GetKey(KeyCode.K))
+                {
+                    moveDown = true;
+                    if (currentClip == "flydown")
+                        transform.position -= new Vector3(0, 2 * Time.deltaTime, 0);
+                }
+                if (Input.GetKey(KeyCode.L))
+                {
+                    moveRight = true;
+                    if (currentClip == "flyright")
+                        transform.position += new Vector3(2 * Time.deltaTime, 0, 0);
+                }
+            }
+        }
+        public void StartAnimation()
+        {
+            if (foundMe && !firstTime)
+            {
+                a.Play("entrance");
+                firstTime = true;
+            }
+        }
+        bool twostep = true;
+        public IEnumerator Speak(string whatToSay)
+        {
+            textBox.SetActive(true);
+            text.text = whatToSay;
+            int num = text.firstOverflowCharacterIndex;
+            Debug.Log($"--------[{num}]");
+            if (text.isTextOverflowing)
+            {
+                text.text = whatToSay.Remove(num);
+                whatToSay = whatToSay.Remove(0, num);
+                twostep = true;
+                StartCoroutine(loadsong(text.text));
+                yield return new WaitUntil(() => !testingaudio && !twostep);
+                StartCoroutine(Speak(whatToSay));
+            }
+            else
+            {
+                text.text = whatToSay;
+                twostep = true;
+                StartCoroutine(loadsong(text.text));
+                yield return new WaitUntil(() => !testingaudio && !twostep);
+                text.text = "";
+                textBox.SetActive(false);
+            }
         }
         public bool isLocked(FileInfo file)
         {
@@ -244,54 +396,60 @@ namespace MoistureUpset
         }
         public IEnumerator loadsong(string text)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = $"/C del BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
-            process.StartInfo = startInfo;
-            process.Start();
-
-            yield return new WaitUntil(() => !File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"));
-
-            process = new System.Diagnostics.Process();
-            startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            
-            startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n Sidney -t \"{text}\" -p 60 -s 140 -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
-            process.StartInfo = startInfo;
-            process.Start();
-
-            yield return new WaitUntil(() => File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"));
-            FileInfo file = new FileInfo("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav");
-            yield return new WaitUntil(() => !isLocked(file));
-            //FileInfo fileNew = new FileInfo("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav");
-            //WWW www = new WWW("file:///" + "BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav");
-            //yield return www;
-
-
-            if (text == "stop")
+            if (!testingaudio)
             {
-                testingaudio = false;
-                AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = $"/C del BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                process.StartInfo = startInfo;
+                process.Start();
 
-            }
-            else
-            {
+                yield return new WaitUntil(() => !File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"));
 
-                testingaudio = true;
+                process = new System.Diagnostics.Process();
+                startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
 
+                if (BigJank.getOptionValue("Original Bonzi Buddy TTS") == 1)
+                {
+                    startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n Sidney -t \"{text}\" -p 60 -s 140 -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                }
+                else
+                {
+                    startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                }
+                process.StartInfo = startInfo;
+                process.Start();
 
-                //AkExternalSourceInfo source = new AkExternalSourceInfo();
-                //source.iExternalSrcCookie = AkSoundEngine.GetIDFromString("TestTTSAudio");
-                //source.szFile = "joemama.wav";
-                //source.idCodec = AkSoundEngine.AKCODECID_PCM;
+                yield return new WaitUntil(() => File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"));
+                FileInfo file = new FileInfo("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav");
+                yield return new WaitUntil(() => !isLocked(file));
 
-                //AkSoundEngine.PostEvent("TestTTSAudio", GameObject.FindObjectOfType<GameObject>(), 0, null, null, 1, source);
-                Debug.Log($"--------postaudioevent");
+                if (text == "stop")
+                {
+                    testingaudio = false;
+                    twostep = false;
+                    AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
 
-                AkAudioInputManager.PostAudioInputEvent("ttsInput", GameObject.FindObjectOfType<GameObject>(), fuckmeiguess, fuckmetoo);
+                }
+                else
+                {
+
+                    testingaudio = true;
+
+                    //AkExternalSourceInfo source = new AkExternalSourceInfo();
+                    //source.iExternalSrcCookie = AkSoundEngine.GetIDFromString("TestTTSAudio");
+                    //source.szFile = "joemama.wav";
+                    //source.idCodec = AkSoundEngine.AKCODECID_PCM;
+
+                    //AkSoundEngine.PostEvent("TestTTSAudio", GameObject.FindObjectOfType<GameObject>(), 0, null, null, 1, source);
+                    //Debug.Log($"--------postaudioevent");
+
+                    AkAudioInputManager.PostAudioInputEvent("ttsInput", GameObject.FindObjectOfType<GameObject>(), fuckmeiguess, fuckmetoo);
+                }
             }
         }
     }
