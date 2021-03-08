@@ -11,6 +11,9 @@ namespace MoistureUpset
 {
     public class BonziBuddy : MonoBehaviour
     {
+        #region defined positions
+        Vector2 M1 = new Vector2(0.7779733f, 0.2007445f);
+        #endregion
         public static BonziBuddy buddy;
         private static bool testingaudio = false;
         private uint length = 0;
@@ -249,11 +252,12 @@ namespace MoistureUpset
         bool firstTime = false;
         float prevY = 0, prevX = 0;
         bool moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
+        bool debugging = false;
         string currentClip = "";
         public bool atDest = true;
         public Vector2 dest;
         public Vector2 screenPos;
-        void Start()////////////////overflow is buggy
+        void Start()
         {
             a = GetComponentInChildren<Animator>();
             prevX = transform.position.x;
@@ -275,6 +279,7 @@ namespace MoistureUpset
         {
             if (firstTime)
             {
+                GoTo(M1);
                 Vector2 temp = RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position);
                 screenPos = new Vector2(temp.x / (float)Screen.width, temp.y / (float)Screen.height);
                 if (a.GetCurrentAnimatorClipInfo(0).Length != 0)
@@ -282,11 +287,11 @@ namespace MoistureUpset
                     currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
                 }
 
-                bool equalX = AlmostEqual(dest.x, screenPos.x, .05f);
-                bool equalY = AlmostEqual(dest.y, screenPos.y, .05f);
+                bool equalX = AlmostEqual(dest.x, screenPos.x, .0015f);
+                bool equalY = AlmostEqual(dest.y, screenPos.y, .0015f);
                 atDest = equalX && equalY;
                 moveDown = moveUp = moveLeft = moveRight = false;
-                if (!atDest && currentClip != "entrance" && currentClip != "leave")
+                if (!atDest && currentClip != "entrance" && currentClip != "leave" && !debugging)
                 {
                     if (dest.x > screenPos.x && !equalX)
                     {
@@ -313,7 +318,7 @@ namespace MoistureUpset
                             transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
                     }
                 }
-                //DebugMovement();
+                DebugMovement();
 
 
 
@@ -370,27 +375,43 @@ namespace MoistureUpset
             if (Input.GetKey(KeyCode.I))
             {
                 moveUp = true;
-                if (currentClip == "flyup")
-                    transform.position += new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                //if (currentClip == "flyup")
+                    transform.position += new Vector3(0, 1 * Time.deltaTime * (Screen.height / 1080.0f), 0);
             }
             if (Input.GetKey(KeyCode.J))
             {
                 moveLeft = true;
-                if (currentClip == "flyleft")
-                    transform.position -= new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                //if (currentClip == "flyleft")
+                    transform.position -= new Vector3(1 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
             }
             if (Input.GetKey(KeyCode.K))
             {
                 moveDown = true;
-                if (currentClip == "flydown")
-                    transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                //if (currentClip == "flydown")
+                    transform.position -= new Vector3(0, 1 * Time.deltaTime * (Screen.height / 1080.0f), 0);
             }
             if (Input.GetKey(KeyCode.L))
             {
                 moveRight = true;
-                if (currentClip == "flyright")
-                    transform.position += new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                //if (currentClip == "flyright")
+                    transform.position += new Vector3(1 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
             }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                DebugClass.Log($"= new Vector2({screenPos.x}f, {screenPos.y}f)");
+            }
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                debugging = !debugging;
+            }
+        }
+        private void GoTo(float x, float y)
+        {
+            GoTo(new Vector2(x, y));
+        }
+        private void GoTo(Vector2 pos)
+        {
+            dest = pos;
         }
         public void StartAnimation()
         {
