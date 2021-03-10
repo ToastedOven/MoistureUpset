@@ -200,6 +200,11 @@ namespace MoistureUpset
             {
                 orig(self);
             };
+            On.RoR2.UI.MainMenu.MainMenuController.SetDesiredMenuScreen += (orig, self, newscreen) =>
+            {
+                orig(self, newscreen);
+                BonziBuddy.buddy.MainMenuMovement(newscreen.name);
+            };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
 
@@ -242,13 +247,16 @@ namespace MoistureUpset
                 orig(oldS, newS);
                 try
                 {
+                    //Debug.Log($"--------{newS.name}");
                     switch (newS.name)
                     {
                         case "logbook":
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
+                            BonziBuddy.GoTo(BonziBuddy.LOGBOOK);
                             break;
                         case "title":
-                            BonziBuddy.buddy.StartAnimation();
+                            BonziBuddy.buddy.Setup();
+                            BonziBuddy.GoTo(BonziBuddy.MAINMENU);
                             if (BigJank.getOptionValue("Shreks outhouse") == 1)
                             {
                                 GameObject pod = GameObject.Find("SurvivorPod");
@@ -262,11 +270,16 @@ namespace MoistureUpset
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
                             break;
                         case "lobby":
+                            BonziBuddy.GoTo(BonziBuddy.CHARSELECT);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
                             break;
                         case "splash":
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+                            break;
+                        case "eclipseworld":
+                            BonziBuddy.GoTo(BonziBuddy.ECLIPSE);
+                            AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
                             break;
                         default:
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 0);

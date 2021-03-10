@@ -276,12 +276,19 @@ namespace MoistureUpset
         {
             string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
             DebugClass.Log(s);
-            using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
+            try
             {
-                var bytes = new byte[bankStream.Length];
-                bankStream.Read(bytes, 0, bytes.Length);
+                using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
+                {
+                    var bytes = new byte[bankStream.Length];
+                    bankStream.Read(bytes, 0, bytes.Length);
 
-                SoundBanks.Add(bytes);
+                    SoundBanks.Add(bytes);
+                }
+            }
+            catch (Exception e)
+            {
+                DebugClass.Log(e);
             }
         }
         public static void RunAll()

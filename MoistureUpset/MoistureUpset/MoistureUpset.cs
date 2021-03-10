@@ -82,7 +82,6 @@ namespace MoistureUpset
         }
         private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         {
-
             BonziBuddy.buddy.StartCoroutine(BonziBuddy.buddy.Speak(self.text));
             return orig(self);
         }
