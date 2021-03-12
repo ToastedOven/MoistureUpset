@@ -13,6 +13,7 @@ namespace MoistureUpset.NetMessages
             NetworkingAPI.RegisterMessageType<InteractReplacements.SyncFidget>();
             NetworkingAPI.RegisterMessageType<SyncAudio>();
             NetworkingAPI.RegisterMessageType<SyncAudioWithJotaroSubtitles>();
+            NetworkingAPI.RegisterMessageType<SyncDamage>();
         }
     }
 }
