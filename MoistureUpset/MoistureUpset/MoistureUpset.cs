@@ -63,7 +63,7 @@ namespace MoistureUpset
 
             //AkSoundEngine.SetAudioInputCallbacks(fuckmeiguess, fuckmetoo);
 
-            On.RoR2.Chat.UserChatMessage.ConstructChatString += PlaySound;
+            //On.RoR2.Chat.UserChatMessage.ConstructChatString += PlaySound;
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             On.RoR2.RoR2Application.OnLoad += (orig, self) =>
             {
@@ -80,11 +80,11 @@ namespace MoistureUpset
                 BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
             };
         }
-        private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
-        {
-            BonziBuddy.buddy.StartCoroutine(BonziBuddy.buddy.Speak(self.text));
-            return orig(self);
-        }
+        //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
+        //{
+        //    BonziBuddy.buddy.StartCoroutine(BonziBuddy.buddy.Speak(self.text));
+        //    return orig(self);
+        //}
 
         public void IntroReplaceAction()
         {

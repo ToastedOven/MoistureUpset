@@ -1,4 +1,6 @@
-﻿using RoR2;
+﻿using MoistureUpset.NetMessages;
+using R2API.Networking.Interfaces;
+using RoR2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,14 +25,13 @@ namespace MoistureUpset
         public static Vector2 ECLIPSE = new Vector2(0.572173f, 0.7421584f);
         public static Vector2 MULTIPLAYERSETUP = new Vector2(0.7007814f, 0.7697079f);
         public static Vector2 CHARSELECT = new Vector2(0.862179f, 0.2109936f);
+        public static Vector2 DEATH = new Vector2(0.5394522f, 0.1317119f);
         #endregion
         public static BonziBuddy buddy;
 
         Animator a;
         GameObject textBox;
         TextMeshPro text;
-        //UnityEngine.UI.Image img;
-        //SpriteRenderer spr;
         bool foundMe = true;
         bool firstTime = false;
         float prevY = 0, prevX = 0;
@@ -40,8 +41,13 @@ namespace MoistureUpset
         public bool atDest = true;
         public Vector2 dest;
         public Vector2 screenPos;
+        int idlenum = -1;
+        string username = "";
+        List<string> lastQuotes = new List<string>();
+        List<int> lastIdle = new List<int>();
         void Start()
         {
+            username = Facepunch.Steamworks.Client.Instance.Username;
             a = GetComponentInChildren<Animator>();
             prevX = transform.position.x;
             prevY = transform.position.y;
@@ -51,30 +57,148 @@ namespace MoistureUpset
             textBox.layer = 5;
             text.gameObject.transform.localPosition = new Vector3(0.06f, 0, -.1f);
             dest = new Vector2(.5f, .5f);
-            //img = GetComponentInChildren<UnityEngine.UI.Image>();
-            //spr = GetComponent<SpriteRenderer>();
             textBox.SetActive(false);
-        }
 
+
+            On.RoR2.CharacterMaster.OnBodyDamaged += (orig, self, report) =>
+            {
+                new SyncDamage(self.netId, report.damageInfo, report.victim.gameObject).Send(R2API.Networking.NetworkDestination.Clients);
+                orig(self, report);
+            };
+            //On.RoR2.CharacterMaster.OnBodyDeath += (orig, self, body) =>
+            //{
+            //    Debug.Log($"deatgh--------{body.name}");
+            //    orig(self, body);
+            //};
+            //On.RoR2.CharacterMaster.OnBodyDestroyed += (orig, self, body) =>
+            //{
+            //    Debug.Log($"destrot--------{body.name}");
+            //    orig(self, body);
+            //};
+            //On.RoR2.CharacterMaster.OnBodyStart += (orig, self, body) =>
+            //{
+            //    Debug.Log($"start--------{body.name}");
+            //    orig(self, body);
+            //};
+        }
+        public void PlayerDeath(GameObject g)
+        {
+            a.SetInteger("idle", -1);
+            a.Play("idle");
+            List<string> deathQuotes = new List<string> { "That really was your fault.", "If you think about it, you just suck.", "That's unfortunate." };
+            if (UnityEngine.Random.Range(0, 1000) == 0)
+            {
+                deathQuotes[2] = "That's unfortnite";
+            }
+            if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 1)
+            {
+                deathQuotes.Add("You should really start carrying your own weight.");
+                deathQuotes.Add("Just blame your teammates 4Head");
+            }
+            Inventory inventory = g.GetComponentInChildren<CharacterBody>().inventory;
+            if (inventory.GetItemCount(ItemIndex.ExtraLife) != 0)
+            {
+                deathQuotes.Clear();
+                if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 0)
+                {
+                    deathQuotes.Add("Wait don't leave yet!");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 1)
+                {
+                    deathQuotes.Add("You know, just because you have them, doesn't mean you have to use them...");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 2)
+                {
+                    ShouldSpeak("T t t triple kill");
+                    return;
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 3)
+                {
+                    deathQuotes.Add("Really just chugging these down at this point yeah?");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 4)
+                {
+                    deathQuotes.Add("That's 5 deaths now, how are you this bad at the game?");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 5)
+                {
+                    deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.ExtraLife).nameToken)}s. So thank you, for using them for me so I don't have to.");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 6)
+                {
+                    deathQuotes.Add("So that was a bit of a hyperbole earlier. I don't actually think we should consume more of them, so if you could just stop that would be great.");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 7)
+                {
+                    deathQuotes.Add("You know what? I give up, I hope you lose this run.");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 68)
+                {
+                    deathQuotes.Add("nice.");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 419)
+                {
+                    deathQuotes.Add("Blaze it.");
+                }
+                else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
+                {
+                    deathQuotes.Add($"{inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) + 1}");
+                }
+                ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
+                return;
+            }
+            if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
+            {
+                ShouldSpeak("good");
+                return;
+            }
+            if (inventory.GetItemCount(ItemIndex.GhostOnKill) > 0)
+            {
+                deathQuotes.Add($"{Language.GetString(ItemCatalog.GetItemDef(ItemIndex.GhostOnKill).nameToken)} really shouldn't be a red item.");
+            }
+            if (inventory.GetItemCount(ItemIndex.Plant) > 0)
+            {
+                deathQuotes.Add($"{Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} really shouldn't be a red item.");
+            }
+            if (inventory.GetItemCount(ItemIndex.Clover) == 1)
+            {
+                deathQuotes.Add($"Wow you died with a {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}? You really do suck at this game.");
+            }
+            else if (inventory.GetItemCount(ItemIndex.Clover) > 1)
+            {
+                deathQuotes.Add($"Wow you died with {inventory.GetItemCount(ItemIndex.Clover)} {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You really do suck at this game.");
+            }
+            if (inventory.GetItemCount(ItemIndex.LunarDagger) != 0)
+            {
+                if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 1)
+                {
+                    deathQuotes.Add($"You know, when you pickup {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} you are just holding your teamates back.");
+                }
+                deathQuotes.Add($"You probably would have gotten further without {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}.");
+                deathQuotes.Add($"{Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} probably wasn't the move there chief...");
+            }
+            //Debug.Log($"--------{inventory.GetItemCount(ItemIndex.LunarBadLuck)}");
+            string theQuote;
+            int num = 0;
+            do
+            {
+                num++;
+                theQuote = deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)];
+            } while (lastQuotes.Contains(theQuote) || num == 7);
+            lastQuotes.Add(theQuote);
+            if (lastQuotes.Count > 5)
+            {
+                lastQuotes.RemoveAt(0);
+            }
+            ShouldSpeak(theQuote);
+        }
         bool AlmostEqual(float a, float b, float threshold)
         {
             return Math.Abs(a - b) <= threshold;
         }
         void Update()
         {
-            //img.sprite = spr.sprite;
-            //every frame, set img global position to sprite screenPos * width and height
-            //img scale is 2 2 2
-
-            //if (img.sprite == null)
-            //{
-            //    img.transform.localScale = Vector3.zero;
-            //}
-            //else
-            //{
-            //    img.transform.localScale = new Vector3(0.02059911f, 0.02059911f, 0.02059911f);
-            //}
-            if (firstTime && !speaking)
+            if (firstTime && !speaking && !textBox.activeSelf)
             {
                 Vector2 temp = RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position);
                 screenPos = new Vector2(temp.x / (float)Screen.width, temp.y / (float)Screen.height);
@@ -114,7 +238,7 @@ namespace MoistureUpset
                             transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
                     }
                 }
-                DebugMovement();
+                //DebugMovement();
                 IdleAnimation();
 
 
@@ -152,9 +276,40 @@ namespace MoistureUpset
                 timer -= Time.deltaTime;
                 if (timer < 0)
                 {
-                    //timer = UnityEngine.Random.Range(20, 41);
-                    timer = 5;
-                    a.SetInteger("idle", UnityEngine.Random.Range(0, 11));
+                    timer = UnityEngine.Random.Range(20, 41);
+                    //timer = 5;
+                    do
+                    {
+                        idlenum = UnityEngine.Random.Range(0, 14);
+                    } while (lastIdle.Contains(idlenum));
+                    lastIdle.Add(idlenum);
+                    if (lastIdle.Count == 4)
+                    {
+                        lastIdle.RemoveAt(0);
+                    }
+                    if (BigJank.getOptionValue("Original Bonzi Buddy TTS") != 1)
+                    {
+                        if (UnityEngine.Random.Range(0, 150) == 0)
+                        {
+                            StartCoroutine(Speak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!"));
+                            idlenum = -1;
+                        }
+                    }
+                    a.SetInteger("idle", idlenum);
+                    switch (idlenum)
+                    {
+                        case 11:
+                            StartCoroutine(Speak("Did you know? Me neither..."));
+                            break;
+                        case 12:
+                            StartCoroutine(Speak("We live in a society"));
+                            break;
+                        case 13:
+                            StartCoroutine(Speak("Bottom Text"));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             else
@@ -270,14 +425,38 @@ namespace MoistureUpset
             //yield return new WaitUntil(() => true);
             yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0).Length != 0);
             yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0)[0].clip.name == "entrance");
-            firstTime = true;
             GetComponent<RectTransform>().SetAsLastSibling();
+            yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0)[0].clip.name == "idle");
+            switch (UnityEngine.Random.Range(0, 3))
+            {
+                case 0:
+                    StartCoroutine(Speak($"Hey {username}, good to see you again!"));
+                    break;
+                case 1:
+                    StartCoroutine(Speak($"Welcome back {username}!"));
+                    break;
+                case 2:
+                    StartCoroutine(Speak($"The weather is nice out today, isn't it {username}."));
+                    break;
+                default:
+                    break;
+            }
+            firstTime = true;
             if (SceneManager.GetActiveScene().name == "title")
             {
                 GoTo(MAINMENU);
             }
         }
         bool twostep = true;
+        public void ShouldSpeak(string whatToSay)
+        {
+            StartCoroutine(ShouldSpeak(whatToSay, false));
+        }
+        public IEnumerator ShouldSpeak(string whatToSay, bool bigma)
+        {
+            yield return new WaitUntil(() => currentClip == "idle");
+            StartCoroutine(Speak(whatToSay));
+        }
         public IEnumerator Speak(string whatToSay)
         {
             textBox.SetActive(true);

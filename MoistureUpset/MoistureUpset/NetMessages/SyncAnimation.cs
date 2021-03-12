@@ -37,7 +37,7 @@ namespace MoistureUpset.NetMessages
 
         public void Deserialize(NetworkReader reader)
         {
-            DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
+            //DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
 
             netId = reader.ReadNetworkId();
             animation = emotes[reader.ReadInt32()];

@@ -50,6 +50,10 @@ namespace MoistureUpset
                         if (self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>() && self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>().name == "PlayerPositionIndicator(Clone)")
                         {
                             AkSoundEngine.PostEvent("PlayerDeath", self.outer.gameObject);
+                            if (self.outer.gameObject.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
+                            {
+                                BonziBuddy.buddy.PlayerDeath(self.outer.gameObject);
+                            }
                         }
                 }
                 catch (Exception)
@@ -247,7 +251,6 @@ namespace MoistureUpset
                 orig(oldS, newS);
                 try
                 {
-                    //Debug.Log($"--------{newS.name}");
                     switch (newS.name)
                     {
                         case "logbook":
@@ -281,9 +284,17 @@ namespace MoistureUpset
                             BonziBuddy.GoTo(BonziBuddy.ECLIPSE);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
                             break;
+                        case "outro":
+                            BonziBuddy.buddy.enabled = false;
+                            break;
                         default:
+                            BonziBuddy.GoTo(BonziBuddy.M1);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
                             break;
+                    }
+                    if (newS.name != "outro")
+                    {
+                        BonziBuddy.buddy.enabled = true;
                     }
                 }
                 catch (Exception)
@@ -378,6 +389,7 @@ namespace MoistureUpset
                         }
                     var controller = GameObject.FindObjectOfType<MusicController>();
                     controller.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                    BonziBuddy.GoTo(BonziBuddy.DEATH);
                 }
                 catch (Exception)
                 {
