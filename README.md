@@ -1,5 +1,5 @@
 # Moisture Upset
- Moisture Upset is a passion project we have been working on for the last 5 months.
+ Moisture Upset is basically just a giant meme mod.
  
  Check out one or both of these trailers to get a good feel for what we have created.
  
