@@ -88,6 +88,9 @@ public class mousechecker : MonoBehaviour
                         else
                         {
                             new SyncAnimationToClients(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Clients);
+
+                            GameObject bodyObject = Util.FindNetworkObject(identity.netId);
+                            bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim("none");
                         }
                         
                     }
@@ -102,6 +105,9 @@ public class mousechecker : MonoBehaviour
                         else
                         {
                             new SyncAnimationToClients(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
+
+                            GameObject bodyObject = Util.FindNetworkObject(identity.netId);
+                            bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim(selected.GetComponentInChildren<TextMeshProUGUI>().text);
                         }
                         
                     }
