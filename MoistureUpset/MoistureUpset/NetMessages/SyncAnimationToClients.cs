@@ -9,29 +9,19 @@ using UnityEngine.Networking;
 
 namespace MoistureUpset.NetMessages
 {
-    public class SyncAnimation : INetMessage
+    class SyncAnimationToClients : INetMessage
     {
         NetworkInstanceId netId;
         string animation;
-        Int32 animationPos;
-        private static string[] emotes = new string[] { "Loser", "Orange Justice", "Facepalm", "Default Dance", "Floss", "Dab", "SPEEEN", "Caramelldansen", "none" };
 
-        public SyncAnimation()
+        public SyncAnimationToClients()
         {
 
         }
 
-        public SyncAnimation(NetworkInstanceId netId, string animation)
+        public SyncAnimationToClients(NetworkInstanceId netId, string animation)
         {
             this.netId = netId;
-            for (int i = 0; i < emotes.Length; i++)
-            {
-                if (emotes[i] == animation)
-                {
-                    animationPos = i;
-                    break;
-                }
-            }
             this.animation = animation;
         }
 
@@ -40,11 +30,15 @@ namespace MoistureUpset.NetMessages
             //DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
 
             netId = reader.ReadNetworkId();
-            animation = emotes[reader.ReadInt32()];
+            animation = reader.ReadString();
         }
 
         public void OnReceived()
         {
+            if (NetworkServer.active)
+                return;
+
+
             GameObject bodyObject = Util.FindNetworkObject(netId);
             if (!bodyObject)
             {
@@ -52,14 +46,14 @@ namespace MoistureUpset.NetMessages
             }
 
             DebugClass.Log($"Recieved message to play {animation} on client. Playing on {bodyObject.GetComponent<ModelLocator>().modelTransform}");
-            //DebugClass.Log($"Client Body is {bodyObject.name}");
+
             bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim(animation);
         }
 
         public void Serialize(NetworkWriter writer)
         {
             writer.Write(netId);
-            writer.Write(animationPos);
+            writer.Write(animation);
         }
     }
 }
