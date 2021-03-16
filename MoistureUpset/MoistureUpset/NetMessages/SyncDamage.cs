@@ -13,14 +13,14 @@ namespace MoistureUpset.NetMessages
     {
         NetworkInstanceId netId;
         DamageInfo info;
-        GameObject victim;
+        NetworkInstanceId victim;
 
         public SyncDamage()
         {
 
         }
 
-        public SyncDamage(NetworkInstanceId netId, DamageInfo attacker, GameObject victim)
+        public SyncDamage(NetworkInstanceId netId, DamageInfo attacker, NetworkInstanceId victim)
         {
             this.netId = netId;
             this.info = attacker;
@@ -33,16 +33,21 @@ namespace MoistureUpset.NetMessages
 
             netId = reader.ReadNetworkId();
             info = reader.ReadDamageInfo();
-            victim = reader.ReadGameObject();
+            victim = reader.ReadNetworkId();
         }
 
         public void OnReceived()
         {
-
-            if (info.attacker && victim)
+            GameObject v = Util.FindNetworkObject(victim);
+            if (info.attacker && v)
             {
-                Debug.Log($"--------{victim.name} took damage, {victim.GetComponentInChildren<HealthComponent>().health} health remaining");
+                //Debug.Log($"--------{victim.name} took damage, {victim.GetComponentInChildren<HealthComponent>().health} health remaining");
                 //health is new health, aka it can be lessthan or equal to 0
+                var body = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                if (v.GetComponentInChildren<CharacterBody>() == body || info.attacker.GetComponentInChildren<CharacterBody>() == body)
+                {
+                    BonziBuddy.buddy.Damage(v, info);
+                }
             }
         }
 
