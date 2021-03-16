@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using MoistureUpset.Skins.Engi;
+using R2API;
 using R2API.Utils;
 using RoR2;
 using RoR2.Projectile;
@@ -26,6 +27,17 @@ namespace MoistureUpset.Skins
             AddToPrefab();
 
             //On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
+            //On.RoR2.CharacterMaster.OnBodyDamaged += mostRecentAttacker;
+        }
+
+        private static void mostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
+        {
+            orig(self, damageReport);
+
+            if (damageReport.victimBody.isSkin("THE_TF2_ENGINEER_SKIN"))
+            {
+                damageReport.victimBody.GetComponent<EngiKillCam>().attacker = damageReport.attackerBody;
+            }
         }
 
         private static void KillCamTest(On.RoR2.CharacterMaster.orig_OnBodyDeath orig, CharacterMaster self, CharacterBody body)
@@ -37,6 +49,8 @@ namespace MoistureUpset.Skins
                 if (!self.preventGameOver)
                 {
                     DebugClass.Log($"The Engi is Dead");
+
+                    body.GetComponent<EngiKillCam>().DoKillCam();
                 }
             }
         }
@@ -346,8 +360,9 @@ namespace MoistureUpset.Skins
         private static void AddToPrefab()
         {
             GameObject engiBody = Resources.Load<GameObject>("prefabs/characterbodies/engibody"); // load engibody prefab
-            engiBody.AddComponent<Engi.AddMedicIcon>();
-            engiBody.AddComponent<Engi.EngiHurt>();
+            engiBody.AddComponent<AddMedicIcon>();
+            engiBody.AddComponent<EngiHurt>();
+            engiBody.AddComponent<EngiKillCam>();
         }
     }
 }

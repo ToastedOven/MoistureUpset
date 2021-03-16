@@ -80,14 +80,30 @@ public class mousechecker : MonoBehaviour
                     if (Math.Abs(Input.mousePosition.x - (Screen.width / 2.0f)) < 30f * XScale && Math.Abs(Input.mousePosition.y - (Screen.height / 2.0f)) < 30f * YScale)
                     {
                         var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
-                        SoundAssets.PlaySound("Stop", identity.netId);
-                        new SyncAnimation(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Clients);
+
+                        if (!NetworkServer.active)
+                        {
+                            new SyncAnimationToServer(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Server);
+                        }
+                        else
+                        {
+                            new SyncAnimationToClients(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Clients);
+                        }
+                        
                     }
                     else
                     {
                         var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
-                        SoundAssets.PlaySound("Stop", identity.netId);
-                        new SyncAnimation(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
+
+                        if (!NetworkServer.active)
+                        {
+                            new SyncAnimationToServer(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Server);
+                        }
+                        else
+                        {
+                            new SyncAnimationToClients(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
+                        }
+                        
                     }
                 }
                 catch (Exception e)

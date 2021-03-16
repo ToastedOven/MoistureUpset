@@ -416,6 +416,8 @@ namespace MoistureUpset
                 DebugClass.Log("There was an error playing the audio file, The audio buffer is empty!");
             }
 
+
+            // probably redundant now tbh.
             if (length >= (uint)left.Length)
             {
                 length = (uint)left.Length;
