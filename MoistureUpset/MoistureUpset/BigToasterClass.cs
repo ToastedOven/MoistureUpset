@@ -15,6 +15,8 @@ using System.Text;
 using RiskOfOptions;
 using AK;
 using System.Collections;
+using MoistureUpset.NetMessages;
+using R2API.Networking.Interfaces;
 
 namespace MoistureUpset
 {
@@ -50,6 +52,14 @@ namespace MoistureUpset
                         if (self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>() && self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>().name == "PlayerPositionIndicator(Clone)")
                         {
                             AkSoundEngine.PostEvent("PlayerDeath", self.outer.gameObject);
+                            if (self.outer.gameObject.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
+                            {
+                                BonziBuddy.buddy.PlayerDeath(self.outer.gameObject);
+                            }
+                            else
+                            {
+                                BonziBuddy.buddy.AllyDeath(self.outer.gameObject);
+                            }
                         }
                 }
                 catch (Exception)
@@ -105,7 +115,7 @@ namespace MoistureUpset
                 }
             }
 
-            
+
             //var font = Resources.Load<Font>("@MoistureUpset_robloxfont:assets/roblox_font.ttf");
             //var resources2 = Resources.LoadAll<Font>("");
             //for (int i = 0; i < resources2.Length; i++)
@@ -191,6 +201,14 @@ namespace MoistureUpset
         }
         public static void PreGame()
         {
+            On.RoR2.CharacterMaster.OnBodyDamaged += (orig, self, report) =>
+            {
+                if (report.victim)
+                {
+                    new SyncDamage(self.netId, report.damageInfo, report.victim.gameObject.GetComponent<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
+                }
+                orig(self, report);
+            };
             On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
                 {
                     orig(self);
@@ -207,7 +225,8 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
-
+                BonziBuddy.buddy.resetRun = false;
+                BonziBuddy.buddy.oncePerStage = true;
                 var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
                 if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
                 {
@@ -247,7 +266,6 @@ namespace MoistureUpset
                 orig(oldS, newS);
                 try
                 {
-                    //Debug.Log($"--------{newS.name}");
                     switch (newS.name)
                     {
                         case "logbook":
@@ -281,9 +299,17 @@ namespace MoistureUpset
                             BonziBuddy.GoTo(BonziBuddy.ECLIPSE);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
                             break;
+                        case "outro":
+                            BonziBuddy.buddy.enabled = false;
+                            break;
                         default:
+                            BonziBuddy.GoTo(BonziBuddy.M1);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
                             break;
+                    }
+                    if (newS.name != "outro")
+                    {
+                        BonziBuddy.buddy.enabled = true;
                     }
                 }
                 catch (Exception)
@@ -378,6 +404,7 @@ namespace MoistureUpset
                         }
                     var controller = GameObject.FindObjectOfType<MusicController>();
                     controller.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                    BonziBuddy.GoTo(BonziBuddy.DEATH);
                 }
                 catch (Exception)
                 {
