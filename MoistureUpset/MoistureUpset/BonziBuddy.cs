@@ -669,9 +669,9 @@ namespace MoistureUpset
             {
                 deathQuotes.Add($"Wow, dying with {inventory.GetItemCount(ItemIndex.Clover)} {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You should flame them");
             }
-            if (inventory.GetItemCount(ItemIndex.Plant))
+            if (inventory.GetItemCount(ItemIndex.Plant) != 0)
             {
-
+                deathQuotes.Add($"{allyName} probably died because of {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
             }
 
 
