@@ -947,6 +947,11 @@ namespace MoistureUpset
                     if (BigJank.getOptionValue("Interactables") == 1)
                         st = "SPEEEEEEEEEEEEN";
                 }
+                else if (token == "SHOPKEEPER_BODY_NAME")
+                {
+                    if (BigJank.getOptionValue("Merchant") == 1)
+                        st = "Beedle";
+                }
                 //else if (st.Contains("Jellyfish"))
                 //{
                 //    st = st.Replace("Jellyfish", "Comedy");
