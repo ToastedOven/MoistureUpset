@@ -40,6 +40,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.2.1: Fixed a few bugs with sounds still playing when turned off.
+
  1.2.0: Fixed issues with the FrankasaurusEngi mod (and probably other engi mods) Changed the chance shrine and the triple shops. Added a setting which disables everything except the survivor skins, make sure to check this if you only want to use the survivor skins we implement! (Also increases load times dramatically since we don't load stuff you don't want)
 
  1.1.4: Fixed issue with font's becoming lines... yeah I'm kinda stupid
