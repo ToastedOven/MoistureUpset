@@ -3,11 +3,9 @@
  
  Check out one or both of these trailers to get a good feel for what we have created.
  
- https://www.youtube.com/watch?v=AyslWZm0lCg (cinematic)
- 
- https://www.youtube.com/watch?v=oXVEEjPcCws (more showcase oriented)
- 
- 
+ - [![Moisture Upset Trailer](http://img.youtube.com/vi/AyslWZm0lCg/0.jpg)](https://www.youtube.com/watch?v=AyslWZm0lCg "Moisture Upset Trailer")
+
+ - [![Moisture Upset Showcase](http://img.youtube.com/vi/oXVEEjPcCws/0.jpg)](https://www.youtube.com/watch?v=oXVEEjPcCws "Moisture Upset Showcase")
  
 It's hard to say exactly what this mod changes since we do so much. As a general statement, all enemies in the vanilla game, have had a "makeover" (complete with sound effects!)
 
