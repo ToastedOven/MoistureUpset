@@ -28,7 +28,7 @@ namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("com.rune580.riskofoptions")]
-    [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", "1.2.0")]
+    [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", "1.2.1")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
@@ -61,24 +61,23 @@ namespace MoistureUpset
 
             ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
 
-            //AkSoundEngine.SetAudioInputCallbacks(fuckmeiguess, fuckmetoo);
-
-            //On.RoR2.Chat.UserChatMessage.ConstructChatString += PlaySound;
-            EnemyReplacements.LoadResource("moisture_bonzibuddy");
-            On.RoR2.RoR2Application.OnLoad += (orig, self) =>
-            {
-                orig(self);
 
 
-                GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
-                DontDestroyOnLoad(bonzi);
-                bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
-                bonzi.SetActive(true);
-                bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
-                bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
-                bonzi.layer = 5;
-                BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
-            };
+            //EnemyReplacements.LoadResource("moisture_bonzibuddy");
+            //On.RoR2.RoR2Application.OnLoad += (orig, self) =>
+            //{
+            //    orig(self);
+
+
+            //    GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+            //    DontDestroyOnLoad(bonzi);
+            //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+            //    bonzi.SetActive(true);
+            //    bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            //    bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+            //    bonzi.layer = 5;
+            //    BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
+            //};
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{

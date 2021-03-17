@@ -54,11 +54,11 @@ namespace MoistureUpset
                             AkSoundEngine.PostEvent("PlayerDeath", self.outer.gameObject);
                             if (self.outer.gameObject.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
                             {
-                                BonziBuddy.buddy.PlayerDeath(self.outer.gameObject);
+                                //BonziBuddy.buddy.PlayerDeath(self.outer.gameObject);
                             }
                             else
                             {
-                                BonziBuddy.buddy.AllyDeath(self.outer.gameObject);
+                                //BonziBuddy.buddy.AllyDeath(self.outer.gameObject);
                             }
                         }
                 }
@@ -201,32 +201,20 @@ namespace MoistureUpset
         }
         public static void PreGame()
         {
-            On.RoR2.CharacterMaster.OnBodyDamaged += (orig, self, report) =>
-            {
-                if (report.victim)
-                {
-                    new SyncDamage(self.netId, report.damageInfo, report.victim.gameObject.GetComponent<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
-                }
-                orig(self, report);
-            };
             On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
-                {
-                    orig(self);
-                    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
-                };
-            On.RoR2.UI.AssignStageToken.Start += (orig, self) =>
             {
                 orig(self);
+                AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
             };
             On.RoR2.UI.MainMenu.MainMenuController.SetDesiredMenuScreen += (orig, self, newscreen) =>
             {
                 orig(self, newscreen);
-                BonziBuddy.buddy.MainMenuMovement(newscreen.name);
+                //BonziBuddy.buddy.MainMenuMovement(newscreen.name);
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
-                BonziBuddy.buddy.resetRun = false;
-                BonziBuddy.buddy.oncePerStage = true;
+                //BonziBuddy.buddy.resetRun = false;
+                //BonziBuddy.buddy.oncePerStage = true;
                 var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
                 if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
                 {
@@ -270,11 +258,11 @@ namespace MoistureUpset
                     {
                         case "logbook":
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
-                            BonziBuddy.GoTo(BonziBuddy.LOGBOOK);
+                            //BonziBuddy.GoTo(BonziBuddy.LOGBOOK);
                             break;
                         case "title":
-                            BonziBuddy.buddy.Setup();
-                            BonziBuddy.GoTo(BonziBuddy.MAINMENU);
+                            //BonziBuddy.buddy.Setup();
+                            //BonziBuddy.GoTo(BonziBuddy.MAINMENU);
                             if (BigJank.getOptionValue("Shreks outhouse") == 1)
                             {
                                 GameObject pod = GameObject.Find("SurvivorPod");
@@ -288,7 +276,7 @@ namespace MoistureUpset
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
                             break;
                         case "lobby":
-                            BonziBuddy.GoTo(BonziBuddy.CHARSELECT);
+                            //BonziBuddy.GoTo(BonziBuddy.CHARSELECT);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
                             break;
@@ -296,20 +284,20 @@ namespace MoistureUpset
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
                             break;
                         case "eclipseworld":
-                            BonziBuddy.GoTo(BonziBuddy.ECLIPSE);
+                            //BonziBuddy.GoTo(BonziBuddy.ECLIPSE);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
                             break;
                         case "outro":
-                            BonziBuddy.buddy.enabled = false;
+                            //BonziBuddy.buddy.enabled = false;
                             break;
                         default:
-                            BonziBuddy.GoTo(BonziBuddy.M1);
+                            //BonziBuddy.GoTo(BonziBuddy.M1);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 0);
                             break;
                     }
                     if (newS.name != "outro")
                     {
-                        BonziBuddy.buddy.enabled = true;
+                        //BonziBuddy.buddy.enabled = true;
                     }
                 }
                 catch (Exception)
@@ -332,7 +320,10 @@ namespace MoistureUpset
                 //muMenu
                 orig(self);
                 var c = GameObject.FindObjectOfType<MusicController>();
-                MusicAPI.StopSong(ref c, "muIntroCutscene");
+                if (BigJank.getOptionValue("Replace Intro Scene") == 1)
+                {
+                    MusicAPI.StopSong(ref c, "muIntroCutscene");
+                }
                 if (BigJank.getOptionValue("Logo") == 1)
                     UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png");
                 if (BigJank.getOptionValue("Roblox Cursor") == 1)
@@ -404,7 +395,7 @@ namespace MoistureUpset
                         }
                     var controller = GameObject.FindObjectOfType<MusicController>();
                     controller.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
-                    BonziBuddy.GoTo(BonziBuddy.DEATH);
+                    //BonziBuddy.GoTo(BonziBuddy.DEATH);
                 }
                 catch (Exception)
                 {
@@ -834,6 +825,11 @@ namespace MoistureUpset
                 {
                     orig(self);
                     AkSoundEngine.PostEvent("SomebodyLoop", self.outer.gameObject);
+                };
+                On.EntityStates.SurvivorPod.Landed.OnExit += (orig, self) =>
+                {
+                    orig(self);
+                    AkSoundEngine.PostEvent("SomebodyStop", self.outer.gameObject);
                 };
                 On.EntityStates.SurvivorPod.Release.OnEnter += (orig, self) =>
                 {
