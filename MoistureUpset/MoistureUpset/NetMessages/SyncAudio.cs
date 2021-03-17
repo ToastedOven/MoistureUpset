@@ -42,7 +42,10 @@ namespace MoistureUpset.NetMessages
         {
             if ((!doMinecraftOofSound && soundId == "MinecraftHurt") || (doShrineSound && (soundId == "ChanceFailure" || soundId == "ChanceSuccess")))
                 return;
-
+            if (soundId == "NoodleSplash" && BigJank.getOptionValue("Pool Noodle") != 1)
+                return;
+            else if (soundId == "JellyDetonate" && BigJank.getOptionValue("Comedy") != 1)
+                return;
             GameObject bodyObject = Util.FindNetworkObject(netId);
             if (!bodyObject)
             {

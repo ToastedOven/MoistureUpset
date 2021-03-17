@@ -181,34 +181,33 @@ namespace MoistureUpset.InteractReplacements
                 {
                     On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
                     {
-                        orig(self, i);
-                        if (!self.CanBeAffordedByInteractor(i))
+                        if (self.CanBeAffordedByInteractor(i))
                         {
-                            return;
-                        }
-                        try
-                        {
-                            if (self.gameObject.ToString().Contains("NewtStatue"))
+                            try
                             {
-                                if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "AToasterOven(Clone)")
+                                if (self.gameObject.ToString().Contains("NewtStatue"))
                                 {
-                                    self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play("Backflip");
+                                    if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "AToasterOven(Clone)")
+                                    {
+                                        self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play("Backflip");
+                                    }
+                                    else if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "RuneMasterGaming580808080808080ADHD(Clone)")
+                                    {
+                                        int num = UnityEngine.Random.Range(0, 4);
+                                        self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play($"r_death{num + 1}");
+                                    }
+                                    else
+                                    {
+                                        self.gameObject.GetComponent<Fixers.robloxfixer>().a.CrossFade("Backflip", .4f);
+                                    }
+                                    self.gameObject.GetComponent<Fixers.robloxfixer>().bought = true;
                                 }
-                                else if (self.gameObject.GetComponent<Fixers.robloxfixer>().a.name == "RuneMasterGaming580808080808080ADHD(Clone)")
-                                {
-                                    int num = UnityEngine.Random.Range(0, 4);
-                                    self.gameObject.GetComponent<Fixers.robloxfixer>().a.Play($"r_death{num + 1}");
-                                }
-                                else
-                                {
-                                    self.gameObject.GetComponent<Fixers.robloxfixer>().a.CrossFade("Backflip", .4f);
-                                }
-                                self.gameObject.GetComponent<Fixers.robloxfixer>().bought = true;
+                            }
+                            catch (Exception)
+                            {
                             }
                         }
-                        catch (Exception)
-                        {
-                        }
+                        orig(self, i);
                     };
                     On.RoR2.PurchaseInteraction.OnDeserialize += (orig, self, r, i) =>
                     {

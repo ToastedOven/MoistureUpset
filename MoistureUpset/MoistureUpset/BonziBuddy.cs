@@ -1,5 +1,6 @@
 ﻿using MoistureUpset.NetMessages;
 using R2API.Networking.Interfaces;
+using R2API.Utils;
 using RoR2;
 using System;
 using System.Collections;
@@ -17,7 +18,7 @@ namespace MoistureUpset
     public class BonziBuddy : MonoBehaviour
     {
         #region defined positions
-        public static Vector2 M1 = new Vector2(0.7779733f, 0.2007445f);
+        public static Vector2 M1 = new Vector2(0.7779733f, 0.2307445f);
         public static Vector2 MAINMENU = new Vector2(0.6449644f, 0.8017029f);
         public static Vector2 SETTINGS = new Vector2(0.04327124f, 0.216697f);
         public static Vector2 LOGBOOK = new Vector2(0.9575167f, 0.2372429f);
@@ -48,6 +49,7 @@ namespace MoistureUpset
         List<string> lastQuotesAllyDeath = new List<string>();
         List<int> lastIdle = new List<int>();
         bool idling = false;
+        int failCount = 0;
         void Start()
         {
             username = Facepunch.Steamworks.Client.Instance.Username;
@@ -95,6 +97,78 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
+            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                float yes = self.GetFieldValue<int>("successfulPurchaseCount");
+                orig(self, activator);
+                if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+                else
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+            };
+            On.RoR2.CharacterMaster.OnBodyDamaged += (orig, self, report) =>
+            {
+                if (report.victim)
+                {
+                    new SyncDamage(self.netId, report.damageInfo, report.victim.gameObject.GetComponent<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
+                }
+                orig(self, report);
+            };
+        }
+        public void Chance(bool number1VictoryRoyale)
+        {
+            if (number1VictoryRoyale)
+            {
+                failCount = 0;
+            }
+            else
+            {
+                failCount++;
+                switch (failCount)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        ShouldSpeak("Wow");
+                        break;
+                    case 3:
+                        ShouldSpeak("Really?");
+                        break;
+                    case 4:
+                        ShouldSpeak("This has to be rigged... right?");
+                        break;
+                    case 5:
+                        ShouldSpeak("Yeah it's rigged");
+                        break;
+                    case 6:
+                        ShouldSpeak("What did you do to deserve this?");
+                        break;
+                    case 7:
+                        ShouldSpeak("I didn't really think that you would ever make it this far so I kinda ran out of things to say");
+                        break;
+                    case 8:
+                        ShouldSpeak("Maybe I'll just start counting how many times you fail in a row");
+                        break;
+                    default:
+                        ShouldSpeak($"That's {failCount}");
+                        break;
+                }
+            }
+        }
+        public void NotEnoughMoney()
+        {
+            if (idling)
+            {
+                if (UnityEngine.Random.Range(0, 5) == 0)
+                {
+                    string[] quotes = { "Woah there buddy, you don't have enough money for that one.", $"Sorry {username}, I can't give credit. Come back when you're a little hmmmmm, richer.", "hmmmmmmmmmm, no" };
+                    ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Length)]);
+                }
+            }
         }
         public bool resetRun = false;
         public void Items(Inventory inventory, ItemIndex index, int count, GameObject g)
@@ -645,6 +719,10 @@ namespace MoistureUpset
         {
             string allyName = g.GetComponent<CharacterBody>().GetUserName();
             List<string> deathQuotes = new List<string> { $"That really was {allyName}'s fault.", $"{allyName} wants you to know that it's your fault" };
+            if (UnityEngine.Random.Range(0, 100) == 0)
+            {
+                deathQuotes.Add($"It's so sad that {allyName} died of ligma");
+            }
             Inventory inventory = g.GetComponentInChildren<CharacterBody>().inventory;
             if (g.name.StartsWith("Commando"))
             {
@@ -672,6 +750,10 @@ namespace MoistureUpset
             if (inventory.GetItemCount(ItemIndex.Plant) != 0)
             {
                 deathQuotes.Add($"{allyName} probably died because of {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
+            }
+            if (inventory.GetItemCount(ItemIndex.LunarDagger) != 0)
+            {
+                deathQuotes.Add($"Why would you even take {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}");
             }
 
 

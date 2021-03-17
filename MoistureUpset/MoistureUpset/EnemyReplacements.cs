@@ -13,6 +13,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
+using MoistureUpset.NetMessages;
+using R2API.Networking.Interfaces;
 
 namespace MoistureUpset
 {
@@ -623,17 +625,11 @@ namespace MoistureUpset
                 orig(self, activator);
                 if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
                 {
-                    //NetworkAssistant.playSound("ChanceFailure", activator.gameObject.transform.position);
-                    //AkSoundEngine.PostEvent("ChanceFailure", mainBody.gameObject);
-
-                    SoundAssets.PlaySound("ChanceFailure", activator.netId);
+                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
                 }
                 else
                 {
-                    //NetworkAssistant.playSound("ChanceSuccess", activator.gameObject.transform.position);
-                    //AkSoundEngine.PostEvent("ChanceSuccess", mainBody.gameObject);
-
-                    SoundAssets.PlaySound("ChanceSuccess", activator.netId);
+                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
                 }
             };
         }
@@ -2082,6 +2078,7 @@ namespace MoistureUpset
                 orig(self, point, normal);
                 if (self.name == "MagmaWormBody(Clone)")
                 {
+
                     SoundAssets.PlaySound("NoodleSplash", self.netId);
                     //NetworkAssistant.playSound("NoodleSplash", self.gameObject.transform.position);
                 }
