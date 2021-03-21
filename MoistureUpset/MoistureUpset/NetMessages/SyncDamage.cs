@@ -49,6 +49,14 @@ namespace MoistureUpset.NetMessages
                     BonziBuddy.buddy.Damage(v, info);
                 }
             }
+            else if (info.damageType == DamageType.FallDamage && v)
+            {
+                var body = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                if (v.GetComponentInChildren<CharacterBody>() == body)
+                {
+                    BonziBuddy.buddy.FallDamage(v, info);
+                }
+            }
         }
 
         public void Serialize(NetworkWriter writer)

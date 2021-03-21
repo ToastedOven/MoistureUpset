@@ -9,29 +9,34 @@ using UnityEngine.Networking;
 
 namespace MoistureUpset.NetMessages
 {
-    public class SyncChance : INetMessage
+    public enum ShrineType
+    {
+        blood,
+        mountain,
+        healing,
+        order,
+        combat,
+        count
+    }
+    public class SyncShrine : INetMessage
     {
         NetworkInstanceId netId;
-        bool succ;
-        string sound;
-
-        public SyncChance()
+        Int32 type;
+        public SyncShrine()
         {
 
         }
 
-        public SyncChance(NetworkInstanceId netId, bool succ, string sound)
+        public SyncShrine(NetworkInstanceId netId, ShrineType type)
         {
             this.netId = netId;
-            this.succ = succ;
-            this.sound = sound;
+            this.type = (Int32)type;
         }
 
         public void Deserialize(NetworkReader reader)
         {
             netId = reader.ReadNetworkId();
-            succ = reader.ReadBoolean();
-            sound = reader.ReadString();
+            type = reader.ReadInt32();
         }
 
         public void OnReceived()
@@ -41,11 +46,7 @@ namespace MoistureUpset.NetMessages
             {
                 if (g.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
                 {
-                    BonziBuddy.buddy.Chance(succ);
-                }
-                if (BigJank.getOptionValue("Shrine Changes") == 1)
-                {
-                    AkSoundEngine.PostEvent(sound, g);
+                    BonziBuddy.buddy.GenericShrine((ShrineType)type);
                 }
             }
         }
@@ -53,8 +54,7 @@ namespace MoistureUpset.NetMessages
         public void Serialize(NetworkWriter writer)
         {
             writer.Write(netId);
-            writer.Write(succ);
-            writer.Write(sound);
+            writer.Write(type);
         }
     }
 }

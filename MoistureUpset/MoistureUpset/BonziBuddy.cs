@@ -1,4 +1,5 @@
 ﻿using MoistureUpset.NetMessages;
+using R2API;
 using R2API.Networking.Interfaces;
 using R2API.Utils;
 using RoR2;
@@ -15,6 +16,37 @@ using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
+    public class BonziUnlocked : ModdedUnlockableAndAchievement<VanillaSpriteProvider>
+    {
+        public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
+        public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
+        public override string PrerequisiteUnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_PREREQ_ID";
+        public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
+        public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
+        public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
+        protected override VanillaSpriteProvider SpriteProvider { get; } = new VanillaSpriteProvider("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/gifs/idle/frame_000_delay-0.03s.gif");
+        public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
+        {
+            orig(self);
+            Debug.Log($"--------checking it");
+            if (BonziBuddy.buddy.foundMe)
+            {
+                Debug.Log($"--------===============------yeah");
+                base.Grant();
+            }
+        }
+        public override void OnInstall()
+        {
+            base.OnInstall();
+            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update += ClearCheck;
+        }
+
+        public override void OnUninstall()
+        {
+            base.OnUninstall();
+            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
+        }
+    }
     public class BonziBuddy : MonoBehaviour
     {
         #region defined positions
@@ -34,7 +66,7 @@ namespace MoistureUpset
         Animator a;
         GameObject textBox;
         TextMeshPro text;
-        bool foundMe = true;
+        public bool foundMe = false;
         bool firstTime = false;
         float prevY = 0, prevX = 0;
         bool moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
@@ -50,6 +82,15 @@ namespace MoistureUpset
         List<int> lastIdle = new List<int>();
         bool idling = false;
         int failCount = 0;
+        bool activeMountainShrine = false;
+        int mountainShrineItems = 0;
+        StringBuilder mountainItems = new StringBuilder();
+        float bloodShrineTimer = 0;
+        Transform charPosition = null;
+        GameObject obj1, obj2, obj3, obj4, obj5, obj6;
+        GameObject preloaded = Resources.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
+
+        bool bonziActive = false;
         void Start()
         {
             username = Facepunch.Steamworks.Client.Instance.Username;
@@ -67,13 +108,115 @@ namespace MoistureUpset
         }
         private void Hooks()
         {
+            On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                charPosition = RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.transform;
+
+                obj1 = preloaded;
+                obj1 = Instantiate(obj1);
+                obj1.transform.position = new Vector3(1811, 351, 719);
+
+                obj3 = preloaded;
+                obj3 = Instantiate(obj3);
+                obj3.transform.position = new Vector3(1958, 340, 722);
+
+                obj4 = preloaded;
+                obj4 = Instantiate(obj4);
+                obj4.transform.position = new Vector3(2170, 336, 728);
+
+                obj5 = preloaded;
+                obj5 = Instantiate(obj5);
+                obj5.transform.position = new Vector3(2317, 337, 726);
+
+                obj6 = preloaded;
+                obj6 = Instantiate(obj6);
+                obj6.transform.position = new Vector3(2432, 248, 724);
+
+                obj2 = new GameObject();
+                obj2 = Instantiate(obj2);
+                obj2.transform.position = new Vector3(2656, 205, 722);
+                AkSoundEngine.PostEvent("BonziGlitches", obj2);
+            };
+            On.RoR2.UI.MainMenu.MainMenuController.SetDesiredMenuScreen += (orig, self, newscreen) =>
+            {
+                orig(self, newscreen);
+                BonziBuddy.buddy.MainMenuMovement(newscreen.name);
+            };
+            On.RoR2.Run.OnClientGameOver += (orig, self, report) =>
+            {
+                orig(self, report);
+                try
+                {
+                    if (report.gameEnding.endingTextToken == "GAME_RESULT_UNKNOWN")
+                    {
+                        ShouldSpeak("Kind of a cop-out isn't it?");
+                    }
+                    GoTo(DEATH);
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
+            {
+                try
+                {
+                    resetRun = false;
+                    oncePerStage = true;
+                    activeMountainShrine = false;
+                    switch (newS.name)
+                    {
+                        case "logbook":
+                            GoTo(LOGBOOK);
+                            break;
+                        case "title":
+                            buddy.Setup();
+                            GoTo(MAINMENU);
+                            break;
+                        case "lobby":
+                            GoTo(CHARSELECT);
+                            break;
+                        case "eclipseworld":
+                            GoTo(ECLIPSE);
+                            break;
+                        case "outro":
+                            buddy.enabled = false; /////solution for this
+                            break;
+                        case "moon":
+                            //frogge 
+                            break;
+                        default:
+                            GoTo(M1);
+                            break;
+                    }
+                    if (newS.name != "outro")
+                    {
+                        enabled = true; /////and this
+                    }
+                    charPosition = null;
+                    AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
+                }
+                catch (Exception)
+                {
+                }
+                orig(oldS, newS);
+            };
+            On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
+            {
+                if (!self.CanBeAffordedByInteractor(i))
+                {
+                    new SyncBroke(i.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId).Send(R2API.Networking.NetworkDestination.Clients);
+                }
+                orig(self, i);
+            };
             On.RoR2.Inventory.GiveItem += (orig, self, index, count) =>
             {
                 try
                 {
-                    if (self.gameObject && self.gameObject.GetComponentInChildren<CharacterMaster>() && self.gameObject.GetComponentInChildren<CharacterMaster>().GetBody().gameObject)
+                    if (self.gameObject && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>() && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject)
                     {
-                        new SyncItems(self.gameObject.GetComponentInChildren<CharacterMaster>().GetBody().gameObject.GetComponent<NetworkIdentity>().netId, index, count).Send(R2API.Networking.NetworkDestination.Clients);
+                        new SyncItems(self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject.GetComponent<NetworkIdentity>().netId, index, count).Send(R2API.Networking.NetworkDestination.Clients);
                     }
                 }
                 catch (Exception)
@@ -83,17 +226,23 @@ namespace MoistureUpset
             };
             On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
             {
-                if (resetRun && (self.inputField.text.ToUpper() == "YES" || self.inputField.text.ToUpper() == "Y"))
+                try
                 {
-                    //NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().healthComponent.Suicide();
-                    //NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>()
-                    new SyncSuicide((NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>()).netId).Send(R2API.Networking.NetworkDestination.Server);
-                    resetRun = false;
+                    if (resetRun && (self.inputField.text.ToUpper() == "YES" || self.inputField.text.ToUpper() == "Y"))
+                    {
+                        //NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().healthComponent.Suicide();
+                        //NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>()
+                        new SyncSuicide((RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>()).netId).Send(R2API.Networking.NetworkDestination.Server);
+                        resetRun = false;
+                    }
+                    else if (resetRun && (self.inputField.text.ToUpper() == "NO" || self.inputField.text.ToUpper() == "N"))
+                    {
+                        ShouldSpeak("Fine, that's your loss");
+                        resetRun = false;
+                    }
                 }
-                else if (resetRun && (self.inputField.text.ToUpper() == "NO" || self.inputField.text.ToUpper() == "N"))
+                catch (Exception)
                 {
-                    ShouldSpeak("Fine, that's your loss");
-                    resetRun = false;
                 }
                 orig(self);
             };
@@ -103,12 +252,35 @@ namespace MoistureUpset
                 orig(self, activator);
                 if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
                 {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
                 }
                 else
                 {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
                 }
+            };
+            On.RoR2.ShrineBloodBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                orig(self, activator);
+                new SyncShrine(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, ShrineType.blood).Send(R2API.Networking.NetworkDestination.Clients);
+            };
+            On.RoR2.ShrineBossBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                orig(self, activator);
+                new SyncShrine(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, ShrineType.mountain).Send(R2API.Networking.NetworkDestination.Clients);
+            };
+            On.RoR2.ShrineHealingBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                orig(self, activator);
+                if (self.purchaseCount == 1)
+                {
+                    new SyncShrine(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, ShrineType.healing).Send(R2API.Networking.NetworkDestination.Clients);
+                }
+            };
+            On.RoR2.ShrineRestackBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                orig(self, activator);
+                new SyncShrine(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, ShrineType.order).Send(R2API.Networking.NetworkDestination.Clients);
             };
             On.RoR2.CharacterMaster.OnBodyDamaged += (orig, self, report) =>
             {
@@ -118,6 +290,206 @@ namespace MoistureUpset
                 }
                 orig(self, report);
             };
+            On.EntityStates.GenericCharacterDeath.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                try
+                {
+                    if (self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>() && self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>().name == "PlayerPositionIndicator(Clone)")
+                    {
+                        if (self.outer.gameObject.GetComponentInChildren<RoR2.CharacterBody>() == RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
+                        {
+                            buddy.PlayerDeath(self.outer.gameObject, self.outer.gameObject.GetComponentInChildren<RoR2.HealthComponent>().killingDamageType);
+                        }
+                        else
+                        {
+                            buddy.AllyDeath(self.outer.gameObject, self.outer.gameObject.GetComponentInChildren<RoR2.HealthComponent>().killingDamageType);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            };
+            On.RoR2.BossGroup.DropRewards += (orig, self) =>
+            {
+                if (activeMountainShrine && self.dropPosition)
+                {
+                    mountainShrineItems = 1 + self.bonusRewardCount;
+                    mountainShrineItems *= RoR2.Run.instance.participatingPlayerCount;
+                }
+                orig(self);
+                mountainShrineItems = 0;
+                activeMountainShrine = false;
+            };
+            On.RoR2.PickupDropletController.CreatePickupDroplet += (orig, index, pos, vector) =>
+            {
+                orig(index, pos, vector);
+                if (mountainShrineItems > 0)
+                {
+                    mountainItems.Append($"{(int)(index.itemIndex)} ");
+                    mountainShrineItems--;
+                    if (mountainShrineItems == 0)
+                    {
+                        mountainItems.Remove(mountainItems.Length - 1, 1);
+                        new SyncMountain(mountainItems.ToString()).Send(R2API.Networking.NetworkDestination.Clients);
+                        mountainItems.Clear();
+                    }
+                }
+            };
+        }
+        public void Mountain(string[] stringItems)
+        {
+            int squidCount = 0;
+            ItemIndex[] items = new ItemIndex[stringItems.Length];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = (ItemIndex)(int.Parse(stringItems[i]));
+            }
+            float goodPercent = 0;
+            foreach (var item in items)
+            {
+                switch (item)
+                {
+                    case ItemIndex.Missile:
+                        goodPercent += 1.0f / (float)items.Length;
+                        break;
+                    case ItemIndex.ExplodeOnDeath:
+                        goodPercent += 0.7f / (float)items.Length;
+                        break;
+                    case ItemIndex.Feather:
+                        goodPercent += 0.7f / (float)items.Length;
+                        break;
+                    case ItemIndex.ChainLightning:
+                        goodPercent += 0.9f / (float)items.Length;
+                        break;
+                    case ItemIndex.Seed:
+                        goodPercent += 0.6f / (float)items.Length;
+                        break;
+                    case ItemIndex.AttackSpeedOnCrit:
+                        goodPercent += 0.85f / (float)items.Length;
+                        break;
+                    case ItemIndex.SprintOutOfCombat:
+                        goodPercent += 0.5f / (float)items.Length;
+                        break;
+                    case ItemIndex.Phasing:
+                        goodPercent += 0.35f / (float)items.Length;
+                        break;
+                    case ItemIndex.HealOnCrit:
+                        goodPercent += 0.85f / (float)items.Length;
+                        break;
+                    case ItemIndex.EquipmentMagazine:
+                        goodPercent += 0.9f / (float)items.Length;
+                        break;
+                    case ItemIndex.Infusion:
+                        goodPercent += 0.3f / (float)items.Length;
+                        break;
+                    case ItemIndex.Bandolier:
+                        goodPercent += 0.1f / (float)items.Length;
+                        break;
+                    case ItemIndex.WarCryOnMultiKill:
+                        goodPercent += 0.5f / (float)items.Length;
+                        break;
+                    case ItemIndex.Knurl:
+                        goodPercent += 0.8f / (float)items.Length;
+                        break;
+                    case ItemIndex.BeetleGland:
+                        goodPercent += 0.5f / (float)items.Length;
+                        break;
+                    case ItemIndex.SprintArmor:
+                        goodPercent += 0.25f / (float)items.Length;
+                        break;
+                    case ItemIndex.IceRing:
+                        goodPercent += 0.85f / (float)items.Length;
+                        break;
+                    case ItemIndex.FireRing:
+                        goodPercent += 0.8f / (float)items.Length;
+                        break;
+                    case ItemIndex.SlowOnHit:
+                        goodPercent += 0.35f / (float)items.Length;
+                        break;
+                    case ItemIndex.JumpBoost:
+                        goodPercent += 0.5f / (float)items.Length;
+                        break;
+                    case ItemIndex.ExecuteLowHealthElite:
+                        goodPercent += 0.95f / (float)items.Length;
+                        break;
+                    case ItemIndex.EnergizedOnEquipmentUse:
+                        goodPercent += 0.45f / (float)items.Length;
+                        break;
+                    case ItemIndex.SprintWisp:
+                        goodPercent += 0.75f / (float)items.Length;
+                        break;
+                    case ItemIndex.TPHealingNova:
+                        //no
+                        break;
+                    case ItemIndex.Thorns:
+                        goodPercent += 0.65f / (float)items.Length;
+                        break;
+                    case ItemIndex.BonusGoldPackOnKill:
+                        goodPercent += 0.4f / (float)items.Length;
+                        break;
+                    case ItemIndex.NovaOnLowHealth:
+                        goodPercent += 0.4f / (float)items.Length;
+                        break;
+                    case ItemIndex.Squid:
+                        squidCount++;
+                        break;
+                    case ItemIndex.DeathMark:
+                        goodPercent += 0.4f / (float)items.Length;
+                        break;
+                    case ItemIndex.Incubator:
+                        break;
+                    case ItemIndex.FireballsOnHit:
+                        goodPercent += 0.85f / (float)items.Length;
+                        break;
+                    case ItemIndex.BleedOnHitAndExplode:
+                        goodPercent += 1.0f / (float)items.Length;
+                        break;
+                    case ItemIndex.SiphonOnLowHealth:
+                        goodPercent += 0.45f / (float)items.Length;
+                        break;
+                    default:
+                        goodPercent += 0.8f / (float)items.Length;
+                        break;
+                }
+            }
+            if (squidCount != 0)
+            {
+                ShouldSpeak($"You got {squidCount} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Squid).nameToken)}s, nothing else matters");
+            }
+            else
+            {
+                List<string> quotes = new List<string>();
+                if (goodPercent > .95f)
+                {
+                    quotes.Add("It can't get any better than this");
+                    quotes.Add("Just like the simulations");
+                }
+                else if (goodPercent > .75f)
+                {
+                    quotes.Add("Hey... that's pretty good");
+                    quotes.Add("Not too shabby");
+                }
+                else if (goodPercent > .55f)
+                {
+                    quotes.Add("I'll allow it");
+                    quotes.Add("Could have been worse");
+                }
+                else if (goodPercent > .35f)
+                {
+                    quotes.Add("Gee... thanks");
+                    quotes.Add("This is why people don't do mountain shrines");
+                }
+                else
+                {
+                    quotes.Add("I expected nothing and I'm still dissapointed");
+                    quotes.Add("Wow, it's nothing");
+                    quotes.Add("My disappointment is immeasurable and my day is ruined");
+                    quotes.Add("This has been the worst trade deal in the history of trade deals, maybe ever");
+                }
+                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)]);
+            }
         }
         public void Chance(bool number1VictoryRoyale)
         {
@@ -159,6 +531,141 @@ namespace MoistureUpset
                 }
             }
         }
+        public void GenericShrine(ShrineType type)
+        {
+            List<string> quotes = new List<string>();
+            RoR2.Inventory inventory = RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory;
+            switch (type)
+            {
+                case ShrineType.blood:
+                    if (inventory.GetItemCount(ItemIndex.RegenOnKill) == 0 && inventory.GetItemCount(ItemIndex.Mushroom) == 0 && inventory.GetItemCount(ItemIndex.HealWhileSafe) == 0 && inventory.GetItemCount(ItemIndex.Medkit) == 0 && inventory.GetItemCount(ItemIndex.Tooth) == 0 && inventory.GetItemCount(ItemIndex.PersonalShield) < 5 && inventory.GetItemCount(ItemIndex.HealOnCrit) == 0 && inventory.GetItemCount(ItemIndex.Seed) == 0 && inventory.GetItemCount(ItemIndex.Plant) == 0 && inventory.GetItemCount(ItemIndex.Knurl) == 0 && inventory.GetItemCount(ItemIndex.ShieldOnly) == 0 && inventory.GetItemCount(ItemIndex.LunarDagger) == 0)
+                    {
+                        quotes.Add("I hope you have some plan to heal this off");
+                        bloodShrineTimer = 15f;
+                    }
+                    else
+                    {
+                        bloodShrineTimer = 7.5f;
+                    }
+                    break;
+                case ShrineType.mountain:
+                    activeMountainShrine = true;
+                    quotes.Add("Is there really any reason to not hit these?");
+                    quotes.Add($"I can't wait to get some extra {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.NovaOnHeal).nameToken)}s");
+                    quotes.Add("It's free real estate");
+                    break;
+                case ShrineType.healing:
+                    quotes.Add("People actually use these?");
+                    quotes.Add("Wow! This is garbage. You actually like this?");
+                    break;
+                case ShrineType.order:
+                    if (inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) > 0 || (inventory.GetItemCount(ItemIndex.Missile) != 0 && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) >= 0))
+                    {
+                        quotes.Add("This was so worth it");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) < 0)
+                    {
+                        quotes.Add("I hope you are ready to never launch another ATG missle");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.LunarTrinket) > 1)
+                    {
+                        quotes.Add("Here's hoping you find a lunar pool soon");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.BleedOnHit) > 7)
+                    {
+                        quotes.Add($"Do you really need this many {RoR2.Language.GetString("ITEM_BLEEDONHIT_NAME")}s?");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Hoof) != 0 || inventory.GetItemCount(ItemIndex.SprintBonus) != 0 || inventory.GetItemCount(ItemIndex.SprintOutOfCombat) != 0)
+                    {
+                        quotes.Add("Speeeeeeeeeeeed");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Mushroom) != 0)
+                    {
+                        quotes.Add("BUNGUS");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.RegenOnKill) != 0)
+                    {
+                        quotes.Add("Wow, I don't think you could have done worse on your white roll");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.ScrapWhite) != 0 || inventory.GetItemCount(ItemIndex.ScrapRed) != 0 || inventory.GetItemCount(ItemIndex.ScrapGreen) != 0 || inventory.GetItemCount(ItemIndex.ScrapYellow) != 0)
+                    {
+                        quotes.Add("At least now you just need a good printer or two");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.CritGlasses) > 10)
+                    {
+                        quotes.Add("Too much crit! Too much crit!");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Bear) != 0)
+                    {
+                        quotes.Add("You can now block attacks almost as hard as I get blocked on twitter");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.EquipmentMagazine) != 0 || inventory.GetItemCount(ItemIndex.AutoCastEquipment) != 0)
+                    {
+                        quotes.Add("Equipment Cooldown Status: None");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Feather) != 0)
+                    {
+                        quotes.Add("Where we're going, we don't need the floor");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.TPHealingNova) != 0)
+                    {
+                        quotes.Add($"Waow it's a {RoR2.Language.GetString("ITEM_TPHEALINGNOVA_NAME")} build guys!");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Phasing) != 0)
+                    {
+                        quotes.Add("When you get hit you have a chance to become permanently invisible");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Thorns) != 0 && inventory.GetEquipmentIndex() == EquipmentIndex.BurnNearby)
+                    {
+                        quotes.Add("Oh yeah, it's all coming together");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.ExplodeOnDeath) != 0)
+                    {
+                        quotes.Add("Wisp jar go boom");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.AlienHead) > 1 || inventory.GetItemCount(ItemIndex.KillEliteFrenzy) > 1)
+                    {
+                        quotes.Add("What is a cooldown?");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Behemoth) > 1)
+                    {
+                        quotes.Add("I don't know if you really needed more than one Behemoth");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.ExtraLife) > 1)
+                    {
+                        quotes.Add("At least you won't be able to lose for a while");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Plant) > 1)
+                    {
+                        quotes.Add("Deskplant Pog");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.ShinyPearl) > 1)
+                    {
+                        quotes.Add($"Holy crap he got the {RoR2.Language.GetString("ITEM_SHINYPEARL_NAME")}s");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.LunarDagger) > 1)
+                    {
+                        quotes.Add("Your health is no more");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.ShieldOnly) > 1)
+                    {
+                        quotes.Add("Become the shield");
+                    }
+
+
+                    if (quotes.Count == 0)
+                    {
+                        quotes.Add("Interesting choice");
+                        quotes.Add("It certainly makes the run more interesting");
+                    }
+                    break;
+                default:
+                    quotes.Add("");
+                    break;
+            }
+            if (quotes.Count != 0)
+                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)]);
+        }
         public void NotEnoughMoney()
         {
             if (idling)
@@ -171,11 +678,11 @@ namespace MoistureUpset
             }
         }
         public bool resetRun = false;
-        public void Items(Inventory inventory, ItemIndex index, int count, GameObject g)
+        public void Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g)
         {
             if (inventory.GetTotalItemCountOfTier(ItemTier.Tier3) == 0 && index == ItemIndex.Plant)
             {
-                ShouldSpeak($"I see that you have received {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} as your first red item, would you like me to end the run now? yes or no?");
+                ShouldSpeak($"I see that you have received {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} as your first red item, would you like me to end the run now? yes or no?");
                 resetRun = true;
             }
             else
@@ -236,7 +743,7 @@ namespace MoistureUpset
                         //frost relic
                         break;
                     case ItemIndex.GhostOnKill:
-                        ShouldSpeak($"At least it's not {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
+                        ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
                         break;
                     case ItemIndex.Mushroom:
                         ShouldSpeak("BUNGUS");
@@ -437,7 +944,7 @@ namespace MoistureUpset
                         //not used
                         break;
                     case ItemIndex.ExecuteLowHealthElite:
-                        if (Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(ItemIndex.ExecuteLowHealthElite) == 0)
+                        if (RoR2.Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(ItemIndex.ExecuteLowHealthElite) == 0)
                         {
                             ShouldSpeak("Finally");
                         }
@@ -593,140 +1100,155 @@ namespace MoistureUpset
                 }
             }
         }
-        public void PlayerDeath(GameObject g)
+        public void PlayerDeath(GameObject g, DamageType damageType)
         {
             try
             {
-                a.SetInteger("idle", -1);
-                a.Play("idle");
-                List<string> deathQuotes = new List<string> { "That really was your fault.", "If you think about it, you just suck.", "That's unfortunate." };
-                if (UnityEngine.Random.Range(0, 1000) == 0)
+                if (bonziActive)
                 {
-                    deathQuotes[2] = "That's unfortnite";
-                }
-                if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 1)
-                {
-                    deathQuotes.Add("You should really start carrying your own weight.");
-                    deathQuotes.Add("Just blame your teammates 4Head");
-                }
-                Inventory inventory = g.GetComponentInChildren<CharacterBody>().inventory;
-                if (inventory.GetItemCount(ItemIndex.ExtraLife) != 0)
-                {
-                    deathQuotes.Clear();
-                    if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 0)
+                    a.SetInteger("idle", -1);
+                    a.Play("idle");
+                    List<string> deathQuotes = new List<string> { "That really was your fault.", "If you think about it, you just suck.", "That's unfortunate." };
+                    if (UnityEngine.Random.Range(0, 1000) == 0)
                     {
-                        deathQuotes.Add("Wait don't leave yet!");
+                        deathQuotes[2] = "That's unfortnite";
                     }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 1)
-                    {
-                        deathQuotes.Add("You know, just because you have them, doesn't mean you have to use them...");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 2)
-                    {
-                        ShouldSpeak("T t t triple kill");
-                        return;
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 3)
-                    {
-                        deathQuotes.Add("Really just chugging these down at this point yeah?");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 4)
-                    {
-                        deathQuotes.Add("That's 5 deaths now, how are you this bad at the game?");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 5)
-                    {
-                        deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.ExtraLife).nameToken)}s. So thank you, for using them for me so I don't have to.");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 6)
-                    {
-                        deathQuotes.Add("So that was a bit of a hyperbole earlier. I don't actually think we should consume more of them, so if you could just stop that would be great.");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 7)
-                    {
-                        deathQuotes.Add("You know what? I give up, I hope you lose this run.");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 68)
-                    {
-                        deathQuotes.Add("nice.");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 419)
-                    {
-                        deathQuotes.Add("Blaze it");
-                    }
-                    else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
-                    {
-                        deathQuotes.Add($"{inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) + 1}");
-                    }
-                    ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
-                    return;
-                }
-                if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
-                {
-                    ShouldSpeak("good");
-                    return;
-                }
-                if (inventory.GetItemCount(ItemIndex.GhostOnKill) > 0)
-                {
-                    deathQuotes.Add($"{Language.GetString(ItemCatalog.GetItemDef(ItemIndex.GhostOnKill).nameToken)} really shouldn't be a red item.");
-                }
-                if (inventory.GetItemCount(ItemIndex.Plant) > 0)
-                {
-                    deathQuotes.Add($"{Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} really shouldn't be a red item.");
-                }
-                if (inventory.GetItemCount(ItemIndex.Clover) == 1)
-                {
-                    deathQuotes.Add($"Wow you died with a {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}? You really do suck at this game.");
-                }
-                else if (inventory.GetItemCount(ItemIndex.Clover) > 1)
-                {
-                    deathQuotes.Add($"Wow you died with {inventory.GetItemCount(ItemIndex.Clover)} {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You really do suck at this game.");
-                }
-                if (inventory.GetItemCount(ItemIndex.LunarDagger) != 0)
-                {
                     if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 1)
                     {
-                        deathQuotes.Add($"You know, when you pickup {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} you are just holding your teamates back.");
+                        deathQuotes.Add("You should really start carrying your own weight.");
+                        deathQuotes.Add("Just blame your teammates 4Head");
                     }
-                    deathQuotes.Add($"You probably would have gotten further without {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}.");
-                    deathQuotes.Add($"{Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} probably wasn't the move there chief...");
-                }
-                //Debug.Log($"--------{inventory.GetItemCount(ItemIndex.LunarBadLuck)}");
-                string theQuote;
-                int num = 0;
-                do
-                {
-                    theQuote = deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)];
-                    num++;
-                    if (num == 7)
+                    RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
+                    if (inventory.GetItemCount(ItemIndex.ExtraLife) != 0)
                     {
-                        break;
+                        deathQuotes.Clear();
+                        if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 0)
+                        {
+                            deathQuotes.Add("Wait don't leave yet!");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 1)
+                        {
+                            deathQuotes.Add("You know, just because you have them, doesn't mean you have to use them...");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 2)
+                        {
+                            ShouldSpeak("T t t triple kill");
+                            return;
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 3)
+                        {
+                            deathQuotes.Add("Really just chugging these down at this point yeah?");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 4)
+                        {
+                            deathQuotes.Add("That's 5 deaths now, how are you this bad at the game?");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 5)
+                        {
+                            deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.ExtraLife).nameToken)}s. So thank you, for using them for me so I don't have to.");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 6)
+                        {
+                            deathQuotes.Add("So that was a bit of a hyperbole earlier. I don't actually think we should consume more of them, so if you could just stop that would be great.");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 7)
+                        {
+                            deathQuotes.Add("You know what? I give up, I hope you lose this run.");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 68)
+                        {
+                            deathQuotes.Add("nice.");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 419)
+                        {
+                            deathQuotes.Add("Blaze it");
+                        }
+                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
+                        {
+                            deathQuotes.Add($"{inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) + 1}");
+                        }
+                        ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
+                        return;
                     }
-                } while (lastQuotes.Contains(theQuote));
-                lastQuotes.Add(theQuote);
-                if (lastQuotes.Count > 5)
-                {
-                    lastQuotes.RemoveAt(0);
+                    if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
+                    {
+                        ShouldSpeak("good");
+                        return;
+                    }
+                    if (bloodShrineTimer > 0)
+                    {
+                        deathQuotes.Add("Maybe next time bring some more healing before you use a blood shrine");
+                        deathQuotes.Add("Maybe next time bring some more healing before you use a blood shrine");
+                        deathQuotes.Add("Maybe next time bring some more healing before you use a blood shrine");
+                    }
+                    if (damageType == DamageType.FallDamage)
+                    {
+                        deathQuotes.Add($"Have you considered playing {RoR2.Language.GetString("LOADER_BODY_NAME")}?");
+                        deathQuotes.Add($"Maybe don't jump so far next time.");
+                        deathQuotes.Add($"Fall damage is fatal by the way");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.GhostOnKill) > 0)
+                    {
+                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.GhostOnKill).nameToken)} really shouldn't be a red item.");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Plant) > 0)
+                    {
+                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} really shouldn't be a red item.");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.Clover) == 1)
+                    {
+                        deathQuotes.Add($"Wow you died with a {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}? You really do suck at this game.");
+                    }
+                    else if (inventory.GetItemCount(ItemIndex.Clover) > 1)
+                    {
+                        deathQuotes.Add($"Wow you died with {inventory.GetItemCount(ItemIndex.Clover)} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You really do suck at this game.");
+                    }
+                    if (inventory.GetItemCount(ItemIndex.LunarDagger) != 0)
+                    {
+                        if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 1)
+                        {
+                            deathQuotes.Add($"You know, when you pickup {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} you are just holding your teamates back.");
+                        }
+                        deathQuotes.Add($"You probably would have gotten further without {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}.");
+                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} probably wasn't the move there chief...");
+                    }
+                    //Debug.Log($"--------{inventory.GetItemCount(ItemIndex.LunarBadLuck)}");
+                    string theQuote;
+                    int num = 0;
+                    do
+                    {
+                        theQuote = deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)];
+                        num++;
+                        if (num == 7)
+                        {
+                            break;
+                        }
+                    } while (lastQuotes.Contains(theQuote));
+                    lastQuotes.Add(theQuote);
+                    if (lastQuotes.Count > 5)
+                    {
+                        lastQuotes.RemoveAt(0);
+                    }
+                    ShouldSpeak(theQuote);
                 }
-                ShouldSpeak(theQuote);
             }
             catch (Exception e)
             {
                 DebugClass.Log(e);
             }
         }
-        public void AllyDeath(GameObject g)
+        public void AllyDeath(GameObject g, DamageType damageType)
         {
-            string allyName = g.GetComponent<CharacterBody>().GetUserName();
+            string allyName = g.GetComponent<RoR2.CharacterBody>().GetUserName();
             List<string> deathQuotes = new List<string> { $"That really was {allyName}'s fault.", $"{allyName} wants you to know that it's your fault" };
             if (UnityEngine.Random.Range(0, 100) == 0)
             {
                 deathQuotes.Add($"It's so sad that {allyName} died of ligma");
             }
-            Inventory inventory = g.GetComponentInChildren<CharacterBody>().inventory;
+            RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
             if (g.name.StartsWith("Commando"))
             {
-                deathQuotes.Add($"Why is {allyName} even using {Language.GetString(SurvivorCatalog.GetSurvivorDef(SurvivorIndex.Commando).displayNameToken)}???");
+                deathQuotes.Add($"Why is {allyName} even using {RoR2.Language.GetString(RoR2.SurvivorCatalog.GetSurvivorDef(SurvivorIndex.Commando).displayNameToken)}???");
             }
             else if (g.name.StartsWith("Engi"))
             {
@@ -734,26 +1256,38 @@ namespace MoistureUpset
                 {
                     deathQuotes.Add($"What a waste of a respawn");
                 }
-                if (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(ItemIndex.Plant) != 0 && inventory.GetItemCount(ItemIndex.Plant) == 0 && !(NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).gameObject.name.StartsWith("Engi"))
+                if (RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(ItemIndex.Plant) != 0 && inventory.GetItemCount(ItemIndex.Plant) == 0 && !(RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).gameObject.name.StartsWith("Engi"))
                 {
                     deathQuotes.Add($"{allyName} died because you stole their bungus");
                 }
             }
+            if (damageType == DamageType.FallDamage)
+            {
+                deathQuotes.Add($"Maybe {allyName} should play {RoR2.Language.GetString("LOADER_BODY_NAME")} instead.");
+                if ((RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).gameObject.name.StartsWith("Loader") && RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(ItemIndex.FallBoots) != 0)
+                {
+                    deathQuotes.Add($"Why do you even have a {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.FallBoots).nameToken)}? {allyName} really could have used it.");
+                }
+                else if (RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(ItemIndex.FallBoots) > 1 && inventory.GetItemCount(ItemIndex.FallBoots) == 0)
+                {
+                    deathQuotes.Add($"Do you really need {inventory.GetItemCount(ItemIndex.FallBoots)} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.FallBoots).nameToken)}s? {allyName} really could have used one of em.");
+                }
+            }
             if (inventory.GetItemCount(ItemIndex.Clover) == 1)
             {
-                deathQuotes.Add($"Wow, dying with a {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}? You should flame them");
+                deathQuotes.Add($"Wow, dying with a {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}? You should flame them");
             }
             else if (inventory.GetItemCount(ItemIndex.Clover) > 1)
             {
-                deathQuotes.Add($"Wow, dying with {inventory.GetItemCount(ItemIndex.Clover)} {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You should flame them");
+                deathQuotes.Add($"Wow, dying with {inventory.GetItemCount(ItemIndex.Clover)} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You should flame them");
             }
             if (inventory.GetItemCount(ItemIndex.Plant) != 0)
             {
-                deathQuotes.Add($"{allyName} probably died because of {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
+                deathQuotes.Add($"{allyName} probably died because of {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
             }
             if (inventory.GetItemCount(ItemIndex.LunarDagger) != 0)
             {
-                deathQuotes.Add($"Why would you even take {Language.GetString(ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}");
+                deathQuotes.Add($"Why would you even take {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}");
             }
 
 
@@ -875,9 +1409,61 @@ namespace MoistureUpset
         }
         void Update()
         {
-            idling = !textBox.activeSelf && !speaking;
-            if (firstTime && idling)
+            if (charPosition != null)
             {
+                if (Vector3.Distance(charPosition.position, new Vector3(2656,205,722)) < 35f)
+                {
+                    Activate();
+                    charPosition = null;
+                }
+                if (obj2 && obj2.transform.position == new Vector3(2656, 205, 722))
+                {
+                    if (Vector3.Distance(charPosition.position, obj2.transform.position) < 75f)
+                    {
+                        var c = GameObject.FindObjectOfType<MusicController>();
+                        c.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                        AkSoundEngine.PostEvent("BonziError", obj2);
+                        AkSoundEngine.ExecuteActionOnEvent(4159841934, AkActionOnEventType.AkActionOnEventType_Stop);
+                        AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
+                        Destroy(obj1);
+                        Destroy(obj3);
+                        Destroy(obj4);
+                        Destroy(obj5);
+                        Destroy(obj6);
+
+                        obj2.transform.position = charPosition.position;
+                    }
+                    else
+                    {
+                        float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
+                        if (num > 800)
+                        {
+                            num = 800;
+                        }
+                        Debug.Log($"--------{num}");
+                        AkSoundEngine.SetRTPCValue("DistanceToBonzi", num);
+                    }
+                }//this is poorly organized
+
+
+
+
+                if (obj1 && obj1.transform.position == new Vector3(1811, 351, 719))
+                {
+                    if (Vector3.Distance(charPosition.position, obj1.transform.position) < 250f)
+                    {
+                        AkSoundEngine.PostEvent("BonziStartup", obj1);
+                        obj1.transform.position = new Vector3(1811, 350, 719);
+                    }
+                }
+            }
+            idling = !textBox.activeSelf && !speaking;
+            if (firstTime && idling && bonziActive)
+            {
+                if (bloodShrineTimer > 0)
+                {
+                    bloodShrineTimer -= Time.deltaTime;
+                }
                 Vector2 temp = RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position);
                 screenPos = new Vector2(temp.x / (float)Screen.width, temp.y / (float)Screen.height);
                 if (a.GetCurrentAnimatorClipInfo(0).Length != 0)
@@ -947,14 +1533,14 @@ namespace MoistureUpset
             }
         }
         public bool oncePerStage = true;
-        public void Damage(GameObject victim, DamageInfo info)
+        public void Damage(GameObject victim, RoR2.DamageInfo info)
         {
-            var playerBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-            var attackerBody = info.attacker.GetComponentInChildren<CharacterBody>();
-            var victimBody = victim.GetComponentInChildren<CharacterBody>();
-            if (attackerBody == playerBody)
+            var playerBody = RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+            var attackerBody = info.attacker.GetComponentInChildren<RoR2.CharacterBody>();
+            var victimBody = victim.GetComponentInChildren<RoR2.CharacterBody>();
+            if (victim.GetComponentInChildren<RoR2.HealthComponent>().health <= 0)
             {
-                if (victim.GetComponentInChildren<HealthComponent>().health <= 0)
+                if (attackerBody == playerBody)
                 {
                     if (victimBody.isBoss)
                     {
@@ -983,7 +1569,7 @@ namespace MoistureUpset
                     }
                     else if (victimBody.isElite)
                     {
-                        if (UnityEngine.Random.Range(0, 100) == 0)
+                        if (UnityEngine.Random.Range(0, 75) == 0)
                         {
                             switch (victimBody.baseNameToken)
                             {
@@ -1087,6 +1673,13 @@ namespace MoistureUpset
                 }
             }
         }
+        public void FallDamage(GameObject victim, RoR2.DamageInfo info)
+        {
+            if (victim.GetComponentInChildren<RoR2.HealthComponent>().health <= 0)
+            {
+
+            }
+        }
         float timer = 20f;
         private void IdleAnimation()
         {
@@ -1099,7 +1692,7 @@ namespace MoistureUpset
                     //timer = 5;
                     do
                     {
-                        idlenum = UnityEngine.Random.Range(0, 14);
+                        idlenum = UnityEngine.Random.Range(0, 15);
                     } while (lastIdle.Contains(idlenum));
                     lastIdle.Add(idlenum);
                     if (lastIdle.Count == 4)
@@ -1110,7 +1703,7 @@ namespace MoistureUpset
                     {
                         if (UnityEngine.Random.Range(0, 150) == 0)
                         {
-                            StartCoroutine(Speak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!"));
+                            ShouldSpeak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!");
                             idlenum = -1;
                         }
                     }
@@ -1118,13 +1711,16 @@ namespace MoistureUpset
                     switch (idlenum)
                     {
                         case 11:
-                            StartCoroutine(Speak("Did you know? Me neither..."));
+                            ShouldSpeak("Did you know? Me neither...");
                             break;
                         case 12:
-                            StartCoroutine(Speak("We live in a society"));
+                            ShouldSpeak("We live in a society");
                             break;
                         case 13:
-                            StartCoroutine(Speak("Bottom Text"));
+                            ShouldSpeak("Bottom Text");
+                            break;
+                        case 14:
+                            ShouldSpeak("Can I ask?........... Thanks that's all.");
                             break;
                         default:
                             break;
@@ -1220,7 +1816,7 @@ namespace MoistureUpset
             }
             if (Input.GetKeyDown(KeyCode.M))
             {
-                StartCoroutine(Speak("This is a test to see where my textbox will be."));
+                ShouldSpeak("This is a test to see where my textbox will be.");
             }
         }
         public static void GoTo(float x, float y)
@@ -1231,9 +1827,21 @@ namespace MoistureUpset
         {
             buddy.dest = pos;
         }
+        public void Activate()
+        {
+            foundMe = true;
+            firstTime = false;
+            bonziActive = true;
+            Setup();
+        }
+        public void Deactivate()
+        {
+            bonziActive = false;
+            a.Play("leave");
+        }
         public void Setup()
         {
-            if (foundMe && !firstTime)
+            if (foundMe && !firstTime && bonziActive)
             {
                 StartCoroutine(StartAnimation());
             }
@@ -1249,20 +1857,20 @@ namespace MoistureUpset
             switch (UnityEngine.Random.Range(0, 3))
             {
                 case 0:
-                    StartCoroutine(Speak($"Hey {username}, good to see you again!"));
+                    ShouldSpeak($"Hey {username}, good to see you again!");
                     break;
                 case 1:
                     if (UnityEngine.Random.Range(0, 10000) == 0)
                     {
-                        StartCoroutine(Speak($"Welcome back {Environment.UserName}!"));
+                        ShouldSpeak($"Welcome back {Environment.UserName}!");
                     }
                     else
                     {
-                        StartCoroutine(Speak($"Welcome back {username}!"));
+                        ShouldSpeak($"Welcome back {username}!");
                     }
                     break;
                 case 2:
-                    StartCoroutine(Speak($"The weather is nice out today, isn't it {username}."));
+                    ShouldSpeak($"The weather is nice out today, isn't it {username}.");
                     break;
                 default:
                     break;
@@ -1280,8 +1888,11 @@ namespace MoistureUpset
         }
         public IEnumerator ShouldSpeak(string whatToSay, bool bigma)
         {
-            yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
-            StartCoroutine(Speak(whatToSay));
+            if (bonziActive)
+            {
+                yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
+                StartCoroutine(Speak(whatToSay));
+            }
         }
         public IEnumerator Speak(string whatToSay)
         {
