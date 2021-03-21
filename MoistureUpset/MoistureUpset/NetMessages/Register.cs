@@ -20,6 +20,8 @@ namespace MoistureUpset.NetMessages
             NetworkingAPI.RegisterMessageType<SyncItems>();
             NetworkingAPI.RegisterMessageType<SyncSuicide>();
             NetworkingAPI.RegisterMessageType<SyncChance>();
+            NetworkingAPI.RegisterMessageType<SyncShrine>();
+            NetworkingAPI.RegisterMessageType<SyncBroke>();
         }
     }
 }

@@ -48,18 +48,6 @@ namespace MoistureUpset
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightmap", null);
                 }
-                //try
-                //{
-                //    foreach (var item in meshes[0].sharedMaterials[i].GetTexturePropertyNames())
-                //    {
-                //        Debug.Log($"---------{item}---------------{meshes[0].sharedMaterials[i].GetTexture(item)}");
-                //    }
-                //    Debug.Log($"------------------------{meshes[0].sharedMaterials[i]}");
-                //}
-                //catch (Exception e)
-                //{
-                //    Debug.Log(e);
-                //}
             }
             if (replaceothers)
             {

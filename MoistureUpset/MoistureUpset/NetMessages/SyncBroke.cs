@@ -9,29 +9,22 @@ using UnityEngine.Networking;
 
 namespace MoistureUpset.NetMessages
 {
-    public class SyncChance : INetMessage
+    public class SyncBroke : INetMessage
     {
         NetworkInstanceId netId;
-        bool succ;
-        string sound;
-
-        public SyncChance()
+        public SyncBroke()
         {
 
         }
 
-        public SyncChance(NetworkInstanceId netId, bool succ, string sound)
+        public SyncBroke(NetworkInstanceId netId)
         {
             this.netId = netId;
-            this.succ = succ;
-            this.sound = sound;
         }
 
         public void Deserialize(NetworkReader reader)
         {
             netId = reader.ReadNetworkId();
-            succ = reader.ReadBoolean();
-            sound = reader.ReadString();
         }
 
         public void OnReceived()
@@ -41,11 +34,7 @@ namespace MoistureUpset.NetMessages
             {
                 if (g.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
                 {
-                    BonziBuddy.buddy.Chance(succ);
-                }
-                if (BigJank.getOptionValue("Shrine Changes") == 1)
-                {
-                    AkSoundEngine.PostEvent(sound, g);
+                    BonziBuddy.buddy.NotEnoughMoney();
                 }
             }
         }
@@ -53,8 +42,6 @@ namespace MoistureUpset.NetMessages
         public void Serialize(NetworkWriter writer)
         {
             writer.Write(netId);
-            writer.Write(succ);
-            writer.Write(sound);
         }
     }
 }
