@@ -607,19 +607,6 @@ namespace MoistureUpset
         }
         private static void Shrines()
         {
-            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
-            {
-                float yes = self.GetFieldValue<int>("successfulPurchaseCount");
-                orig(self, activator);
-                if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
-                {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
-                }
-                else
-                {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
-                }
-            };
         }
         private static void Names()
         {

@@ -178,6 +178,7 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                brother = 0;
                 var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
                 if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
                 {
@@ -213,7 +214,7 @@ namespace MoistureUpset
                 if (BigJank.getOptionValue("Sans") == 1)
                     EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
                 StopBossMusic(new UInt32[] { 311764514, 405315856, 829504566, 1557982612, 4106775434 });
-                StopBossMusic(new UInt32[] { 4109509168, 4059176314, 4075953896, 4159841934, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 454706293, 541788247 });
+                StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 454706293, 541788247 });
                 orig(oldS, newS);
                 try
                 {
@@ -318,7 +319,7 @@ namespace MoistureUpset
                 try
                 {
                     StopBossMusic(new UInt32[] { 311764514, 405315856, 829504566, 1557982612, 4106775434 });
-                    StopBossMusic(new UInt32[] { 4109509168, 4059176314, 4075953896, 4159841934, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 1214003200, 541788247 });
+                    StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 1214003200, 541788247 });
                     var c = GameObject.FindObjectOfType<Transform>();
                     if (BigJank.getOptionValue("Imposter") == 1)
                     {
@@ -451,20 +452,20 @@ namespace MoistureUpset
                 AkSoundEngine.ExecuteActionOnEvent(item, AkActionOnEventType.AkActionOnEventType_Stop);
             }
         }
+            static int brother = 0;
         public static void BossMusicAndFanFare()
         {
-            int brother = 0;
             On.EntityStates.Missions.BrotherEncounter.PreEncounter.OnEnter += (orig, self) =>
             {
                 orig(self);
                 if ((BigJank.getOptionValue("Thanos") != 1))
                     return;
-                StopBossMusic(new UInt32[] { 4109509168, 4059176314, 4075953896, 4159841934, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
+                StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                 var c = GameObject.FindObjectOfType<MusicController>();
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref c, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                AkSoundEngine.PostEvent("Thanos11", mainBody.gameObject);
+                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
@@ -478,7 +479,7 @@ namespace MoistureUpset
                     bool resetThanos = true;
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     bool stop = false;
-                    StopBossMusic(new UInt32[] { 4059176314, 4075953896, 4159841934, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
+                    StopBossMusic(new UInt32[] { 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                     if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (BigJank.getOptionValue("Sans") == 1))
                     {
                         AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
@@ -523,14 +524,14 @@ namespace MoistureUpset
                                 case 1:
                                     break;
                                 case 2:
-                                    AkSoundEngine.ExecuteActionOnEvent(4109509168, AkActionOnEventType.AkActionOnEventType_Stop);
-                                    AkSoundEngine.PostEvent("Thanos22", mainBody.gameObject);
+                                    AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);
                                     break;
                                 case 3:
-                                    AkSoundEngine.PostEvent("Thanos33", mainBody.gameObject);
+                                    AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);
                                     break;
                                 case 4:
-                                    AkSoundEngine.PostEvent("Thanos44", mainBody.gameObject);
+                                    AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);
                                     break;
                                 default:
                                     break;
@@ -581,7 +582,7 @@ namespace MoistureUpset
                     if (resetThanos)
                     {
                         brother = 0;
-                        AkSoundEngine.ExecuteActionOnEvent(4109509168, AkActionOnEventType.AkActionOnEventType_Stop);
+                        AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
                     }
                     try
                     {

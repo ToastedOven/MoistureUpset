@@ -11,31 +11,41 @@ namespace MoistureUpset.NetMessages
 {
     public class SyncMountain : INetMessage
     {
-        string items;
+        PickupIndex item;
+        Int32 count;
+        List<PickupIndex> pickups = new List<PickupIndex>();
 
         public SyncMountain()
         {
 
         }
 
-        public SyncMountain(string items)
+        public SyncMountain(PickupIndex item, int count)
         {
-            this.items = items;
+            this.item = item;
+            this.count = count;
         }
 
         public void Deserialize(NetworkReader reader)
         {
-            items = reader.ReadString();
+            item = reader.ReadPickupIndex();
+            count = reader.ReadInt32();
         }
 
         public void OnReceived()
         {
-            BonziBuddy.buddy.Mountain(items.Split(' '));
+            pickups.Add(item);
+            if (pickups.Count == count)
+            {
+                BonziBuddy.buddy.Mountain(pickups);
+                pickups.Clear();
+            }
         }
 
         public void Serialize(NetworkWriter writer)
         {
-            writer.Write(items);
+            writer.Write(item);
+            writer.Write(count);
         }
     }
 }

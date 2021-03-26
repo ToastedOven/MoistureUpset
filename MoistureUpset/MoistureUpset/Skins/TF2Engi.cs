@@ -74,7 +74,7 @@ namespace MoistureUpset.Skins
         {
             orig();
 
-            var survivorDef = SurvivorCatalog.GetSurvivorDef(SurvivorIndex.Engi);
+            var survivorDef = RoR2Content.Survivors.Engi;
             var bodyPrefab = survivorDef.bodyPrefab;
 
             var engiTurretBodyPrefab = BodyCatalog.GetBodyPrefab(36);

@@ -18,8 +18,8 @@ namespace MoistureUpset
     {
         void FixedUpdate()
         {
-            Debug.Log($"-----------{transform.rotation}");
-            Debug.Log($"-----{transform.localEulerAngles}");
+            //Debug.Log($"-----------{transform.rotation}");
+            //Debug.Log($"-----{transform.localEulerAngles}");
         }
     }
 }

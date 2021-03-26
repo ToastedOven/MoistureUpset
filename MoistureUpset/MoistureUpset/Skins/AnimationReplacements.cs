@@ -25,15 +25,7 @@ namespace MoistureUpset.Skins
         public static void RunAll()
         {
             EnemyReplacements.LoadResource("moisture_animationreplacements");
-            ChangeAnims(SurvivorIndex.Croco, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/acrid.prefab");
-            ChangeAnims(SurvivorIndex.Mage, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/artificer.prefab");
-            ChangeAnims(SurvivorIndex.Captain, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/captain.prefab");
-            ChangeAnims(SurvivorIndex.Engi, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/engi.prefab");
-            ChangeAnims(SurvivorIndex.Loader, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/loader.prefab");
-            ChangeAnims(SurvivorIndex.Merc, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/merc.prefab");
-            ChangeAnims(SurvivorIndex.Toolbot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/mult.prefab");
-            ChangeAnims(SurvivorIndex.Treebot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/rex.prefab");
-            ChangeAnims(SurvivorIndex.Commando, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/commando.prefab");
+            ChangeAnims();
             On.RoR2.UI.HUD.Awake += (orig, self) =>
             {
                 orig(self);
@@ -44,9 +36,9 @@ namespace MoistureUpset.Skins
                 GameObject g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/emotewheel/emotewheel.prefab"));
                 foreach (var item in g.GetComponentsInChildren<TextMeshProUGUI>())
                 {
-                    item.font = self.mainContainer.transform.Find("MainUIArea").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().font;
-                    item.fontMaterial = self.mainContainer.transform.Find("MainUIArea").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontMaterial;
-                    item.fontSharedMaterial = self.mainContainer.transform.Find("MainUIArea").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontSharedMaterial;
+                    item.font = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().font;
+                    item.fontMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontMaterial;
+                    item.fontSharedMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontSharedMaterial;
                 }
                 g.transform.SetParent(self.mainContainer.transform);
                 g.transform.localPosition = new Vector3(0, 0, 0);
@@ -65,27 +57,25 @@ namespace MoistureUpset.Skins
                 }
             };
         }
-        public static void ChangeAnims(SurvivorIndex index, string resource)
+        public static bool setup = false;
+        public static void ChangeAnims(/*SurvivorDef index, string resource*/)
         {
             On.RoR2.SurvivorCatalog.Init += (orig) =>
             {
                 orig();
-                var survivorDef = SurvivorCatalog.GetSurvivorDef(index);
-                var bodyPrefab = survivorDef.bodyPrefab;
-                GameObject animcontroller = Resources.Load<GameObject>(resource);
-                animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
-                animcontroller.transform.localPosition = Vector3.zero;
-                animcontroller.transform.localEulerAngles = Vector3.zero;
-                animcontroller.transform.localScale = Vector3.one;
-                SkinnedMeshRenderer smr1 = animcontroller.GetComponentInChildren<SkinnedMeshRenderer>();
-                SkinnedMeshRenderer smr2 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>();
-                var test = animcontroller.AddComponent<BoneMapper>();
-                test.smr1 = smr1;
-                test.smr2 = smr2;
-                test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
-                test.a2 = animcontroller.GetComponentInChildren<Animator>();
-                test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
-                test.model = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+                if (!setup)
+                {
+                    setup = true;
+                    ApplyAnimationStuff(RoR2Content.Survivors.Croco, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/acrid.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Mage, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/artificer.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Captain, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/captain.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Engi, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/engi.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Loader, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/loader.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Merc, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/merc.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Toolbot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/mult.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Treebot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/rex.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Commando, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/commando.prefab");
+                }
 
                 //bodyPrefab = survivorDef.displayPrefab;
                 //animcontroller = Resources.Load<GameObject>(resource);
@@ -101,6 +91,25 @@ namespace MoistureUpset.Skins
                 //test.a2 = animcontroller.GetComponentInChildren<Animator>();
                 //test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
             };
+        }
+        private static void ApplyAnimationStuff(SurvivorDef index, string resource)
+        {
+            var survivorDef = index;
+            var bodyPrefab = survivorDef.bodyPrefab;
+            GameObject animcontroller = Resources.Load<GameObject>(resource);
+            animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
+            animcontroller.transform.localPosition = Vector3.zero;
+            animcontroller.transform.localEulerAngles = Vector3.zero;
+            animcontroller.transform.localScale = Vector3.one;
+            SkinnedMeshRenderer smr1 = animcontroller.GetComponentInChildren<SkinnedMeshRenderer>();
+            SkinnedMeshRenderer smr2 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>();
+            var test = animcontroller.AddComponent<BoneMapper>();
+            test.smr1 = smr1;
+            test.smr2 = smr2;
+            test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
+            test.a2 = animcontroller.GetComponentInChildren<Animator>();
+            test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
+            test.model = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
         }
     }
     public class BoneMapper : MonoBehaviour

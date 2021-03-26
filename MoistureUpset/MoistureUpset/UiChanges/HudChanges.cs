@@ -36,7 +36,7 @@ namespace MoistureUpset
         {
             orig(self);
 
-            GameObject EXPBar = self.mainContainer.transform.Find("MainUIArea").Find("BottomLeftCluster").Find("BarRoots").Find("LevelDisplayCluster").Find("ExpBarRoot").Find("ShrunkenRoot").gameObject;
+            GameObject EXPBar = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("BarRoots").Find("LevelDisplayCluster").Find("ExpBarRoot").Find("ShrunkenRoot").gameObject;
 
             var XPTest = Resources.Load<GameObject>("@MoistureUpset_Resources_xpbar:assets/minecraft_xp/xpbarholder.prefab");
 
@@ -138,7 +138,6 @@ namespace MoistureUpset
                             item.text = "";
                         }
                     }
-
                     g = new GameObject();
                     //g.tag = "gamepass";
                     g.transform.parent = self.mainContainer.transform;
@@ -148,8 +147,7 @@ namespace MoistureUpset
                     image.preserveAspect = true;
                     g.transform.localScale = new Vector3(3, 3, 3);
 
-
-                    context = self.mainContainer.transform.Find("MainUIArea").Find("RightCluster").Find("ContextNotification").Find("ContextDisplay").gameObject;
+                    context = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("RightCluster").Find("ContextNotification").Find("ContextDisplay").gameObject;
                 };
 
                 On.RoR2.PurchaseInteraction.GetContextString += (orig, self, i) =>
