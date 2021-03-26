@@ -12,7 +12,7 @@ namespace MoistureUpset.NetMessages
     public class SyncItems : INetMessage
     {
         NetworkInstanceId netId;
-        ItemIndex index;
+        PickupIndex index;
         Int32 count;
 
         public SyncItems()
@@ -20,7 +20,7 @@ namespace MoistureUpset.NetMessages
 
         }
 
-        public SyncItems(NetworkInstanceId netId, ItemIndex index, int count)
+        public SyncItems(NetworkInstanceId netId, PickupIndex index, int count)
         {
             this.netId = netId;
             this.index = index;
@@ -32,7 +32,7 @@ namespace MoistureUpset.NetMessages
             //DebugClass.Log($"POSITION: {reader.Position}, SIZE: {reader.Length}");
 
             netId = reader.ReadNetworkId();
-            index = reader.ReadItemIndex();
+            index = reader.ReadPickupIndex();
             count = reader.ReadInt32();
         }
 

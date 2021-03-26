@@ -1,4 +1,5 @@
-﻿using MoistureUpset.NetMessages;
+﻿using HG;
+using MoistureUpset.NetMessages;
 using R2API;
 using R2API.Networking.Interfaces;
 using R2API.Utils;
@@ -24,14 +25,12 @@ namespace MoistureUpset
         public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
         public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
         public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
-        protected override VanillaSpriteProvider SpriteProvider { get; } = new VanillaSpriteProvider("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/gifs/idle/frame_000_delay-0.03s.gif");
+        protected override VanillaSpriteProvider SpriteProvider { get; } = new VanillaSpriteProvider("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
         public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
         {
             orig(self);
-            Debug.Log($"--------checking it");
             if (BonziBuddy.buddy.foundMe)
             {
-                Debug.Log($"--------===============------yeah");
                 base.Grant();
             }
         }
@@ -83,12 +82,12 @@ namespace MoistureUpset
         bool idling = false;
         int failCount = 0;
         bool activeMountainShrine = false;
-        int mountainShrineItems = 0;
-        StringBuilder mountainItems = new StringBuilder();
+        int mountainShrineItems = 0, mountainShrineCount = 0;
         float bloodShrineTimer = 0;
         Transform charPosition = null;
         GameObject obj1, obj2, obj3, obj4, obj5, obj6;
         GameObject preloaded = Resources.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
+        public float dontSpeak = 0;
 
         bool bonziActive = false;
         void Start()
@@ -104,6 +103,7 @@ namespace MoistureUpset
             text.gameObject.transform.localPosition = new Vector3(0.06f, 0, -.1f);
             dest = new Vector2(.5f, .5f);
             textBox.SetActive(false);
+            preloaded.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/frames.png");
             Hooks();
         }
         private void Hooks()
@@ -111,32 +111,49 @@ namespace MoistureUpset
             On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
-                charPosition = RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.transform;
+                //Main Camera(Clone)
+                //MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID
+                if (!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))//achievement not unlocked
+                {
+                    Chat.AddMessage($"<style=cWorldEvent>You hear a rumbling coming from the teleporter...</style>");
+                    foreach (var item in Camera.allCameras)
+                    {
+                        var effect = item.gameObject.AddComponent<GlitchEffect>();
+                        effect.Shader = Resources.Load<Shader>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/GlitchShader.shader");
+                        effect.displacementMap = Resources.Load<Texture2D>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/test.png");
+                        effect.intensity = 0;
+                        effect.flipIntensity = 0;
+                        effect.colorIntensity = 0;
+                    }
 
-                obj1 = preloaded;
-                obj1 = Instantiate(obj1);
-                obj1.transform.position = new Vector3(1811, 351, 719);
 
-                obj3 = preloaded;
-                obj3 = Instantiate(obj3);
-                obj3.transform.position = new Vector3(1958, 340, 722);
+                    charPosition = RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.transform;
 
-                obj4 = preloaded;
-                obj4 = Instantiate(obj4);
-                obj4.transform.position = new Vector3(2170, 336, 728);
+                    obj1 = preloaded;
+                    obj1 = Instantiate(obj1);
+                    obj1.transform.position = new Vector3(1850, 351, 719);
 
-                obj5 = preloaded;
-                obj5 = Instantiate(obj5);
-                obj5.transform.position = new Vector3(2317, 337, 726);
+                    obj3 = preloaded;
+                    obj3 = Instantiate(obj3);
+                    obj3.transform.position = new Vector3(1958, 340, 722);
 
-                obj6 = preloaded;
-                obj6 = Instantiate(obj6);
-                obj6.transform.position = new Vector3(2432, 248, 724);
+                    obj4 = preloaded;
+                    obj4 = Instantiate(obj4);
+                    obj4.transform.position = new Vector3(2170, 336, 728);
 
-                obj2 = new GameObject();
-                obj2 = Instantiate(obj2);
-                obj2.transform.position = new Vector3(2656, 205, 722);
-                AkSoundEngine.PostEvent("BonziGlitches", obj2);
+                    obj5 = preloaded;
+                    obj5 = Instantiate(obj5);
+                    obj5.transform.position = new Vector3(2317, 337, 726);
+
+                    obj6 = preloaded;
+                    obj6 = Instantiate(obj6);
+                    obj6.transform.position = new Vector3(2432, 248, 724);
+
+                    obj2 = new GameObject();
+                    obj2 = Instantiate(obj2);
+                    obj2.transform.position = new Vector3(2656, 205, 722);
+                    AkSoundEngine.PostEvent("BonziGlitches", obj2);
+                }
             };
             On.RoR2.UI.MainMenu.MainMenuController.SetDesiredMenuScreen += (orig, self, newscreen) =>
             {
@@ -162,6 +179,7 @@ namespace MoistureUpset
             {
                 try
                 {
+                    AkSoundEngine.SetRTPCValue("DistanceToBonzi", 800);
                     resetRun = false;
                     oncePerStage = true;
                     activeMountainShrine = false;
@@ -171,7 +189,10 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            buddy.Setup();
+                            if (BigJank.getOptionValue("Top Secret Setting") == 1 && LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID") && !bonziActive)
+                            {
+                                Activate();
+                            }
                             GoTo(MAINMENU);
                             break;
                         case "lobby":
@@ -202,26 +223,19 @@ namespace MoistureUpset
                 }
                 orig(oldS, newS);
             };
-            On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
+            On.RoR2.Inventory.GiveItem += (On.RoR2.Inventory.orig_GiveItem orig, RoR2.Inventory self, ItemIndex index, int count) =>
             {
-                if (!self.CanBeAffordedByInteractor(i))
-                {
-                    new SyncBroke(i.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId).Send(R2API.Networking.NetworkDestination.Clients);
-                }
-                orig(self, i);
-            };
-            On.RoR2.Inventory.GiveItem += (orig, self, index, count) =>
-            {
-                try
-                {
-                    if (self.gameObject && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>() && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject)
-                    {
-                        new SyncItems(self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject.GetComponent<NetworkIdentity>().netId, index, count).Send(R2API.Networking.NetworkDestination.Clients);
-                    }
-                }
-                catch (Exception)
-                {
-                }
+                //try
+                //{
+                //    if (self.gameObject && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>() && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject)
+                //    {
+                //        new SyncItems(self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject.GetComponent<NetworkIdentity>().netId, index, count).Send(R2API.Networking.NetworkDestination.Clients);
+                //    }
+                //}
+                //catch (Exception)
+                //{
+                //}
+                DebugClass.Log($"----------{index}");
                 orig(self, index, count);
             };
             On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
@@ -279,8 +293,8 @@ namespace MoistureUpset
             };
             On.RoR2.ShrineRestackBehavior.AddShrineStack += (orig, self, activator) =>
             {
-                orig(self, activator);
                 new SyncShrine(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, ShrineType.order).Send(R2API.Networking.NetworkDestination.Clients);
+                orig(self, activator);
             };
             On.RoR2.CharacterMaster.OnBodyDamaged += (orig, self, report) =>
             {
@@ -317,9 +331,11 @@ namespace MoistureUpset
                 {
                     mountainShrineItems = 1 + self.bonusRewardCount;
                     mountainShrineItems *= RoR2.Run.instance.participatingPlayerCount;
+                    mountainShrineCount = mountainShrineItems;
                 }
                 orig(self);
                 mountainShrineItems = 0;
+                mountainShrineCount = 0;
                 activeMountainShrine = false;
             };
             On.RoR2.PickupDropletController.CreatePickupDroplet += (orig, index, pos, vector) =>
@@ -327,136 +343,128 @@ namespace MoistureUpset
                 orig(index, pos, vector);
                 if (mountainShrineItems > 0)
                 {
-                    mountainItems.Append($"{(int)(index.itemIndex)} ");
                     mountainShrineItems--;
                     if (mountainShrineItems == 0)
                     {
-                        mountainItems.Remove(mountainItems.Length - 1, 1);
-                        new SyncMountain(mountainItems.ToString()).Send(R2API.Networking.NetworkDestination.Clients);
-                        mountainItems.Clear();
+                        new SyncMountain(index, mountainShrineCount).Send(R2API.Networking.NetworkDestination.Clients);
                     }
                 }
             };
         }
-        public void Mountain(string[] stringItems)
+        public void Mountain(List<PickupIndex> pickups)
         {
             int squidCount = 0;
-            ItemIndex[] items = new ItemIndex[stringItems.Length];
-            for (int i = 0; i < items.Length; i++)
-            {
-                items[i] = (ItemIndex)(int.Parse(stringItems[i]));
-            }
             float goodPercent = 0;
-            foreach (var item in items)
+            foreach (var item in pickups)
             {
-                switch (item)
+                switch (PickupCatalog.GetPickupDef(item).nameToken)
                 {
-                    case ItemIndex.Missile:
-                        goodPercent += 1.0f / (float)items.Length;
+                    case "ITEM_MISSILE_NAME":
+                        goodPercent += 1.0f / (float)pickups.Count;
                         break;
-                    case ItemIndex.ExplodeOnDeath:
-                        goodPercent += 0.7f / (float)items.Length;
+                    case "ITEM_EXPLODEONDEATH_NAME":
+                        goodPercent += 0.7f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Feather:
-                        goodPercent += 0.7f / (float)items.Length;
+                    case "ITEM_FEATHER_NAME":
+                        goodPercent += 0.7f / (float)pickups.Count;
                         break;
-                    case ItemIndex.ChainLightning:
-                        goodPercent += 0.9f / (float)items.Length;
+                    case "ITEM_CHAINLIGHTNING_NAME":
+                        goodPercent += 0.9f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Seed:
-                        goodPercent += 0.6f / (float)items.Length;
+                    case "ITEM_SEED_NAME":
+                        goodPercent += 0.6f / (float)pickups.Count;
                         break;
-                    case ItemIndex.AttackSpeedOnCrit:
-                        goodPercent += 0.85f / (float)items.Length;
+                    case "ITEM_ATTACKSPEEDONCRIT_NAME":
+                        goodPercent += 0.85f / (float)pickups.Count;
                         break;
-                    case ItemIndex.SprintOutOfCombat:
-                        goodPercent += 0.5f / (float)items.Length;
+                    case "ITEM_SPRINTOUTOFCOMBAT_NAME":
+                        goodPercent += 0.5f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Phasing:
-                        goodPercent += 0.35f / (float)items.Length;
+                    case "ITEM_PHASING_NAME":
+                        goodPercent += 0.35f / (float)pickups.Count;
                         break;
-                    case ItemIndex.HealOnCrit:
-                        goodPercent += 0.85f / (float)items.Length;
+                    case "ITEM_HEALONCRIT_NAME":
+                        goodPercent += 0.85f / (float)pickups.Count;
                         break;
-                    case ItemIndex.EquipmentMagazine:
-                        goodPercent += 0.9f / (float)items.Length;
+                    case "ITEM_EQUIPMENTMAGAZINE_NAME":
+                        goodPercent += 0.9f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Infusion:
-                        goodPercent += 0.3f / (float)items.Length;
+                    case "ITEM_INFUSION_NAME":
+                        goodPercent += 0.3f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Bandolier:
-                        goodPercent += 0.1f / (float)items.Length;
+                    case "ITEM_BANDOLIER_NAME":
+                        goodPercent += 0.1f / (float)pickups.Count;
                         break;
-                    case ItemIndex.WarCryOnMultiKill:
-                        goodPercent += 0.5f / (float)items.Length;
+                    case "ITEM_WARCRYONMULTIKILL_NAME":
+                        goodPercent += 0.5f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Knurl:
-                        goodPercent += 0.8f / (float)items.Length;
+                    case "ITEM_KNURL_NAME":
+                        goodPercent += 0.8f / (float)pickups.Count;
                         break;
-                    case ItemIndex.BeetleGland:
-                        goodPercent += 0.5f / (float)items.Length;
+                    case "ITEM_BEETLEGLAND_NAME":
+                        goodPercent += 0.5f / (float)pickups.Count;
                         break;
-                    case ItemIndex.SprintArmor:
-                        goodPercent += 0.25f / (float)items.Length;
+                    case "ITEM_SPRINTARMOR_NAME":
+                        goodPercent += 0.25f / (float)pickups.Count;
                         break;
-                    case ItemIndex.IceRing:
-                        goodPercent += 0.85f / (float)items.Length;
+                    case "ITEM_ICERING_NAME":
+                        goodPercent += 0.85f / (float)pickups.Count;
                         break;
-                    case ItemIndex.FireRing:
-                        goodPercent += 0.8f / (float)items.Length;
+                    case "ITEM_FIRERING_NAME":
+                        goodPercent += 0.8f / (float)pickups.Count;
                         break;
-                    case ItemIndex.SlowOnHit:
-                        goodPercent += 0.35f / (float)items.Length;
+                    case "ITEM_SLOWONHIT_NAME":
+                        goodPercent += 0.35f / (float)pickups.Count;
                         break;
-                    case ItemIndex.JumpBoost:
-                        goodPercent += 0.5f / (float)items.Length;
+                    case "ITEM_JUMPBOOST_NAME":
+                        goodPercent += 0.5f / (float)pickups.Count;
                         break;
-                    case ItemIndex.ExecuteLowHealthElite:
-                        goodPercent += 0.95f / (float)items.Length;
+                    case "ITEM_EXECUTELOWHEALTHELITE_NAME":
+                        goodPercent += 0.95f / (float)pickups.Count;
                         break;
-                    case ItemIndex.EnergizedOnEquipmentUse:
-                        goodPercent += 0.45f / (float)items.Length;
+                    case "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME":
+                        goodPercent += 0.45f / (float)pickups.Count;
                         break;
-                    case ItemIndex.SprintWisp:
-                        goodPercent += 0.75f / (float)items.Length;
+                    case "ITEM_SPRINTWISP_NAME":
+                        goodPercent += 0.75f / (float)pickups.Count;
                         break;
-                    case ItemIndex.TPHealingNova:
+                    case "ITEM_TPHEALINGNOVA_NAME":
                         //no
                         break;
-                    case ItemIndex.Thorns:
-                        goodPercent += 0.65f / (float)items.Length;
+                    case "ITEM_THORNS_NAME":
+                        goodPercent += 0.65f / (float)pickups.Count;
                         break;
-                    case ItemIndex.BonusGoldPackOnKill:
-                        goodPercent += 0.4f / (float)items.Length;
+                    case "ITEM_BONUSGOLDPACKONKILL_NAME":
+                        goodPercent += 0.4f / (float)pickups.Count;
                         break;
-                    case ItemIndex.NovaOnLowHealth:
-                        goodPercent += 0.4f / (float)items.Length;
+                    case "ITEM_NOVAONLOWHEALTH_NAME":
+                        goodPercent += 0.4f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Squid:
+                    case "ITEM_SQUID_NAME":
                         squidCount++;
                         break;
-                    case ItemIndex.DeathMark:
-                        goodPercent += 0.4f / (float)items.Length;
+                    case "ITEM_DEATHMARK_NAME":
+                        goodPercent += 0.4f / (float)pickups.Count;
                         break;
-                    case ItemIndex.Incubator:
+                    case "ITEM_INCUBATOR_NAME":
                         break;
-                    case ItemIndex.FireballsOnHit:
-                        goodPercent += 0.85f / (float)items.Length;
+                    case "ITEM_FIREBALLSONHIT_NAME":
+                        goodPercent += 0.85f / (float)pickups.Count;
                         break;
-                    case ItemIndex.BleedOnHitAndExplode:
-                        goodPercent += 1.0f / (float)items.Length;
+                    case "ITEM_BLEEDONHITANDEXPLODE_NAME":
+                        goodPercent += 1.0f / (float)pickups.Count;
                         break;
-                    case ItemIndex.SiphonOnLowHealth:
-                        goodPercent += 0.45f / (float)items.Length;
+                    case "ITEM_SIPHONONLOWHEALTH_NAME":
+                        goodPercent += 0.45f / (float)pickups.Count;
                         break;
                     default:
-                        goodPercent += 0.8f / (float)items.Length;
+                        goodPercent += 0.8f / (float)pickups.Count;
                         break;
                 }
             }
             if (squidCount != 0)
             {
-                ShouldSpeak($"You got {squidCount} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Squid).nameToken)}s, nothing else matters");
+                ShouldSpeak($"You got {squidCount} {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}s, nothing else matters");
             }
             else
             {
@@ -538,7 +546,7 @@ namespace MoistureUpset
             switch (type)
             {
                 case ShrineType.blood:
-                    if (inventory.GetItemCount(ItemIndex.RegenOnKill) == 0 && inventory.GetItemCount(ItemIndex.Mushroom) == 0 && inventory.GetItemCount(ItemIndex.HealWhileSafe) == 0 && inventory.GetItemCount(ItemIndex.Medkit) == 0 && inventory.GetItemCount(ItemIndex.Tooth) == 0 && inventory.GetItemCount(ItemIndex.PersonalShield) < 5 && inventory.GetItemCount(ItemIndex.HealOnCrit) == 0 && inventory.GetItemCount(ItemIndex.Seed) == 0 && inventory.GetItemCount(ItemIndex.Plant) == 0 && inventory.GetItemCount(ItemIndex.Knurl) == 0 && inventory.GetItemCount(ItemIndex.ShieldOnly) == 0 && inventory.GetItemCount(ItemIndex.LunarDagger) == 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Mushroom) == 0 && inventory.GetItemCount(RoR2Content.Items.HealWhileSafe) == 0 && inventory.GetItemCount(RoR2Content.Items.Medkit) == 0 && inventory.GetItemCount(RoR2Content.Items.Tooth) == 0 && inventory.GetItemCount(RoR2Content.Items.PersonalShield) < 5 && inventory.GetItemCount(RoR2Content.Items.HealOnCrit) == 0 && inventory.GetItemCount(RoR2Content.Items.Seed) == 0 && inventory.GetItemCount(RoR2Content.Items.Plant) == 0 && inventory.GetItemCount(RoR2Content.Items.Knurl) == 0 && inventory.GetItemCount(RoR2Content.Items.ShieldOnly) == 0 && inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 0)
                     {
                         quotes.Add("I hope you have some plan to heal this off");
                         bloodShrineTimer = 15f;
@@ -551,7 +559,7 @@ namespace MoistureUpset
                 case ShrineType.mountain:
                     activeMountainShrine = true;
                     quotes.Add("Is there really any reason to not hit these?");
-                    quotes.Add($"I can't wait to get some extra {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.NovaOnHeal).nameToken)}s");
+                    quotes.Add($"I can't wait to get some extra {RoR2.Language.GetString(RoR2Content.Items.TPHealingNova.nameToken)}s");
                     quotes.Add("It's free real estate");
                     break;
                 case ShrineType.healing:
@@ -559,95 +567,103 @@ namespace MoistureUpset
                     quotes.Add("Wow! This is garbage. You actually like this?");
                     break;
                 case ShrineType.order:
-                    if (inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) > 0 || (inventory.GetItemCount(ItemIndex.Missile) != 0 && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) >= 0))
+                    dontSpeak = 2;
+                    if (inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) > 0 || (inventory.GetItemCount(RoR2Content.Items.Missile) != 0 && inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) >= 0))
                     {
                         quotes.Add("This was so worth it");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) < 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) < 0)
                     {
                         quotes.Add("I hope you are ready to never launch another ATG missle");
                     }
-                    if (inventory.GetItemCount(ItemIndex.LunarTrinket) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.LunarTrinket) > 1)
                     {
                         quotes.Add("Here's hoping you find a lunar pool soon");
                     }
-                    if (inventory.GetItemCount(ItemIndex.BleedOnHit) > 7)
+                    if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) > 7)
                     {
                         quotes.Add($"Do you really need this many {RoR2.Language.GetString("ITEM_BLEEDONHIT_NAME")}s?");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Hoof) != 0 || inventory.GetItemCount(ItemIndex.SprintBonus) != 0 || inventory.GetItemCount(ItemIndex.SprintOutOfCombat) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Hoof) != 0 || inventory.GetItemCount(RoR2Content.Items.SprintBonus) != 0 || inventory.GetItemCount(RoR2Content.Items.SprintOutOfCombat) != 0)
                     {
                         quotes.Add("Speeeeeeeeeeeed");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Mushroom) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Mushroom) != 0)
                     {
                         quotes.Add("BUNGUS");
                     }
-                    if (inventory.GetItemCount(ItemIndex.RegenOnKill) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.FlatHealth) != 0)
                     {
                         quotes.Add("Wow, I don't think you could have done worse on your white roll");
                     }
-                    if (inventory.GetItemCount(ItemIndex.ScrapWhite) != 0 || inventory.GetItemCount(ItemIndex.ScrapRed) != 0 || inventory.GetItemCount(ItemIndex.ScrapGreen) != 0 || inventory.GetItemCount(ItemIndex.ScrapYellow) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.ScrapWhite) != 0 || inventory.GetItemCount(RoR2Content.Items.ScrapRed) != 0 || inventory.GetItemCount(RoR2Content.Items.ScrapGreen) != 0 || inventory.GetItemCount(RoR2Content.Items.ScrapYellow) != 0)
                     {
                         quotes.Add("At least now you just need a good printer or two");
                     }
-                    if (inventory.GetItemCount(ItemIndex.CritGlasses) > 10)
+                    if (inventory.GetItemCount(RoR2Content.Items.CritGlasses) > 10)
                     {
                         quotes.Add("Too much crit! Too much crit!");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Bear) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Bear) != 0)
                     {
                         quotes.Add("You can now block attacks almost as hard as I get blocked on twitter");
                     }
-                    if (inventory.GetItemCount(ItemIndex.EquipmentMagazine) != 0 || inventory.GetItemCount(ItemIndex.AutoCastEquipment) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.EquipmentMagazine) != 0 || inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) != 0)
                     {
                         quotes.Add("Equipment Cooldown Status: None");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Feather) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Feather) != 0)
                     {
                         quotes.Add("Where we're going, we don't need the floor");
                     }
-                    if (inventory.GetItemCount(ItemIndex.TPHealingNova) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.TPHealingNova) != 0)
                     {
                         quotes.Add($"Waow it's a {RoR2.Language.GetString("ITEM_TPHEALINGNOVA_NAME")} build guys!");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Phasing) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Phasing) != 0)
                     {
                         quotes.Add("When you get hit you have a chance to become permanently invisible");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Thorns) != 0 && inventory.GetEquipmentIndex() == EquipmentIndex.BurnNearby)
+                    try
                     {
-                        quotes.Add("Oh yeah, it's all coming together");
+                        if (inventory.GetItemCount(RoR2Content.Items.Thorns) != 0 && inventory.currentEquipmentState.equipmentDef.nameToken == "EQUIPMENT_BURNNEARBY_NAME")
+                        {
+                            quotes.Add("Oh yeah, it's all coming together");
+                        }
                     }
-                    if (inventory.GetItemCount(ItemIndex.ExplodeOnDeath) != 0)
+                    catch (Exception e )
+                    {
+                        DebugClass.Log(e);
+                    }
+                    if (inventory.GetItemCount(RoR2Content.Items.ExplodeOnDeath) != 0)
                     {
                         quotes.Add("Wisp jar go boom");
                     }
-                    if (inventory.GetItemCount(ItemIndex.AlienHead) > 1 || inventory.GetItemCount(ItemIndex.KillEliteFrenzy) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.AlienHead) > 1 || inventory.GetItemCount(RoR2Content.Items.KillEliteFrenzy) > 1)
                     {
                         quotes.Add("What is a cooldown?");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Behemoth) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.Behemoth) > 1)
                     {
                         quotes.Add("I don't know if you really needed more than one Behemoth");
                     }
-                    if (inventory.GetItemCount(ItemIndex.ExtraLife) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) > 1)
                     {
                         quotes.Add("At least you won't be able to lose for a while");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Plant) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.Plant) > 1)
                     {
                         quotes.Add("Deskplant Pog");
                     }
-                    if (inventory.GetItemCount(ItemIndex.ShinyPearl) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.ShinyPearl) > 1)
                     {
                         quotes.Add($"Holy crap he got the {RoR2.Language.GetString("ITEM_SHINYPEARL_NAME")}s");
                     }
-                    if (inventory.GetItemCount(ItemIndex.LunarDagger) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) > 1)
                     {
                         quotes.Add("Your health is no more");
                     }
-                    if (inventory.GetItemCount(ItemIndex.ShieldOnly) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) > 1)
                     {
                         quotes.Add("Become the shield");
                     }
@@ -678,425 +694,467 @@ namespace MoistureUpset
             }
         }
         public bool resetRun = false;
-        public void Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g)
+        public void Items(RoR2.Inventory inventory, PickupIndex index, int count, GameObject g)
         {
-            if (inventory.GetTotalItemCountOfTier(ItemTier.Tier3) == 0 && index == ItemIndex.Plant)
+            //StartCoroutine(Items(inventory, index, count, g, false));
+        }
+        public IEnumerator Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g, bool yeet)
+        {
+            yield return new WaitForSeconds(.1f);
+            if (dontSpeak <= 0)
             {
-                ShouldSpeak($"I see that you have received {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} as your first red item, would you like me to end the run now? yes or no?");
-                resetRun = true;
-            }
-            else
-            {
-                switch (index)
+                if (inventory.GetTotalItemCountOfTier(ItemTier.Tier3) == 1 && index == ItemIndex.Plant)
                 {
-                    case ItemIndex.None:
-                        break;
-                    case ItemIndex.Syringe:
-                        if (inventory.GetItemCount(ItemIndex.Syringe) == 10)
-                        {
-                            ShouldSpeak("Don't you think you have enough attack speed?");
-                        }
-                        break;
-                    case ItemIndex.Bear:
-                        if (inventory.GetItemCount(ItemIndex.Syringe) == 100)
-                        {
-                            ShouldSpeak("You know stacking them further is almost pointless...");
-                        }
-                        break;
-                    case ItemIndex.Behemoth:
-                        ShouldSpeak("Haha rocket launcher go boom");
-                        break;
-                    case ItemIndex.Missile:
-                        //ShouldSpeak("This really pogs my champ");
-                        break;
-                    case ItemIndex.ExplodeOnDeath:
-                        //fire in a jar thing
-                        break;
-                    case ItemIndex.Dagger:
-                        //red dagger
+                    ShouldSpeak($"I see that you have received {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} as your first red item, would you like me to end the run now? yes or no?");
+                    resetRun = true;
+                }
+                else
+                {
+                    switch (index)
+                    {
+                        case ItemIndex.None:
+                            break;
+                        case ItemIndex.Syringe:
+                            if (inventory.GetItemCount(ItemIndex.Syringe) == 11)
+                            {
+                                ShouldSpeak("Don't you think you have enough attack speed?");
+                            }
+                            break;
+                        case ItemIndex.Bear:
+                            if (inventory.GetItemCount(ItemIndex.Bear) == 101)
+                            {
+                                ShouldSpeak("You know stacking them further is almost pointless...");
+                            }
+                            break;
+                        case ItemIndex.Behemoth:
+                            ShouldSpeak("Haha rocket launcher go boom");
+                            break;
+                        case ItemIndex.Missile:
+                            //ShouldSpeak("This really pogs my champ");
+                            break;
+                        case ItemIndex.ExplodeOnDeath:
+                            //fire in a jar thing
+                            break;
+                        case ItemIndex.Dagger:
+                            //red dagger
 
-                        ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
-                        break;
-                    case ItemIndex.Tooth:
-                        //monster tooth
-                        break;
-                    case ItemIndex.CritGlasses:
-                        break;
-                    case ItemIndex.Hoof:
-                        break;
-                    case ItemIndex.Feather:
-                        break;
-                    case ItemIndex.AACannon:
-                        //not used
-                        break;
-                    case ItemIndex.ChainLightning:
-                        //uke
-                        break;
-                    case ItemIndex.PlasmaCore:
-                        //not used
-                        break;
-                    case ItemIndex.Seed:
-                        //leeching
-                        break;
-                    case ItemIndex.Icicle:
-                        ShouldSpeak("Wow gee thanks");
-                        //frost relic
-                        break;
-                    case ItemIndex.GhostOnKill:
-                        ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
-                        break;
-                    case ItemIndex.Mushroom:
-                        ShouldSpeak("BUNGUS");
-                        //bungus
-                        break;
-                    case ItemIndex.Crowbar:
-                        break;
-                    case ItemIndex.LevelBonus:
-                        //not used
-                        break;
-                    case ItemIndex.AttackSpeedOnCrit:
-                        break;
-                    case ItemIndex.BleedOnHit:
-                        if (inventory.GetItemCount(ItemIndex.BleedOnHit) == 6)
-                        {
-                            ShouldSpeak("Oh yeah, it's gamer time.");
-                        }
-                        break;
-                    case ItemIndex.SprintOutOfCombat:
-                        break;
-                    case ItemIndex.FallBoots:
-                        //the legendary
-                        break;
-                    case ItemIndex.CooldownOnCrit:
-                        //wicked ring not used
-                        break;
-                    case ItemIndex.WardOnLevel:
-                        //warbanner
-                        break;
-                    case ItemIndex.Phasing:
-                        //stealthkit
-                        break;
-                    case ItemIndex.HealOnCrit:
-                        break;
-                    case ItemIndex.HealWhileSafe:
-                        //slug
-                        break;
-                    case ItemIndex.TempestOnKill:
-                        //not used
-                        break;
-                    case ItemIndex.PersonalShield:
-                        break;
-                    case ItemIndex.EquipmentMagazine:
-                        //fuel cell
-                        break;
-                    case ItemIndex.NovaOnHeal:
-                        //legendary heal damage thing
-                        break;
-                    case ItemIndex.ShockNearby:
-                        //tesla
-                        break;
-                    case ItemIndex.Infusion:
-                        break;
-                    case ItemIndex.WarCryOnCombat:
-                        //not used
-                        break;
-                    case ItemIndex.Clover:
-                        if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 0)
-                        {
-                            ShouldSpeak("run = won");
-                        }
-                        else if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 1)
-                        {
-                            ShouldSpeak("I bet you are regretting that purity now aren't ya?");
-                        }
-                        else
-                        {
-                            ShouldSpeak("I bet you are regretting those purities now aren't ya?");
-                        }
-                        break;
-                    case ItemIndex.Medkit:
-                        break;
-                    case ItemIndex.Bandolier:
-                        break;
-                    case ItemIndex.BounceNearby:
-                        //meat hook
-                        break;
-                    case ItemIndex.IgniteOnKill:
-                        //gas
-                        break;
-                    case ItemIndex.PlantOnHit:
-                        //not used
-                        break;
-                    case ItemIndex.StunChanceOnHit:
-                        break;
-                    case ItemIndex.Firework:
-                        break;
-                    case ItemIndex.LunarDagger:
-                        if (inventory.GetItemCount(ItemIndex.LunarDagger) == 0)
-                        {
-                            ShouldSpeak("Should you really be doing this?");
-                        }
-                        else
-                        {
-                            ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(ItemIndex.LunarDagger)}, how much could one more hurt?");
-                        }
-                        break;
-                    case ItemIndex.GoldOnHit:
-                        //crown
-                        break;
-                    case ItemIndex.MageAttunement:
-                        //not used
-                        break;
-                    case ItemIndex.WarCryOnMultiKill:
-                        //pauldron
-                        break;
-                    case ItemIndex.BoostHp:
-                        //not used
-                        break;
-                    case ItemIndex.BoostDamage:
-                        //not used
-                        break;
-                    case ItemIndex.ShieldOnly:
-                        ShouldSpeak($"Ah I see you are a gamer of culture.");
-                        //trans
-                        break;
-                    case ItemIndex.AlienHead:
-                        break;
-                    case ItemIndex.Talisman:
-                        //catalyst
-                        break;
-                    case ItemIndex.Knurl:
-                        break;
-                    case ItemIndex.BeetleGland:
-                        if (BigJank.getOptionValue("Winston") == 1)
-                        {
-                            ShouldSpeak("Winston please switch");
-                        }
-                        break;
-                    case ItemIndex.BurnNearby:
-                        //not used
-                        break;
-                    case ItemIndex.CritHeal:
-                        //not used
-                        break;
-                    case ItemIndex.CrippleWardOnLevel:
-                        //not used
-                        break;
-                    case ItemIndex.SprintBonus:
-                        break;
-                    case ItemIndex.SecondarySkillMagazine:
-                        break;
-                    case ItemIndex.StickyBomb:
-                        break;
-                    case ItemIndex.TreasureCache:
-                        //rusted key
-                        break;
-                    case ItemIndex.BossDamageBonus:
-                        break;
-                    case ItemIndex.SprintArmor:
-                        break;
-                    case ItemIndex.IceRing:
-                        break;
-                    case ItemIndex.FireRing:
-                        break;
-                    case ItemIndex.SlowOnHit:
-                        break;
-                    case ItemIndex.ExtraLife:
-                        break;
-                    case ItemIndex.ExtraLifeConsumed:
-                        break;
-                    case ItemIndex.UtilitySkillMagazine:
-                        //hardlight
-                        break;
-                    case ItemIndex.HeadHunter:
-                        //vultures
-                        break;
-                    case ItemIndex.KillEliteFrenzy:
-                        //stonks
-                        break;
-                    case ItemIndex.RepeatHeal:
-                        ShouldSpeak("You're going to regret this later");
-                        //corpseblossom
-                        break;
-                    case ItemIndex.Ghost:
-                        //not used
-                        break;
-                    case ItemIndex.HealthDecay:
-                        //not used
-                        break;
-                    case ItemIndex.AutoCastEquipment:
-                        if (inventory.GetItemCount(ItemIndex.AutoCastEquipment) + inventory.GetItemCount(ItemIndex.EquipmentMagazine) < 3
-                            && inventory.GetItemCount(ItemIndex.Talisman) == 0
-                            && inventory.GetEquipmentIndex() == EquipmentIndex.Tonic
-                            && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) <= 0)
-                        {
-                            ShouldSpeak("I hope you enjoy the tonic afflictions");
-                        }
-                        //gesture
-                        break;
-                    case ItemIndex.IncreaseHealing:
-                        //rejuv rack
-                        break;
-                    case ItemIndex.JumpBoost:
-                        //quail
-                        break;
-                    case ItemIndex.DrizzlePlayerHelper:
-                        //not used
-                        break;
-                    case ItemIndex.ExecuteLowHealthElite:
-                        if (RoR2.Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(ItemIndex.ExecuteLowHealthElite) == 0)
-                        {
-                            ShouldSpeak("Finally");
-                        }
-                        break;
-                    case ItemIndex.EnergizedOnEquipmentUse:
-                        //war horn
-                        break;
-                    case ItemIndex.BarrierOnOverHeal:
-                        break;
-                    case ItemIndex.TonicAffliction:
-                        if (inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) < 0)
-                        {
-                            ShouldSpeak("What are you even thinking!?");
-                        }
-                        else if (inventory.GetItemCount(ItemIndex.AutoCastEquipment) + inventory.GetItemCount(ItemIndex.EquipmentMagazine) < 4
-                            && inventory.GetItemCount(ItemIndex.Talisman) == 0
-                            && inventory.GetEquipmentIndex() == EquipmentIndex.Tonic
-                            && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) <= 0
-                            && inventory.GetItemCount(ItemIndex.AutoCastEquipment) > 0)
-                        {
-                            ShouldSpeak("You deserve that one");
-                        }
-                        else
-                        {
-                            ShouldSpeak("Maybe the tonic life shouldn't be for you?");
-                        }
-                        break;
-                    case ItemIndex.TitanGoldDuringTP:
-                        //halcyon seed
-                        break;
-                    case ItemIndex.SprintWisp:
-                        //disciple
-                        break;
-                    case ItemIndex.BarrierOnKill:
-                        break;
-                    case ItemIndex.ArmorReductionOnHit:
-                        break;
-                    case ItemIndex.TPHealingNova:
-                        //shiton daisy
-                        break;
-                    case ItemIndex.NearbyDamageBonus:
-                        //focus crystal
-                        break;
-                    case ItemIndex.LunarUtilityReplacement:
-                        //strides
-                        break;
-                    case ItemIndex.MonsoonPlayerHelper:
-                        //not used
-                        break;
-                    case ItemIndex.Thorns:
-                        //razorwire
-                        break;
-                    case ItemIndex.RegenOnKill:
-                        //meat
-                        break;
-                    case ItemIndex.Pearl:
-                        break;
-                    case ItemIndex.ShinyPearl:
-                        ShouldSpeak("bruh");
-                        break;
-                    case ItemIndex.BonusGoldPackOnKill:
-                        //ghor
-                        break;
-                    case ItemIndex.LaserTurbine:
-                        //res disc
-                        break;
-                    case ItemIndex.LunarPrimaryReplacement:
-                        //visions
-                        break;
-                    case ItemIndex.NovaOnLowHealth:
-                        break;
-                    case ItemIndex.LunarTrinket:
-                        if (inventory.GetItemCount(ItemIndex.LunarTrinket) == 0)
-                        {
-                            ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later");
-                        }
-                        else
-                        {
-                            ShouldSpeak("I knew it");
-                        }
-                        //beads
-                        break;
-                    case ItemIndex.InvadingDoppelganger:
-                        //not used
-                        break;
-                    case ItemIndex.CutHp:
-                        //not used
-                        break;
-                    case ItemIndex.ArtifactKey:
-                        break;
-                    case ItemIndex.ArmorPlate:
-                        break;
-                    case ItemIndex.Squid:
-                        break;
-                    case ItemIndex.DeathMark:
-                        if (inventory.GetItemCount(ItemIndex.DeathMark) == 1)
-                        {
-                            ShouldSpeak("You do realise stacking these does basically nothing right?");
-                        }
-                        break;
-                    case ItemIndex.Plant:
-                        //idp
-                        ShouldSpeak("Well well well, if it isn't the best item in the game");
-                        break;
-                    case ItemIndex.Incubator:
-                        //not used
-                        break;
-                    case ItemIndex.FocusConvergence:
-                        break;
-                    case ItemIndex.BoostAttackSpeed:
-                        //not used
-                        break;
-                    case ItemIndex.AdaptiveArmor:
-                        //not used
-                        break;
-                    case ItemIndex.CaptainDefenseMatrix:
-                        break;
-                    case ItemIndex.FireballsOnHit:
-                        //perforator
-                        break;
-                    case ItemIndex.BleedOnHitAndExplode:
-                        //spleeeeeen
-                        break;
-                    case ItemIndex.SiphonOnLowHealth:
-                        //urn
-                        break;
-                    case ItemIndex.MonstersOnShrineUse:
-                        break;
-                    case ItemIndex.RandomDamageZone:
-                        break;
-                    case ItemIndex.ScrapWhite:
-                        break;
-                    case ItemIndex.ScrapGreen:
-                        break;
-                    case ItemIndex.ScrapRed:
-                        ShouldSpeak("Good luck ever finding a printer for this");
-                        break;
-                    case ItemIndex.ScrapYellow:
-                        break;
-                    case ItemIndex.LunarBadLuck:
-                        if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 0)
-                        {
-                            ShouldSpeak("This is almost definitely a bad idea.");
-                        }
-                        break;
-                    case ItemIndex.BoostEquipmentRecharge:
-                        //not used
-                        break;
-                    case ItemIndex.Count:
-                        break;
-                    default:
-                        break;
+                            ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
+                            break;
+                        case ItemIndex.Tooth:
+                            //monster tooth
+                            break;
+                        case ItemIndex.CritGlasses:
+                            break;
+                        case ItemIndex.Hoof:
+                            break;
+                        case ItemIndex.Feather:
+                            break;
+                        case ItemIndex.AACannon:
+                            //not used
+                            break;
+                        case ItemIndex.ChainLightning:
+                            //uke
+                            break;
+                        case ItemIndex.PlasmaCore:
+                            //not used
+                            break;
+                        case ItemIndex.Seed:
+                            //leeching
+                            break;
+                        case ItemIndex.Icicle:
+                            ShouldSpeak("Wow gee thanks");
+                            //frost relic
+                            break;
+                        case ItemIndex.GhostOnKill:
+                            ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
+                            break;
+                        case ItemIndex.Mushroom:
+                            if (inventory.GetItemCount(ItemIndex.Mushroom) == 1)
+                            {
+                                if (SurvivorCatalog.FindSurvivorDefFromBody(g.GetComponentInChildren<CharacterBody>().gameObject).survivorIndex == SurvivorIndex.Engi)
+                                {
+                                    ShouldSpeak("Oh yeah, it's all coming together");
+                                }
+                                else
+                                {
+                                    ShouldSpeak("BUNGUS");
+                                }
+                            }
+                            //bungus
+                            break;
+                        case ItemIndex.Crowbar:
+                            break;
+                        case ItemIndex.LevelBonus:
+                            //not used
+                            break;
+                        case ItemIndex.AttackSpeedOnCrit:
+                            break;
+                        case ItemIndex.BleedOnHit:
+                            if (inventory.GetItemCount(ItemIndex.BleedOnHit) == 7)
+                            {
+                                ShouldSpeak("Oh yeah, it's gamer time.");
+                            }
+                            break;
+                        case ItemIndex.SprintOutOfCombat:
+                            break;
+                        case ItemIndex.FallBoots:
+                            //the legendary
+                            break;
+                        case ItemIndex.CooldownOnCrit:
+                            //wicked ring not used
+                            break;
+                        case ItemIndex.WardOnLevel:
+                            //warbanner
+                            break;
+                        case ItemIndex.Phasing:
+                            //stealthkit
+                            break;
+                        case ItemIndex.HealOnCrit:
+                            break;
+                        case ItemIndex.HealWhileSafe:
+                            //slug
+                            break;
+                        case ItemIndex.TempestOnKill:
+                            //not used
+                            break;
+                        case ItemIndex.PersonalShield:
+                            break;
+                        case ItemIndex.EquipmentMagazine:
+                            //fuel cell
+                            break;
+                        case ItemIndex.NovaOnHeal:
+                            //legendary heal damage thing
+                            break;
+                        case ItemIndex.ShockNearby:
+                            //tesla
+                            break;
+                        case ItemIndex.Infusion:
+                            break;
+                        case ItemIndex.WarCryOnCombat:
+                            //not used
+                            break;
+                        case ItemIndex.Clover:
+                            if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 0)
+                            {
+                                ShouldSpeak("run = won");
+                            }
+                            else if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 1)
+                            {
+                                ShouldSpeak("I bet you are regretting that purity now aren't ya?");
+                            }
+                            else
+                            {
+                                ShouldSpeak("I bet you are regretting those purities now aren't ya?");
+                            }
+                            break;
+                        case ItemIndex.Medkit:
+                            break;
+                        case ItemIndex.Bandolier:
+                            break;
+                        case ItemIndex.BounceNearby:
+                            //meat hook
+                            break;
+                        case ItemIndex.IgniteOnKill:
+                            //gas
+                            break;
+                        case ItemIndex.PlantOnHit:
+                            //not used
+                            break;
+                        case ItemIndex.StunChanceOnHit:
+                            break;
+                        case ItemIndex.Firework:
+                            break;
+                        case ItemIndex.LunarDagger:
+                            if (inventory.GetItemCount(ItemIndex.LunarDagger) == 1)
+                            {
+                                if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length == 2)
+                                {
+                                    ShouldSpeak("At least you have your teammate to pickup the slack when you inevitably die");
+                                }
+                                else if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 2)
+                                {
+                                    ShouldSpeak("At least you have your teammates to pickup the slack when you inevitably die");
+                                }
+                                else
+                                {
+                                    ShouldSpeak("Should you really be doing this?");
+                                }
+                            }
+                            else
+                            {
+                                ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(ItemIndex.LunarDagger) - 1} of them, how much could one more hurt?");
+                            }
+                            break;
+                        case ItemIndex.GoldOnHit:
+                            //crown
+                            break;
+                        case ItemIndex.MageAttunement:
+                            //not used
+                            break;
+                        case ItemIndex.WarCryOnMultiKill:
+                            //pauldron
+                            break;
+                        case ItemIndex.BoostHp:
+                            //not used
+                            break;
+                        case ItemIndex.BoostDamage:
+                            //not used
+                            break;
+                        case ItemIndex.ShieldOnly:
+                            ShouldSpeak($"Ah I see you are a gamer of culture.");
+                            //trans
+                            break;
+                        case ItemIndex.AlienHead:
+                            break;
+                        case ItemIndex.Talisman:
+                            //catalyst
+                            break;
+                        case ItemIndex.Knurl:
+                            break;
+                        case ItemIndex.BeetleGland:
+                            if (BigJank.getOptionValue("Winston") == 1)
+                            {
+                                ShouldSpeak("Winston please switch");
+                            }
+                            break;
+                        case ItemIndex.BurnNearby:
+                            //not used
+                            break;
+                        case ItemIndex.CritHeal:
+                            //not used
+                            break;
+                        case ItemIndex.CrippleWardOnLevel:
+                            //not used
+                            break;
+                        case ItemIndex.SprintBonus:
+                            break;
+                        case ItemIndex.SecondarySkillMagazine:
+                            break;
+                        case ItemIndex.StickyBomb:
+                            break;
+                        case ItemIndex.TreasureCache:
+                            //rusted key
+                            break;
+                        case ItemIndex.BossDamageBonus:
+                            break;
+                        case ItemIndex.SprintArmor:
+                            break;
+                        case ItemIndex.IceRing:
+                            break;
+                        case ItemIndex.FireRing:
+                            break;
+                        case ItemIndex.SlowOnHit:
+                            break;
+                        case ItemIndex.ExtraLife:
+                            break;
+                        case ItemIndex.ExtraLifeConsumed:
+                            break;
+                        case ItemIndex.UtilitySkillMagazine:
+                            //hardlight
+                            break;
+                        case ItemIndex.HeadHunter:
+                            //vultures
+                            break;
+                        case ItemIndex.KillEliteFrenzy:
+                            //stonks
+                            break;
+                        case ItemIndex.RepeatHeal:
+                            switch (UnityEngine.Random.Range(0, 2))
+                            {
+                                case 0:
+                                    ShouldSpeak("That better have been an accident");
+                                    break;
+                                case 1:
+                                    ShouldSpeak("Get a load of this idiot");
+                                    break;
+                                case 2:
+                                    ShouldSpeak("You're going to regret this later");
+                                    break;
+                                default:
+                                    break;
+                            }
+                            //corpseblossom
+                            break;
+                        case ItemIndex.Ghost:
+                            //not used
+                            break;
+                        case ItemIndex.HealthDecay:
+                            //not used
+                            break;
+                        case ItemIndex.AutoCastEquipment:
+                            if (inventory.GetItemCount(ItemIndex.AutoCastEquipment) + inventory.GetItemCount(ItemIndex.EquipmentMagazine) < 4
+                                && inventory.GetItemCount(ItemIndex.Talisman) == 0
+                                && inventory.GetEquipmentIndex() == EquipmentIndex.Tonic
+                                && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) <= 0)
+                            {
+                                ShouldSpeak("I hope you enjoy the tonic afflictions");
+                            }
+                            //gesture
+                            break;
+                        case ItemIndex.IncreaseHealing:
+                            //rejuv rack
+                            break;
+                        case ItemIndex.JumpBoost:
+                            //quail
+                            break;
+                        case ItemIndex.DrizzlePlayerHelper:
+                            //not used
+                            break;
+                        case ItemIndex.ExecuteLowHealthElite:
+                            if (RoR2.Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(ItemIndex.ExecuteLowHealthElite) == 1)
+                            {
+                                ShouldSpeak("Finally");
+                            }
+                            break;
+                        case ItemIndex.EnergizedOnEquipmentUse:
+                            //war horn
+                            break;
+                        case ItemIndex.BarrierOnOverHeal:
+                            break;
+                        case ItemIndex.TonicAffliction:
+                            if (inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) < 0)
+                            {
+                                ShouldSpeak("What are you even thinking!?");
+                            }
+                            else if (inventory.GetItemCount(ItemIndex.AutoCastEquipment) + inventory.GetItemCount(ItemIndex.EquipmentMagazine) < 4
+                                && inventory.GetItemCount(ItemIndex.Talisman) == 0
+                                && inventory.GetEquipmentIndex() == EquipmentIndex.Tonic
+                                && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) <= 0
+                                && inventory.GetItemCount(ItemIndex.AutoCastEquipment) > 0)
+                            {
+                                ShouldSpeak("You deserve that one");
+                            }
+                            else
+                            {
+                                ShouldSpeak("Maybe the tonic life shouldn't be for you?");
+                            }
+                            break;
+                        case ItemIndex.TitanGoldDuringTP:
+                            //halcyon seed
+                            break;
+                        case ItemIndex.SprintWisp:
+                            //disciple
+                            break;
+                        case ItemIndex.BarrierOnKill:
+                            break;
+                        case ItemIndex.ArmorReductionOnHit:
+                            break;
+                        case ItemIndex.TPHealingNova:
+                            //shiton daisy
+                            break;
+                        case ItemIndex.NearbyDamageBonus:
+                            //focus crystal
+                            break;
+                        case ItemIndex.LunarUtilityReplacement:
+                            //strides
+                            break;
+                        case ItemIndex.MonsoonPlayerHelper:
+                            //not used
+                            break;
+                        case ItemIndex.Thorns:
+                            //razorwire
+                            break;
+                        case ItemIndex.RegenOnKill:
+                            //meat
+                            break;
+                        case ItemIndex.Pearl:
+                            break;
+                        case ItemIndex.ShinyPearl:
+                            ShouldSpeak("bruh");
+                            break;
+                        case ItemIndex.BonusGoldPackOnKill:
+                            //ghor
+                            break;
+                        case ItemIndex.LaserTurbine:
+                            //res disc
+                            break;
+                        case ItemIndex.LunarPrimaryReplacement:
+                            //visions
+                            break;
+                        case ItemIndex.NovaOnLowHealth:
+                            break;
+                        case ItemIndex.LunarTrinket:
+                            if (inventory.GetItemCount(ItemIndex.LunarTrinket) == 1)
+                            {
+                                ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later");
+                            }
+                            else
+                            {
+                                ShouldSpeak("I knew it");
+                            }
+                            //beads
+                            break;
+                        case ItemIndex.InvadingDoppelganger:
+                            //not used
+                            break;
+                        case ItemIndex.CutHp:
+                            //not used
+                            break;
+                        case ItemIndex.ArtifactKey:
+                            break;
+                        case ItemIndex.ArmorPlate:
+                            break;
+                        case ItemIndex.Squid:
+                            break;
+                        case ItemIndex.DeathMark:
+                            if (inventory.GetItemCount(ItemIndex.DeathMark) == 2)
+                            {
+                                ShouldSpeak("You do realise stacking these does basically nothing right?");
+                            }
+                            break;
+                        case ItemIndex.Plant:
+                            //idp
+                            ShouldSpeak("Well well well, if it isn't the best item in the game");
+                            break;
+                        case ItemIndex.Incubator:
+                            //not used
+                            break;
+                        case ItemIndex.FocusConvergence:
+                            break;
+                        case ItemIndex.BoostAttackSpeed:
+                            //not used
+                            break;
+                        case ItemIndex.AdaptiveArmor:
+                            //not used
+                            break;
+                        case ItemIndex.CaptainDefenseMatrix:
+                            break;
+                        case ItemIndex.FireballsOnHit:
+                            //perforator
+                            break;
+                        case ItemIndex.BleedOnHitAndExplode:
+                            //spleeeeeen
+                            break;
+                        case ItemIndex.SiphonOnLowHealth:
+                            //urn
+                            break;
+                        case ItemIndex.MonstersOnShrineUse:
+                            break;
+                        case ItemIndex.RandomDamageZone:
+                            break;
+                        case ItemIndex.ScrapWhite:
+                            break;
+                        case ItemIndex.ScrapGreen:
+                            break;
+                        case ItemIndex.ScrapRed:
+                            ShouldSpeak("Good luck ever finding a printer for this");
+                            break;
+                        case ItemIndex.ScrapYellow:
+                            break;
+                        case ItemIndex.LunarBadLuck:
+                            if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 1)
+                            {
+                                ShouldSpeak("This is almost definitely a bad idea.");
+                            }
+                            break;
+                        case ItemIndex.BoostEquipmentRecharge:
+                            //not used
+                            break;
+                        case ItemIndex.Count:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -1119,58 +1177,58 @@ namespace MoistureUpset
                         deathQuotes.Add("Just blame your teammates 4Head");
                     }
                     RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
-                    if (inventory.GetItemCount(ItemIndex.ExtraLife) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
                     {
                         deathQuotes.Clear();
-                        if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 0)
+                        if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 0)
                         {
                             deathQuotes.Add("Wait don't leave yet!");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 1)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 1)
                         {
                             deathQuotes.Add("You know, just because you have them, doesn't mean you have to use them...");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 2)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 2)
                         {
                             ShouldSpeak("T t t triple kill");
                             return;
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 3)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 3)
                         {
                             deathQuotes.Add("Really just chugging these down at this point yeah?");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 4)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 4)
                         {
                             deathQuotes.Add("That's 5 deaths now, how are you this bad at the game?");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 5)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 5)
                         {
-                            deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.ExtraLife).nameToken)}s. So thank you, for using them for me so I don't have to.");
+                            deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2Content.Items.ExtraLife.nameToken)}s. So thank you, for using them for me so I don't have to.");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 6)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 6)
                         {
                             deathQuotes.Add("So that was a bit of a hyperbole earlier. I don't actually think we should consume more of them, so if you could just stop that would be great.");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 7)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 7)
                         {
                             deathQuotes.Add("You know what? I give up, I hope you lose this run.");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 68)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 68)
                         {
                             deathQuotes.Add("nice.");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) == 419)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 419)
                         {
                             deathQuotes.Add("Blaze it");
                         }
-                        else if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
                         {
-                            deathQuotes.Add($"{inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) + 1}");
+                            deathQuotes.Add($"{inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) + 1}");
                         }
                         ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
                         return;
                     }
-                    if (inventory.GetItemCount(ItemIndex.ExtraLifeConsumed) > 7)
+                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
                     {
                         ShouldSpeak("good");
                         return;
@@ -1187,32 +1245,32 @@ namespace MoistureUpset
                         deathQuotes.Add($"Maybe don't jump so far next time.");
                         deathQuotes.Add($"Fall damage is fatal by the way");
                     }
-                    if (inventory.GetItemCount(ItemIndex.GhostOnKill) > 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.GhostOnKill) > 0)
                     {
-                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.GhostOnKill).nameToken)} really shouldn't be a red item.");
+                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2Content.Items.GhostOnKill.nameToken)} really shouldn't be a red item.");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Plant) > 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Plant) > 0)
                     {
-                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} really shouldn't be a red item.");
+                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2Content.Items.Plant.nameToken)} really shouldn't be a red item.");
                     }
-                    if (inventory.GetItemCount(ItemIndex.Clover) == 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
                     {
-                        deathQuotes.Add($"Wow you died with a {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}? You really do suck at this game.");
+                        deathQuotes.Add($"Wow you died with a {RoR2.Language.GetString(RoR2Content.Items.Clover.nameToken)}? You really do suck at this game.");
                     }
-                    else if (inventory.GetItemCount(ItemIndex.Clover) > 1)
+                    else if (inventory.GetItemCount(RoR2Content.Items.Clover) > 1)
                     {
-                        deathQuotes.Add($"Wow you died with {inventory.GetItemCount(ItemIndex.Clover)} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You really do suck at this game.");
+                        deathQuotes.Add($"Wow you died with {inventory.GetItemCount(RoR2Content.Items.Clover)} {RoR2.Language.GetString(RoR2Content.Items.Clover.nameToken)}s? You really do suck at this game.");
                     }
-                    if (inventory.GetItemCount(ItemIndex.LunarDagger) != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) != 0)
                     {
                         if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 1)
                         {
-                            deathQuotes.Add($"You know, when you pickup {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} you are just holding your teamates back.");
+                            deathQuotes.Add($"You know, when you pickup {RoR2.Language.GetString(RoR2Content.Items.LunarDagger.nameToken)} you are just holding your teamates back.");
                         }
-                        deathQuotes.Add($"You probably would have gotten further without {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}.");
-                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)} probably wasn't the move there chief...");
+                        deathQuotes.Add($"You probably would have gotten further without {RoR2.Language.GetString(RoR2Content.Items.LunarDagger.nameToken)}.");
+                        deathQuotes.Add($"{RoR2.Language.GetString(RoR2Content.Items.LunarDagger.nameToken)} probably wasn't the move there chief...");
                     }
-                    //Debug.Log($"--------{inventory.GetItemCount(ItemIndex.LunarBadLuck)}");
+                    //Debug.Log($"--------{inventory.GetItemCount(RoR2Content.Items.LunarBadLuck)}");
                     string theQuote;
                     int num = 0;
                     do
@@ -1248,15 +1306,15 @@ namespace MoistureUpset
             RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
             if (g.name.StartsWith("Commando"))
             {
-                deathQuotes.Add($"Why is {allyName} even using {RoR2.Language.GetString(RoR2.SurvivorCatalog.GetSurvivorDef(SurvivorIndex.Commando).displayNameToken)}???");
+                deathQuotes.Add($"Why is {allyName} even using {RoR2.Language.GetString(RoR2Content.Survivors.Commando.displayNameToken)}???");
             }
             else if (g.name.StartsWith("Engi"))
             {
-                if (inventory.GetItemCount(ItemIndex.ExtraLife) != 0)
+                if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
                 {
                     deathQuotes.Add($"What a waste of a respawn");
                 }
-                if (RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(ItemIndex.Plant) != 0 && inventory.GetItemCount(ItemIndex.Plant) == 0 && !(RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).gameObject.name.StartsWith("Engi"))
+                if (RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(RoR2Content.Items.Mushroom) != 0 && inventory.GetItemCount(RoR2Content.Items.Mushroom) == 0 && !(RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).gameObject.name.StartsWith("Engi"))
                 {
                     deathQuotes.Add($"{allyName} died because you stole their bungus");
                 }
@@ -1264,30 +1322,30 @@ namespace MoistureUpset
             if (damageType == DamageType.FallDamage)
             {
                 deathQuotes.Add($"Maybe {allyName} should play {RoR2.Language.GetString("LOADER_BODY_NAME")} instead.");
-                if ((RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).gameObject.name.StartsWith("Loader") && RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(ItemIndex.FallBoots) != 0)
+                if ((RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).gameObject.name.StartsWith("Loader") && RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(RoR2Content.Items.FallBoots) != 0)
                 {
-                    deathQuotes.Add($"Why do you even have a {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.FallBoots).nameToken)}? {allyName} really could have used it.");
+                    deathQuotes.Add($"Why do you even have a {RoR2.Language.GetString(RoR2Content.Items.FallBoots.nameToken)}? {allyName} really could have used it.");
                 }
-                else if (RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(ItemIndex.FallBoots) > 1 && inventory.GetItemCount(ItemIndex.FallBoots) == 0)
+                else if (RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().inventory.GetItemCount(RoR2Content.Items.FallBoots) > 1 && inventory.GetItemCount(RoR2Content.Items.FallBoots) == 0)
                 {
-                    deathQuotes.Add($"Do you really need {inventory.GetItemCount(ItemIndex.FallBoots)} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.FallBoots).nameToken)}s? {allyName} really could have used one of em.");
+                    deathQuotes.Add($"Do you really need {inventory.GetItemCount(RoR2Content.Items.FallBoots)} {RoR2.Language.GetString(RoR2Content.Items.FallBoots.nameToken)}s? {allyName} really could have used one of em.");
                 }
             }
-            if (inventory.GetItemCount(ItemIndex.Clover) == 1)
+            if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
             {
-                deathQuotes.Add($"Wow, dying with a {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}? You should flame them");
+                deathQuotes.Add($"Wow, dying with a {RoR2.Language.GetString(RoR2Content.Items.Clover.nameToken)}? You should flame them");
             }
-            else if (inventory.GetItemCount(ItemIndex.Clover) > 1)
+            else if (inventory.GetItemCount(RoR2Content.Items.Clover) > 1)
             {
-                deathQuotes.Add($"Wow, dying with {inventory.GetItemCount(ItemIndex.Clover)} {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Clover).nameToken)}s? You should flame them");
+                deathQuotes.Add($"Wow, dying with {inventory.GetItemCount(RoR2Content.Items.Clover)} {RoR2.Language.GetString(RoR2Content.Items.Clover.nameToken)}s? You should flame them");
             }
-            if (inventory.GetItemCount(ItemIndex.Plant) != 0)
+            if (inventory.GetItemCount(RoR2Content.Items.Plant) != 0)
             {
-                deathQuotes.Add($"{allyName} probably died because of {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
+                deathQuotes.Add($"{allyName} probably died because of {RoR2.Language.GetString(RoR2Content.Items.Plant.nameToken)}");
             }
-            if (inventory.GetItemCount(ItemIndex.LunarDagger) != 0)
+            if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) != 0)
             {
-                deathQuotes.Add($"Why would you even take {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.LunarDagger).nameToken)}");
+                deathQuotes.Add($"Why would you even take {RoR2.Language.GetString(RoR2Content.Items.LunarDagger.nameToken)}");
             }
 
 
@@ -1409,9 +1467,13 @@ namespace MoistureUpset
         }
         void Update()
         {
+            if (dontSpeak > 0)
+            {
+                dontSpeak -= Time.deltaTime;
+            }
             if (charPosition != null)
             {
-                if (Vector3.Distance(charPosition.position, new Vector3(2656,205,722)) < 35f)
+                if (Vector3.Distance(charPosition.position, new Vector3(2656, 205, 722)) < 35f)
                 {
                     Activate();
                     charPosition = null;
@@ -1423,15 +1485,18 @@ namespace MoistureUpset
                         var c = GameObject.FindObjectOfType<MusicController>();
                         c.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                         AkSoundEngine.PostEvent("BonziError", obj2);
-                        AkSoundEngine.ExecuteActionOnEvent(4159841934, AkActionOnEventType.AkActionOnEventType_Stop);
+                        AkSoundEngine.ExecuteActionOnEvent(3605238264, AkActionOnEventType.AkActionOnEventType_Stop);
                         AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
                         Destroy(obj1);
                         Destroy(obj3);
                         Destroy(obj4);
                         Destroy(obj5);
                         Destroy(obj6);
-
                         obj2.transform.position = charPosition.position;
+                        foreach (var item in Camera.allCameras)
+                        {
+                            Destroy(item.GetComponent<GlitchEffect>());
+                        }
                     }
                     else
                     {
@@ -1440,8 +1505,22 @@ namespace MoistureUpset
                         {
                             num = 800;
                         }
-                        Debug.Log($"--------{num}");
                         AkSoundEngine.SetRTPCValue("DistanceToBonzi", num);
+                        foreach (var item in Camera.allCameras)
+                        {
+                            var glitch = item.GetComponent<GlitchEffect>();
+                            glitch.intensity = 1 - (num / 800f);
+                            if (glitch.intensity > .75f)
+                            {
+                                glitch.intensity = .75f;
+                            }
+                            glitch.flipIntensity = 1 - (num / 800f);
+                            if (glitch.flipIntensity > .5f)
+                            {
+                                glitch.flipIntensity = .5f;
+                            }
+                            glitch.colorIntensity = 1 - (num / 800f);
+                        }
                     }
                 }//this is poorly organized
 
@@ -1471,8 +1550,8 @@ namespace MoistureUpset
                     currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
                 }
 
-                bool equalX = AlmostEqual(dest.x, screenPos.x, .0019f);
-                bool equalY = AlmostEqual(dest.y, screenPos.y, .0019f);
+                bool equalX = AlmostEqual(dest.x, screenPos.x, .002f);
+                bool equalY = AlmostEqual(dest.y, screenPos.y, .002f);
                 atDest = equalX && equalY;
                 moveDown = moveUp = moveLeft = moveRight = false;
                 if (!atDest && currentClip != "entrance" && currentClip != "leave" && !debugging)
@@ -1481,25 +1560,36 @@ namespace MoistureUpset
                     {
                         moveRight = true;
                         if (currentClip == "flyright")
+                        {
                             transform.position += new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                        }
                     }
                     else if (dest.x < screenPos.x && !equalX)
                     {
                         moveLeft = true;
                         if (currentClip == "flyleft")
+                        {
                             transform.position -= new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+
+                        }
                     }
                     else if (dest.y > screenPos.y && !equalY)
                     {
                         moveUp = true;
                         if (currentClip == "flyup")
+                        {
                             transform.position += new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+
+                        }
                     }
                     else if (dest.y < screenPos.y && !equalY)
                     {
                         moveDown = true;
                         if (currentClip == "flydown")
+                        {
                             transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+
+                        }
                     }
                 }
                 //DebugMovement();
@@ -1699,7 +1789,7 @@ namespace MoistureUpset
                     {
                         lastIdle.RemoveAt(0);
                     }
-                    if (BigJank.getOptionValue("Original Bonzi Buddy TTS") != 1)
+                    if (BigJank.getOptionValue("Original REDACTED TTS") != 1)
                     {
                         if (UnityEngine.Random.Range(0, 150) == 0)
                         {
@@ -1827,6 +1917,20 @@ namespace MoistureUpset
         {
             buddy.dest = pos;
         }
+        public static void SetActive(bool yeet)
+        {
+            if (LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))
+            {
+                if (!yeet && !buddy.bonziActive)
+                {
+                    buddy.Activate();
+                }
+                else if (yeet && buddy.bonziActive)
+                {
+                    buddy.Deactivate();
+                }
+            }
+        }
         public void Activate()
         {
             foundMe = true;
@@ -1854,31 +1958,52 @@ namespace MoistureUpset
             yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0)[0].clip.name == "entrance");
             GetComponent<RectTransform>().SetAsLastSibling();
             yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0)[0].clip.name == "idle");
-            switch (UnityEngine.Random.Range(0, 3))
+            GoTo(transform.position);
+            if (SceneManager.GetActiveScene().name != "moon")
             {
-                case 0:
-                    ShouldSpeak($"Hey {username}, good to see you again!");
-                    break;
-                case 1:
-                    if (UnityEngine.Random.Range(0, 10000) == 0)
-                    {
-                        ShouldSpeak($"Welcome back {Environment.UserName}!");
-                    }
-                    else
-                    {
-                        ShouldSpeak($"Welcome back {username}!");
-                    }
-                    break;
-                case 2:
-                    ShouldSpeak($"The weather is nice out today, isn't it {username}.");
-                    break;
-                default:
-                    break;
+                switch (UnityEngine.Random.Range(0, 3))
+                {
+                    case 0:
+                        StartCoroutine(Speak($"Hey {username}, good to see you again!"));
+                        break;
+                    case 1:
+                        if (UnityEngine.Random.Range(0, 3000) == 0)
+                        {
+                            StartCoroutine(Speak($"Welcome back {Environment.UserName}!"));
+                        }
+                        else
+                        {
+                            StartCoroutine(Speak($"Welcome back {username}!"));
+                        }
+                        break;
+                    case 2:
+                        StartCoroutine(Speak($"The weather is nice out today, isn't it {username}."));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                if (UnityEngine.Random.Range(0, 3000) == 0)
+                {
+                    StartCoroutine(Speak($"Hey {Environment.UserName}, I'm bonzi buddy! I'll be your personal assistant from now on."));
+                }
+                else
+                {
+                    StartCoroutine(Speak($"Hey {username}, I'm bonzi buddy! I'll be your personal assistant from now on."));
+                }
             }
             firstTime = true;
+            yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0)[0].clip.name == "speaking");
+            yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0)[0].clip.name == "idle");
             if (SceneManager.GetActiveScene().name == "title")
             {
                 GoTo(MAINMENU);
+            }
+            else
+            {
+                GoTo(M1);
             }
         }
         bool twostep = true;
@@ -1960,7 +2085,7 @@ namespace MoistureUpset
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
 
-                if (BigJank.getOptionValue("Original Bonzi Buddy TTS") == 1)
+                if (BigJank.getOptionValue("Original REDACTED TTS") == 1)
                 {
                     startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n Sidney -t \"{text}\" -p 60 -s 140 -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
                 }

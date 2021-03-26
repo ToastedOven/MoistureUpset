@@ -32,8 +32,10 @@ namespace MoistureUpset.NetMessages
             GameObject g = Util.FindNetworkObject(netId);
             if (g)
             {
+                Debug.Log($"--------g is real");
                 if (g.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
                 {
+                    Debug.Log($"--------running func");
                     BonziBuddy.buddy.NotEnoughMoney();
                 }
             }
