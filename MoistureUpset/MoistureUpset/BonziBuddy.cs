@@ -204,7 +204,7 @@ namespace MoistureUpset
                         case "outro":
                             buddy.enabled = false; /////solution for this
                             break;
-                        case "moon":
+                        case "moon2":
                             //frogge 
                             break;
                         default:
@@ -225,17 +225,17 @@ namespace MoistureUpset
             };
             On.RoR2.Inventory.GiveItem += (On.RoR2.Inventory.orig_GiveItem orig, RoR2.Inventory self, ItemIndex index, int count) =>
             {
-                //try
-                //{
-                //    if (self.gameObject && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>() && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject)
-                //    {
-                //        new SyncItems(self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject.GetComponent<NetworkIdentity>().netId, index, count).Send(R2API.Networking.NetworkDestination.Clients);
-                //    }
-                //}
-                //catch (Exception)
-                //{
-                //}
-                DebugClass.Log($"----------{index}");
+                try
+                {
+                    if (self.gameObject && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>() && self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject)
+                    {
+                        new SyncItems(self.gameObject.GetComponentInChildren<RoR2.CharacterMaster>().GetBody().gameObject.GetComponent<NetworkIdentity>().netId, index, count).Send(R2API.Networking.NetworkDestination.Clients);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                //DebugClass.Log($"----------{ItemCatalog.GetItemDef(index).nameToken}");//this is the nametoken, this works
                 orig(self, index, count);
             };
             On.RoR2.UI.ChatBox.SubmitChat += (orig, self) =>
@@ -694,84 +694,83 @@ namespace MoistureUpset
             }
         }
         public bool resetRun = false;
-        public void Items(RoR2.Inventory inventory, PickupIndex index, int count, GameObject g)
+        public void Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g)
         {
-            //StartCoroutine(Items(inventory, index, count, g, false));
+            StartCoroutine(Items(inventory, index, count, g, false));
         }
         public IEnumerator Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g, bool yeet)
         {
             yield return new WaitForSeconds(.1f);
             if (dontSpeak <= 0)
             {
-                if (inventory.GetTotalItemCountOfTier(ItemTier.Tier3) == 1 && index == ItemIndex.Plant)
+                string itemToken = ItemCatalog.GetItemDef(index).nameToken;
+                if (inventory.GetTotalItemCountOfTier(ItemTier.Tier3) == 1 && itemToken == RoR2Content.Items.Plant.nameToken)
                 {
-                    ShouldSpeak($"I see that you have received {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)} as your first red item, would you like me to end the run now? yes or no?");
+                    ShouldSpeak($"I see that you have received {RoR2.Language.GetString(itemToken)} as your first red item, would you like me to end the run now? yes or no?");
                     resetRun = true;
                 }
                 else
                 {
-                    switch (index)
+                    switch (itemToken)
                     {
-                        case ItemIndex.None:
-                            break;
-                        case ItemIndex.Syringe:
-                            if (inventory.GetItemCount(ItemIndex.Syringe) == 11)
+                        case "ITEM_SYRINGE_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Syringe) == 11)
                             {
                                 ShouldSpeak("Don't you think you have enough attack speed?");
                             }
                             break;
-                        case ItemIndex.Bear:
-                            if (inventory.GetItemCount(ItemIndex.Bear) == 101)
+                        case "ITEM_BEAR_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Bear) == 101)
                             {
                                 ShouldSpeak("You know stacking them further is almost pointless...");
                             }
                             break;
-                        case ItemIndex.Behemoth:
+                        case "ITEM_BEHEMOTH_NAME":
                             ShouldSpeak("Haha rocket launcher go boom");
                             break;
-                        case ItemIndex.Missile:
+                        case "ITEM_MISSILE_NAME":
                             //ShouldSpeak("This really pogs my champ");
                             break;
-                        case ItemIndex.ExplodeOnDeath:
+                        case "ITEM_EXPLODEONDEATH_NAME":
                             //fire in a jar thing
                             break;
-                        case ItemIndex.Dagger:
+                        case "ITEM_DAGGER_NAME":
                             //red dagger
 
                             ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
                             break;
-                        case ItemIndex.Tooth:
+                        case "ITEM_TOOTH_NAME":
                             //monster tooth
                             break;
-                        case ItemIndex.CritGlasses:
+                        case "ITEM_CRITGLASSES_NAME":
                             break;
-                        case ItemIndex.Hoof:
+                        case "ITEM_HOOF_NAME":
                             break;
-                        case ItemIndex.Feather:
+                        case "ITEM_FEATHER_NAME":
                             break;
-                        case ItemIndex.AACannon:
+                        case "ITEM_AACANNON_NAME":
                             //not used
                             break;
-                        case ItemIndex.ChainLightning:
+                        case "ITEM_CHAINLIGHTNING_NAME":
                             //uke
                             break;
-                        case ItemIndex.PlasmaCore:
+                        case "ITEM_PLASMACORE_NAME":
                             //not used
                             break;
-                        case ItemIndex.Seed:
+                        case "ITEM_SEED_NAME":
                             //leeching
                             break;
-                        case ItemIndex.Icicle:
+                        case "ITEM_ICICLE_NAME":
                             ShouldSpeak("Wow gee thanks");
                             //frost relic
                             break;
-                        case ItemIndex.GhostOnKill:
-                            ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2.ItemCatalog.GetItemDef(ItemIndex.Plant).nameToken)}");
+                        case "ITEM_GHOSTONKILL_NAME":
+                            ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2Content.Items.Plant.nameToken)}");
                             break;
-                        case ItemIndex.Mushroom:
-                            if (inventory.GetItemCount(ItemIndex.Mushroom) == 1)
+                        case "ITEM_MUSHROOM_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Mushroom) == 1)
                             {
-                                if (SurvivorCatalog.FindSurvivorDefFromBody(g.GetComponentInChildren<CharacterBody>().gameObject).survivorIndex == SurvivorIndex.Engi)
+                                if (SurvivorCatalog.FindSurvivorDefFromBody(g.GetComponentInChildren<CharacterBody>().gameObject) == RoR2Content.Survivors.Engi)
                                 {
                                     ShouldSpeak("Oh yeah, it's all coming together");
                                 }
@@ -782,63 +781,63 @@ namespace MoistureUpset
                             }
                             //bungus
                             break;
-                        case ItemIndex.Crowbar:
+                        case "ITEM_CROWBAR_NAME":
                             break;
-                        case ItemIndex.LevelBonus:
+                        case "ITEM_LEVELBONUS_NAME":
                             //not used
                             break;
-                        case ItemIndex.AttackSpeedOnCrit:
+                        case "ITEM_ATTACKSPEEDONCRIT_NAME":
                             break;
-                        case ItemIndex.BleedOnHit:
-                            if (inventory.GetItemCount(ItemIndex.BleedOnHit) == 7)
+                        case "ITEM_BLEEDONHIT_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 7)
                             {
                                 ShouldSpeak("Oh yeah, it's gamer time.");
                             }
                             break;
-                        case ItemIndex.SprintOutOfCombat:
+                        case "ITEM_SPRINTOUTOFCOMBAT_NAME":
                             break;
-                        case ItemIndex.FallBoots:
+                        case "ITEM_FALLBOOTS_NAME":
                             //the legendary
                             break;
-                        case ItemIndex.CooldownOnCrit:
+                        case "ITEM_COOLDOWNONCRIT_NAME":
                             //wicked ring not used
                             break;
-                        case ItemIndex.WardOnLevel:
+                        case "ITEM_WARDONLEVEL_NAME":
                             //warbanner
                             break;
-                        case ItemIndex.Phasing:
+                        case "ITEM_PHASING_NAME":
                             //stealthkit
                             break;
-                        case ItemIndex.HealOnCrit:
+                        case "ITEM_HEALONCRIT_NAME":
                             break;
-                        case ItemIndex.HealWhileSafe:
+                        case "ITEM_HEALWHILESAFE_NAME":
                             //slug
                             break;
-                        case ItemIndex.TempestOnKill:
+                        case "ITEM_TEMPESTONKILL_NAME":
                             //not used
                             break;
-                        case ItemIndex.PersonalShield:
+                        case "ITEM_PERSONALSHIELD_NAME":
                             break;
-                        case ItemIndex.EquipmentMagazine:
+                        case "ITEM_EQUIPMENTMAGAZINE_NAME":
                             //fuel cell
                             break;
-                        case ItemIndex.NovaOnHeal:
+                        case "ITEM_NOVAONHEAL_NAME":
                             //legendary heal damage thing
                             break;
-                        case ItemIndex.ShockNearby:
+                        case "ITEM_SHOCKNEARBY_NAME":
                             //tesla
                             break;
-                        case ItemIndex.Infusion:
+                        case "ITEM_INFUSION_NAME":
                             break;
-                        case ItemIndex.WarCryOnCombat:
+                        case "ITEM_WARCRYONCOMBAT_NAME":
                             //not used
                             break;
-                        case ItemIndex.Clover:
-                            if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 0)
+                        case "ITEM_CLOVER_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 0)
                             {
                                 ShouldSpeak("run = won");
                             }
-                            else if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 1)
+                            else if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 1)
                             {
                                 ShouldSpeak("I bet you are regretting that purity now aren't ya?");
                             }
@@ -847,25 +846,25 @@ namespace MoistureUpset
                                 ShouldSpeak("I bet you are regretting those purities now aren't ya?");
                             }
                             break;
-                        case ItemIndex.Medkit:
+                        case "ITEM_MEDKIT_NAME":
                             break;
-                        case ItemIndex.Bandolier:
+                        case "ITEM_BANDOLIER_NAME":
                             break;
-                        case ItemIndex.BounceNearby:
+                        case "ITEM_BOUNCENEARBY_NAME":
                             //meat hook
                             break;
-                        case ItemIndex.IgniteOnKill:
+                        case "ITEM_IGNITEONKILL_NAME":
                             //gas
                             break;
-                        case ItemIndex.PlantOnHit:
+                        case "ITEM_PLANTONHIT_NAME":
                             //not used
                             break;
-                        case ItemIndex.StunChanceOnHit:
+                        case "ITEM_STUNCHANCEONHIT_NAME":
                             break;
-                        case ItemIndex.Firework:
+                        case "ITEM_FIREWORK_NAME":
                             break;
-                        case ItemIndex.LunarDagger:
-                            if (inventory.GetItemCount(ItemIndex.LunarDagger) == 1)
+                        case "ITEM_LUNARDAGGER_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 1)
                             {
                                 if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length == 2)
                                 {
@@ -882,83 +881,83 @@ namespace MoistureUpset
                             }
                             else
                             {
-                                ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(ItemIndex.LunarDagger) - 1} of them, how much could one more hurt?");
+                                ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(RoR2Content.Items.LunarDagger) - 1} of them, how much could one more hurt?");
                             }
                             break;
-                        case ItemIndex.GoldOnHit:
+                        case "ITEM_GOLDONHIT_NAME":
                             //crown
                             break;
-                        case ItemIndex.MageAttunement:
+                        case "ITEM_MAGEATTUNEMENT_NAME":
                             //not used
                             break;
-                        case ItemIndex.WarCryOnMultiKill:
+                        case "ITEM_WARCRYONMULTIKILL_NAME":
                             //pauldron
                             break;
-                        case ItemIndex.BoostHp:
+                        case "ITEM_BOOSTHP_NAME":
                             //not used
                             break;
-                        case ItemIndex.BoostDamage:
+                        case "ITEM_BOOSTDAMAGE_NAME":
                             //not used
                             break;
-                        case ItemIndex.ShieldOnly:
+                        case "ITEM_SHIELDONLY_NAME":
                             ShouldSpeak($"Ah I see you are a gamer of culture.");
                             //trans
                             break;
-                        case ItemIndex.AlienHead:
+                        case "ITEM_ALIENHEAD_NAME":
                             break;
-                        case ItemIndex.Talisman:
+                        case "ITEM_TALISMAN_NAME":
                             //catalyst
                             break;
-                        case ItemIndex.Knurl:
+                        case "ITEM_KNURL_NAME":
                             break;
-                        case ItemIndex.BeetleGland:
+                        case "ITEM_BEETLEGLAND_NAME":
                             if (BigJank.getOptionValue("Winston") == 1)
                             {
                                 ShouldSpeak("Winston please switch");
                             }
                             break;
-                        case ItemIndex.BurnNearby:
+                        case "ITEM_BURNNEARBY_NAME":
                             //not used
                             break;
-                        case ItemIndex.CritHeal:
+                        case "ITEM_CRITHEAL_NAME":
                             //not used
                             break;
-                        case ItemIndex.CrippleWardOnLevel:
+                        case "ITEM_CRIPPLEWARDONLEVEL_NAME":
                             //not used
                             break;
-                        case ItemIndex.SprintBonus:
+                        case "ITEM_SPRINTBONUS_NAME":
                             break;
-                        case ItemIndex.SecondarySkillMagazine:
+                        case "ITEM_SECONDARYSKILLMAGAZINE_NAME":
                             break;
-                        case ItemIndex.StickyBomb:
+                        case "ITEM_STICKYBOMB_NAME":
                             break;
-                        case ItemIndex.TreasureCache:
+                        case "ITEM_TREASURECACHE_NAME":
                             //rusted key
                             break;
-                        case ItemIndex.BossDamageBonus:
+                        case "ITEM_BOSSDAMAGEBONUS_NAME":
                             break;
-                        case ItemIndex.SprintArmor:
+                        case "ITEM_SPRINTARMOR_NAME":
                             break;
-                        case ItemIndex.IceRing:
+                        case "ITEM_ICERING_NAME":
                             break;
-                        case ItemIndex.FireRing:
+                        case "ITEM_FIRERING_NAME":
                             break;
-                        case ItemIndex.SlowOnHit:
+                        case "ITEM_SLOWONHIT_NAME":
                             break;
-                        case ItemIndex.ExtraLife:
+                        case "ITEM_EXTRALIFE_NAME":
                             break;
-                        case ItemIndex.ExtraLifeConsumed:
+                        case "ITEM_EXTRALIFECONSUMED_NAME":
                             break;
-                        case ItemIndex.UtilitySkillMagazine:
+                        case "ITEM_UTILITYSKILLMAGAZINE_NAME":
                             //hardlight
                             break;
-                        case ItemIndex.HeadHunter:
+                        case "ITEM_HEADHUNTER_NAME":
                             //vultures
                             break;
-                        case ItemIndex.KillEliteFrenzy:
+                        case "ITEM_KILLELITEFRENZY_NAME":
                             //stonks
                             break;
-                        case ItemIndex.RepeatHeal:
+                        case "ITEM_REPEATHEAL_NAME":
                             switch (UnityEngine.Random.Range(0, 2))
                             {
                                 case 0:
@@ -975,52 +974,54 @@ namespace MoistureUpset
                             }
                             //corpseblossom
                             break;
-                        case ItemIndex.Ghost:
+                        case "ITEM_GHOST_NAME":
                             //not used
                             break;
-                        case ItemIndex.HealthDecay:
+                        case "ITEM_HEALTHDECAY_NAME":
                             //not used
                             break;
-                        case ItemIndex.AutoCastEquipment:
-                            if (inventory.GetItemCount(ItemIndex.AutoCastEquipment) + inventory.GetItemCount(ItemIndex.EquipmentMagazine) < 4
-                                && inventory.GetItemCount(ItemIndex.Talisman) == 0
-                                && inventory.GetEquipmentIndex() == EquipmentIndex.Tonic
-                                && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) <= 0)
+                        case "ITEM_AUTOCASTEQUIPMENT_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) + inventory.GetItemCount(RoR2Content.Items.EquipmentMagazine) < 4
+                                && inventory.GetItemCount(RoR2Content.Items.Talisman) == 0
+                                //inventory.currentEquipmentState.equipmentDef.nameToken == "EQUIPMENT_BURNNEARBY_NAME"
+                                //&& inventory.GetEquipmentIndex() == EquipmentIndex.Tonic
+                                && inventory.currentEquipmentState.equipmentDef.nameToken == "EQUIPMENT_TONIC_NAME"
+                                && inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) <= 0)
                             {
                                 ShouldSpeak("I hope you enjoy the tonic afflictions");
                             }
                             //gesture
                             break;
-                        case ItemIndex.IncreaseHealing:
+                        case "ITEM_INCREASEHEALING_NAME":
                             //rejuv rack
                             break;
-                        case ItemIndex.JumpBoost:
+                        case "ITEM_JUMPBOOST_NAME":
                             //quail
                             break;
-                        case ItemIndex.DrizzlePlayerHelper:
+                        case "ITEM_DRIZZLEPLAYERHELPER_NAME":
                             //not used
                             break;
-                        case ItemIndex.ExecuteLowHealthElite:
-                            if (RoR2.Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(ItemIndex.ExecuteLowHealthElite) == 1)
+                        case "ITEM_EXECUTELOWHEALTHELITE_NAME":
+                            if (RoR2.Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(RoR2Content.Items.ExecuteLowHealthElite) == 1)
                             {
                                 ShouldSpeak("Finally");
                             }
                             break;
-                        case ItemIndex.EnergizedOnEquipmentUse:
+                        case "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME":
                             //war horn
                             break;
-                        case ItemIndex.BarrierOnOverHeal:
+                        case "ITEM_BARRIERONOVERHEAL_NAME":
                             break;
-                        case ItemIndex.TonicAffliction:
-                            if (inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) < 0)
+                        case "ITEM_TONICAFFLICTION_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) < 0)
                             {
                                 ShouldSpeak("What are you even thinking!?");
                             }
-                            else if (inventory.GetItemCount(ItemIndex.AutoCastEquipment) + inventory.GetItemCount(ItemIndex.EquipmentMagazine) < 4
-                                && inventory.GetItemCount(ItemIndex.Talisman) == 0
-                                && inventory.GetEquipmentIndex() == EquipmentIndex.Tonic
-                                && inventory.GetItemCount(ItemIndex.Clover) - inventory.GetItemCount(ItemIndex.LunarBadLuck) <= 0
-                                && inventory.GetItemCount(ItemIndex.AutoCastEquipment) > 0)
+                            else if (inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) + inventory.GetItemCount(RoR2Content.Items.EquipmentMagazine) < 4
+                                && inventory.GetItemCount(RoR2Content.Items.Talisman) == 0
+                                && inventory.currentEquipmentState.equipmentDef.nameToken == "EQUIPMENT_TONIC_NAME"
+                                && inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) <= 0
+                                && inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) > 0)
                             {
                                 ShouldSpeak("You deserve that one");
                             }
@@ -1029,52 +1030,52 @@ namespace MoistureUpset
                                 ShouldSpeak("Maybe the tonic life shouldn't be for you?");
                             }
                             break;
-                        case ItemIndex.TitanGoldDuringTP:
+                        case "ITEM_TITANGOLDDURINGTP_NAME":
                             //halcyon seed
                             break;
-                        case ItemIndex.SprintWisp:
+                        case "ITEM_SPRINTWISP_NAME":
                             //disciple
                             break;
-                        case ItemIndex.BarrierOnKill:
+                        case "ITEM_BARRIERONKILL_NAME":
                             break;
-                        case ItemIndex.ArmorReductionOnHit:
+                        case "ITEM_ARMORREDUCTIONONHIT_NAME":
                             break;
-                        case ItemIndex.TPHealingNova:
+                        case "ITEM_TPHEALINGNOVA_NAME":
                             //shiton daisy
                             break;
-                        case ItemIndex.NearbyDamageBonus:
+                        case "ITEM_NEARBYDAMAGEBONUS_NAME":
                             //focus crystal
                             break;
-                        case ItemIndex.LunarUtilityReplacement:
+                        case "ITEM_LUNARUTILITYREPLACEMENT_NAME":
                             //strides
                             break;
-                        case ItemIndex.MonsoonPlayerHelper:
+                        case "ITEM_MONSOONPLAYERHELPER_NAME":
                             //not used
                             break;
-                        case ItemIndex.Thorns:
+                        case "ITEM_THORNS_NAME":
                             //razorwire
                             break;
-                        case ItemIndex.RegenOnKill:
+                        case "ITEM_REGENONKILL_NAME":
                             //meat
                             break;
-                        case ItemIndex.Pearl:
+                        case "ITEM_PEARL_NAME":
                             break;
-                        case ItemIndex.ShinyPearl:
+                        case "ITEM_SHINYPEARL_NAME":
                             ShouldSpeak("bruh");
                             break;
-                        case ItemIndex.BonusGoldPackOnKill:
+                        case "ITEM_BONUSGOLDPACKONKILL_NAME":
                             //ghor
                             break;
-                        case ItemIndex.LaserTurbine:
+                        case "ITEM_LASERTURBINE_NAME":
                             //res disc
                             break;
-                        case ItemIndex.LunarPrimaryReplacement:
+                        case "ITEM_LUNARPRIMARYREPLACEMENT_NAME":
                             //visions
                             break;
-                        case ItemIndex.NovaOnLowHealth:
+                        case "ITEM_NOVAONLOWHEALTH_NAME":
                             break;
-                        case ItemIndex.LunarTrinket:
-                            if (inventory.GetItemCount(ItemIndex.LunarTrinket) == 1)
+                        case "ITEM_LUNARTRINKET_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.LunarTrinket) == 1)
                             {
                                 ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later");
                             }
@@ -1084,73 +1085,73 @@ namespace MoistureUpset
                             }
                             //beads
                             break;
-                        case ItemIndex.InvadingDoppelganger:
+                        case "ITEM_INVADINGDOPPELGANGER_NAME":
                             //not used
                             break;
-                        case ItemIndex.CutHp:
+                        case "ITEM_CUTHP_NAME":
                             //not used
                             break;
-                        case ItemIndex.ArtifactKey:
+                        case "ITEM_ARTIFACTKEY_NAME":
                             break;
-                        case ItemIndex.ArmorPlate:
+                        case "ITEM_ARMORPLATE_NAME":
                             break;
-                        case ItemIndex.Squid:
+                        case "ITEM_SQUID_NAME":
                             break;
-                        case ItemIndex.DeathMark:
-                            if (inventory.GetItemCount(ItemIndex.DeathMark) == 2)
+                        case "ITEM_DEATHMARK_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.DeathMark) == 2)
                             {
                                 ShouldSpeak("You do realise stacking these does basically nothing right?");
                             }
                             break;
-                        case ItemIndex.Plant:
+                        case "ITEM_PLANT_NAME":
                             //idp
                             ShouldSpeak("Well well well, if it isn't the best item in the game");
                             break;
-                        case ItemIndex.Incubator:
+                        case "ITEM_INCUBATOR_NAME":
                             //not used
                             break;
-                        case ItemIndex.FocusConvergence:
+                        case "ITEM_FOCUSCONVERGENCE_NAME":
                             break;
-                        case ItemIndex.BoostAttackSpeed:
+                        case "ITEM_BOOSTATTACKSPEED_NAME":
                             //not used
                             break;
-                        case ItemIndex.AdaptiveArmor:
+                        case "ITEM_ADAPTIVEARMOR_NAME":
                             //not used
                             break;
-                        case ItemIndex.CaptainDefenseMatrix:
+                        case "ITEM_CAPTAINDEFENSEMATRIX_NAME":
                             break;
-                        case ItemIndex.FireballsOnHit:
+                        case "ITEM_FIREBALLSONHIT_NAME":
                             //perforator
                             break;
-                        case ItemIndex.BleedOnHitAndExplode:
+                        case "ITEM_BLEEDONHITANDEXPLODE_NAME":
                             //spleeeeeen
                             break;
-                        case ItemIndex.SiphonOnLowHealth:
+                        case "ITEM_SIPHONONLOWHEALTH_NAME":
                             //urn
                             break;
-                        case ItemIndex.MonstersOnShrineUse:
+                        case "ITEM_MONSTERSONSHRINEUSE_NAME":
                             break;
-                        case ItemIndex.RandomDamageZone:
+                        case "ITEM_RANDOMDAMAGEZONE_NAME":
                             break;
-                        case ItemIndex.ScrapWhite:
+                        case "ITEM_SCRAPWHITE_NAME":
                             break;
-                        case ItemIndex.ScrapGreen:
+                        case "ITEM_SCRAPGREEN_NAME":
                             break;
-                        case ItemIndex.ScrapRed:
+                        case "ITEM_SCRAPRED_NAME":
                             ShouldSpeak("Good luck ever finding a printer for this");
                             break;
-                        case ItemIndex.ScrapYellow:
+                        case "ITEM_SCRAPYELLOW_NAME":
                             break;
-                        case ItemIndex.LunarBadLuck:
-                            if (inventory.GetItemCount(ItemIndex.LunarBadLuck) == 1)
+                        case "ITEM_LUNARBADLUCK_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 1)
                             {
                                 ShouldSpeak("This is almost definitely a bad idea.");
                             }
                             break;
-                        case ItemIndex.BoostEquipmentRecharge:
+                        case "ITEM_BOOSTEQUIPMENTRECHARGE_NAME":
                             //not used
                             break;
-                        case ItemIndex.Count:
+                        case "ITEM_COUNT_NAME":
                             break;
                         default:
                             break;
@@ -1959,7 +1960,7 @@ namespace MoistureUpset
             GetComponent<RectTransform>().SetAsLastSibling();
             yield return new WaitUntil(() => a.GetCurrentAnimatorClipInfo(0)[0].clip.name == "idle");
             GoTo(transform.position);
-            if (SceneManager.GetActiveScene().name != "moon")
+            if (SceneManager.GetActiveScene().name != "moon2")
             {
                 switch (UnityEngine.Random.Range(0, 3))
                 {

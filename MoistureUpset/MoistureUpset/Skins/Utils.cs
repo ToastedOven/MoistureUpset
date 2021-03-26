@@ -35,7 +35,7 @@ namespace MoistureUpset.Skins
             JotaroCaptain.Init();
             StarPlatinumLoader.Init();
 
-            //AnimationReplacements.RunAll();
+            AnimationReplacements.RunAll();
             
             On.RoR2.SurvivorCatalog.Init += AddSkinReloader;
         }

@@ -67,7 +67,7 @@ public class mousechecker : MonoBehaviour
                 events.cursorOpenerForGamepadCount += 1;
                 events.cursorOpenerCount += 1;
             }
-            transform.localPosition = v; 
+            transform.localPosition = v;
         }
         else
         {
@@ -80,7 +80,7 @@ public class mousechecker : MonoBehaviour
                     if (Math.Abs(Input.mousePosition.x - (Screen.width / 2.0f)) < 30f * XScale && Math.Abs(Input.mousePosition.y - (Screen.height / 2.0f)) < 30f * YScale)
                     {
                         var identity = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject.GetComponent<NetworkIdentity>();
-                        
+
                         if (!NetworkServer.active)
                         {
                             new SyncAnimationToServer(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Server);
@@ -92,7 +92,7 @@ public class mousechecker : MonoBehaviour
                             GameObject bodyObject = Util.FindNetworkObject(identity.netId);
                             bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim("none");
                         }
-                        
+
                     }
                     else
                     {
@@ -105,7 +105,6 @@ public class mousechecker : MonoBehaviour
                         else
                         {
                             new SyncAnimationToClients(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Clients);
-
                             GameObject bodyObject = Util.FindNetworkObject(identity.netId);
                             bodyObject.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<BoneMapper>().PlayAnim(selected.GetComponentInChildren<TextMeshProUGUI>().text);
                         }
