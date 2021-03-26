@@ -33,7 +33,7 @@ namespace MoistureUpset.Skins
         {
             orig();
 
-            var survivorDef = SurvivorCatalog.GetSurvivorDef(SurvivorIndex.Commando);
+            var survivorDef = RoR2Content.Survivors.Commando;
             var bodyPrefab = survivorDef.bodyPrefab;
 
             var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
