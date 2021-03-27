@@ -37,95 +37,95 @@ namespace MoistureUpset.Skins
         {
             orig();
 
-            var survivorDef = RoR2Content.Survivors.Captain;
-            var bodyPrefab = survivorDef.bodyPrefab;
+            //var survivorDef = RoR2Content.Survivors.Captain;
+            //var bodyPrefab = survivorDef.bodyPrefab;
 
-            var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
-            var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
+            //var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
+            //var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            var mdl = skinController.gameObject;
+            //var mdl = skinController.gameObject;
 
-            var skin = new LoadoutAPI.SkinDefInfo
-            {
-                Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
-                Name = Name,
-                NameToken = NameToken,
-                RootObject = mdl,
-                BaseSkins = new SkinDef[0],
-                UnlockableName = "",
-                GameObjectActivations = new SkinDef.GameObjectActivation[0],
-                RendererInfos = new CharacterModel.RendererInfo[]
-                {
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Assets.CreateMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.png"),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = renderers[0]
-                    },
-                    new CharacterModel.RendererInfo
-                    {
-                        defaultMaterial = Assets.CreateMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotarohurt.png"),
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                        ignoreOverlays = false,
-                        renderer = renderers[2]
-                    }
-                },
+            //var skin = new LoadoutAPI.SkinDefInfo
+            //{
+            //    Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
+            //    Name = Name,
+            //    NameToken = NameToken,
+            //    RootObject = mdl,
+            //    BaseSkins = new SkinDef[0],
+            //    UnlockableName = "",
+            //    GameObjectActivations = new SkinDef.GameObjectActivation[0],
+            //    RendererInfos = new CharacterModel.RendererInfo[]
+            //    {
+            //        new CharacterModel.RendererInfo
+            //        {
+            //            defaultMaterial = Assets.CreateMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.png"),
+            //            defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+            //            ignoreOverlays = false,
+            //            renderer = renderers[0]
+            //        },
+            //        new CharacterModel.RendererInfo
+            //        {
+            //            defaultMaterial = Assets.CreateMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotarohurt.png"),
+            //            defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+            //            ignoreOverlays = false,
+            //            renderer = renderers[2]
+            //        }
+            //    },
 
-                MeshReplacements = new SkinDef.MeshReplacement[]
-                {
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"),
-                        renderer = renderers[0]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
-                        renderer = renderers[1]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"), // We use this skinnedmeshrenderer to be the hurt jotaro.
-                        renderer = renderers[2]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
-                        renderer = renderers[3]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
-                        renderer = renderers[4]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
-                        renderer = renderers[5]
-                    },
-                    new SkinDef.MeshReplacement
-                    {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
-                        renderer = renderers[6]
-                    }
-                },
-                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
-            };
+            //    MeshReplacements = new SkinDef.MeshReplacement[]
+            //    {
+            //        new SkinDef.MeshReplacement
+            //        {
+            //            mesh = Resources.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"),
+            //            renderer = renderers[0]
+            //        },
+            //        new SkinDef.MeshReplacement
+            //        {
+            //            mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+            //            renderer = renderers[1]
+            //        },
+            //        new SkinDef.MeshReplacement
+            //        {
+            //            mesh = Resources.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"), // We use this skinnedmeshrenderer to be the hurt jotaro.
+            //            renderer = renderers[2]
+            //        },
+            //        new SkinDef.MeshReplacement
+            //        {
+            //            mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+            //            renderer = renderers[3]
+            //        },
+            //        new SkinDef.MeshReplacement
+            //        {
+            //            mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+            //            renderer = renderers[4]
+            //        },
+            //        new SkinDef.MeshReplacement
+            //        {
+            //            mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+            //            renderer = renderers[5]
+            //        },
+            //        new SkinDef.MeshReplacement
+            //        {
+            //            mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+            //            renderer = renderers[6]
+            //        }
+            //    },
+            //    ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+            //    MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
+            //};
 
-            Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
-            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
+            //Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
+            //skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
 
-            var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
-            skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
-            Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
+            //var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
+            //skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
+            //Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
 
-            LanguageAPI.Add(NameToken, Name);
+            //LanguageAPI.Add(NameToken, Name);
 
-            SkinHelper.RegisterSkin(NameToken, "jotaro");
+            //SkinHelper.RegisterSkin(NameToken, "jotaro");
 
-            DebugClass.Log($"Adding skin: {Name}");
+            //DebugClass.Log($"Adding skin: {Name}");
         }
 
         private static void CaptainDisplayFix()

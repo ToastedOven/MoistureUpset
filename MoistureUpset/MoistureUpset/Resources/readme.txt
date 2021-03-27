@@ -1,0 +1,1 @@
+This is just residual files for moisture upset's tts system, run the .bat file or just delete the folder.

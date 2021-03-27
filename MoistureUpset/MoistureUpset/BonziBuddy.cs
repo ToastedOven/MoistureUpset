@@ -105,6 +105,7 @@ namespace MoistureUpset
             textBox.SetActive(false);
             preloaded.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/frames.png");
             Hooks();
+            SetupBalcon();
         }
         private void Hooks()
         {
@@ -189,7 +190,7 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            if (BigJank.getOptionValue("Top Secret Setting") == 1 && LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID") && !bonziActive)
+                            if (BigJank.getOptionValue("Top Secret Setting") == 1 /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/ && !bonziActive)
                             {
                                 Activate();
                             }
@@ -631,7 +632,7 @@ namespace MoistureUpset
                             quotes.Add("Oh yeah, it's all coming together");
                         }
                     }
-                    catch (Exception e )
+                    catch (Exception e)
                     {
                         DebugClass.Log(e);
                     }
@@ -1920,7 +1921,7 @@ namespace MoistureUpset
         }
         public static void SetActive(bool yeet)
         {
-            if (LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))
+            if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/true)
             {
                 if (!yeet && !buddy.bonziActive)
                 {
@@ -2067,38 +2068,47 @@ namespace MoistureUpset
             }
             return false;
         }
+        private static string documents = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
         public IEnumerator loadsong(string text)
         {
             if (!speaking)
             {
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = $"/C del BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
-                process.StartInfo = startInfo;
-                process.Start();
+                string balconPath = $"\"{documents}\\My Games\\Moisture Upset\\data\\balcon.exe\"";
+                string joemamaPath = $"\"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav\"";
+                System.Diagnostics.Process process;
+                System.Diagnostics.ProcessStartInfo startInfo;
+                if (File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"))
+                {
+                    process = new System.Diagnostics.Process();
+                    startInfo = new System.Diagnostics.ProcessStartInfo();
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = $"/C del {joemamaPath}";
+                    process.StartInfo = startInfo;
+                    process.Start();
+                }
+                yield return new WaitUntil(() => !File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
 
-                yield return new WaitUntil(() => !File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"));
 
                 process = new System.Diagnostics.Process();
                 startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-
+                startInfo.FileName = balconPath;
                 if (BigJank.getOptionValue("Original REDACTED TTS") == 1)
                 {
-                    startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n Sidney -t \"{text}\" -p 60 -s 140 -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                    startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
                 }
                 else
                 {
-                    startInfo.Arguments = $"/C BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\balcon.exe -n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav";
+                    startInfo.Arguments = $"-n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w {joemamaPath}";
                 }
                 process.StartInfo = startInfo;
                 process.Start();
 
-                yield return new WaitUntil(() => File.Exists("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav"));
-                FileInfo file = new FileInfo("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav");
+                yield return new WaitUntil(() => process.HasExited);
+                DebugClass.Log($"----------file is supposedly done");
+                yield return new WaitUntil(() => File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
+                FileInfo file = new FileInfo($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav");
                 yield return new WaitUntil(() => !isLocked(file));
 
                 if (text == "stop")
@@ -2115,14 +2125,6 @@ namespace MoistureUpset
                     a.SetBool("speaking", true);
                     speaking = true;
 
-                    //AkExternalSourceInfo source = new AkExternalSourceInfo();
-                    //source.iExternalSrcCookie = AkSoundEngine.GetIDFromString("TestTTSAudio");
-                    //source.szFile = "joemama.wav";
-                    //source.idCodec = AkSoundEngine.AKCODECID_PCM;
-
-                    //AkSoundEngine.PostEvent("TestTTSAudio", GameObject.FindObjectOfType<GameObject>(), 0, null, null, 1, source);
-                    //Debug.Log($"--------postaudioevent");
-
                     AkAudioInputManager.PostAudioInputEvent("ttsInput", GameObject.FindObjectOfType<GameObject>(), WavBufferToWwise, BeforePlayingAudio);
                 }
             }
@@ -2131,23 +2133,93 @@ namespace MoistureUpset
         private uint length = 0;
 
         float[] left, right;
+        public void SetupBalcon()
+        {
+            if (!Directory.Exists($"{documents}\\My Games"))
+            {
+                DebugClass.Log($"How do you not even have a \"My Games\" folder???? What happened");
+                Directory.CreateDirectory($"{documents}\\My Games");
+            }
+            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset"))
+            {
+                DebugClass.Log($"Creating Folder");
+                Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset");
+            }
+            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data"))
+            {
+                DebugClass.Log($"Creating Folder");
+                Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset\\data");
+            }
+
+
+
+            if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\balcon.exe"))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.balcon.exe"))
+                {
+                    using (var file = new FileStream($"{documents}\\My Games\\Moisture Upset\\data\\balcon.exe", FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
+            if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\spchapi.exe"))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.spchapi.exe"))
+                {
+                    using (var file = new FileStream($"{documents}\\My Games\\Moisture Upset\\data\\spchapi.exe", FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
+            if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\tv_enua.exe"))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.tv_enua.exe"))
+                {
+                    using (var file = new FileStream($"{documents}\\My Games\\Moisture Upset\\data\\tv_enua.exe", FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
+            if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\readme.txt"))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.readme.txt"))
+                {
+                    using (var file = new FileStream($"{documents}\\My Games\\Moisture Upset\\readme.txt", FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
+            if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\Delet this.bat"))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.Delet this.bat"))
+                {
+                    using (var file = new FileStream($"{documents}\\My Games\\Moisture Upset\\Delet this.bat", FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
+        }
 
         public static void FixTTS(bool yeet)
         {
             if (!yeet)
             {
                 string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
-                string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                if ((!File.Exists(s + "\\Speech\\speech.dll") || !File.Exists(s + "\\lhsp\\help\\tv_enua.hlp")) && File.Exists("SAPI4_Installed"))
+                if ((!File.Exists(s + "\\Speech\\speech.dll") || !File.Exists(s + "\\lhsp\\help\\tv_enua.hlp")) && File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed"))
                 {
-                    File.Delete("SAPI4_Installed");
+                    File.Delete($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed");
                 }
                 //string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
-                if (!File.Exists("SAPI4_Installed"))
+                if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed"))
                 {
-                    File.Create("SAPI4_Installed");
-                    System.Diagnostics.Process.Start($"{path}\\MetrosexualFruitcake-MoistureUpset\\spchapi.exe");
-                    System.Diagnostics.Process.Start($"{path}\\MetrosexualFruitcake-MoistureUpset\\tv_enua.exe");
+                    File.Create($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed");
+                    System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\spchapi.exe");
+                    System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\tv_enua.exe");
                 }
             }
         }
@@ -2210,7 +2282,7 @@ namespace MoistureUpset
 
             left = right = new float[0];
 
-            readWav("BepInEx\\plugins\\MetrosexualFruitcake-MoistureUpset\\joemama.wav", out left, out right, out samplerate, out channels);
+            readWav($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav", out left, out right, out samplerate, out channels);
 
             format.channelConfig.uNumChannels = channels;
             format.uSampleRate = samplerate;
