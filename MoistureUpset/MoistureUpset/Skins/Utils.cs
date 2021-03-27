@@ -30,10 +30,10 @@ namespace MoistureUpset.Skins
         // Add all the skins to load here
         public static void LoadAllSkins()
         {
-            CommandoTest.Init();
-            TF2Engi.Init();
-            JotaroCaptain.Init();
-            StarPlatinumLoader.Init();
+            //CommandoTest.Init();
+            //TF2Engi.Init();
+            //JotaroCaptain.Init();
+            //StarPlatinumLoader.Init();
 
             AnimationReplacements.RunAll();
             
