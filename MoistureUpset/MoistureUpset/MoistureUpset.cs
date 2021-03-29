@@ -2,27 +2,16 @@
 using R2API.Utils;
 using RoR2;
 using R2API;
-using R2API.MiscHelpers;
 using System.Reflection;
-using static R2API.SoundAPI;
 using UnityEngine;
-using UnityEditor;
-using System;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using RoR2.UI;
 using RiskOfOptions;
-using System.Text;
-using System.IO;
 using UnityEngine.Video;
-using RoR2.PostProcessing;
 using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
-using R2API.Networking;
 using MoistureUpset.NetMessages;
-using System.Linq;
-using UnityEngine.Assertions;
 
 namespace MoistureUpset
 {
@@ -43,6 +32,7 @@ namespace MoistureUpset
             Settings.RunAll();
 
             Assets.PopulateAssets();
+            //
 
             Skins.Utils.LoadAllSkins();
 
@@ -143,6 +133,25 @@ namespace MoistureUpset
 
                 AkSoundEngine.PostEvent("PlayOpening", GameObject.FindObjectOfType<GameObject>());
             }
+
+            //if (arg0.name == "title")
+            //{
+            //    var dialog = SimpleDialogBox.Create();
+
+            //    dialog.headerToken = new SimpleDialogBox.TokenParamsPair
+            //    { 
+            //        token = "Hey!",
+            //        formatParams = Array.Empty<object>()
+            //    };
+
+            //    dialog.descriptionToken = new SimpleDialogBox.TokenParamsPair
+            //    {
+            //        token = "Did you know you can customize this brain damage? \n Go to options and then mod options.",
+            //        formatParams = Array.Empty<object>()
+            //    };
+
+            //    dialog.AddCancelButton("ok");
+            //}
         }
 
         private void IntroFinished(VideoPlayer source)
