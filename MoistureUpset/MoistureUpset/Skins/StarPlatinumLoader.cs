@@ -20,7 +20,8 @@ namespace MoistureUpset.Skins
         public static void Init()
         {
             PopulateAssets();
-            On.RoR2.SurvivorCatalog.Init += RegisterSkin;
+
+            Utils.AddSkin("LoaderBody", LoaderSkin);
         }
 
         // Load assets here
@@ -35,86 +36,75 @@ namespace MoistureUpset.Skins
         }
 
         // Skindef stuff here
-        private static void RegisterSkin(On.RoR2.SurvivorCatalog.orig_Init orig)
+        private static SkinDef[] LoaderSkin(GameObject bodyPrefab)
         {
-            orig();
+            var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
+            var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
 
-            //var survivorDef = RoR2Content.Survivors.Loader;
-            //var bodyPrefab = survivorDef.bodyPrefab;
+            var mdl = skinController.gameObject;
 
-            //var renderers = bodyPrefab.GetComponentsInChildren<Renderer>();
-            //var skinController = bodyPrefab.GetComponentInChildren<ModelSkinController>();
+            var skin = new LoadoutAPI.SkinDefInfo
+            {
+                Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
+                Name = Name,
+                NameToken = NameToken,
+                RootObject = mdl,
+                BaseSkins = new SkinDef[0],
+                UnlockableName = "",
+                GameObjectActivations = new SkinDef.GameObjectActivation[0],
 
-            //var mdl = skinController.gameObject;
+                RendererInfos = new CharacterModel.RendererInfo[]
+                {
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[0]
+                    },
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[1]
+                    },
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[2]
+                    },
+                },
 
-            //var skin = new LoadoutAPI.SkinDefInfo
-            //{
-            //    Icon = LoadoutAPI.CreateSkinIcon(Color.black, Color.white, new Color(0.69F, 0.19F, 0.65F, 1F), Color.yellow),
-            //    Name = Name,
-            //    NameToken = NameToken,
-            //    RootObject = mdl,
-            //    BaseSkins = new SkinDef[0],
-            //    UnlockableName = "",
-            //    GameObjectActivations = new SkinDef.GameObjectActivation[0],
+                MeshReplacements = new SkinDef.MeshReplacement[]
+                {
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
+                        renderer = renderers[0]
+                    },
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
+                        renderer = renderers[1]
+                    },
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
+                        renderer = renderers[2]
+                    }
 
-            //    RendererInfos = new CharacterModel.RendererInfo[]
-            //    {
-            //        new CharacterModel.RendererInfo
-            //        {
-            //            defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
-            //            defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-            //            ignoreOverlays = false,
-            //            renderer = renderers[0]
-            //        },
-            //        new CharacterModel.RendererInfo
-            //        {
-            //            defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
-            //            defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-            //            ignoreOverlays = false,
-            //            renderer = renderers[1]
-            //        },
-            //        new CharacterModel.RendererInfo
-            //        {
-            //            defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
-            //            defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-            //            ignoreOverlays = false,
-            //            renderer = renderers[2]
-            //        },
-            //    },
+                },
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
+            };
 
-            //    MeshReplacements = new SkinDef.MeshReplacement[]
-            //    {
-            //        new SkinDef.MeshReplacement
-            //        {
-            //            mesh = Resources.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
-            //            renderer = renderers[0]
-            //        },
-            //        new SkinDef.MeshReplacement
-            //        {
-            //            mesh = Resources.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
-            //            renderer = renderers[1]
-            //        },
-            //        new SkinDef.MeshReplacement
-            //        {
-            //            mesh = Resources.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
-            //            renderer = renderers[2]
-            //        }
+            Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
+            skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
 
-            //    },
-            //    ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-            //    MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
-            //};
-
-            //Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
-            //skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
-
-            //var skinsField = Reflection.GetFieldValue<SkinDef[][]>(typeof(BodyCatalog), "skins");
-            //skinsField[BodyCatalog.FindBodyIndex(bodyPrefab)] = skinController.skins;
-            //Reflection.SetFieldValue(typeof(BodyCatalog), "skins", skinsField);
-
-            //LanguageAPI.Add(NameToken, Name);
-
-            //DebugClass.Log($"Adding skin: {Name}");
+            return skinController.skins;
         }
     }
 }

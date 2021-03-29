@@ -370,7 +370,7 @@ namespace MoistureUpset
                 UImods.ReplaceTexture2D("textures/bodyicons/RoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
             if (BigJank.getOptionValue("Obama Prism") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/RoboBallMiniBody", "MoistureUpset.Resources.obamaprism.png");
-            if (BigJank.getOptionValue("Obama prism") == 1)
+            if (BigJank.getOptionValue("Obama Prism") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/SuperRoboBallBossBody", "MoistureUpset.Resources.obamasphere.png");
             if (BigJank.getOptionValue("Dogplane") == 1)
                 UImods.ReplaceTexture2D("textures/bodyicons/WispBody", "MoistureUpset.Resources.dogplane.png");
