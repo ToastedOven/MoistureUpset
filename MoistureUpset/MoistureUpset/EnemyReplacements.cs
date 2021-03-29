@@ -1724,7 +1724,7 @@ namespace MoistureUpset
             };
             On.RoR2.EffectManager.SpawnEffect_EffectIndex_EffectData_bool += (orig, index, data, transmit) =>
             {
-                if ((int)index == 404 && !transmit)
+                if (EffectCatalog.GetEffectDef(index).prefabName == "TitanFistEffect" && !transmit)
                 {
                     if (NetworkClient.active)
                     {
