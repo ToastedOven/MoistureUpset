@@ -13,7 +13,7 @@ namespace MoistureUpset.NetMessages
     {
         PickupIndex item;
         Int32 count;
-        List<PickupIndex> pickups = new List<PickupIndex>();
+        private static List<PickupIndex> pickups = new List<PickupIndex>();
 
         public SyncMountain()
         {

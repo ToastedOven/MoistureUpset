@@ -109,6 +109,12 @@ namespace MoistureUpset
         }
         private void Hooks()
         {
+            //On.RoR2.EscapeSequenceController.EscapeSequenceMainState.OnEnter += (orig, self) =>
+            //{
+            //    orig(self);
+            //    DebugClass.Log($"----------{self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("t")}");
+            //    self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("tNow") = 5;
+            //};
             On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
@@ -132,27 +138,27 @@ namespace MoistureUpset
 
                     obj1 = preloaded;
                     obj1 = Instantiate(obj1);
-                    obj1.transform.position = new Vector3(1850, 351, 719);
+                    obj1.transform.position = new Vector3(448, -140, 525);
 
                     obj3 = preloaded;
                     obj3 = Instantiate(obj3);
-                    obj3.transform.position = new Vector3(1958, 340, 722);
+                    obj3.transform.position = new Vector3(554, -140, 632);
 
                     obj4 = preloaded;
                     obj4 = Instantiate(obj4);
-                    obj4.transform.position = new Vector3(2170, 336, 728);
+                    obj4.transform.position = new Vector3(675, -140, 757);
 
                     obj5 = preloaded;
                     obj5 = Instantiate(obj5);
-                    obj5.transform.position = new Vector3(2317, 337, 726);
+                    obj5.transform.position = new Vector3(810, -140, 893);
 
                     obj6 = preloaded;
                     obj6 = Instantiate(obj6);
-                    obj6.transform.position = new Vector3(2432, 248, 724);
+                    obj6.transform.position = new Vector3(974, -244, 1046);
 
                     obj2 = new GameObject();
                     obj2 = Instantiate(obj2);
-                    obj2.transform.position = new Vector3(2656, 205, 722);
+                    obj2.transform.position = new Vector3(1105, -283, 1181);
                     AkSoundEngine.PostEvent("BonziGlitches", obj2);
                 }
             };
@@ -207,6 +213,7 @@ namespace MoistureUpset
                             break;
                         case "moon2":
                             //frogge 
+                            On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
                             break;
                         default:
                             GoTo(M1);
@@ -215,6 +222,10 @@ namespace MoistureUpset
                     if (newS.name != "outro")
                     {
                         enabled = true; /////and this
+                    }
+                    if (newS.name != "moon2")
+                    {
+                        On.RoR2.Run.FixedUpdate -= Run_FixedUpdate;
                     }
                     charPosition = null;
                     AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
@@ -345,13 +356,27 @@ namespace MoistureUpset
                 if (mountainShrineItems > 0)
                 {
                     mountainShrineItems--;
-                    if (mountainShrineItems == 0)
-                    {
-                        new SyncMountain(index, mountainShrineCount).Send(R2API.Networking.NetworkDestination.Clients);
-                    }
+                    new SyncMountain(index, mountainShrineCount).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             };
         }
+
+        private void Run_FixedUpdate(On.RoR2.Run.orig_FixedUpdate orig, Run self)
+        {
+            //if (charPosition != null)
+            //{
+            //    float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
+            //    if (num < 799 && num > 1)
+            //    {
+            //        DebugClass.Log($"----------{self.fixedTime}");
+            //        self.fixedTime -= Time.fixedDeltaTime / (800f - num);
+            //        DebugClass.Log($"-----------------{self.fixedTime}");
+            //    }
+            //}
+            orig(self);
+            //DebugClass.Log($"-------------------------{self.fixedTime}");
+        }
+
         public void Mountain(List<PickupIndex> pickups)
         {
             int squidCount = 0;
@@ -836,7 +861,10 @@ namespace MoistureUpset
                         case "ITEM_CLOVER_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 0)
                             {
-                                ShouldSpeak("run = won");
+                                if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
+                                {
+                                    ShouldSpeak("run = won");
+                                }
                             }
                             else if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 1)
                             {
@@ -1080,7 +1108,7 @@ namespace MoistureUpset
                             {
                                 ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later");
                             }
-                            else
+                            else if (inventory.GetItemCount(RoR2Content.Items.LunarTrinket) == 2)
                             {
                                 ShouldSpeak("I knew it");
                             }
@@ -1146,7 +1174,18 @@ namespace MoistureUpset
                         case "ITEM_LUNARBADLUCK_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 1)
                             {
-                                ShouldSpeak("This is almost definitely a bad idea.");
+                                if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
+                                {
+                                    ShouldSpeak("There goes your luck Sadge");
+                                }
+                                else if (inventory.GetItemCount(RoR2Content.Items.Clover) > 1)
+                                {
+                                    ShouldSpeak("It's ok, you have some luck to spare");
+                                }
+                                else
+                                {
+                                    ShouldSpeak("This is almost definitely a bad idea.");
+                                }
                             }
                             break;
                         case "ITEM_BOOSTEQUIPMENTRECHARGE_NAME":
@@ -1301,7 +1340,7 @@ namespace MoistureUpset
         {
             string allyName = g.GetComponent<RoR2.CharacterBody>().GetUserName();
             List<string> deathQuotes = new List<string> { $"That really was {allyName}'s fault.", $"{allyName} wants you to know that it's your fault" };
-            if (UnityEngine.Random.Range(0, 100) == 0)
+            if (UnityEngine.Random.Range(0, 50) == 0)
             {
                 deathQuotes.Add($"It's so sad that {allyName} died of ligma");
             }
@@ -1475,12 +1514,12 @@ namespace MoistureUpset
             }
             if (charPosition != null)
             {
-                if (Vector3.Distance(charPosition.position, new Vector3(2656, 205, 722)) < 35f)
+                if (Vector3.Distance(charPosition.position, new Vector3(1105, -283, 1181)) < 35f)
                 {
                     Activate();
                     charPosition = null;
                 }
-                if (obj2 && obj2.transform.position == new Vector3(2656, 205, 722))
+                if (obj2 && obj2.transform.position == new Vector3(1105, -283, 1181))
                 {
                     if (Vector3.Distance(charPosition.position, obj2.transform.position) < 75f)
                     {
@@ -2106,7 +2145,7 @@ namespace MoistureUpset
                 process.Start();
 
                 yield return new WaitUntil(() => process.HasExited);
-                DebugClass.Log($"----------file is supposedly done");
+                //DebugClass.Log($"----------file is supposedly done");
                 yield return new WaitUntil(() => File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
                 FileInfo file = new FileInfo($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav");
                 yield return new WaitUntil(() => !isLocked(file));
