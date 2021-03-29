@@ -235,7 +235,7 @@ namespace MoistureUpset
                 }
                 orig(oldS, newS);
             };
-            On.RoR2.Inventory.GiveItem += (On.RoR2.Inventory.orig_GiveItem orig, RoR2.Inventory self, ItemIndex index, int count) =>
+            On.RoR2.Inventory.GiveItem_ItemIndex_int += (orig, self, index, count) =>
             {
                 try
                 {
