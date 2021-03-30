@@ -56,25 +56,25 @@ namespace MoistureUpset
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");
-            On.RoR2.RoR2Application.OnLoad += (orig, self) =>
-            {
-                orig(self);
+            //On.RoR2.RoR2Application.OnLoad += (orig, self) =>
+            //{
+            //    orig(self);
 
 
-                GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
-                DontDestroyOnLoad(bonzi);
-                bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
-                bonzi.SetActive(true);
-                bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
-                bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
-                bonzi.layer = 5;
-                BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
-            };
+            //    GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+            //    DontDestroyOnLoad(bonzi);
+            //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+            //    bonzi.SetActive(true);
+            //    bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            //    bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+            //    bonzi.layer = 5;
+            //    BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
+            //};
 
-            LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME", "He awakens");
-            LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC", "The glass frog isn't what it seems");
-            LanguageAPI.Add("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME", "He awakens");
-            UnlockablesAPI.AddUnlockable<BonziUnlocked>(true);
+            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME", "He awakens");
+            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC", "The glass frog isn't what it seems");
+            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME", "He awakens");
+            //UnlockablesAPI.AddUnlockable<BonziUnlocked>(true);
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
