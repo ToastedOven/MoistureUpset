@@ -31,31 +31,34 @@ namespace MoistureUpset.InteractReplacements
             if (BigJank.getOptionValue("Interactables") == 1)
             {
 
-
+                var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
                 var cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest1");
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest1", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
-                cUm.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
-
+                cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
+                cUm.AddComponent<NewSplatSystemRemover>();
 
 
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/CategoryChestDamage", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/damagechest.png");
                 EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestDamage", "@MoistureUpset_na:assets/na1.mesh");
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestDamage");
-                cUm.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+                cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/CategoryChestHealing", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/healingchest.png");
                 EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestHealing", "@MoistureUpset_na:assets/na1.mesh");
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestHealing");
-                cUm.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+                cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/CategoryChestUtility", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/categorychest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/utilitychest.png");
                 EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/chest/CategoryChestUtility", "@MoistureUpset_na:assets/na1.mesh");
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/CategoryChestUtility");
-                cUm.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+                cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechestsplat.png"));
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/EquipmentBarrel", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/shulker.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/shulker.png");
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/EquipmentBarrel");
-                cUm.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetInt("_Cull", 0);
+                cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetInt("_Cull", 0);
                 cUm.AddComponent<equipmentbarrelfixer>();
                 cUm.GetComponentInChildren<SfxLocator>().openSound = "EquipmentBarrel";
 
@@ -66,6 +69,7 @@ namespace MoistureUpset.InteractReplacements
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
                 cUm.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
                 cUm.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
                 particles.transform.SetParent(cUm.transform);
@@ -73,7 +77,7 @@ namespace MoistureUpset.InteractReplacements
 
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Barrel1", "@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/cylinder.mesh");
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Barrel1");
-                cUm.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/sodaSplatmap.png"));
+                cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/sodaSplatmap.png"));
                 cUm.AddComponent<RandomizeSoda>();
                 {
                     GameObject spritzPrefab = Resources.Load<GameObject>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/soda spritz.prefab");
@@ -81,6 +85,7 @@ namespace MoistureUpset.InteractReplacements
                     spritzPrefab.transform.localPosition = new Vector3(0, 1.2f, -0.4f);
                 }
                 cUm.GetComponentInChildren<SfxLocator>().openSound = "Soda";
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/TripleShopLarge");
                 cUm.GetComponentInChildren<MeshFilter>().mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
@@ -100,18 +105,19 @@ namespace MoistureUpset.InteractReplacements
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Barrel1").GetComponentInChildren<SkinnedMeshRenderer>().material;
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/MultiShopTerminal", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerpart.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerred.png");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/faheet.png"));
-
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/MultiShopLargeTerminal");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Barrel1").GetComponentInChildren<SkinnedMeshRenderer>().material;
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/MultiShopLargeTerminal", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerpart.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerred.png");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/faheet.png"));
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/MultiShopEquipmentTerminal");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Barrel1").GetComponentInChildren<SkinnedMeshRenderer>().material;
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/MultiShopEquipmentTerminal", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerpart.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerred.png");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/faheet.png"));
-
+                cUm.AddComponent<NewSplatSystemRemover>();
 
                 if (BigJank.getOptionValue("Currency Changes") == 1)
                 {

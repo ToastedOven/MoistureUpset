@@ -120,7 +120,7 @@ namespace MoistureUpset
                 orig(self);
                 //Main Camera(Clone)
                 //MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID
-                if (!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))//achievement not unlocked
+                if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))//achievement not unlocked
                 {
                     Chat.AddMessage($"<style=cWorldEvent>You hear a rumbling coming from the teleporter...</style>");
                     foreach (var item in Camera.allCameras)
@@ -363,18 +363,20 @@ namespace MoistureUpset
 
         private void Run_FixedUpdate(On.RoR2.Run.orig_FixedUpdate orig, Run self)
         {
-            //if (charPosition != null)
-            //{
-            //    float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
-            //    if (num < 799 && num > 1)
-            //    {
-            //        DebugClass.Log($"----------{self.fixedTime}");
-            //        self.fixedTime -= Time.fixedDeltaTime / (800f - num);
-            //        DebugClass.Log($"-----------------{self.fixedTime}");
-            //    }
-            //}
             orig(self);
-            //DebugClass.Log($"-------------------------{self.fixedTime}");
+            if (charPosition != null)
+            {
+                float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
+                if (num < 800)
+                {
+                    num = 1f - (num / 800f) + .2f;
+                    if (num > 1)
+                    {
+                        num = 1;
+                    }
+                    Run.instance.fixedTime -= Time.deltaTime * num;
+                }
+            }
         }
 
         public void Mountain(List<PickupIndex> pickups)

@@ -48,6 +48,13 @@ namespace MoistureUpset
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
                     meshes[position].sharedMaterials[i].SetTexture("_FlowHeightmap", null);
                 }
+                if (png.Contains("dankengine"))
+                {
+                    meshes[1].sharedMaterials[0].SetTexture("_MainTex", texture);
+                    meshes[position].sharedMaterials[i].SetTexture("_FresnelRamp", null);
+                    meshes[position].sharedMaterials[i].SetTexture("_FlowHeightRamp", null);
+                    meshes[position].sharedMaterials[i].SetTexture("_FlowHeightmap", null);
+                }
             }
             if (replaceothers)
             {
@@ -1257,6 +1264,7 @@ namespace MoistureUpset
             meshfilter.transform.localScale *= .7f;
 
             var splat = Resources.Load<GameObject>("prefabs/projectiles/SporeGrenadeProjectileDotZone");
+            splat.GetComponentInChildren<MeshRenderer>().gameObject.transform.localScale = new Vector3(2.4f, 0.6128117f, 2.4f);
             var texture = Resources.Load<Texture>("@MoistureUpset_toad1:assets/toadsplatcolorhighres.png");
             foreach (var item in splat.GetComponentsInChildren<ThreeEyedGames.Decal>())
             {
