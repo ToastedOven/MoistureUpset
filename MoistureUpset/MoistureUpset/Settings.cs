@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Text;
 using MoistureUpset.NetMessages;
 using RiskOfOptions;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace MoistureUpset
 {
@@ -39,6 +41,7 @@ namespace MoistureUpset
             ModSettingsManager.CreateCategory("Enemy Skins");
             ModSettingsManager.CreateCategory("UI Changes");
             ModSettingsManager.CreateCategory("Interactables");
+            ModSettingsManager.CreateCategory("Controls");
             ModSettingsManager.CreateCategory("Misc");
         }
         private static void HitMarker()
@@ -131,6 +134,10 @@ namespace MoistureUpset
             ModSettingsManager.AddCheckBox("End of game music", "Defeat theme", true, "Audio");
             ModSettingsManager.AddCheckBox("Respawn SFX", "Yeah", true, "Audio");
             ModSettingsManager.AddCheckBox("Replace Intro Scene", "Replaces the default intro cutscene with one that UnsavedTrash made", true, "UI Changes");
+
+            ModSettingsManager.AddKeyBind("Emote Wheel", "Displays the emote wheel.", KeyCode.C, "Controls");
+
+            ModSettingsManager.AddListener(new UnityAction<KeyCode>(delegate (KeyCode keyCode) {mousechecker.emoteButton = keyCode;}), "Emote Wheel", "Controls");
             //ModSettingsManager.AddCheckBox("Shreks outhouse", "SOMEBODY", "1"));
         }
     }
