@@ -47,14 +47,14 @@ namespace MoistureUpset.Skins
 
             On.RoR2.ContentManager.SetContentPacks += AddSkinsToBodyPrefabs;
 
-            //CommandoTest.Init();
+            CommandoTest.Init();
             TF2Engi.Init();
-            //JotaroCaptain.Init();
-            //StarPlatinumLoader.Init();
+            JotaroCaptain.Init();
+            StarPlatinumLoader.Init();
             //
             //
 
-            //AnimationReplacements.RunAll();
+            AnimationReplacements.RunAll();
             
             On.RoR2.SurvivorCatalog.Init += AddSkinReloader;
         }

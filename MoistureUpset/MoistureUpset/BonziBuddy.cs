@@ -109,19 +109,17 @@ namespace MoistureUpset
         }
         private void Hooks()
         {
-            //On.RoR2.EscapeSequenceController.EscapeSequenceMainState.OnEnter += (orig, self) =>
-            //{
-            //    orig(self);
-            //    DebugClass.Log($"----------{self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("t")}");
-            //    self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("tNow") = 5;
-            //};
+
             On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
                 //Main Camera(Clone)
                 //MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID
-                if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))//achievement not unlocked
+                if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"))//achievement not unlocked
                 {
+                    On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
+
+
                     Chat.AddMessage($"<style=cWorldEvent>You hear a rumbling coming from the teleporter...</style>");
                     foreach (var item in Camera.allCameras)
                     {
@@ -196,7 +194,7 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            if (BigJank.getOptionValue("Top Secret Setting") == 1 /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/ && !bonziActive)
+                            if (BigJank.getOptionValue("Top Secret Setting") == 1 /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/ && !bonziActive)
                             {
                                 Activate();
                             }
@@ -213,7 +211,6 @@ namespace MoistureUpset
                             break;
                         case "moon2":
                             //frogge 
-                            On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
                             break;
                         default:
                             GoTo(M1);
@@ -229,6 +226,8 @@ namespace MoistureUpset
                     }
                     charPosition = null;
                     AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
+                    SyncBonziApproach.netIds.Clear();
+                    SyncBonziApproach.distances.Clear();
                 }
                 catch (Exception)
                 {
@@ -367,18 +366,33 @@ namespace MoistureUpset
             if (charPosition != null)
             {
                 float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
-                if (num < 800)
+                if (num >= 0)
                 {
-                    num = 1f - (num / 800f) + .2f;
-                    if (num > 1)
-                    {
-                        num = 1;
-                    }
-                    Run.instance.fixedTime -= Time.deltaTime * num;
+                    new SyncBonziApproach((int)num, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             }
+            else
+            {
+                new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
+            }
+            Run.instance.fixedTime -= Time.deltaTime * dist;
         }
-
+        float dist = 0;
+        public void BonziApproach(int distance)
+        {
+            if (distance < 800)
+            {
+                float distance2;
+                distance2 = 1f - ((float)distance / 800f) + .2f;
+                if (distance2 > 1)
+                {
+                    distance2 = 1;
+                }
+                dist = distance2;
+                return;
+            }
+            dist = 0f;
+        }
         public void Mountain(List<PickupIndex> pickups)
         {
             int squidCount = 0;
@@ -748,6 +762,10 @@ namespace MoistureUpset
                             }
                             break;
                         case "ITEM_BEAR_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Bear) == 50)
+                            {
+                                ShouldSpeak("I don't know if you really need any more block chance");
+                            }
                             if (inventory.GetItemCount(RoR2Content.Items.Bear) == 101)
                             {
                                 ShouldSpeak("You know stacking them further is almost pointless...");
@@ -764,8 +782,10 @@ namespace MoistureUpset
                             break;
                         case "ITEM_DAGGER_NAME":
                             //red dagger
-
-                            ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
+                            if (inventory.GetItemCount(RoR2Content.Items.Dagger) == 1)
+                            {
+                                ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
+                            }
                             break;
                         case "ITEM_TOOTH_NAME":
                             //monster tooth
@@ -817,7 +837,7 @@ namespace MoistureUpset
                         case "ITEM_ATTACKSPEEDONCRIT_NAME":
                             break;
                         case "ITEM_BLEEDONHIT_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 7)
+                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 10)
                             {
                                 ShouldSpeak("Oh yeah, it's gamer time.");
                             }
@@ -1518,6 +1538,7 @@ namespace MoistureUpset
             {
                 if (Vector3.Distance(charPosition.position, new Vector3(1105, -283, 1181)) < 35f)
                 {
+                    LocalUserManager.readOnlyLocalUsersList[0].userProfile.GrantUnlockable(UnlockableCatalog.GetUnlockableDef("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"));
                     Activate();
                     charPosition = null;
                 }
@@ -1962,7 +1983,7 @@ namespace MoistureUpset
         }
         public static void SetActive(bool yeet)
         {
-            if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/true)
+            if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/true)
             {
                 if (!yeet && !buddy.bonziActive)
                 {

@@ -85,8 +85,8 @@ namespace MoistureUpset
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Cereal", "EAT EM UP EAT EM UP EAT EM UP!", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Interactables", "Replaces chests and barrels with minecraft items", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Currency Changes", "Replaces currency types with robux and tix", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Top Secret Setting", "You'll probably know it when you see it", "1"));
-            //ModSettingsManager.addListener(ModSettingsManager.getOption("Top Secret Setting"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Top Secret Setting", "You'll probably know it when you see it", "1"));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Top Secret Setting"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive));
         }
         private static void CollabOptions()
         {
@@ -103,8 +103,8 @@ namespace MoistureUpset
         }
         private static void Misc()
         {
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Original REDACTED TTS", "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.", "0"));
-            //ModSettingsManager.addListener(ModSettingsManager.getOption("Original REDACTED TTS"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS));
+            ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Original REDACTED TTS", "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.", "0"));
+            ModSettingsManager.addListener(ModSettingsManager.getOption("Original REDACTED TTS"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "NSFW", "Toggles 'NSFW' content. Not actually NSFW like boobies, just some questionable words if you aren't into that kinda thing", "0"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Fanfare", "Adds fanfare to the end of the teleporter event", "1"));
             ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Pizza Roll", "Replaces that diamond UI element with a pizza roll", "1"));

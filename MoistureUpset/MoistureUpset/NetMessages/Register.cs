@@ -22,6 +22,7 @@ namespace MoistureUpset.NetMessages
             NetworkingAPI.RegisterMessageType<SyncChance>();
             NetworkingAPI.RegisterMessageType<SyncShrine>();
             NetworkingAPI.RegisterMessageType<SyncBroke>();
+            NetworkingAPI.RegisterMessageType<SyncBonziApproach>();
         }
     }
 }
