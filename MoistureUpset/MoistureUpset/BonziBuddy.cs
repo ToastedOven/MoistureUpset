@@ -1985,11 +1985,11 @@ namespace MoistureUpset
         {
             if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/true)
             {
-                if (!yeet && !buddy.bonziActive)
+                if (yeet && !buddy.bonziActive)
                 {
                     buddy.Activate();
                 }
-                else if (yeet && buddy.bonziActive)
+                else if (!yeet && buddy.bonziActive)
                 {
                     buddy.Deactivate();
                 }
@@ -2269,7 +2269,7 @@ namespace MoistureUpset
 
         public static void FixTTS(bool yeet)
         {
-            if (!yeet)
+            if (yeet)
             {
                 string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
                 if ((!File.Exists(s + "\\Speech\\speech.dll") || !File.Exists(s + "\\lhsp\\help\\tv_enua.hlp")) && File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed"))
