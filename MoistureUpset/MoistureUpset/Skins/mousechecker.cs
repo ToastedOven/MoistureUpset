@@ -27,15 +27,23 @@ public class mousechecker : MonoBehaviour
 
     public RoR2.UI.MPInput input = GameObject.Find("MPEventSystem Player0").GetComponent<RoR2.UI.MPInput>();
     public RoR2.UI.MPEventSystem events;
+
+    public static KeyCode emoteButton = KeyCode.None;
+
     GameObject selected;
     float XScale = 1, YScale = 1;
     void Start()
     {
         selected = gameObjects[0];
         events = input.GetFieldValue<RoR2.UI.MPEventSystem>("eventSystem");
+
+        emoteButton = ModSettingsManager.GetOption("Emote Wheel", "Controls").GetKeyCode();
     }
     void Update()
     {
+        if (RoR2.PauseManager.isPaused)
+            return;
+
         Vector3 v = new Vector3(0, 0, 0);
         if (transform.localPosition == v)
         {
@@ -60,7 +68,7 @@ public class mousechecker : MonoBehaviour
                 selected.GetComponent<RectTransform>().localScale = new Vector3(0.6771638f, 0.6771638f, 0.6771638f);
             }
         }
-        if (Input.GetKey(KeyCode.C))
+        if (Input.GetKey(emoteButton))
         {
             if (transform.localPosition != v)
             {
