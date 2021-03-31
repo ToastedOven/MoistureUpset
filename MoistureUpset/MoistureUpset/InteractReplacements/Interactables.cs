@@ -63,6 +63,8 @@ namespace MoistureUpset.InteractReplacements
                 cUm.GetComponentInChildren<SfxLocator>().openSound = "EquipmentBarrel";
 
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest2", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.png");
+                cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2");
+                cUm.AddComponent<NewSplatSystemRemover>();
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/GoldChest", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/GoldChest");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
