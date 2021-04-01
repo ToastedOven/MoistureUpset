@@ -12,6 +12,7 @@ using UnityEngine.Video;
 using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
+using RoR2Content = On.RoR2.RoR2Content;
 
 namespace MoistureUpset
 {
@@ -46,7 +47,7 @@ namespace MoistureUpset
 
             //ligmaballs();
 
-            ItemDisplayPositionFixer.Init();
+            On.RoR2.RoR2Content.Init += ItemDisplayPositionFixer.Init;
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
