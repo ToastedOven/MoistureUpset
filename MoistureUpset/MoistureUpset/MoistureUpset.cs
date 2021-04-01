@@ -116,7 +116,7 @@ namespace MoistureUpset
                 SyncAudio.doMinecraftOofSound = false;
                 SyncAudio.doShrineSound = false;
             }
-            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
+            if (BigJank.getOptionValue("Replace Intro Scene", "UI Changes"))
             {
                 LoadIntro();
 
@@ -255,7 +255,7 @@ namespace MoistureUpset
 
         public void Start()
         {
-            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
+            if (BigJank.getOptionValue("Replace Intro Scene", "UI Changes"))
             {
                 RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
             }
