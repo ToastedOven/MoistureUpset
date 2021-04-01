@@ -42,6 +42,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.3.1: Fixed issue with artifact of command and breaking other mods using EnigmaticThunder's unlockable system.
+
  1.3.0: Added compatibility for the new update! Not much else to note here but do know that we are still working on stuff. We acknowledge that some enemies are now incomplete but we will get to them soonTM.
 
  1.2.1: Fixed a few bugs with sounds still playing when turned off.
