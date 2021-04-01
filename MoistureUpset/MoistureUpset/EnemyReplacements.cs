@@ -1682,65 +1682,71 @@ namespace MoistureUpset
             };
             On.RoR2.EffectManager.SpawnEffect_EffectIndex_EffectData_bool += (orig, index, data, transmit) =>
             {
-                if (EffectCatalog.GetEffectDef(index).prefabName == "TitanFistEffect" && !transmit)
+                orig(index, data, transmit);
+                try
                 {
-                    if (NetworkClient.active)
+                    if (EffectCatalog.GetEffectDef(index).prefabName == "TitanFistEffect" && !transmit)
                     {
-                        EffectDef effectDef = EffectCatalog.GetEffectDef(index);
-                        var pre = effectDef.prefab;
-                        var yeet = pre.GetComponentsInChildren<ParticleSystemRenderer>()[0];
-                        yeet.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_roblox:assets/robloxfist.png");
-                        try
+                        if (NetworkClient.active)
                         {
-                            int num = UnityEngine.Random.Range(0, 100);
-                            if (num == 99)
+                            EffectDef effectDef = EffectCatalog.GetEffectDef(index);
+                            var pre = effectDef.prefab;
+                            var yeet = pre.GetComponentsInChildren<ParticleSystemRenderer>()[0];
+                            yeet.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_roblox:assets/robloxfist.png");
+                            try
                             {
-                                yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/jj5x5.mesh");
-                                RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxJJ5X5"), data.origin);
-                            }
-                            else
-                                switch (num % 7)
+                                int num = UnityEngine.Random.Range(0, 100);
+                                if (num == 99)
                                 {
-                                    case 0:
-                                        yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/pizza.mesh");
-                                        RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxPizza"), data.origin);
-                                        break;
-                                    case 1:
-                                        yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/sword.mesh");
-                                        RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxSword"), data.origin);
-                                        break;
-                                    case 2:
-                                        yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cola.mesh");
-                                        RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxCola"), data.origin);
-                                        break;
-                                    case 3:
-                                        yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cake.mesh");
-                                        RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxCake"), data.origin);
-                                        break;
-                                    case 4:
-                                        yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/burger.mesh");
-                                        RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxBurger"), data.origin);
-                                        break;
-                                    case 5:
-                                        yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/gravity.mesh");
-                                        RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxGravity"), data.origin);
-                                        break;
-                                    case 6:
-                                        yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/robloxtaco.mesh");
-                                        RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxTaco"), data.origin);
-                                        break;
-                                    default:
-                                        break;
+                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/jj5x5.mesh");
+                                    RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxJJ5X5"), data.origin);
                                 }
-                            yeet.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
-                        }
-                        catch (Exception e)
-                        {
-                            //Debug.Log(e);
+                                else
+                                    switch (num % 7)
+                                    {
+                                        case 0:
+                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/pizza.mesh");
+                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxPizza"), data.origin);
+                                            break;
+                                        case 1:
+                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/sword.mesh");
+                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxSword"), data.origin);
+                                            break;
+                                        case 2:
+                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cola.mesh");
+                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxCola"), data.origin);
+                                            break;
+                                        case 3:
+                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cake.mesh");
+                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxCake"), data.origin);
+                                            break;
+                                        case 4:
+                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/burger.mesh");
+                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxBurger"), data.origin);
+                                            break;
+                                        case 5:
+                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/gravity.mesh");
+                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxGravity"), data.origin);
+                                            break;
+                                        case 6:
+                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/robloxtaco.mesh");
+                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxTaco"), data.origin);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                yeet.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+                            }
+                            catch (Exception e)
+                            {
+                                //Debug.Log(e);
+                            }
                         }
                     }
                 }
-                orig(index, data, transmit);
+                catch (Exception)
+                {
+                }
             };
             On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
             {
