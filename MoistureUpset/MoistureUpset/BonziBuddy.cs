@@ -194,7 +194,7 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            if (BigJank.getOptionValue("Top Secret Setting") == 1 /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/ && !bonziActive)
+                            if (BigJank.getOptionValue("Top Secret Setting", "Misc") /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/ && !bonziActive)
                             {
                                 Activate();
                             }
@@ -962,7 +962,7 @@ namespace MoistureUpset
                         case "ITEM_KNURL_NAME":
                             break;
                         case "ITEM_BEETLEGLAND_NAME":
-                            if (BigJank.getOptionValue("Winston") == 1)
+                            if (BigJank.getOptionValue("Winston", "Enemy Skins"))
                             {
                                 ShouldSpeak("Winston please switch");
                             }
@@ -1703,13 +1703,13 @@ namespace MoistureUpset
                             switch (victimBody.baseNameToken)
                             {
                                 case "TITAN_BODY_NAME":
-                                    if (BigJank.getOptionValue("Roblox Titan") == 1)
+                                    if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins"))
                                     {
                                         ShouldSpeak($"ooooooooof");
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
-                                    if (BigJank.getOptionValue("Twitch") == 1)
+                                    if (BigJank.getOptionValue("Twitch", "Enemy Skins"))
                                     {
                                         ShouldSpeak($"Poggers");
                                     }
@@ -1731,7 +1731,7 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "JELLYFISH_BODY_NAME":
-                                    if (BigJank.getOptionValue("Comedy") == 1)
+                                    if (BigJank.getOptionValue("Comedy", "Enemy Skins"))
                                     {
                                         ShouldSpeak($"I'm something of a comedian myself.");
                                     }
@@ -1752,13 +1752,13 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "BELL_BODY_NAME":
-                                    if (BigJank.getOptionValue("Taco Bell") == 1)
+                                    if (BigJank.getOptionValue("Taco Bell", "Enemy Skins"))
                                     {
                                         ShouldSpeak($"Now I'm feeling kind of hungry.");
                                     }
                                     break;
                                 case "GOLEM_BODY_NAME":
-                                    if (BigJank.getOptionValue("Robloxian") == 1)
+                                    if (BigJank.getOptionValue("Robloxian", "Enemy Skins"))
                                     {
                                         ShouldSpeak($"oof");
                                     }
@@ -1783,13 +1783,13 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "TITAN_BODY_NAME":
-                                    if (BigJank.getOptionValue("Roblox Titan") == 1)
+                                    if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins"))
                                     {
                                         ShouldSpeak($"ooooooooof");
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
-                                    if (BigJank.getOptionValue("Twitch") == 1)
+                                    if (BigJank.getOptionValue("Twitch", "Enemy Skins"))
                                     {
                                         ShouldSpeak($"Poggers");
                                     }
@@ -1853,7 +1853,7 @@ namespace MoistureUpset
                     {
                         lastIdle.RemoveAt(0);
                     }
-                    if (BigJank.getOptionValue("Original REDACTED TTS") != 1)
+                    if (!BigJank.getOptionValue("Original REDACTED TTS", "Misc"))
                     {
                         if (UnityEngine.Random.Range(0, 150) == 0)
                         {
@@ -2156,7 +2156,7 @@ namespace MoistureUpset
                 startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = balconPath;
-                if (BigJank.getOptionValue("Original REDACTED TTS") == 1)
+                if (BigJank.getOptionValue("Original REDACTED TTS", "Misc"))
                 {
                     startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
                 }

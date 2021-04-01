@@ -23,9 +23,9 @@ namespace MoistureUpset
         {
             EnemyReplacements.LoadResource("na");
 
-            BigToasterClass.HitMarker(BigJank.getOptionValue("HitMarker Volume"));
-            BigToasterClass.Modded_MSX(BigJank.getOptionValue("Modded Music Volume"));
-            BigToasterClass.Modded_SFX(BigJank.getOptionValue("Modded SFX Volume"));
+            BigToasterClass.HitMarker(BigJank.getFloatValue("HitMarker Volume", "Audio"));
+            BigToasterClass.Modded_MSX(BigJank.getFloatValue("Modded Music Volume", "Audio"));
+            BigToasterClass.Modded_SFX(BigJank.getFloatValue("Modded SFX Volume", "Audio"));
             InteractReplacements.Interactables.Init();
             EnemyReplacements.RunAll();
             HudChanges.RunAll();
