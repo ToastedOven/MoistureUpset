@@ -35,7 +35,7 @@ namespace MoistureUpset
         }
         private static void Setup()
         {
-            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion 1.3.0");
+            ModSettingsManager.setPanelDescription("Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion 1.3.1");
             ModSettingsManager.setPanelTitle("Moisture Upset");
             ModSettingsManager.CreateCategory("Audio");
             ModSettingsManager.CreateCategory("Enemy Skins");
