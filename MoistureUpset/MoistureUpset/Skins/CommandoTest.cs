@@ -44,7 +44,6 @@ namespace MoistureUpset.Skins
                 NameToken = NameToken,
                 RootObject = mdl,
                 BaseSkins = new SkinDef[0],
-                UnlockableName = "",
                 GameObjectActivations = new SkinDef.GameObjectActivation[0],
 
                 RendererInfos = new CharacterModel.RendererInfo[]
