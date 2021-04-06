@@ -42,6 +42,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.3.3: Fixed issue with Alex Jones sfx being carried over to other stuff. I probably need to take a look at all the hacky solutions I used and fix more of them.
+
  1.3.1: Fixed issue with artifact of command and breaking other mods using EnigmaticThunder's unlockable system.
 
  1.3.0: Added compatibility for the new update! Not much else to note here but do know that we are still working on stuff. We acknowledge that some enemies are now incomplete but we will get to them soonTM.
