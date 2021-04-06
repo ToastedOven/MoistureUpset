@@ -1858,7 +1858,8 @@ namespace MoistureUpset
             On.RoR2.EffectManager.SpawnEffect_EffectIndex_EffectData_bool += (orig, index, data, transmit) =>
             {
                 ////////////////////406
-                if ((int)index == 406 && !transmit)
+                //DebugClass.Log($"----------{}");
+                if (EffectCatalog.GetEffectDef(index).prefabName == "TitanGoldFistEffect" && !transmit)
                 {
                     RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("OHSHITWADDUP"), data.origin);
                 }
