@@ -42,6 +42,8 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
+ 1.3.4: Fixed issue with a few more effects causing errors, you should also get like maybe 1/10th of a frame per second back because it's more optimized now. I know all these small patches might get a tad annoying, but I feel in our case it's better to fix stuff as soon as it gets reported rather than gathering them all up and fixing it a week later.
+
  1.3.3: Fixed issue with Alex Jones sfx being carried over to other stuff. I probably need to take a look at all the hacky solutions I used and fix more of them.
 
  1.3.1: Fixed issue with artifact of command and breaking other mods using EnigmaticThunder's unlockable system.
