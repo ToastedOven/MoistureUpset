@@ -1680,74 +1680,7 @@ namespace MoistureUpset
                     AkSoundEngine.PostEvent("RobloxFist", self.outer.gameObject);
                 }
             };
-            On.RoR2.EffectManager.SpawnEffect_EffectIndex_EffectData_bool += (orig, index, data, transmit) =>
-            {
-                orig(index, data, transmit);
-                try
-                {
-                    if (EffectCatalog.GetEffectDef(index).prefabName == "TitanFistEffect" && !transmit)
-                    {
-                        if (NetworkClient.active)
-                        {
-                            EffectDef effectDef = EffectCatalog.GetEffectDef(index);
-                            var pre = effectDef.prefab;
-                            var yeet = pre.GetComponentsInChildren<ParticleSystemRenderer>()[0];
-                            yeet.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_roblox:assets/robloxfist.png");
-                            try
-                            {
-                                int num = UnityEngine.Random.Range(0, 100);
-                                if (num == 99)
-                                {
-                                    yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/jj5x5.mesh");
-                                    RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxJJ5X5"), data.origin);
-                                }
-                                else
-                                    switch (num % 7)
-                                    {
-                                        case 0:
-                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/pizza.mesh");
-                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxPizza"), data.origin);
-                                            break;
-                                        case 1:
-                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/sword.mesh");
-                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxSword"), data.origin);
-                                            break;
-                                        case 2:
-                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cola.mesh");
-                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxCola"), data.origin);
-                                            break;
-                                        case 3:
-                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/cake.mesh");
-                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxCake"), data.origin);
-                                            break;
-                                        case 4:
-                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/burger.mesh");
-                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxBurger"), data.origin);
-                                            break;
-                                        case 5:
-                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/gravity.mesh");
-                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxGravity"), data.origin);
-                                            break;
-                                        case 6:
-                                            yeet.mesh = Resources.Load<Mesh>("@MoistureUpset_roblox:assets/robloxtaco.mesh");
-                                            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("RobloxTaco"), data.origin);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                yeet.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
-                            }
-                            catch (Exception e)
-                            {
-                                //Debug.Log(e);
-                            }
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            };
+            Resources.Load<GameObject>("prefabs/effects/TitanFistEffect").AddComponent<Fixers.TitanFixer>();
             On.EntityStates.TitanMonster.FireFist.PlaceSingleDelayBlast += (orig, self, position, delay) =>
             {
                 if (!self.outer.gameObject.name.Contains("Gold"))
@@ -1855,16 +1788,23 @@ namespace MoistureUpset
             //        GameObject.Destroy(gameObject);
             //    }
             //};
-            On.RoR2.EffectManager.SpawnEffect_EffectIndex_EffectData_bool += (orig, index, data, transmit) =>
-            {
-                ////////////////////406
-                //DebugClass.Log($"----------{}");
-                if (EffectCatalog.GetEffectDef(index).prefabName == "TitanGoldFistEffect" && !transmit)
-                {
-                    RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("OHSHITWADDUP"), data.origin);
-                }
-                orig(index, data, transmit);
-            };
+            Resources.Load<GameObject>("prefabs/effects/TitanGoldFistEffect").AddComponent<Fixers.GoldTitanFixer>();
+            //On.RoR2.EffectManager.SpawnEffect_EffectIndex_EffectData_bool += (orig, index, data, transmit) =>
+            //{
+            //    ////////////////////406
+            //    //DebugClass.Log($"----------{}");'
+            //    try
+            //    {
+            //        if (EffectCatalog.GetEffectDef(index).prefabName == "TitanGoldFistEffect" && !transmit)
+            //        {
+            //            RoR2.Audio.PointSoundManager.EmitSoundLocal(AkSoundEngine.GetIDFromString("OHSHITWADDUP"), data.origin);
+            //        }
+            //    }
+            //    catch (Exception)
+            //    {
+            //    }
+            //    orig(index, data, transmit);
+            //};
             On.EntityStates.TitanMonster.ChargeGoldMegaLaser.FixedUpdate += (orig, self) =>
             {
                 orig(self);
