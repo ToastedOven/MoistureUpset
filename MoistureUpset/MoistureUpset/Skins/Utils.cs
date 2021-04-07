@@ -1,10 +1,17 @@
 ﻿using R2API;
 using RoR2;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using R2API.Utils;
+using RoR2.ContentManagement;
 using UnityEngine;
+using ContentManager = On.RoR2.ContentManagement.ContentManager;
+using LoadStaticContentAsyncArgs = RoR2.ContentManagement.LoadStaticContentAsyncArgs;
+using ReadOnlyContentPack = RoR2.ContentManagement.ReadOnlyContentPack;
+using RoR2Content = On.RoR2.RoR2Content;
 
 namespace MoistureUpset.Skins
 {
@@ -12,13 +19,11 @@ namespace MoistureUpset.Skins
     {
         public delegate SkinDef[] CreateSkin(GameObject bodyPrefab);
 
-        private static bool Loaded = false;
-
         internal static Dictionary<string, SkinDef> skins;
 
         private static Dictionary<string, CreateSkin> skinDelegates;
 
-        private static GameObject[] tempBodyPrefabs;
+        private static NamedAssetCollection<GameObject> tempBodyPrefabs;
 
         //private static SurvivorDef[] tempSurvivorDefs;
 
@@ -35,6 +40,9 @@ namespace MoistureUpset.Skins
                 }
 
                 DebugClass.Log($"Loading Asset: {ResourceStream}");
+
+                //LoadAsset(name, MainAssetBundle);
+
                 ResourcesAPI.AddProvider(new AssetBundleResourcesProvider(name, MainAssetBundle));
             }
         }
@@ -45,7 +53,9 @@ namespace MoistureUpset.Skins
             skins = new Dictionary<string, SkinDef>();
             skinDelegates = new Dictionary<string, CreateSkin>();
 
-            On.RoR2.ContentManager.SetContentPacks += AddSkinsToBodyPrefabs;
+
+            On.RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate.Invoke += AddSkinsToBodyPrefabs;
+
 
             //CommandoTest.Init();
             TF2Engi.Init();
@@ -58,6 +68,41 @@ namespace MoistureUpset.Skins
             
             On.RoR2.SurvivorCatalog.Init += AddSkinReloader;
         }
+
+        private static void AddSkinsToBodyPrefabs(ContentManager.AddContentPackProviderDelegate.orig_Invoke orig, RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate self, IContentPackProvider contentPackProvider)
+        {
+            if (contentPackProvider.identifier != "RoR2.BaseContent")
+                orig(self, contentPackProvider);
+
+            ContentPack baseGameContent = contentPackProvider.GetFieldValue<ContentPack>("contentPack");
+
+            tempBodyPrefabs = baseGameContent.bodyPrefabs;
+
+            DebugClass.Log($"Loading skins...");
+
+            foreach (var bodyName in skinDelegates.Keys)
+            {
+                DebugClass.Log($"Loading skins for {baseGameContent.bodyPrefabs.GetBodyPrefab(bodyName).name}");
+
+                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(baseGameContent.bodyPrefabs.GetBodyPrefab(bodyName));
+
+                baseGameContent.bodyPrefabs[baseGameContent.bodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
+
+                skins.Add(bodyName, skinDefs[skinDefs.Length - 1]);
+            }
+
+            tempBodyPrefabs.Clear();
+            skins.Clear();
+            skinDelegates.Clear();
+
+            contentPackProvider.SetFieldValue("contentPack", baseGameContent);
+
+            DebugClass.Log($"Finished Loading skins!");
+
+            orig(self, contentPackProvider);
+        }
+
+
 
         // Add component SkinReloader to all survivors
         private static void AddSkinReloader(On.RoR2.SurvivorCatalog.orig_Init orig)
@@ -75,40 +120,40 @@ namespace MoistureUpset.Skins
             skinDelegates.Add(bodyName, del);
         }
 
-        private static void AddSkinsToBodyPrefabs(On.RoR2.ContentManager.orig_SetContentPacks orig, List<ContentPack> newContentPacks)
-        {
-            if (Loaded)
-                return;
+        //private static void AddSkinsToBodyPrefabs(ContentManager.orig_SetContentPacks orig, List<ReadOnlyContentPack> newContentPacks)
+        //{
+        //    if (Loaded)
+        //        orig(newContentPacks);
 
-            tempBodyPrefabs = newContentPacks[0].bodyPrefabs;
+        //    tempBodyPrefabs = newContentPacks[0].bodyPrefabs;
 
-            //tempSurvivorDefs = newContentPacks[0].survivorDefs;
+        //    //tempSurvivorDefs = newContentPacks[0].survivorDefs;
 
-            DebugClass.Log($"Loading skins...");
+        //    DebugClass.Log($"Loading skins...");
 
-            foreach (var bodyName in skinDelegates.Keys)
-            {
-                DebugClass.Log($"Loading skins for {newContentPacks[0].bodyPrefabs.GetBodyPrefab(bodyName).name}");
+        //    foreach (var bodyName in skinDelegates.Keys)
+        //    {
+        //        DebugClass.Log($"Loading skins for {newContentPacks[0].bodyPrefabs.GetBodyPrefab(bodyName).name}");
 
-                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(newContentPacks[0].bodyPrefabs.GetBodyPrefab(bodyName));
+        //        SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(newContentPacks[0].bodyPrefabs.GetBodyPrefab(bodyName));
 
-                newContentPacks[0].bodyPrefabs[newContentPacks[0].bodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
+        //        newContentPacks[0].bodyPrefabs[newContentPacks[0].bodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
 
-                skins.Add(bodyName, skinDefs[skinDefs.Length - 1]);
-            }
+        //        skins.Add(bodyName, skinDefs[skinDefs.Length - 1]);
+        //    }
 
-            tempBodyPrefabs = Array.Empty<GameObject>();
-            //tempSurvivorDefs = Array.Empty<SurvivorDef>();
+        //    tempBodyPrefabs = Array.Empty<GameObject>();
+        //    //tempSurvivorDefs = Array.Empty<SurvivorDef>();
 
-            skins.Clear();
-            skinDelegates.Clear();
+        //    skins.Clear();
+        //    skinDelegates.Clear();
 
-            Loaded = true;
+        //    Loaded = true;
 
-            DebugClass.Log($"Finished Loading skins!");
+        //    DebugClass.Log($"Finished Loading skins!");
 
-            orig(newContentPacks);
-        }
+        //    orig(newContentPacks);
+        //}
 
         //internal static GameObject GetDisplayPrefab(string PrefabName)
         //{
@@ -124,45 +169,45 @@ namespace MoistureUpset.Skins
         //    return null;
         //}
 
-        internal static GameObject GetBodyPrefab(string BodyName)
+        internal static GameObject GetBodyPrefab(string bodyName)
         {
             for (int i = 0; i < tempBodyPrefabs.Length; i++)
             {
-                if (tempBodyPrefabs[i].name.ToLower() == BodyName.ToLower())
+                if (string.Equals(tempBodyPrefabs[i].name, bodyName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return tempBodyPrefabs[i];
                 }
             }
 
-            DebugClass.Log($"Couldn't find BodyPrefab: {BodyName}!");
+            DebugClass.Log($"Couldn't find BodyPrefab: {bodyName}!");
             return null;
         }
 
-        private static GameObject GetBodyPrefab(this GameObject[] bodyPrefabs, string BodyName)
+        private static GameObject GetBodyPrefab(this NamedAssetCollection<GameObject> bodyPrefabs, string bodyName)
         {
             for (int i = 0; i < bodyPrefabs.Length; i++)
             {
-                if (bodyPrefabs[i].name.ToLower() == BodyName.ToLower())
+                if (string.Equals(bodyPrefabs[i].name, bodyName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return bodyPrefabs[i];
                 }
             }
 
-            DebugClass.Log($"Couldn't find BodyPrefab: {BodyName}!");
+            DebugClass.Log($"Couldn't find BodyPrefab: {bodyName}!");
             return null;
         }
 
-        private static int GetBodyIndex(this GameObject[] bodyPrefabs, string BodyName)
+        private static int GetBodyIndex(this NamedAssetCollection<GameObject> bodyPrefabs, string bodyName)
         {
             for (int i = 0; i < bodyPrefabs.Length; i++)
             {
-                if (bodyPrefabs[i].name.ToLower() == BodyName.ToLower())
+                if (string.Equals(bodyPrefabs[i].name, bodyName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return i;
                 }
             }
 
-            DebugClass.Log($"Couldn't find BodyIndex: {BodyName}!");
+            DebugClass.Log($"Couldn't find BodyIndex: {bodyName}!");
             return 0;
         }
     }

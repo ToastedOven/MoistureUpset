@@ -12,7 +12,7 @@ using UnityEngine.Video;
 using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
-using RoR2Content = On.RoR2.RoR2Content;
+using R2API.Networking;
 
 namespace MoistureUpset
 {
@@ -23,7 +23,7 @@ namespace MoistureUpset
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
-        public const string VERSION = "1.3.2";
+        public const string VERSION = "1.3.4";
         public void Awake()
         {
 
@@ -48,7 +48,7 @@ namespace MoistureUpset
 
             //ligmaballs();
 
-            On.RoR2.RoR2Content.Init += ItemDisplayPositionFixer.Init;
+            On.RoR2.RoR2Application.LoadGameContent += ItemDisplayPositionFixer.Init;
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
