@@ -18,18 +18,10 @@ namespace MoistureUpset
         //}
         public static bool getOptionValue(string option, string category)
         {
-            if (ModSettingsManager.GetOption("Only Survivor Skins", "Misc").GetBool())
-            {
-                return false;
-            }
             return ModSettingsManager.GetOption(option, category).GetBool();
         }
         public static float getFloatValue(string option, string category)
         {
-            if (ModSettingsManager.GetOption("Only Survivor Skins", "Misc").GetBool())
-            {
-                return 0;
-            }
             return ModSettingsManager.GetOption(option, category).GetFloat();
         }
     }
