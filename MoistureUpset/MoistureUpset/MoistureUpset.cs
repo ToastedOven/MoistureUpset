@@ -24,6 +24,7 @@ namespace MoistureUpset
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public const string VERSION = "1.3.4";
+
         public void Awake()
         {
 
