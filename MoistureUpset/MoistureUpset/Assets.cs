@@ -54,6 +54,8 @@ namespace MoistureUpset
 
         public static void PopulateAssets()
         {
+            EnemyReplacements.LoadResource("na");
+
             using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ImMoist.bnk"))
             {
                 var bytes = new byte[bankStream.Length];

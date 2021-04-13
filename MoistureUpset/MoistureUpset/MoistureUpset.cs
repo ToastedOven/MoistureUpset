@@ -24,7 +24,7 @@ namespace MoistureUpset
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
 
-        public const string VERSION = "1.3.5";
+        public const string VERSION = "1.3.6";
         public void Awake()
         {
 
@@ -59,6 +59,15 @@ namespace MoistureUpset
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");
+
+            LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME", "He awakens");
+            LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC", "The glass frog isn't what it seems");
+            LanguageAPI.Add("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME", "He awakens");
+
+            RoR2.ContentManagement.ContentManager.collectContentPackProviders += delegate (RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate addContentPackProvider)
+            {
+                addContentPackProvider(new MoistureUpsetContent());
+            };
 
             On.RoR2.RoR2Application.OnLoad += (orig, self) =>
             {
@@ -102,10 +111,8 @@ namespace MoistureUpset
                 BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
             };
 
-            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME", "He awakens");
-            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC", "The glass frog isn't what it seems");
-            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME", "He awakens");
-            //UnlockablesAPI.AddUnlockable<BonziUnlocked>(true);
+
+            //UnlockableAPI.AddUnlockable<BonziUnlocked>(true);
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
