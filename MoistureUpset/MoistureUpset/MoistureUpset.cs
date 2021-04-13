@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using R2API.Utils;
 using RoR2;
 using R2API;
@@ -24,6 +24,7 @@ namespace MoistureUpset
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public const string VERSION = "1.3.5";
+        
         public void Awake()
         {
 
