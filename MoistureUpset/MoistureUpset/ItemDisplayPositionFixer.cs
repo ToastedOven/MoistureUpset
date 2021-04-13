@@ -9,7 +9,6 @@ using CharacterModel = RoR2.CharacterModel;
 using DisplayRuleGroup = RoR2.DisplayRuleGroup;
 using ItemDef = RoR2.ItemDef;
 using ItemDisplayRuleSet = RoR2.ItemDisplayRuleSet;
-using RoR2Application = On.RoR2.RoR2Application;
 using RoR2Content = RoR2.RoR2Content;
 
 namespace MoistureUpset
@@ -18,13 +17,9 @@ namespace MoistureUpset
     {
         public static ItemDisplayRuleSet TF2_Engi_IDRS;
 
-        public static IEnumerator Init(RoR2Application.orig_LoadGameContent orig, RoR2.RoR2Application self)
+        public static void Init()
         {
-            var lig = orig(self);
-
             GenerateIDRSEngi();
-
-            return lig;
         }
 
 

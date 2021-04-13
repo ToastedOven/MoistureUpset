@@ -23,9 +23,8 @@ namespace MoistureUpset.Skins
 
         private static Dictionary<string, CreateSkin> skinDelegates;
 
-        private static NamedAssetCollection<GameObject> tempBodyPrefabs;
+        private static GameObject[] tempBodyPrefabs;
 
-        //private static SurvivorDef[] tempSurvivorDefs;
 
         // Makes loading assets easier
         public static void LoadAsset(string ResourceStream, string name = null)
@@ -54,52 +53,43 @@ namespace MoistureUpset.Skins
             skinDelegates = new Dictionary<string, CreateSkin>();
 
 
-            On.RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate.Invoke += AddSkinsToBodyPrefabs;
-
-
             //CommandoTest.Init();
             TF2Engi.Init();
             //JotaroCaptain.Init();
             //StarPlatinumLoader.Init();
             //
-            //
 
             //AnimationReplacements.RunAll();
-            
+
+            AddSkinsToBodyPrefabs();
+
             On.RoR2.SurvivorCatalog.Init += AddSkinReloader;
         }
 
-        private static void AddSkinsToBodyPrefabs(ContentManager.AddContentPackProviderDelegate.orig_Invoke orig, RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate self, IContentPackProvider contentPackProvider)
+        private static void AddSkinsToBodyPrefabs()
         {
-            if (contentPackProvider.identifier != "RoR2.BaseContent")
-                orig(self, contentPackProvider);
-
-            ContentPack baseGameContent = contentPackProvider.GetFieldValue<ContentPack>("contentPack");
-
-            tempBodyPrefabs = baseGameContent.bodyPrefabs;
+            tempBodyPrefabs = Resources.LoadAll<GameObject>("prefabs/characterbodies/");
 
             DebugClass.Log($"Loading skins...");
 
             foreach (var bodyName in skinDelegates.Keys)
             {
-                DebugClass.Log($"Loading skins for {baseGameContent.bodyPrefabs.GetBodyPrefab(bodyName).name}");
+                DebugClass.Log($"Loading skins for {tempBodyPrefabs.GetBodyPrefab(bodyName).name}");
 
-                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(baseGameContent.bodyPrefabs.GetBodyPrefab(bodyName));
+                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(tempBodyPrefabs.GetBodyPrefab(bodyName));
 
-                baseGameContent.bodyPrefabs[baseGameContent.bodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
+                tempBodyPrefabs[tempBodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
 
                 skins.Add(bodyName, skinDefs[skinDefs.Length - 1]);
             }
 
-            tempBodyPrefabs.Clear();
+            tempBodyPrefabs = Array.Empty<GameObject>();
+
             skins.Clear();
             skinDelegates.Clear();
 
-            contentPackProvider.SetFieldValue("contentPack", baseGameContent);
 
             DebugClass.Log($"Finished Loading skins!");
-
-            orig(self, contentPackProvider);
         }
 
 
@@ -183,7 +173,7 @@ namespace MoistureUpset.Skins
             return null;
         }
 
-        private static GameObject GetBodyPrefab(this NamedAssetCollection<GameObject> bodyPrefabs, string bodyName)
+        private static GameObject GetBodyPrefab(this GameObject[] bodyPrefabs, string bodyName)
         {
             for (int i = 0; i < bodyPrefabs.Length; i++)
             {
@@ -197,7 +187,7 @@ namespace MoistureUpset.Skins
             return null;
         }
 
-        private static int GetBodyIndex(this NamedAssetCollection<GameObject> bodyPrefabs, string bodyName)
+        private static int GetBodyIndex(this GameObject[] bodyPrefabs, string bodyName)
         {
             for (int i = 0; i < bodyPrefabs.Length; i++)
             {

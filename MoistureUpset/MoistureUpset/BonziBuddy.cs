@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using RoR2.Achievements;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -17,7 +18,7 @@ using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
-    public class BonziUnlocked : ModdedUnlockableAndAchievement<VanillaSpriteProvider>
+    public class BonziUnlocked : ModdedUnlockable
     {
         public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
         public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
@@ -25,7 +26,8 @@ namespace MoistureUpset
         public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
         public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
         public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
-        protected override VanillaSpriteProvider SpriteProvider { get; } = new VanillaSpriteProvider("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
+
+        public override Sprite Sprite { get; } = Resources.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
         public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
         {
             orig(self);
@@ -45,6 +47,9 @@ namespace MoistureUpset
             base.OnUninstall();
             On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
         }
+
+        public override Func<string> GetHowToUnlock { get; } = new Func<string>(() => "lig");
+        public override Func<string> GetUnlocked { get; } = new Func<string>(() => "ball");
     }
     public class BonziBuddy : MonoBehaviour
     {
