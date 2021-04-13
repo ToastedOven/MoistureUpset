@@ -1,18 +1,24 @@
 ﻿using RoR2;
+using On.RoR2;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using CharacterModel = RoR2.CharacterModel;
+using DisplayRuleGroup = RoR2.DisplayRuleGroup;
+using ItemDef = RoR2.ItemDef;
+using ItemDisplayRuleSet = RoR2.ItemDisplayRuleSet;
+using RoR2Content = RoR2.RoR2Content;
 
 namespace MoistureUpset
 {
     public static class ItemDisplayPositionFixer // This is what I think is the best way to do item positions for skins and characters.
     {
         public static ItemDisplayRuleSet TF2_Engi_IDRS;
-        public static void Init(On.RoR2.RoR2Content.orig_Init orig)
-        {
-            orig();
 
+        public static void Init()
+        {
             GenerateIDRSEngi();
         }
 
@@ -126,7 +132,7 @@ namespace MoistureUpset
             TF2_Engi_IDRS.FindItemDisplayRuleGroup(RoR2Content.Items.GhostOnKill).rules[0].localPos = new Vector3(0, 0.4361f, 0.2255f);
             TF2_Engi_IDRS.FindItemDisplayRuleGroup(RoR2Content.Items.GhostOnKill).rules[0].localAngles = new Vector3(11.26f, 0, 0);
             TF2_Engi_IDRS.FindItemDisplayRuleGroup(RoR2Content.Items.GhostOnKill).rules[0].localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            TF2_Engi_IDRS.FindItemDisplayRuleGroup(RoR2Content.Items.GhostOnKill).rules[1] = new ItemDisplayRule();
+            TF2_Engi_IDRS.FindItemDisplayRuleGroup(RoR2Content.Items.GhostOnKill).rules[1] = new RoR2.ItemDisplayRule();
 
             // Tesla Coil
             TF2_Engi_IDRS.FindItemDisplayRuleGroup(RoR2Content.Items.ShockNearby).rules[0].localPos = new Vector3(0, 0.396f, -0.008f);
