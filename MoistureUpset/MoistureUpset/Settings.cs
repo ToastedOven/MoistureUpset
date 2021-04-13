@@ -26,8 +26,6 @@ namespace MoistureUpset
         }
         public static void PingAll()
         {
-            EnemyReplacements.LoadResource("na");
-
             BigToasterClass.HitMarker(BigJank.getFloatValue("HitMarker Volume", "Audio"));
             BigToasterClass.Modded_MSX(BigJank.getFloatValue("Modded Music Volume", "Audio"));
             BigToasterClass.Modded_SFX(BigJank.getFloatValue("Modded SFX Volume", "Audio"));
@@ -48,6 +46,14 @@ namespace MoistureUpset
                 ValueToReturnWhenOverriden = false
             };
 
+            survivorsSkinsOnlySlider = new SliderOverride()
+            {
+                Name = "Only Survivor Skins",
+                CategoryName = "Misc",
+                OverrideOnTrue = true,
+                ValueToReturnWhenOverriden = 0f
+            };
+
             ModSettingsManager.setPanelTitle("Moisture Upset");
             ModSettingsManager.CreateCategory("Audio");
             ModSettingsManager.CreateCategory("Enemy Skins");
@@ -60,7 +66,7 @@ namespace MoistureUpset
         {
             ModSettingsManager.AddCheckBox("Only Survivor Skins", "Only survivor skins are enabled. Restart required!", false, "Misc");
 
-            ModSettingsManager.AddSlider("HitMarker Volume", "This sound is also tied to SFX, but has a separate slider if you want it to be less noisy", 100, "Audio");
+            ModSettingsManager.AddSlider("HitMarker Volume", "This sound is also tied to SFX, but has a separate slider if you want it to be less noisy", 100, "Audio", survivorsSkinsOnlySlider);
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<float>(BigToasterClass.HitMarker), "HitMarker Volume", "Audio");
             ModSettingsManager.AddSlider("Modded Music Volume", "The default music slider also work for modded music, but this effects modded music only. In case you want a different audio balance", 50, "Audio");
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<float>(BigToasterClass.Modded_MSX), "Modded Music Volume", "Audio");
