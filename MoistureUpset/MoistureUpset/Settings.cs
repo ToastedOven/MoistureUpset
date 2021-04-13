@@ -107,6 +107,8 @@ namespace MoistureUpset
             ModSettingsManager.AddCheckBox("Currency Changes", "Replaces currency types with robux and tix", true, "UI Changes", survivorSkinsOnlyCheckBox);
             ModSettingsManager.AddCheckBox("Top Secret Setting", "You'll probably know it when you see it", true, "Misc", survivorSkinsOnlyCheckBox);
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive), "Top Secret Setting", "Misc");
+            //ModSettingsManager.AddCheckBox("Force Restart Bonzi Buddy", "Bonzi Buddy isn't a perfect creation. If something goes horribly wrong this might fix him right up.", true, "Misc", survivorSkinsOnlyCheckBox);
+            //ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.ForceRestart), "Force Restart Bonzi Buddy", "Misc");
             //ModSettingsManager.addListener(ModSettingsManager.getOption("Top Secret Setting"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive));
         }
         private static void CollabOptions()

@@ -60,6 +60,7 @@ namespace MoistureUpset.Skins
         public static bool setup = false;
         public static void ChangeAnims(/*SurvivorDef index, string resource*/)
         {
+            //DebugClass.DebugBones("prefabs/characterbodies/HereticBody", 3);
             On.RoR2.SurvivorCatalog.Init += (orig) =>
             {
                 orig();
@@ -75,6 +76,9 @@ namespace MoistureUpset.Skins
                     ApplyAnimationStuff(RoR2Content.Survivors.Toolbot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/mult.prefab");
                     ApplyAnimationStuff(RoR2Content.Survivors.Treebot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/rex.prefab");
                     ApplyAnimationStuff(RoR2Content.Survivors.Commando, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/commando.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Huntress, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/huntressBetterMaybeFixed.prefab");
+                    ApplyAnimationStuff(RoR2Content.Survivors.Bandit2, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/bandit.prefab");
+                    ApplyAnimationStuff(Resources.Load<GameObject>("prefabs/characterbodies/HereticBody"), "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/heretic.prefab", 3);
                 }
 
                 //bodyPrefab = survivorDef.displayPrefab;
@@ -106,6 +110,44 @@ namespace MoistureUpset.Skins
             var test = animcontroller.AddComponent<BoneMapper>();
             test.smr1 = smr1;
             test.smr2 = smr2;
+            test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
+            test.a2 = animcontroller.GetComponentInChildren<Animator>();
+            test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
+            test.model = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+        }
+        private static void ApplyAnimationStuff(GameObject bodyPrefab, string resource, int pos = 0)
+        {
+            GameObject animcontroller = Resources.Load<GameObject>(resource);
+            animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
+            animcontroller.transform.localPosition = Vector3.zero;
+            animcontroller.transform.localEulerAngles = Vector3.zero;
+            animcontroller.transform.localScale = Vector3.one;
+            SkinnedMeshRenderer smr1 = animcontroller.GetComponentsInChildren<SkinnedMeshRenderer>()[pos];
+            SkinnedMeshRenderer smr2 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentsInChildren<SkinnedMeshRenderer>()[pos];
+            var test = animcontroller.AddComponent<BoneMapper>();
+            test.smr1 = smr1;
+            test.smr2 = smr2;
+            for (int i = 0; i < smr1.bones.Length; i++)
+            {
+                if (smr1.bones[i].name != smr2.bones[i].name)
+                {
+                    DebugClass.Log($"Fixing heretic bone order for emotes");
+                    List<Transform> trans = new List<Transform>();
+                    foreach (var item in smr2.bones)
+                    {
+                        foreach (var item2 in smr1.bones)
+                        {
+                            if (item.name == item2.name)
+                            {
+                                trans.Add(item2);
+                            }
+                        }
+                    }
+                    smr1.bones = trans.ToArray();
+                    DebugClass.Log($"Done");
+                    break;
+                }
+            }
             test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
             test.a2 = animcontroller.GetComponentInChildren<Animator>();
             test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
