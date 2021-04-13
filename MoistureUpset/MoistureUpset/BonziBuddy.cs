@@ -18,39 +18,39 @@ using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
-    public class BonziUnlocked : ModdedUnlockable
-    {
-        public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
-        public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
-        public override string PrerequisiteUnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_PREREQ_ID";
-        public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
-        public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
-        public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
+    //public class BonziUnlocked : ModdedUnlockable
+    //{
+    //    public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
+    //    public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
+    //    public override string PrerequisiteUnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_PREREQ_ID";
+    //    public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
+    //    public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
+    //    public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
 
-        public override Sprite Sprite { get; } = Resources.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
-        public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
-        {
-            orig(self);
-            if (BonziBuddy.buddy.foundMe)
-            {
-                base.Grant();
-            }
-        }
-        public override void OnInstall()
-        {
-            base.OnInstall();
-            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update += ClearCheck;
-        }
+    //    public override Sprite Sprite { get; } = Resources.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
+    //    public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
+    //    {
+    //        orig(self);
+    //        if (BonziBuddy.buddy.foundMe)
+    //        {
+    //            base.Grant();
+    //        }
+    //    }
+    //    public override void OnInstall()
+    //    {
+    //        base.OnInstall();
+    //        On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update += ClearCheck;
+    //    }
 
-        public override void OnUninstall()
-        {
-            base.OnUninstall();
-            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
-        }
+    //    public override void OnUninstall()
+    //    {
+    //        base.OnUninstall();
+    //        On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
+    //    }
 
-        public override Func<string> GetHowToUnlock { get; } = new Func<string>(() => "lig");
-        public override Func<string> GetUnlocked { get; } = new Func<string>(() => "ball");
-    }
+    //    public override Func<string> GetHowToUnlock { get; } = new Func<string>(() => "lig");
+    //    public override Func<string> GetUnlocked { get; } = new Func<string>(() => "ball");
+    //}
     public class BonziBuddy : MonoBehaviour
     {
         #region defined positions
