@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using R2API.Utils;
 using RoR2;
 using R2API;
@@ -12,7 +12,7 @@ using UnityEngine.Video;
 using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
-using RoR2Content = On.RoR2.RoR2Content;
+using R2API.Networking;
 
 namespace MoistureUpset
 {
@@ -20,10 +20,11 @@ namespace MoistureUpset
     [BepInDependency("com.rune580.riskofoptions")]
     [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", VERSION)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
-    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI")]
+    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
-        public const string VERSION = "1.3.4";
+        public const string VERSION = "1.3.5";
+        
         public void Awake()
         {
 
@@ -48,7 +49,7 @@ namespace MoistureUpset
 
             //ligmaballs();
 
-            On.RoR2.RoR2Content.Init += ItemDisplayPositionFixer.Init;
+            ItemDisplayPositionFixer.Init();
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
@@ -58,25 +59,6 @@ namespace MoistureUpset
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");
-            //On.RoR2.RoR2Application.OnLoad += (orig, self) =>
-            //{
-            //    orig(self);
-
-
-            //    GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
-            //    DontDestroyOnLoad(bonzi);
-            //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
-            //    bonzi.SetActive(true);
-            //    bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
-            //    bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
-            //    bonzi.layer = 5;
-            //    BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
-            //};
-
-            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME", "He awakens");
-            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC", "The glass frog isn't what it seems");
-            //LanguageAPI.Add("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME", "He awakens");
-            //UnlockablesAPI.AddUnlockable<BonziUnlocked>(true);
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
@@ -202,40 +184,15 @@ namespace MoistureUpset
             DebugClass.GetAllTransforms();
         }
 
-        public static void ligmaballs()
-        {
-            var fortniteDance = Resources.Load<AnimationClip>("@MoistureUpset_fortnite:assets/dancemoves.anim");
-            var fab = Resources.Load<GameObject>("prefabs/characterbodies/CommandoBody");
 
-            //foreach (var item in fab.GetComponentsInChildren<Component>())
-            //{
-            //    Debug.Log($"--------------------------------------------------{item}");
-            //}
+        //public void Start()
+        //{
+        //    if (BigJank.getOptionValue("Replace Intro Scene") == 1)
+        //    {
+        //        RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
+        //    }
 
-            var anim = fab.GetComponentInChildren<Animator>();
-
-            //Debug.Log($"++++++++++++++++++++++++++++++++++++++++{anim}");
-
-            //AnimatorController anim = new AnimatorController
-            AnimatorOverrideController aoc = new AnimatorOverrideController(anim.runtimeAnimatorController);
-
-            var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-            foreach (var a in aoc.animationClips)
-            {
-                anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(a, a));
-            }
-            aoc.ApplyOverrides(anims);
-            anim.runtimeAnimatorController = aoc;
-        }
-
-        public void Start()
-        {
-            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
-            {
-                RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
-            }
-
-        }
+        //}
 
         private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
         {
