@@ -15,7 +15,7 @@ namespace MoistureUpset
 
         public IEnumerator LoadStaticContentAsync(LoadStaticContentAsyncArgs args)
         {
-            contentPack.unlockableDefs.Add(getUnlockableDefs());
+            contentPack.unlockableDefs.Add(GenerateUnlockableDefs());
 
             args.ReportProgress(1f);
             yield break;
@@ -34,7 +34,7 @@ namespace MoistureUpset
             yield break;
         }
 
-        private UnlockableDef[] getUnlockableDefs()
+        private UnlockableDef[] GenerateUnlockableDefs()
         {
             List<UnlockableDef> unlockableDefs = new List<UnlockableDef>();
 
@@ -50,10 +50,13 @@ namespace MoistureUpset
             };
             BonziBuddyUnlockDef.nameToken = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
 
+            BonziBuddyUnlockDef.cachedName = "BonziBuddyUnlock";
+
             BonziBuddyUnlockDef.hidden = false;
 
-
             BonziBuddyUnlockDef.sortScore = 420;
+
+            BonziBuddyUnlockDef.index = (UnlockableIndex) 69420;
 
             BonziBuddyUnlockDef.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
             {
