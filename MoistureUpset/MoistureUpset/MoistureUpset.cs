@@ -62,14 +62,40 @@ namespace MoistureUpset
             LanguageAPI.Add("MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC", "The glass frog isn't what it seems");
             LanguageAPI.Add("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME", "He awakens");
 
-            RoR2.ContentManagement.ContentManager.collectContentPackProviders += delegate (RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate addContentPackProvider)
-            {
-                addContentPackProvider(new MoistureUpsetContent());
-            };
+            //RoR2.ContentManagement.ContentManager.collectContentPackProviders += delegate (RoR2.ContentManagement.ContentManager.AddContentPackProviderDelegate addContentPackProvider)
+            //{
+            //    addContentPackProvider(new MoistureUpsetContent());
+            //};
 
-            On.RoR2.RoR2Application.OnLoad += (orig, self) =>
+            On.RoR2.ContentManagement.ContentManager.SetContentPacks += (orig, self) =>
             {
-                
+                orig(self);
+
+                //UnlockableDef s = ScriptableObject.CreateInstance<UnlockableDef>();
+                //AchievementDef achievementDef = new AchievementDef
+                //{
+                //    identifier = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID",
+                //    unlockableRewardIdentifier = "MOISTURE_BONZIBUDDY_REWARD_ID",
+                //    prerequisiteAchievementIdentifier = "MOISTURE_BONZIBUDDY_PREREQ_ID",
+                //    nameToken = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME",
+                //    descriptionToken = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC",
+                //    iconPath = "@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png",
+                //};
+                //s.nameToken = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
+                ////s.cachedName = "He awakens";
+                //s.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
+                //{
+                //    Language.GetString(achievementDef.nameToken),
+                //    Language.GetString(achievementDef.descriptionToken)
+                //}));
+                //s.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
+                //{
+                //    Language.GetString(achievementDef.nameToken),
+                //    Language.GetString(achievementDef.descriptionToken)
+                //}));
+                //List<UnlockableDef> unlockableDefs = new List<UnlockableDef>(RoR2.ContentManagement.ContentManager._unlockableDefs);
+                //unlockableDefs.Add(s);
+                //RoR2.ContentManagement.ContentManager._unlockableDefs = unlockableDefs.ToArray();
 
                 GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
                 DontDestroyOnLoad(bonzi);

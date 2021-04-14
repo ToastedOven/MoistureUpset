@@ -93,6 +93,7 @@ namespace MoistureUpset
         GameObject obj1, obj2, obj3, obj4, obj5, obj6;
         GameObject preloaded = Resources.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
         public float dontSpeak = 0;
+        public static bool doHooks = true;
 
         bool bonziActive = false;
         void Start()
@@ -114,7 +115,9 @@ namespace MoistureUpset
         }
         private void Hooks()
         {
-
+            if (!doHooks)
+                return;
+            doHooks = false;
             On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
@@ -1245,6 +1248,7 @@ namespace MoistureUpset
                         deathQuotes.Add("Just blame your teammates 4Head");
                     }
                     RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
+                    //DebugClass.Log($"----------{inventory.GetItemCount(RoR2Content.Items.ExtraLife)}          {inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed)}");
                     if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
                     {
                         deathQuotes.Clear();
@@ -1533,6 +1537,7 @@ namespace MoistureUpset
         {
             return Math.Abs(a - b) <= threshold;
         }
+        const int speed = 2;
         void Update()
         {
             if (dontSpeak > 0)
@@ -1619,8 +1624,8 @@ namespace MoistureUpset
                     currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
                 }
 
-                bool equalX = AlmostEqual(dest.x, screenPos.x, .002f);
-                bool equalY = AlmostEqual(dest.y, screenPos.y, .002f);
+                bool equalX = AlmostEqual(dest.x, screenPos.x, .004f);
+                bool equalY = AlmostEqual(dest.y, screenPos.y, .004f);
                 atDest = equalX && equalY;
                 moveDown = moveUp = moveLeft = moveRight = false;
                 if (!atDest && currentClip != "entrance" && currentClip != "leave" && !debugging)
@@ -1630,7 +1635,7 @@ namespace MoistureUpset
                         moveRight = true;
                         if (currentClip == "flyright")
                         {
-                            transform.position += new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position += new Vector3(speed * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
                         }
                     }
                     else if (dest.x < screenPos.x && !equalX)
@@ -1638,7 +1643,7 @@ namespace MoistureUpset
                         moveLeft = true;
                         if (currentClip == "flyleft")
                         {
-                            transform.position -= new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position -= new Vector3(speed * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
 
                         }
                     }
@@ -1647,7 +1652,7 @@ namespace MoistureUpset
                         moveUp = true;
                         if (currentClip == "flyup")
                         {
-                            transform.position += new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position += new Vector3(0, speed * Time.deltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
@@ -1656,7 +1661,7 @@ namespace MoistureUpset
                         moveDown = true;
                         if (currentClip == "flydown")
                         {
-                            transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position -= new Vector3(0, speed * Time.deltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
@@ -1988,6 +1993,11 @@ namespace MoistureUpset
         }
         public static void SetActive(bool yeet)
         {
+            buddy.StartCoroutine(SetActive(yeet, 0));
+        }
+        public static IEnumerator SetActive(bool yeet, int yes)
+        {
+            yield return new WaitUntil(() => buddy.idling || buddy.bonziActive == false);
             if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/true)
             {
                 if (yeet && !buddy.bonziActive)
@@ -2076,6 +2086,21 @@ namespace MoistureUpset
             }
         }
         bool twostep = true;
+        //public static void ForceRestart(bool ISuck)
+        //{
+        //    Destroy(buddy.gameObject);
+
+        //    GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+        //    DontDestroyOnLoad(bonzi);
+        //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+        //    bonzi.SetActive(true);
+        //    bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+        //    bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+        //    bonzi.layer = 5;
+        //    buddy = bonzi.AddComponent<BonziBuddy>();
+
+        //    buddy.Activate();
+        //}
         public void ShouldSpeak(string whatToSay)
         {
             StartCoroutine(ShouldSpeak(whatToSay, false));
