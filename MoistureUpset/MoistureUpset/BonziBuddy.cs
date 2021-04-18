@@ -94,6 +94,7 @@ namespace MoistureUpset
         GameObject preloaded = Resources.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
         public float dontSpeak = 0;
         public static bool doHooks = true;
+        int dioUsed = 0, dioHeld = 0;
 
         bool bonziActive = false;
         void Start()
@@ -118,15 +119,21 @@ namespace MoistureUpset
             if (!doHooks)
                 return;
             doHooks = false;
+            On.EntityStates.Missions.BrotherEncounter.Phase4.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                dontSpeak = 86400; //yeah if you wait a whole day in phase 4 you can break this, eat me.
+            };
             On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
+                dontSpeak = 5;
                 //Main Camera(Clone)
                 //MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID
                 if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"))//achievement not unlocked
                 {
                     On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
-
+                    On.RoR2.HoldoutZoneController.FixedUpdate += HoldoutZoneController_FixedUpdate;
 
                     Chat.AddMessage($"<style=cWorldEvent>You hear a rumbling coming from the teleporter...</style>");
                     foreach (var item in Camera.allCameras)
@@ -176,6 +183,8 @@ namespace MoistureUpset
             On.RoR2.Run.OnClientGameOver += (orig, self, report) =>
             {
                 orig(self, report);
+                dioUsed = 0;
+                dioHeld = 0;
                 try
                 {
                     if (report.gameEnding.endingTextToken == "GAME_RESULT_UNKNOWN")
@@ -231,6 +240,7 @@ namespace MoistureUpset
                     if (newS.name != "moon2")
                     {
                         On.RoR2.Run.FixedUpdate -= Run_FixedUpdate;
+                        On.RoR2.HoldoutZoneController.FixedUpdate -= HoldoutZoneController_FixedUpdate;
                     }
                     charPosition = null;
                     AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
@@ -368,6 +378,20 @@ namespace MoistureUpset
             };
         }
 
+        private void HoldoutZoneController_FixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
+        {
+            float num = Time.fixedDeltaTime * dist;
+            if (NetworkServer.active)
+            {
+                Time.fixedDeltaTime -= num;
+            }
+            orig(self);
+            if (NetworkServer.active)
+            {
+                Time.fixedDeltaTime += num;
+            }
+        }
+
         private void Run_FixedUpdate(On.RoR2.Run.orig_FixedUpdate orig, Run self)
         {
             orig(self);
@@ -381,7 +405,7 @@ namespace MoistureUpset
             }
             else
             {
-                new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
+                //new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
             }
             Run.instance.fixedTime -= Time.deltaTime * dist;
         }
@@ -391,7 +415,7 @@ namespace MoistureUpset
             if (distance < 800)
             {
                 float distance2;
-                distance2 = 1f - ((float)distance / 800f) + .2f;
+                distance2 = ((1f - ((float)distance / 800f)) * .6f) + .4f;
                 if (distance2 > 1)
                 {
                     distance2 = 1;
@@ -654,6 +678,7 @@ namespace MoistureUpset
                     {
                         quotes.Add("Too much crit! Too much crit!");
                     }
+                    dioHeld = inventory.GetItemCount(RoR2Content.Items.ExtraLife);
                     if (inventory.GetItemCount(RoR2Content.Items.Bear) != 0)
                     {
                         quotes.Add("You can now block attacks almost as hard as I get blocked on twitter");
@@ -1004,6 +1029,7 @@ namespace MoistureUpset
                         case "ITEM_SLOWONHIT_NAME":
                             break;
                         case "ITEM_EXTRALIFE_NAME":
+                            dioHeld += count;
                             break;
                         case "ITEM_EXTRALIFECONSUMED_NAME":
                             break;
@@ -1249,55 +1275,57 @@ namespace MoistureUpset
                     }
                     RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
                     //DebugClass.Log($"----------{inventory.GetItemCount(RoR2Content.Items.ExtraLife)}          {inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed)}");
-                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
+                    if (dioHeld != 0)
                     {
                         deathQuotes.Clear();
-                        if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 0)
+                        if (dioUsed == 0)
                         {
                             deathQuotes.Add("Wait don't leave yet!");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 1)
+                        else if (dioUsed == 1)
                         {
                             deathQuotes.Add("You know, just because you have them, doesn't mean you have to use them...");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 2)
+                        else if (dioUsed == 2)
                         {
                             ShouldSpeak("T t t triple kill");
                             return;
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 3)
+                        else if (dioUsed == 3)
                         {
                             deathQuotes.Add("Really just chugging these down at this point yeah?");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 4)
+                        else if (dioUsed == 4)
                         {
                             deathQuotes.Add("That's 5 deaths now, how are you this bad at the game?");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 5)
+                        else if (dioUsed == 5)
                         {
                             deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2Content.Items.ExtraLife.nameToken)}s. So thank you, for using them for me so I don't have to.");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 6)
+                        else if (dioUsed == 6)
                         {
                             deathQuotes.Add("So that was a bit of a hyperbole earlier. I don't actually think we should consume more of them, so if you could just stop that would be great.");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 7)
+                        else if (dioUsed == 7)
                         {
                             deathQuotes.Add("You know what? I give up, I hope you lose this run.");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 68)
+                        else if (dioUsed == 68)
                         {
                             deathQuotes.Add("nice.");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 419)
+                        else if (dioUsed == 419)
                         {
                             deathQuotes.Add("Blaze it");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
+                        else if (dioUsed > 7)
                         {
-                            deathQuotes.Add($"{inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) + 1}");
+                            deathQuotes.Add($"{dioUsed + 1}");
                         }
                         ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
+                        dioHeld -= 1;
+                        dioUsed += 1;
                         return;
                     }
                     if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
@@ -1550,6 +1578,7 @@ namespace MoistureUpset
                 {
                     LocalUserManager.readOnlyLocalUsersList[0].userProfile.GrantUnlockable(UnlockableCatalog.GetUnlockableDef("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"));
                     Activate();
+                    new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                     charPosition = null;
                 }
                 if (obj2 && obj2.transform.position == new Vector3(1105, -283, 1181))

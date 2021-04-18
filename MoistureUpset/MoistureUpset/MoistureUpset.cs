@@ -13,6 +13,7 @@ using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
 using R2API.Networking;
+using System;
 
 namespace MoistureUpset
 {
@@ -32,9 +33,11 @@ namespace MoistureUpset
 
             NetMessages.Register.Init();
 
-            Settings.RunAll();
 
             Assets.PopulateAssets();
+            Settings.RunAll();
+            EnemyReplaceMentsRunAll();
+
             //
 
             Skins.Utils.LoadAllSkins();
@@ -53,7 +56,7 @@ namespace MoistureUpset
 
             ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
 
-
+            
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");
@@ -106,7 +109,7 @@ namespace MoistureUpset
                 bonzi.layer = 5;
                 BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
 
-                return orig(self);
+                orig(self);
             };
 
             //On.RoR2.RoR2Application.OnLoad += (orig, self) =>
@@ -159,6 +162,66 @@ namespace MoistureUpset
         //    BonziBuddy.buddy.StartCoroutine(BonziBuddy.buddy.Speak(self.text));
         //    return orig(self);
         //}
+        internal static int completed = 0;
+        public void EnemyReplaceMentsRunAll()
+        {
+            try
+            {
+                EnemyReplacements.LoadBNK("ImWettest");
+                EnemyReplacements.LoadBNK("ImWettest2");
+                StartCoroutine(EnemyReplacements.ThanosQuotes());
+                StartCoroutine(EnemyReplacements.DEBUG());
+                StartCoroutine(EnemyReplacements.Twitch());
+                StartCoroutine(EnemyReplacements.Cereal());
+                StartCoroutine(EnemyReplacements.Thanos());
+                StartCoroutine(EnemyReplacements.RobloxTitan());
+                StartCoroutine(EnemyReplacements.Alex());
+                StartCoroutine(EnemyReplacements.ElderLemurian());
+                StartCoroutine(EnemyReplacements.Lemurian());
+                StartCoroutine(EnemyReplacements.Golem());
+                StartCoroutine(EnemyReplacements.Bison());
+                StartCoroutine(EnemyReplacements.SolusUnit());
+                StartCoroutine(EnemyReplacements.Templar());
+                StartCoroutine(EnemyReplacements.GreaterWisp());
+                StartCoroutine(EnemyReplacements.Wisp());
+                StartCoroutine(EnemyReplacements.Sans());
+                StartCoroutine(EnemyReplacements.Imp());
+                StartCoroutine(EnemyReplacements.MiniMushroom());
+                StartCoroutine(EnemyReplacements.BeetleGuard());
+                StartCoroutine(EnemyReplacements.Beetle());
+                StartCoroutine(EnemyReplacements.TacoBell());
+                StartCoroutine(EnemyReplacements.Jelly());
+                StartCoroutine(EnemyReplacements.Shop());
+                StartCoroutine(EnemyReplacements.Names());
+                StartCoroutine(EnemyReplacements.Icons());
+                StartCoroutine(EnemyReplacements._UI());
+                StartCoroutine(EnemyReplacements.NonEnemyNames());
+                StartCoroutine(EnemyReplacements.Shrines());
+                StartCoroutine(EnemyReplacements.LemmeSmash());
+                StartCoroutine(EnemyReplacements.Hagrid());
+                StartCoroutine(EnemyReplacements.Noodle());
+                StartCoroutine(EnemyReplacements.Skeleton());
+                StartCoroutine(EnemyReplacements.CrabRave());
+                StartCoroutine(EnemyReplacements.PUDDI());
+                StartCoroutine(EnemyReplacements.StringWorm());
+                StartCoroutine(EnemyReplacements.Discord());
+                StartCoroutine(EnemyReplacements.Copter());
+                StartCoroutine(EnemyReplacements.Rob());
+                StartCoroutine(EnemyReplacements.Nyan());
+                StartCoroutine(EnemyReplacements.Imposter());
+                StartCoroutine(EnemyReplacements.Collab());
+                DebugClass.Log($"Haulting until everything finishes");
+                while (completed < 41)
+                {
+                    DebugClass.Log($"----------{completed}");
+                }
+                DebugClass.Log($"Done");
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+        }
 
         public void IntroReplaceAction()
         {

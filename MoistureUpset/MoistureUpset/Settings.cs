@@ -30,7 +30,7 @@ namespace MoistureUpset
             BigToasterClass.Modded_MSX(BigJank.getFloatValue("Modded Music Volume", "Audio"));
             BigToasterClass.Modded_SFX(BigJank.getFloatValue("Modded SFX Volume", "Audio"));
             InteractReplacements.Interactables.Init();
-            EnemyReplacements.RunAll();
+            //EnemyReplacements.RunAll();
             HudChanges.RunAll();
             BigToasterClass.RunAll();
         }
@@ -66,11 +66,11 @@ namespace MoistureUpset
         {
             ModSettingsManager.AddCheckBox("Only Survivor Skins", "Only survivor skins are enabled. Restart required!", false, "Misc");
 
-            ModSettingsManager.AddSlider("HitMarker Volume", "This sound is also tied to SFX, but has a separate slider if you want it to be less noisy", 100, "Audio", survivorsSkinsOnlySlider);
+            ModSettingsManager.AddSlider("HitMarker Volume", "This sound is also tied to SFX, but has a separate slider if you want it to be less noisy", 100, 0, 100, "Audio", survivorsSkinsOnlySlider);
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<float>(BigToasterClass.HitMarker), "HitMarker Volume", "Audio");
-            ModSettingsManager.AddSlider("Modded Music Volume", "The default music slider also work for modded music, but this effects modded music only. In case you want a different audio balance", 50, "Audio");
+            ModSettingsManager.AddSlider("Modded Music Volume", "The default music slider also work for modded music, but this effects modded music only. In case you want a different audio balance", 50, 0, 100, "Audio");
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<float>(BigToasterClass.Modded_MSX), "Modded Music Volume", "Audio");
-            ModSettingsManager.AddSlider("Modded SFX Volume", "The default sound slider also work for modded SFX, but this effects modded sfx only. In case you want a different audio balance", 50, "Audio");
+            ModSettingsManager.AddSlider("Modded SFX Volume", "The default sound slider also work for modded SFX, but this effects modded sfx only. In case you want a different audio balance", 50, 0, 100, "Audio");
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<float>(BigToasterClass.Modded_SFX), "Modded SFX Volume", "Audio");
         }
         private static void EnemyOptions()
@@ -155,10 +155,6 @@ namespace MoistureUpset
             ModSettingsManager.AddCheckBox("End of game music", "Defeat theme", true, "Audio", survivorSkinsOnlyCheckBox);
             ModSettingsManager.AddCheckBox("Respawn SFX", "Yeah", true, "Audio", survivorSkinsOnlyCheckBox);
             ModSettingsManager.AddCheckBox("Replace Intro Scene", "Replaces the default intro cutscene with one that UnsavedTrash made", true, "UI Changes", survivorSkinsOnlyCheckBox);
-
-            ModSettingsManager.AddKeyBind("Emote Wheel", "Displays the emote wheel.", KeyCode.C, "Controls");
-
-            ModSettingsManager.AddListener(new UnityAction<KeyCode>(delegate (KeyCode keyCode) {mousechecker.emoteButton = keyCode;}), "Emote Wheel", "Controls");
             //ModSettingsManager.AddCheckBox("Shreks outhouse", "SOMEBODY", "1"));
         }
     }

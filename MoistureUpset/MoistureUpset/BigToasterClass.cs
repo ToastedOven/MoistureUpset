@@ -469,141 +469,148 @@ namespace MoistureUpset
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
-                if (self.baseNameToken == "COMMANDO_BODY_NAME" || self.baseNameToken == "MERC_BODY_NAME" || self.baseNameToken == "ENGI_BODY_NAME" || self.baseNameToken == "HUNTRESS_BODY_NAME" || self.baseNameToken == "MAGE_BODY_NAME" || self.baseNameToken == "TOOLBOT_BODY_NAME" || self.baseNameToken == "TREEBOT_BODY_NAME" || self.baseNameToken == "LOADER_BODY_NAME" || self.baseNameToken == "CROCO_BODY_NAME" || self.baseNameToken == "CAPTAIN_BODY_NAME")
+                try
                 {
-                    return orig(self);
-                }
-                if (self.master && self.master.isBoss)
-                {
-                    var c = GameObject.FindObjectOfType<MusicController>();
-                    bool resetThanos = true;
-                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                    bool stop = false;
-                    StopBossMusic(new UInt32[] { 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
-                    if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (BigJank.getOptionValue("Sans", "Enemy Skins")))
+                    if (self.baseNameToken == "COMMANDO_BODY_NAME" || self.baseNameToken == "MERC_BODY_NAME" || self.baseNameToken == "ENGI_BODY_NAME" || self.baseNameToken == "HUNTRESS_BODY_NAME" || self.baseNameToken == "MAGE_BODY_NAME" || self.baseNameToken == "TOOLBOT_BODY_NAME" || self.baseNameToken == "TREEBOT_BODY_NAME" || self.baseNameToken == "LOADER_BODY_NAME" || self.baseNameToken == "CROCO_BODY_NAME" || self.baseNameToken == "CAPTAIN_BODY_NAME")
                     {
-                        AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
-                        stop = true;
+                        return orig(self);
                     }
-                    else if (self.baseNameToken == "ARTIFACTSHELL_BODY_NAME" && (BigJank.getOptionValue("Cereal", "Enemy Skins")))
+                    if (self.master && self.master.isBoss)
                     {
-                        AkSoundEngine.PostEvent("ArtifactIntro", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue("Obama Prism", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("PlayObama", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue("Obama Prism", "Enemy Skins")))
-                    {
-
-                    }
-                    else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (BigJank.getOptionValue("Alex Jones", "Enemy Skins")))
-                    {
-
-                    }
-                    else if (self.baseNameToken.StartsWith("SCAVLUNAR") && (BigJank.getOptionValue("Imposter", "Enemy Skins")))
-                    {
-
-                    }
-                    else if (self.baseNameToken.StartsWith("DIRESEEKER_BOSS_BODY_NAME") && (BigJank.getOptionValue("DireSeeker", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("DireSeekerMusic", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME"))
-                    {
-                        if ((BigJank.getOptionValue("Thanos", "Enemy Skins")))
+                        var c = GameObject.FindObjectOfType<MusicController>();
+                        bool resetThanos = true;
+                        var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                        bool stop = false;
+                        StopBossMusic(new UInt32[] { 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
+                        if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (BigJank.getOptionValue("Sans", "Enemy Skins")))
                         {
-                            resetThanos = false;
-                            brother++;
-                            MusicAPI.StopSong(ref c, "muSong25");
-                            switch (brother)
-                            {
-                                case 1:
-                                    break;
-                                case 2:
-                                    AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
-                                    AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);
-                                    break;
-                                case 3:
-                                    AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);
-                                    break;
-                                case 4:
-                                    AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
                             stop = true;
                         }
-                    }
-                    else if (self.baseNameToken == "ELECTRICWORM_BODY_NAME" && (BigJank.getOptionValue("Squirmles", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("PlaySquirmles", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "GRAVEKEEPER_BODY_NAME" && (BigJank.getOptionValue("Twitch", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("PlayTwitch", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "BEETLEQUEEN_BODY_NAME" && (BigJank.getOptionValue("Nyan Cat", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("PlayNyan", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "VAGRANT_BODY_NAME" && (BigJank.getOptionValue("WanderingAtEveryone", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("PlayDiscord", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "CLAYBOSS_BODY_NAME" && (BigJank.getOptionValue("Giga Puddi", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("PlayPudi", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "MAGMAWORM_BODY_NAME" && (BigJank.getOptionValue("Pool Noodle", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("PlayNoodle", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue("Roblox Titan", "Enemy Skins")))
-                    {
-                        AkSoundEngine.PostEvent("RobloxMusic", mainBody.gameObject);
-                        stop = true;
-                    }
-                    else if (BigJank.getOptionValue("Generic boss music", "Enemy Skins"))
-                    {
-                        AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
-                        stop = true;
-                    }
-                    if (resetThanos)
-                    {
-                        brother = 0;
-                        AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
-                    }
-                    try
-                    {
-                        if (stop)
+                        else if (self.baseNameToken == "ARTIFACTSHELL_BODY_NAME" && (BigJank.getOptionValue("Cereal", "Enemy Skins")))
                         {
-                            //muEscape
-                            //muSong25
-                            //muSong05
-                            MusicAPI.StopSong(ref c, "muSong05");
-                            MusicAPI.StopSong(ref c, "muSong23");
-                            MusicAPI.StopSong(ref c, "muSong13");
-                            //MusicAPI.GetCurrentSong(ref c);
-                            //AkSoundEngine.exec
-                            AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                            var con = GameObject.FindObjectOfType<MusicController>();
-                            MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
+                            AkSoundEngine.PostEvent("ArtifactIntro", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue("Obama Prism", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("PlayObama", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue("Obama Prism", "Enemy Skins")))
+                        {
+
+                        }
+                        else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (BigJank.getOptionValue("Alex Jones", "Enemy Skins")))
+                        {
+
+                        }
+                        else if (self.baseNameToken.StartsWith("SCAVLUNAR") && (BigJank.getOptionValue("Imposter", "Enemy Skins")))
+                        {
+
+                        }
+                        else if (self.baseNameToken.StartsWith("DIRESEEKER_BOSS_BODY_NAME") && (BigJank.getOptionValue("DireSeeker", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("DireSeekerMusic", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME"))
+                        {
+                            if ((BigJank.getOptionValue("Thanos", "Enemy Skins")))
+                            {
+                                resetThanos = false;
+                                brother++;
+                                MusicAPI.StopSong(ref c, "muSong25");
+                                switch (brother)
+                                {
+                                    case 1:
+                                        break;
+                                    case 2:
+                                        AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
+                                        AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);
+                                        break;
+                                    case 3:
+                                        AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);
+                                        break;
+                                    case 4:
+                                        AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                stop = true;
+                            }
+                        }
+                        else if (self.baseNameToken == "ELECTRICWORM_BODY_NAME" && (BigJank.getOptionValue("Squirmles", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("PlaySquirmles", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "GRAVEKEEPER_BODY_NAME" && (BigJank.getOptionValue("Twitch", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("PlayTwitch", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "BEETLEQUEEN_BODY_NAME" && (BigJank.getOptionValue("Nyan Cat", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("PlayNyan", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "VAGRANT_BODY_NAME" && (BigJank.getOptionValue("WanderingAtEveryone", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("PlayDiscord", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "CLAYBOSS_BODY_NAME" && (BigJank.getOptionValue("Giga Puddi", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("PlayPudi", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "MAGMAWORM_BODY_NAME" && (BigJank.getOptionValue("Pool Noodle", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("PlayNoodle", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue("Roblox Titan", "Enemy Skins")))
+                        {
+                            AkSoundEngine.PostEvent("RobloxMusic", mainBody.gameObject);
+                            stop = true;
+                        }
+                        else if (BigJank.getOptionValue("Generic boss music", "Enemy Skins"))
+                        {
+                            AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
+                            stop = true;
+                        }
+                        if (resetThanos)
+                        {
+                            brother = 0;
+                            AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
+                        }
+                        try
+                        {
+                            if (stop)
+                            {
+                                //muEscape
+                                //muSong25
+                                //muSong05
+                                MusicAPI.StopSong(ref c, "muSong05");
+                                MusicAPI.StopSong(ref c, "muSong23");
+                                MusicAPI.StopSong(ref c, "muSong13");
+                                //MusicAPI.GetCurrentSong(ref c);
+                                //AkSoundEngine.exec
+                                AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
+                                var con = GameObject.FindObjectOfType<MusicController>();
+                                MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
+                            }
+                        }
+                        catch (Exception)
+                        {
                         }
                     }
-                    catch (Exception)
-                    {
-                    }
+                }
+                catch (Exception)
+                {
+
                 }
                 return orig(self);
             };
