@@ -50,7 +50,7 @@ namespace MoistureUpset.NetMessages
                 netIds.Add(netId);
                 distances.Add(distance);
             }
-            int minDistance = 99999;
+            int minDistance = 9999;
             foreach (var item in distances)
             {
                 if (item < minDistance)

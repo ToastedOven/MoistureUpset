@@ -15,6 +15,7 @@ using System.Text;
 using RiskOfOptions;
 using MoistureUpset.NetMessages;
 using R2API.Networking.Interfaces;
+using System.Collections;
 
 namespace MoistureUpset
 {
@@ -342,10 +343,12 @@ namespace MoistureUpset
                 //Debug.Log(e);
             }
         }
-        public static void DEBUG()
+        public static IEnumerator DEBUG()
         {
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void Icons()
+        internal static IEnumerator Icons()
         {
             if (BigJank.getOptionValue("Froggy Chair", "Enemy Skins"))
                 UImods.ReplaceTexture2D("textures/bodyicons/BeetleBody", "MoistureUpset.Resources.froggychair.png");
@@ -417,8 +420,10 @@ namespace MoistureUpset
                 UImods.ReplaceTexture2D("textures/bodyicons/ScavBody", "MoistureUpset.Resources.imposter.png");
             if (BigJank.getOptionValue("Imposter", "Enemy Skins"))
                 UImods.ReplaceTexture2D("textures/bodyicons/ScavLunarBody", "MoistureUpset.Resources.imposter.png");
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void NonEnemyNames()
+        internal static IEnumerator NonEnemyNames()
         {
             On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
             {
@@ -611,11 +616,15 @@ namespace MoistureUpset
                 }
                 orig(self, token, st);
             };
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void Shrines()
+        internal static IEnumerator Shrines()
         {
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void Names()
+        internal static IEnumerator Names()
         {
             On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
             {
@@ -936,8 +945,10 @@ namespace MoistureUpset
                 //}
                 orig(self, token, st);
             };
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void ThanosQuotes()
+        internal static IEnumerator ThanosQuotes()
         {
             if (BigJank.getOptionValue("Thanos", "Enemy Skins"))
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
@@ -1060,35 +1071,50 @@ namespace MoistureUpset
                 }
                 orig(self, token, st);
             };
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void _UI()
+        internal static IEnumerator _UI()
         {
             if (BigJank.getOptionValue("Awp UI", "Audio"))
                 LoadBNK("awp");
             if (BigJank.getOptionValue("Chest noises", "Interactables"))
                 LoadBNK("chestinteraction");
             LoadBNK("playerdeath");
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void Sans()
+        internal static IEnumerator Sans()
         {
             if (BigJank.getOptionValue("Sans", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("sans");
             LoadResource("sans");
             ReplaceModel("prefabs/characterbodies/ImpBossBody", "@MoistureUpset_sans:assets/sans.mesh", "@MoistureUpset_sans:assets/sans.png");
             ReplaceMeshFilter("prefabs/projectileghosts/ImpVoidspikeProjectileGhost", "@MoistureUpset_sans:assets/boner.mesh", "@MoistureUpset_sans:assets/boner.png");
+            Moisture_Upset.completed++;
         }
-        private static void Shop()
+        internal static IEnumerator Shop()
         {
             if (BigJank.getOptionValue("Merchant", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("shop");
             ReplaceModel("prefabs/characterbodies/ShopkeeperBody", "@MoistureUpset_shop:assets/shop.mesh", "@MoistureUpset_shop:assets/shop.png");
+            Moisture_Upset.completed++;
         }
-        private static void BeetleGuard()
+        internal static IEnumerator BeetleGuard()
         {
             if (BigJank.getOptionValue("Winston", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("beetleguard");
             LoadResource("winston");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleGuardBody");
@@ -1129,13 +1155,16 @@ namespace MoistureUpset
                 orig(self);
                 AkSoundEngine.PostEvent("WinstonAttack1", self.outer.gameObject);
             };
-
+            Moisture_Upset.completed++;
 
         }
-        private static void Jelly()
+        internal static IEnumerator Jelly()
         {
             if (BigJank.getOptionValue("Comedy", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("comedy");
             LoadResource("jelly");
             ReplaceModel("prefabs/characterbodies/JellyfishBody", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
@@ -1145,11 +1174,15 @@ namespace MoistureUpset
                 //NetworkAssistant.playSound("JellyDetonate", self.outer.gameObject.transform.position);
                 orig(self);
             };
+            Moisture_Upset.completed++;
         }
-        private static void TacoBell()
+        internal static IEnumerator TacoBell()
         {
             if (BigJank.getOptionValue("Taco Bell", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("tacobell");
             LoadResource("tacobell");
             On.EntityStates.Bell.DeathState.OnEnter += (orig, self) =>
@@ -1171,11 +1204,15 @@ namespace MoistureUpset
             };
             ReplaceModel("prefabs/characterbodies/BellBody", "@MoistureUpset_tacobell:assets/taco.mesh", "@MoistureUpset_tacobell:assets/taco.png");
             ReplaceMeshFilter("prefabs/projectileghosts/BellBallGhost", "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
+            Moisture_Upset.completed++;
         }
-        private static void MiniMushroom()
+        internal static IEnumerator MiniMushroom()
         {
             if (BigJank.getOptionValue("Toad", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("toad");
             LoadResource("toad1");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/MiniMushroomBody");
@@ -1238,11 +1275,15 @@ namespace MoistureUpset
                 item.Material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
                 item.Material.renderQueue = 3000;
             }
+            Moisture_Upset.completed++;
         }
-        private static void Imp()
+        internal static IEnumerator Imp()
         {
             if (BigJank.getOptionValue("Trumpet Skeleton", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("dooter");
             ReplaceModel("prefabs/characterbodies/ImpBody", "@MoistureUpset_dooter:assets/dooter.mesh", "@MoistureUpset_dooter:assets/dooter.png");
 
@@ -1257,25 +1298,30 @@ namespace MoistureUpset
                 Util.PlaySound("Doot", self.outer.gameObject);
                 orig(self);
             };
+            Moisture_Upset.completed++;
         }
-        private static void GetChildren(Transform t, ref List<Transform> l, int depth = 0)
-        {
-            StringBuilder sb = new StringBuilder();
-            l.Add(t);
-            for (int i = 0; i < depth; i++)
-            {
-                sb.Append("====");
-            }
-            DebugClass.Log($"{sb.ToString()}=={depth}======{t.name}");
-            for (int i = 0; i < t.childCount; i++)
-            {
-                GetChildren(t.GetChild(i), ref l, depth + 1);
-            }
-        }
-        private static void Beetle()
+        //internal static IEnumerator GetChildren(Transform t, ref List<Transform> l, int depth = 0)
+        //{
+        //    StringBuilder sb = new StringBuilder();
+        //    l.Add(t);
+        //    for (int i = 0; i < depth; i++)
+        //    {
+        //        sb.Append("====");
+        //    }
+        //    DebugClass.Log($"{sb.ToString()}=={depth}======{t.name}");
+        //    for (int i = 0; i < t.childCount; i++)
+        //    {
+        //        GetChildren(t.GetChild(i), ref l, depth + 1);
+        //    }
+        //    yield break;
+        //}
+        internal static IEnumerator Beetle()
         {
             if (BigJank.getOptionValue("Froggy Chair", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("beetle");
             LoadResource("frog");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/BeetleBody");
@@ -1303,11 +1349,15 @@ namespace MoistureUpset
                 item.bones = t.ToArray();
             }
             ReplaceModel("prefabs/characterbodies/BeetleBody", "@MoistureUpset_frog:assets/frogchair.mesh", "@MoistureUpset_frog:assets/frogchair.png");
+            Moisture_Upset.completed++;
         }
-        private static void ElderLemurian()
+        internal static IEnumerator ElderLemurian()
         {
             if (BigJank.getOptionValue("Bowser", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("bowser");
             LoadResource("bowser");
             ReplaceModel("prefabs/characterbodies/LemurianBruiserBody", "@MoistureUpset_bowser:assets/bowser.mesh", "@MoistureUpset_bowser:assets/bowser.png");
@@ -1334,11 +1384,15 @@ namespace MoistureUpset
             //    }
             //    orig(self);
             //};
+            Moisture_Upset.completed++;
         }
-        private static void Templar()
+        internal static IEnumerator Templar()
         {
             if (BigJank.getOptionValue("Heavy", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("heavy");
             LoadResource("heavy");
             ReplaceModel("prefabs/characterbodies/ClayBruiserBody", "@MoistureUpset_heavy:assets/heavy.mesh", "@MoistureUpset_heavy:assets/heavy.png");
@@ -1383,11 +1437,15 @@ namespace MoistureUpset
             //    }
             //    orig(self);
             //};
+            Moisture_Upset.completed++;
         }
-        private static void GreaterWisp()
+        internal static IEnumerator GreaterWisp()
         {
             if (BigJank.getOptionValue("Ghast", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("ghast");
             LoadResource("ghast");
             ReplaceModel("prefabs/characterbodies/GreaterWispBody", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
@@ -1428,11 +1486,15 @@ namespace MoistureUpset
             //    }
             //    orig(self);
             //};
+            Moisture_Upset.completed++;
         }
-        private static void Wisp()
+        internal static IEnumerator Wisp()
         {
             if (BigJank.getOptionValue("Dogplane", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("dogplane");
             LoadResource("dogplane");
             ReplaceModel("prefabs/characterbodies/WispBody", "@MoistureUpset_dogplane:assets/bahdog.mesh", "@MoistureUpset_dogplane:assets/bahdog.png");
@@ -1467,11 +1529,15 @@ namespace MoistureUpset
                     }
                 }
             }
+            Moisture_Upset.completed++;
         }
-        private static void SolusUnit()
+        internal static IEnumerator SolusUnit()
         {
             if (BigJank.getOptionValue("Obama Prism", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("prism");
             LoadResource("obamaprism");
             ReplaceModel("prefabs/characterbodies/RoboBallMiniBody", "@MoistureUpset_obamaprism:assets/Obamium.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png");
@@ -1505,11 +1571,15 @@ namespace MoistureUpset
                 Util.PlaySound("ObamaDeploy", self.outer.gameObject);
                 orig(self);
             };
+            Moisture_Upset.completed++;
         }
-        private static void Lemurian()
+        internal static IEnumerator Lemurian()
         {
             if (BigJank.getOptionValue("Mike Wazowski", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("mike");
             On.EntityStates.LemurianMonster.Bite.OnEnter += (orig, self) =>
             {
@@ -1522,11 +1592,15 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("prefabs/characterbodies/LemurianBody", "@MoistureUpset_mike:assets/mike.mesh", "@MoistureUpset_mike:assets/mike.png");
+            Moisture_Upset.completed++;
         }
-        private static void Golem()
+        internal static IEnumerator Golem()
         {
             if (BigJank.getOptionValue("Robloxian", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("oof");
             LoadResource("noob");
             On.EntityStates.GolemMonster.ChargeLaser.OnEnter += (orig, self) =>
@@ -1596,11 +1670,15 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("prefabs/characterbodies/GolemBody", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
+            Moisture_Upset.completed++;
         }
-        private static void Bison()
+        internal static IEnumerator Bison()
         {
             if (BigJank.getOptionValue("Thomas", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("thomas");
             On.EntityStates.Bison.Charge.OnEnter += (orig, self) =>
             {
@@ -1613,11 +1691,15 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("prefabs/characterbodies/BisonBody", "@MoistureUpset_thomas:assets/thomas.mesh", "@MoistureUpset_thomas:assets/dankengine.png", 0, true);
+            Moisture_Upset.completed++;
         }
-        private static void RobloxTitan()
+        internal static IEnumerator RobloxTitan()
         {
             if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("roblox");
             ReplaceModel("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.mesh", "@MoistureUpset_roblox:assets/robloxtitan.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/TitanBody");
@@ -1747,11 +1829,15 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
+            Moisture_Upset.completed++;
         }
-        private static void Alex()
+        internal static IEnumerator Alex()
         {
             if (BigJank.getOptionValue("Alex Jones", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("alexjones");
             ReplaceModel("prefabs/characterbodies/TitanGoldBody", "@MoistureUpset_alexjones:assets/alexjones.mesh", "@MoistureUpset_alexjones:assets/alexjones.png");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/TitanGoldBody");
@@ -1878,11 +1964,15 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
+            Moisture_Upset.completed++;
         }
-        private static void LemmeSmash()
+        internal static IEnumerator LemmeSmash()
         {
             if (BigJank.getOptionValue("Lemme Smash", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("vulture");
             LoadResource("lemmesmash");
             ReplaceModel("prefabs/characterbodies/VultureBody", "@MoistureUpset_lemmesmash:assets/lemmesmasheyes.mesh", "@MoistureUpset_lemmesmash:assets/lemmesmash.png");
@@ -1907,11 +1997,15 @@ namespace MoistureUpset
                     }
                 }
             }
+            Moisture_Upset.completed++;
         }
-        private static void Hagrid()
+        internal static IEnumerator Hagrid()
         {
             if (BigJank.getOptionValue("Hagrid", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("hagrid");
             LoadBNK("hagrid");
             ReplaceModel("prefabs/characterbodies/ParentBody", "@MoistureUpset_hagrid:assets/hagrid.mesh", "@MoistureUpset_hagrid:assets/hagrid.png");
@@ -1920,8 +2014,9 @@ namespace MoistureUpset
                 orig(self, pos);
                 AkSoundEngine.PostEvent("HagridTeleport", self.outer.gameObject);
             };
+            Moisture_Upset.completed++;
         }
-        public static void MakePoolNoodleBlue()
+        internal static IEnumerator MakePoolNoodleBlue()
         {
             BlueParticles("prefabs/characterbodies/MagmaWormBody");
             BlueParticles("prefabs/effects/MagmaWormBurrow");
@@ -1930,8 +2025,9 @@ namespace MoistureUpset
             BlueParticles("prefabs/effects/MagmaWormImpactExplosion");
             BlueParticles("prefabs/effects/MagmaWormRupture");
             BlueParticles("prefabs/effects/MagmaWormWarning");
+            yield break;
         }
-        private static void BlueParticles(string path)
+        internal static IEnumerator BlueParticles(string path)
         {
             var fab = Resources.Load<GameObject>(path);
             foreach (var item in fab.GetComponentsInChildren<ParticleSystem>())
@@ -1950,8 +2046,9 @@ namespace MoistureUpset
                     }
                 }
             }
+            yield break;
         }
-        private static void Noodle()
+        internal static IEnumerator Noodle()
         {
             On.RoR2.WormBodyPositions2.OnEnterSurface += (orig, self, point, normal) =>
             {
@@ -1973,7 +2070,10 @@ namespace MoistureUpset
                 }
             };
             if (BigJank.getOptionValue("Pool Noodle", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("noodle");
 
 
@@ -2027,11 +2127,15 @@ namespace MoistureUpset
                 ((UnityEngine.Rendering.PostProcessing.PostProcessProfile)item.sharedProfile).settings = ((UnityEngine.Rendering.PostProcessing.PostProcessProfile)ting.sharedProfile).settings;
             }
             MakePoolNoodleBlue();
+            Moisture_Upset.completed++;
         }
-        private static void Skeleton()
+        internal static IEnumerator Skeleton()
         {
             if (BigJank.getOptionValue("Skeleton Crab", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadBNK("jockey");
             LoadResource("skeleton");
             //ReplaceTexture("prefabs/characterbodies/HermitCrabBody", "@MoistureUpset_skeleton:assets/skeleton.png");
@@ -2053,20 +2157,28 @@ namespace MoistureUpset
             fab.AddComponent<ArrowFixer>();
             fab.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>().speed = Rewired.ComponentControls.Effects.RotateAroundAxis.Speed.Stopped;
             fab.GetComponentInChildren<ParticleSystemRenderer>().enabled = false;
+            Moisture_Upset.completed++;
         }
-        private static void CrabRave()
+        internal static IEnumerator CrabRave()
         {
             if (BigJank.getOptionValue("Crab Rave", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("crabrave");
             LoadBNK("crabrave");
             ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_crabrave:assets/crab.mesh", "@MoistureUpset_crabrave:assets/crab.png", 1);
             ReplaceModel("prefabs/characterbodies/NullifierBody", "@MoistureUpset_na:assets/na.mesh", "@MoistureUpset_na:assets/blank.png");
+            Moisture_Upset.completed++;
         }
-        private static void PUDDI()
+        internal static IEnumerator PUDDI()
         {
             if (BigJank.getOptionValue("Giga Puddi", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("puddi");
             LoadBNK("puddi");
             ReplaceModel("prefabs/characterbodies/ClayBossBody", "@MoistureUpset_puddi:assets/puddi.mesh", "@MoistureUpset_puddi:assets/puddi.png");
@@ -2115,11 +2227,15 @@ namespace MoistureUpset
                 item.transform.localScale *= .5f;
                 item.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_puddi:assets/puddighost.mesh");
             }
+            Moisture_Upset.completed++;
         }
-        private static void StringWorm()
+        internal static IEnumerator StringWorm()
         {
             if (BigJank.getOptionValue("Squirmles", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("werm");
             LoadBNK("werm");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/ElectricWormBody");
@@ -2170,11 +2286,15 @@ namespace MoistureUpset
 
             fab = Resources.Load<GameObject>("prefabs/projectiles/ElectricWormSeekerProjectile");
             var sb = fab.AddComponent<SeekingBullet>();
+            Moisture_Upset.completed++;
         }
-        private static void Discord()
+        internal static IEnumerator Discord()
         {
             if (BigJank.getOptionValue("WanderingAtEveryone", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("discord");
             LoadBNK("discord");
             ReplaceModel("prefabs/characterbodies/VagrantBody", "@MoistureUpset_discord:assets/discord.mesh", "@MoistureUpset_discord:assets/discord.png");
@@ -2230,11 +2350,15 @@ namespace MoistureUpset
             catch (Exception)
             {
             }
+            Moisture_Upset.completed++;
         }
-        private static void Copter()
+        internal static IEnumerator Copter()
         {
             if (BigJank.getOptionValue("Roflcopter", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/LunarWispBody");
             fab.AddComponent<Helicopter>();
             fab.GetComponentsInChildren<ParticleSystem>()[0].maxParticles = 0;
@@ -2244,19 +2368,27 @@ namespace MoistureUpset
             LoadResource("roflcopter");
             LoadBNK("Roflcopter");
             ReplaceModel("prefabs/characterbodies/LunarWispBody", "@MoistureUpset_roflcopter:assets/roflcopter.mesh", "@MoistureUpset_roflcopter:assets/roflcopter.png");
+            Moisture_Upset.completed++;
         }
-        private static void Rob()
+        internal static IEnumerator Rob()
         {
             if (BigJank.getOptionValue("Rob", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("rob");
             ReplaceModel("prefabs/characterbodies/LunarGolemBody", "@MoistureUpset_rob:assets/rob.mesh", "@MoistureUpset_rob:assets/rob.png");
             LoadBNK("rob");
+            Moisture_Upset.completed++;
         }
-        private static void Nyan()
+        internal static IEnumerator Nyan()
         {
             if (BigJank.getOptionValue("Nyan Cat", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("beetlequeen");
             LoadBNK("Nyam2");
             ReplaceModel("prefabs/characterbodies/BeetleQueen2Body", "@MoistureUpset_beetlequeen:assets/bosses/nyancat.mesh", "@MoistureUpset_na:assets/blank.png");
@@ -2267,7 +2399,6 @@ namespace MoistureUpset
             }
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.SetTexture("_EmTex", Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.png"));
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.SetVector("_EmColor", new Vector4(.4f, .4f, .4f, 1));
-
             fab = Resources.Load<GameObject>("prefabs/projectileghosts/BeetleQueenSpitGhost");
             fab.GetComponentsInChildren<TrailRenderer>()[1].gameObject.SetActive(false);
             fab.GetComponentsInChildren<TrailRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/trail.mat");
@@ -2279,10 +2410,8 @@ namespace MoistureUpset
             p.startLifetime = 10;
             var shape = p.shape;
             shape.shapeType = ParticleSystemShapeType.Sprite;
-
             ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
             ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
-
 
             var vel = p.limitVelocityOverLifetime;
             vel.enabled = true;
@@ -2305,35 +2434,41 @@ namespace MoistureUpset
             catch (Exception)
             {
             }
-            foreach (var particle in EntityStates.BeetleQueenMonster.FireSpit.effectPrefab.GetComponentsInChildren<ParticleSystemRenderer>())
-            {
-                try
-                {
-                    particle.material.shader = Shader.Find("Sprites/Default");
-                    particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    particle.material.SetInt("_ZWrite", 0);
-                    particle.material.DisableKeyword("_ALPHATEST_ON");
-                    particle.material.DisableKeyword("_ALPHABLEND_ON");
-                    particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                    particle.material.renderQueue = 3000;
-                    particle.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyanstars.png");
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-
+            //On.RoR2.RoR2Application.OnLoad += (orig, self) =>
+            //{
+            //    foreach (var particle in EntityStates.BeetleQueenMonster.FireSpit.effectPrefab.GetComponentsInChildren<ParticleSystemRenderer>())
+            //    {
+            //        try
+            //        {
+            //            particle.material.shader = Shader.Find("Sprites/Default");
+            //            particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            //            particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            //            particle.material.SetInt("_ZWrite", 0);
+            //            particle.material.DisableKeyword("_ALPHATEST_ON");
+            //            particle.material.DisableKeyword("_ALPHABLEND_ON");
+            //            particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+            //            particle.material.renderQueue = 3000;
+            //            particle.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyanstars.png");
+            //        }
+            //        catch (Exception)
+            //        {
+            //        }
+            //    }
+            //    return orig(self);
+            //};
             fab = Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/BeetleWardOrbEffect");
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.mat");
             fab.GetComponentsInChildren<TrailRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/trail.mat");
+            Moisture_Upset.completed++;
         }
-        private static void Thanos()
+        internal static IEnumerator Thanos()
         {
             if (BigJank.getOptionValue("Thanos", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("thanos");
             LoadBNK("Thanos");
             ReplaceModel("prefabs/characterbodies/BrotherBody", "@MoistureUpset_thanos:assets/bosses/thanos.mesh", "@MoistureUpset_thanos:assets/bosses/thanos.png", 0);
@@ -2357,11 +2492,15 @@ namespace MoistureUpset
             ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_na:assets/na1.mesh", 1);
             ReplaceMeshFilter("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_na:assets/na1.mesh", 2);
             ReplaceModel("prefabs/characterbodies/BrotherHurtBody", "@MoistureUpset_na:assets/na1.mesh", 1);
+            Moisture_Upset.completed++;
         }
-        private static void Cereal()
+        internal static IEnumerator Cereal()
         {
             if (BigJank.getOptionValue("Cereal", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("artifact");
             ReplaceMeshFilter("prefabs/characterbodies/ArtifactShellBody", "@MoistureUpset_artifact:assets/bosses/bowl.mesh");
             var fab = Resources.Load<GameObject>("prefabs/characterbodies/ArtifactShellBody");
@@ -2409,11 +2548,15 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
+            Moisture_Upset.completed++;
         }
-        private static void Twitch()
+        internal static IEnumerator Twitch()
         {
             if (BigJank.getOptionValue("Twitch", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("moisture_twitch");
             LoadResource("twitch2");
             LoadBNK("Twitch");
@@ -2470,8 +2613,9 @@ namespace MoistureUpset
                 Util.PlaySound("TwitchChains", self.outer.gameObject);
                 orig(self);
             };
+            Moisture_Upset.completed++;
         }
-        private static void ImposterChanger(string name)
+        internal static IEnumerator ImposterChanger(string name)
         {
             var fab = Resources.Load<GameObject>($"prefabs/characterbodies/{name}");
             Shader temp = fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shader;
@@ -2479,12 +2623,16 @@ namespace MoistureUpset
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[2].sharedMaterial = Resources.Load<Material>("@MoistureUpset_scavenger:assets/bosses/imposter.mat");
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shader = temp;
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[2].sharedMaterial.shader = temp;
+            yield break;
         }
         public static bool kindlyKillYourselfRune = true;
-        private static void Imposter()
+        internal static IEnumerator Imposter()
         {
             if (BigJank.getOptionValue("Imposter", "Enemy Skins") != true)
-                return;
+            {
+                Moisture_Upset.completed++;
+                yield break;
+            }
             LoadResource("scavenger");
             LoadBNK("Abungus");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
@@ -2565,9 +2713,10 @@ namespace MoistureUpset
             ImposterChanger("ScavLunar4Body");
 
             ReplaceModel("prefabs/networkedobjects/ScavLunarBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png");
+            Moisture_Upset.completed++;
         }
-
-        private static void Collab()
+                       
+        internal static IEnumerator Collab()
         {
             Direseeker();
             PlayableLemurian();
@@ -2577,8 +2726,10 @@ namespace MoistureUpset
             PlayableMithrix();
             PlayableLemurian();
             ChipTheBeetle();
+            Moisture_Upset.completed++;
+            yield break;
         }
-        private static void Direseeker()
+        internal static IEnumerator Direseeker()
         {
             try
             {
@@ -2592,8 +2743,9 @@ namespace MoistureUpset
             {
                 DebugClass.Log($"Direseeker not installed, skipping");
             }
+            yield break;
         }
-        private static void PlayableLemurian()
+        internal static IEnumerator PlayableLemurian()
         {
             try
             {
@@ -2607,8 +2759,9 @@ namespace MoistureUpset
             {
                 DebugClass.Log($"Playable Lemurian not installed, skipping");
             }
+            yield break;
         }
-        private static void PlayableGrovetender()
+        internal static IEnumerator PlayableGrovetender()
         {
             try
             {
@@ -2622,8 +2775,9 @@ namespace MoistureUpset
             {
                 DebugClass.Log($"PlayableGrovetender not installed, skipping");
             }
+            yield break;
         }
-        private static void PlayableScavenger()
+        internal static IEnumerator PlayableScavenger()
         {
             try
             {
@@ -2637,8 +2791,9 @@ namespace MoistureUpset
             {
                 DebugClass.Log($"PlayableScavenger not installed, skipping");
             }
+            yield break;
         }
-        private static void PlayableTemplar()
+        internal static IEnumerator PlayableTemplar()
         {
             try
             {
@@ -2652,8 +2807,9 @@ namespace MoistureUpset
             {
                 DebugClass.Log($"PlayableTemplar not installed, skipping");
             }
+            yield break;
         }
-        private static void PlayableMithrix()
+        internal static IEnumerator PlayableMithrix()
         {
             try
             {
@@ -2667,8 +2823,9 @@ namespace MoistureUpset
             {
                 DebugClass.Log($"PlayableMithrix not installed, skipping");
             }
+            yield break;
         }
-        private static void ChipTheBeetle()
+        internal static IEnumerator ChipTheBeetle()
         {
             try
             {
@@ -2682,6 +2839,7 @@ namespace MoistureUpset
             {
                 DebugClass.Log($"ChipTheBeetle not installed, skipping");
             }
+            yield break;
         }
     }
 }
