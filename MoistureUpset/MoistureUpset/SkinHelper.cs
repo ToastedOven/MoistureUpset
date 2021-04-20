@@ -11,9 +11,11 @@ using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
-    public static class SkinHelper // Originally we used skinIndex == 2, but I realized that that may be incompatible with other skins for the engi, so we do this jank instead.
+    internal static class SkinHelper // Originally we used skinIndex == 2, but I realized that that may be incompatible with other skins for the engi, so we do this jank instead.
     {
-        public static Dictionary<string, string> skinNametoskinMeshName = new Dictionary<string, string>();
+        internal static Dictionary<string, string> skinNametoskinMeshName = new Dictionary<string, string>();
+
+        private static Dictionary<string, uint> skinNameToSkinIndex = new Dictionary<string, uint>();
 
         public static int engiTurretSkinIndex = -1;
 
@@ -26,6 +28,11 @@ namespace MoistureUpset
         {
             if (!cb)
                 return false;
+
+            if (skinNameToSkinIndex.ContainsKey(skinName))
+            {
+                return cb.skinIndex == skinNameToSkinIndex[skinName];
+            }
 
             if (!cb.modelLocator)
                 return false;
@@ -44,6 +51,7 @@ namespace MoistureUpset
 
                 if (smr.sharedMesh.name == meshName)
                 {
+                    skinNameToSkinIndex.Add(skinName, cb.skinIndex);
                     return true;
                 }
             }

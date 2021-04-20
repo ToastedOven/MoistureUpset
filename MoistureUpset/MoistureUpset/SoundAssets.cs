@@ -157,7 +157,7 @@ namespace MoistureUpset
                             //Debug.Log(e);
                         }
                     }
-                    else if (damageReport.attackerMaster.GetBody().name == "CaptainBody(Clone)" && damageReport.attackerMaster.GetBody().skinIndex == 2)
+                    else if (damageReport.attackerMaster.GetBody().name == "CaptainBody(Clone)" && damageReport.attackerBody.isSkin(Skins.JotaroCaptain.NameToken))
                     {
                         try
                         {
