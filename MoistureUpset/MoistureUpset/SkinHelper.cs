@@ -15,6 +15,8 @@ namespace MoistureUpset
     {
         public static Dictionary<string, string> skinNametoskinMeshName = new Dictionary<string, string>();
 
+        private static Dictionary<string, uint> skinNameToSkinIndex = new Dictionary<string, uint>();
+
         public static int engiTurretSkinIndex = -1;
 
         public static void RegisterSkin(string skinName, string skinMeshName)
@@ -26,6 +28,11 @@ namespace MoistureUpset
         {
             if (!cb)
                 return false;
+
+            if (skinNameToSkinIndex.ContainsKey(skinName))
+            {
+                return cb.skinIndex == skinNameToSkinIndex[skinName];
+            }
 
             if (!cb.modelLocator)
                 return false;
@@ -44,6 +51,7 @@ namespace MoistureUpset
 
                 if (smr.sharedMesh.name == meshName)
                 {
+                    skinNameToSkinIndex.Add(skinName, cb.skinIndex);
                     return true;
                 }
             }
