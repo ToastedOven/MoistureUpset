@@ -339,7 +339,7 @@ namespace MoistureUpset
             }
             catch (Exception e)
             {
-                //Debug.Log(e);
+                Debug.Log(e);
             }
         }
         public static void DEBUG()
@@ -2355,24 +2355,24 @@ namespace MoistureUpset
             catch (Exception)
             {
             }
-            foreach (var particle in EntityStates.BeetleQueenMonster.FireSpit.effectPrefab.GetComponentsInChildren<ParticleSystemRenderer>())
-            {
-                try
-                {
-                    particle.material.shader = Shader.Find("Sprites/Default");
-                    particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    particle.material.SetInt("_ZWrite", 0);
-                    particle.material.DisableKeyword("_ALPHATEST_ON");
-                    particle.material.DisableKeyword("_ALPHABLEND_ON");
-                    particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                    particle.material.renderQueue = 3000;
-                    particle.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyanstars.png");
-                }
-                catch (Exception)
-                {
-                }
-            }
+            //foreach (var particle in EntityStates.BeetleQueenMonster.FireSpit.effectPrefab.GetComponentsInChildren<ParticleSystemRenderer>())
+            //{
+            //    try
+            //    {
+            //        particle.material.shader = Shader.Find("Sprites/Default");
+            //        particle.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            //        particle.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            //        particle.material.SetInt("_ZWrite", 0);
+            //        particle.material.DisableKeyword("_ALPHATEST_ON");
+            //        particle.material.DisableKeyword("_ALPHABLEND_ON");
+            //        particle.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+            //        particle.material.renderQueue = 3000;
+            //        particle.material.mainTexture = Resources.Load<Texture>("@MoistureUpset_beetlequeen:assets/bosses/nyanstars.png");
+            //    }
+            //    catch (Exception)
+            //    {
+            //    }
+            //}
 
 
             fab = Resources.Load<GameObject>("Prefabs/Effects/OrbEffects/BeetleWardOrbEffect");
@@ -2537,6 +2537,7 @@ namespace MoistureUpset
                 return;
             LoadResource("scavenger");
             LoadBNK("Abungus");
+            DebugClass.Log($"----------replacing scav stuff");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/networkedobjects/ScavBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_na:assets/na1.mesh", 1);
