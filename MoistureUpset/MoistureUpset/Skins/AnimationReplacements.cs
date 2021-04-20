@@ -25,15 +25,18 @@ namespace MoistureUpset.Skins
     {
         public static void RunAll()
         {
+            HumanBodyBones[] dab = new HumanBodyBones[] { HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightUpperLeg };
+            HumanBodyBones[] Facepalm = new HumanBodyBones[] { HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightUpperLeg, HumanBodyBones.LeftUpperArm };
+            HumanBodyBones[] hips = new HumanBodyBones[] { HumanBodyBones.Hips };
             EnemyReplacements.LoadResource("moisture_animationreplacements");
             EnemyReplacements.LoadBNK("Emotes");
             CustomEmotesAPI.AddCustomAnimation("Loser", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Loser.anim", true, "Loser", "LoserStop");
-            CustomEmotesAPI.AddCustomAnimation("SPEEEN", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/SPEEEN.anim", false);
-            CustomEmotesAPI.AddCustomAnimation("Dab", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Dab.anim", false, "Dab", "DabStop");
+            CustomEmotesAPI.AddCustomAnimation("SPEEEN", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinstart.anim", false, secondaryAnimation: "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinloop.anim");
+            CustomEmotesAPI.AddCustomAnimation("Dab", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Dab.anim", false, "Dab", "DabStop", dab, hips);
             CustomEmotesAPI.AddCustomAnimation("Floss", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Floss.anim", true, "Floss", "FlossStop");
             CustomEmotesAPI.AddCustomAnimation("Default Dance", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Default Dance.anim", false, "DefaultDance", "DefaultDanceStop");
             CustomEmotesAPI.AddCustomAnimation("Caramelldansen", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Caramelldansen.anim", false);
-            CustomEmotesAPI.AddCustomAnimation("Facepalm", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Facepalm.anim", false);
+            CustomEmotesAPI.AddCustomAnimation("Facepalm", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Facepalm.anim", false, "", "", Facepalm, hips);
             CustomEmotesAPI.AddCustomAnimation("Orange Justice", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Orange Justice.anim", true, "OrangeJustice", "OrangeJusticeStop");
             CustomEmotesAPI.AddCustomAnimation("nobones", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/nobones.anim", true);
         }
