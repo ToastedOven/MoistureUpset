@@ -28,7 +28,6 @@ namespace MoistureUpset
         {
             for (int i = 0; i < idrs.keyAssetRuleGroups.Length; i++)
             {
-                //Debug.Log($"idrs: {idrs.keyAssetRuleGroups[i].keyAsset}, itemdef: {item}");
                 if (idrs.keyAssetRuleGroups[i].keyAsset == item)
                 {
                     return idrs.keyAssetRuleGroups[i].displayRuleGroup;

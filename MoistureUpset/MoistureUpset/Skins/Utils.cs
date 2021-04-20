@@ -53,13 +53,13 @@ namespace MoistureUpset.Skins
             skinDelegates = new Dictionary<string, CreateSkin>();
 
 
-            //CommandoTest.Init();
+            CommandoTest.Init();
             TF2Engi.Init();
-            //JotaroCaptain.Init();
-            //StarPlatinumLoader.Init();
+            JotaroCaptain.Init();
+            StarPlatinumLoader.Init();
             //
 
-            //AnimationReplacements.RunAll();
+            AnimationReplacements.RunAll();
 
             AddSkinsToBodyPrefabs();
 
