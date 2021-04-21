@@ -18,39 +18,39 @@ using UnityEngine.SceneManagement;
 
 namespace MoistureUpset
 {
-    //public class BonziUnlocked : ModdedUnlockable
-    //{
-    //    public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
-    //    public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
-    //    public override string PrerequisiteUnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_PREREQ_ID";
-    //    public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
-    //    public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
-    //    public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
+    public class BonziUnlocked : ModdedUnlockable
+    {
+        public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
+        public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
+        public override string PrerequisiteUnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_PREREQ_ID";
+        public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
+        public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
+        public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
 
-    //    public override Sprite Sprite { get; } = Resources.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
-    //    public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
-    //    {
-    //        orig(self);
-    //        if (BonziBuddy.buddy.foundMe)
-    //        {
-    //            base.Grant();
-    //        }
-    //    }
-    //    public override void OnInstall()
-    //    {
-    //        base.OnInstall();
-    //        On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update += ClearCheck;
-    //    }
+        public override Sprite Sprite { get; } = Resources.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
+        public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
+        {
+            orig(self);
+            if (BonziBuddy.buddy.foundMe)
+            {
+                base.Grant();
+            }
+        }
+        public override void OnInstall()
+        {
+            base.OnInstall();
+            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update += ClearCheck;
+        }
 
-    //    public override void OnUninstall()
-    //    {
-    //        base.OnUninstall();
-    //        On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
-    //    }
+        public override void OnUninstall()
+        {
+            base.OnUninstall();
+            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
+        }
 
-    //    public override Func<string> GetHowToUnlock { get; } = new Func<string>(() => "lig");
-    //    public override Func<string> GetUnlocked { get; } = new Func<string>(() => "ball");
-    //}
+        public override Func<string> GetHowToUnlock { get; } = new Func<string>(() => "lig");
+        public override Func<string> GetUnlocked { get; } = new Func<string>(() => "ball");
+    }
     public class BonziBuddy : MonoBehaviour
     {
         #region defined positions
@@ -93,8 +93,6 @@ namespace MoistureUpset
         GameObject obj1, obj2, obj3, obj4, obj5, obj6;
         GameObject preloaded = Resources.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
         public float dontSpeak = 0;
-        public static bool doHooks = true;
-        int dioUsed = 0, dioHeld = 0;
 
         bool bonziActive = false;
         void Start()
@@ -116,25 +114,19 @@ namespace MoistureUpset
         }
         private void Hooks()
         {
-            if (!doHooks)
-                return;
-            doHooks = false;
-            On.EntityStates.Missions.BrotherEncounter.Phase4.OnEnter += (orig, self) =>
-            {
-                orig(self);
-                dontSpeak = 86400; //yeah if you wait a whole day in phase 4 you can break this, eat me.
-            };
+            //On.RoR2.EscapeSequenceController.EscapeSequenceMainState.OnEnter += (orig, self) =>
+            //{
+            //    orig(self);
+            //    DebugClass.Log($"----------{self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("t")}");
+            //    self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("tNow") = 5;
+            //};
             On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
-                dontSpeak = 5;
                 //Main Camera(Clone)
                 //MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID
-                if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"))//achievement not unlocked
+                if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))//achievement not unlocked
                 {
-                    On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
-                    On.RoR2.HoldoutZoneController.FixedUpdate += HoldoutZoneController_FixedUpdate;
-
                     Chat.AddMessage($"<style=cWorldEvent>You hear a rumbling coming from the teleporter...</style>");
                     foreach (var item in Camera.allCameras)
                     {
@@ -183,8 +175,6 @@ namespace MoistureUpset
             On.RoR2.Run.OnClientGameOver += (orig, self, report) =>
             {
                 orig(self, report);
-                dioUsed = 0;
-                dioHeld = 0;
                 try
                 {
                     if (report.gameEnding.endingTextToken == "GAME_RESULT_UNKNOWN")
@@ -211,7 +201,7 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            if (BigJank.getOptionValue("Top Secret Setting", "Misc") /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/ && !bonziActive)
+                            if (BigJank.getOptionValue("Top Secret Setting") == 1 /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/ && !bonziActive)
                             {
                                 Activate();
                             }
@@ -228,6 +218,7 @@ namespace MoistureUpset
                             break;
                         case "moon2":
                             //frogge 
+                            On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
                             break;
                         default:
                             GoTo(M1);
@@ -240,12 +231,9 @@ namespace MoistureUpset
                     if (newS.name != "moon2")
                     {
                         On.RoR2.Run.FixedUpdate -= Run_FixedUpdate;
-                        On.RoR2.HoldoutZoneController.FixedUpdate -= HoldoutZoneController_FixedUpdate;
                     }
                     charPosition = null;
                     AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
-                    SyncBonziApproach.netIds.Clear();
-                    SyncBonziApproach.distances.Clear();
                 }
                 catch (Exception)
                 {
@@ -378,53 +366,24 @@ namespace MoistureUpset
             };
         }
 
-        private void HoldoutZoneController_FixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
-        {
-            float num = Time.fixedDeltaTime * dist;
-            if (NetworkServer.active)
-            {
-                Time.fixedDeltaTime -= num;
-            }
-            orig(self);
-            if (NetworkServer.active)
-            {
-                Time.fixedDeltaTime += num;
-            }
-        }
-
         private void Run_FixedUpdate(On.RoR2.Run.orig_FixedUpdate orig, Run self)
         {
             orig(self);
             if (charPosition != null)
             {
                 float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
-                if (num >= 0)
+                if (num < 800)
                 {
-                    new SyncBonziApproach((int)num, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
+                    num = 1f - (num / 800f) + .2f;
+                    if (num > 1)
+                    {
+                        num = 1;
+                    }
+                    Run.instance.fixedTime -= Time.deltaTime * num;
                 }
             }
-            else
-            {
-                //new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
-            }
-            Run.instance.fixedTime -= Time.deltaTime * dist;
         }
-        float dist = 0;
-        public void BonziApproach(int distance)
-        {
-            if (distance < 800)
-            {
-                float distance2;
-                distance2 = ((1f - ((float)distance / 800f)) * .6f) + .4f;
-                if (distance2 > 1)
-                {
-                    distance2 = 1;
-                }
-                dist = distance2;
-                return;
-            }
-            dist = 0f;
-        }
+
         public void Mountain(List<PickupIndex> pickups)
         {
             int squidCount = 0;
@@ -678,7 +637,6 @@ namespace MoistureUpset
                     {
                         quotes.Add("Too much crit! Too much crit!");
                     }
-                    dioHeld = inventory.GetItemCount(RoR2Content.Items.ExtraLife);
                     if (inventory.GetItemCount(RoR2Content.Items.Bear) != 0)
                     {
                         quotes.Add("You can now block attacks almost as hard as I get blocked on twitter");
@@ -795,10 +753,6 @@ namespace MoistureUpset
                             }
                             break;
                         case "ITEM_BEAR_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.Bear) == 50)
-                            {
-                                ShouldSpeak("I don't know if you really need any more block chance");
-                            }
                             if (inventory.GetItemCount(RoR2Content.Items.Bear) == 101)
                             {
                                 ShouldSpeak("You know stacking them further is almost pointless...");
@@ -815,10 +769,8 @@ namespace MoistureUpset
                             break;
                         case "ITEM_DAGGER_NAME":
                             //red dagger
-                            if (inventory.GetItemCount(RoR2Content.Items.Dagger) == 1)
-                            {
-                                ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
-                            }
+
+                            ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
                             break;
                         case "ITEM_TOOTH_NAME":
                             //monster tooth
@@ -870,7 +822,7 @@ namespace MoistureUpset
                         case "ITEM_ATTACKSPEEDONCRIT_NAME":
                             break;
                         case "ITEM_BLEEDONHIT_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 10)
+                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 7)
                             {
                                 ShouldSpeak("Oh yeah, it's gamer time.");
                             }
@@ -995,7 +947,7 @@ namespace MoistureUpset
                         case "ITEM_KNURL_NAME":
                             break;
                         case "ITEM_BEETLEGLAND_NAME":
-                            if (BigJank.getOptionValue("Winston", "Enemy Skins"))
+                            if (BigJank.getOptionValue("Winston") == 1)
                             {
                                 ShouldSpeak("Winston please switch");
                             }
@@ -1029,7 +981,6 @@ namespace MoistureUpset
                         case "ITEM_SLOWONHIT_NAME":
                             break;
                         case "ITEM_EXTRALIFE_NAME":
-                            dioHeld += count;
                             break;
                         case "ITEM_EXTRALIFECONSUMED_NAME":
                             break;
@@ -1274,58 +1225,55 @@ namespace MoistureUpset
                         deathQuotes.Add("Just blame your teammates 4Head");
                     }
                     RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
-                    //DebugClass.Log($"----------{inventory.GetItemCount(RoR2Content.Items.ExtraLife)}          {inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed)}");
-                    if (dioHeld != 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
                     {
                         deathQuotes.Clear();
-                        if (dioUsed == 0)
+                        if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 0)
                         {
                             deathQuotes.Add("Wait don't leave yet!");
                         }
-                        else if (dioUsed == 1)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 1)
                         {
                             deathQuotes.Add("You know, just because you have them, doesn't mean you have to use them...");
                         }
-                        else if (dioUsed == 2)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 2)
                         {
                             ShouldSpeak("T t t triple kill");
                             return;
                         }
-                        else if (dioUsed == 3)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 3)
                         {
                             deathQuotes.Add("Really just chugging these down at this point yeah?");
                         }
-                        else if (dioUsed == 4)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 4)
                         {
                             deathQuotes.Add("That's 5 deaths now, how are you this bad at the game?");
                         }
-                        else if (dioUsed == 5)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 5)
                         {
                             deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2Content.Items.ExtraLife.nameToken)}s. So thank you, for using them for me so I don't have to.");
                         }
-                        else if (dioUsed == 6)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 6)
                         {
                             deathQuotes.Add("So that was a bit of a hyperbole earlier. I don't actually think we should consume more of them, so if you could just stop that would be great.");
                         }
-                        else if (dioUsed == 7)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 7)
                         {
                             deathQuotes.Add("You know what? I give up, I hope you lose this run.");
                         }
-                        else if (dioUsed == 68)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 68)
                         {
                             deathQuotes.Add("nice.");
                         }
-                        else if (dioUsed == 419)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 419)
                         {
                             deathQuotes.Add("Blaze it");
                         }
-                        else if (dioUsed > 7)
+                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
                         {
-                            deathQuotes.Add($"{dioUsed + 1}");
+                            deathQuotes.Add($"{inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) + 1}");
                         }
                         ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
-                        dioHeld -= 1;
-                        dioUsed += 1;
                         return;
                     }
                     if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
@@ -1565,7 +1513,6 @@ namespace MoistureUpset
         {
             return Math.Abs(a - b) <= threshold;
         }
-        const int speed = 2;
         void Update()
         {
             if (dontSpeak > 0)
@@ -1576,9 +1523,7 @@ namespace MoistureUpset
             {
                 if (Vector3.Distance(charPosition.position, new Vector3(1105, -283, 1181)) < 35f)
                 {
-                    LocalUserManager.readOnlyLocalUsersList[0].userProfile.GrantUnlockable(UnlockableCatalog.GetUnlockableDef("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"));
                     Activate();
-                    new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                     charPosition = null;
                 }
                 if (obj2 && obj2.transform.position == new Vector3(1105, -283, 1181))
@@ -1653,8 +1598,8 @@ namespace MoistureUpset
                     currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
                 }
 
-                bool equalX = AlmostEqual(dest.x, screenPos.x, .004f);
-                bool equalY = AlmostEqual(dest.y, screenPos.y, .004f);
+                bool equalX = AlmostEqual(dest.x, screenPos.x, .002f);
+                bool equalY = AlmostEqual(dest.y, screenPos.y, .002f);
                 atDest = equalX && equalY;
                 moveDown = moveUp = moveLeft = moveRight = false;
                 if (!atDest && currentClip != "entrance" && currentClip != "leave" && !debugging)
@@ -1664,7 +1609,7 @@ namespace MoistureUpset
                         moveRight = true;
                         if (currentClip == "flyright")
                         {
-                            transform.position += new Vector3(speed * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position += new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
                         }
                     }
                     else if (dest.x < screenPos.x && !equalX)
@@ -1672,7 +1617,7 @@ namespace MoistureUpset
                         moveLeft = true;
                         if (currentClip == "flyleft")
                         {
-                            transform.position -= new Vector3(speed * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position -= new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
 
                         }
                     }
@@ -1681,7 +1626,7 @@ namespace MoistureUpset
                         moveUp = true;
                         if (currentClip == "flyup")
                         {
-                            transform.position += new Vector3(0, speed * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position += new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
@@ -1690,7 +1635,7 @@ namespace MoistureUpset
                         moveDown = true;
                         if (currentClip == "flydown")
                         {
-                            transform.position -= new Vector3(0, speed * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
@@ -1742,13 +1687,13 @@ namespace MoistureUpset
                             switch (victimBody.baseNameToken)
                             {
                                 case "TITAN_BODY_NAME":
-                                    if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins"))
+                                    if (BigJank.getOptionValue("Roblox Titan") == 1)
                                     {
                                         ShouldSpeak($"ooooooooof");
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
-                                    if (BigJank.getOptionValue("Twitch", "Enemy Skins"))
+                                    if (BigJank.getOptionValue("Twitch") == 1)
                                     {
                                         ShouldSpeak($"Poggers");
                                     }
@@ -1770,7 +1715,7 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "JELLYFISH_BODY_NAME":
-                                    if (BigJank.getOptionValue("Comedy", "Enemy Skins"))
+                                    if (BigJank.getOptionValue("Comedy") == 1)
                                     {
                                         ShouldSpeak($"I'm something of a comedian myself.");
                                     }
@@ -1791,13 +1736,13 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "BELL_BODY_NAME":
-                                    if (BigJank.getOptionValue("Taco Bell", "Enemy Skins"))
+                                    if (BigJank.getOptionValue("Taco Bell") == 1)
                                     {
                                         ShouldSpeak($"Now I'm feeling kind of hungry.");
                                     }
                                     break;
                                 case "GOLEM_BODY_NAME":
-                                    if (BigJank.getOptionValue("Robloxian", "Enemy Skins"))
+                                    if (BigJank.getOptionValue("Robloxian") == 1)
                                     {
                                         ShouldSpeak($"oof");
                                     }
@@ -1822,13 +1767,13 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "TITAN_BODY_NAME":
-                                    if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins"))
+                                    if (BigJank.getOptionValue("Roblox Titan") == 1)
                                     {
                                         ShouldSpeak($"ooooooooof");
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
-                                    if (BigJank.getOptionValue("Twitch", "Enemy Skins"))
+                                    if (BigJank.getOptionValue("Twitch") == 1)
                                     {
                                         ShouldSpeak($"Poggers");
                                     }
@@ -1892,7 +1837,7 @@ namespace MoistureUpset
                     {
                         lastIdle.RemoveAt(0);
                     }
-                    if (!BigJank.getOptionValue("Original REDACTED TTS", "Misc"))
+                    if (BigJank.getOptionValue("Original REDACTED TTS") != 1)
                     {
                         if (UnityEngine.Random.Range(0, 150) == 0)
                         {
@@ -2022,18 +1967,13 @@ namespace MoistureUpset
         }
         public static void SetActive(bool yeet)
         {
-            buddy.StartCoroutine(SetActive(yeet, 0));
-        }
-        public static IEnumerator SetActive(bool yeet, int yes)
-        {
-            yield return new WaitUntil(() => buddy.idling || buddy.bonziActive == false);
-            if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/true)
+            if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/true)
             {
-                if (yeet && !buddy.bonziActive)
+                if (!yeet && !buddy.bonziActive)
                 {
                     buddy.Activate();
                 }
-                else if (!yeet && buddy.bonziActive)
+                else if (yeet && buddy.bonziActive)
                 {
                     buddy.Deactivate();
                 }
@@ -2115,21 +2055,6 @@ namespace MoistureUpset
             }
         }
         bool twostep = true;
-        //public static void ForceRestart(bool ISuck)
-        //{
-        //    Destroy(buddy.gameObject);
-
-        //    GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
-        //    DontDestroyOnLoad(bonzi);
-        //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
-        //    bonzi.SetActive(true);
-        //    bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
-        //    bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
-        //    bonzi.layer = 5;
-        //    buddy = bonzi.AddComponent<BonziBuddy>();
-
-        //    buddy.Activate();
-        //}
         public void ShouldSpeak(string whatToSay)
         {
             StartCoroutine(ShouldSpeak(whatToSay, false));
@@ -2215,7 +2140,7 @@ namespace MoistureUpset
                 startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = balconPath;
-                if (BigJank.getOptionValue("Original REDACTED TTS", "Misc"))
+                if (BigJank.getOptionValue("Original REDACTED TTS") == 1)
                 {
                     startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
                 }
@@ -2328,7 +2253,7 @@ namespace MoistureUpset
 
         public static void FixTTS(bool yeet)
         {
-            if (yeet)
+            if (!yeet)
             {
                 string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
                 if ((!File.Exists(s + "\\Speech\\speech.dll") || !File.Exists(s + "\\lhsp\\help\\tv_enua.hlp")) && File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed"))

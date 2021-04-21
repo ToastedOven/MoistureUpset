@@ -28,7 +28,7 @@ namespace MoistureUpset.InteractReplacements
         public static void ReloadChests()
         {
 
-            if (BigJank.getOptionValue("Interactables", "Interactables"))
+            if (BigJank.getOptionValue("Interactables") == 1)
             {
 
                 var blank = Resources.Load<Texture>("@MoistureUpset_na:assets/blank.png");
@@ -63,8 +63,6 @@ namespace MoistureUpset.InteractReplacements
                 cUm.GetComponentInChildren<SfxLocator>().openSound = "EquipmentBarrel";
 
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/Chest2", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/largechest.png");
-                cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2");
-                cUm.AddComponent<NewSplatSystemRemover>();
                 EnemyReplacements.ReplaceModel("prefabs/networkedobjects/chest/GoldChest", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
                 cUm = Resources.Load<GameObject>("prefabs/networkedobjects/chest/GoldChest");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
@@ -121,7 +119,7 @@ namespace MoistureUpset.InteractReplacements
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Resources.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/faheet.png"));
                 cUm.AddComponent<NewSplatSystemRemover>();
 
-                if (BigJank.getOptionValue("Currency Changes", "UI Changes"))
+                if (BigJank.getOptionValue("Currency Changes") == 1)
                 {
                     cUm = Resources.Load<GameObject>("prefabs/networkedobjects/NewtStatue");
                     GameObject g = Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab");
@@ -130,7 +128,7 @@ namespace MoistureUpset.InteractReplacements
                     g.transform.localEulerAngles = Vector3.zero;
                 }
             }
-            if (BigJank.getOptionValue("Shrine Changes", "Interactables"))
+            if (BigJank.getOptionValue("Shrine Changes") == 1)
             {
                 GameObject gathan = Resources.Load<GameObject>("prefabs/networkedobjects/shrines/ShrineChance");
                 foreach (var item in gathan.GetComponentInChildren<MeshRenderer>().material.GetTexturePropertyNames())
@@ -144,11 +142,11 @@ namespace MoistureUpset.InteractReplacements
         }
         private static void Chests()
         {
-            if (BigJank.getOptionValue("Shrine Changes", "Interactables"))
+            if (BigJank.getOptionValue("Shrine Changes") == 1)
             {
                 EnemyReplacements.LoadResource("moisture_lego");
             }
-            if (BigJank.getOptionValue("Interactables", "Interactables"))
+            if (BigJank.getOptionValue("Interactables") == 1)
             {
                 EnemyReplacements.LoadBNK("Chest");
                 EnemyReplacements.LoadResource("moisture_chests");
@@ -185,7 +183,7 @@ namespace MoistureUpset.InteractReplacements
                         item.GetComponentInChildren<RandomizeSplatBias>().InvokeMethod("Start");
                     }
                 };
-                if (BigJank.getOptionValue("Currency Changes", "UI Changes"))
+                if (BigJank.getOptionValue("Currency Changes") == 1)
                 {
                     On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
                     {

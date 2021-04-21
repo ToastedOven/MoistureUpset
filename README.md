@@ -42,16 +42,6 @@ Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithri
 
 # Changelog
 
- 1.4.0: Updated to have compatibility with the new patch.
-
- 1.3.4: Fixed issue with a few more effects causing errors, you should also get like maybe 1/10th of a frame per second back because it's more optimized now. I know all these small patches might get a tad annoying, but I feel in our case it's better to fix stuff as soon as it gets reported rather than gathering them all up and fixing it a week later.
-
- 1.3.3: Fixed issue with Alex Jones sfx being carried over to other stuff. I probably need to take a look at all the hacky solutions I used and fix more of them.
-
- 1.3.1: Fixed issue with artifact of command and breaking other mods using EnigmaticThunder's unlockable system.
-
- 1.3.0: Added compatibility for the new update! Not much else to note here but do know that we are still working on stuff. We acknowledge that some enemies are now incomplete but we will get to them soonTM.
-
  1.2.1: Fixed a few bugs with sounds still playing when turned off.
 
  1.2.0: Fixed issues with the FrankasaurusEngi mod (and probably other engi mods) Changed the chance shrine and the triple shops. Added a setting which disables everything except the survivor skins, make sure to check this if you only want to use the survivor skins we implement! (Also increases load times dramatically since we don't load stuff you don't want)
