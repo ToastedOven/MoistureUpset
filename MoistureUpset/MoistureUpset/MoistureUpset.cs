@@ -24,8 +24,7 @@ namespace MoistureUpset
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
-
-        public const string VERSION = "1.3.6";
+        public const string VERSION = "1.4.1";
         public void Awake()
         {
 
