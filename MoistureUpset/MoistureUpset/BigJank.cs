@@ -18,11 +18,11 @@ namespace MoistureUpset
         //}
         public static bool getOptionValue(string option, string category)
         {
-            return ModSettingsManager.GetOption(option, category).GetBool();
+            return ModSettingsManager.GetOption(option, category).GetValue<bool>();
         }
         public static float getFloatValue(string option, string category)
         {
-            return ModSettingsManager.GetOption(option, category).GetFloat();
+            return ModSettingsManager.GetOption(option, category).GetValue<float>();
         }
     }
 }

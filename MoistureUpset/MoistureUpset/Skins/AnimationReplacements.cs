@@ -30,15 +30,15 @@ namespace MoistureUpset.Skins
             HumanBodyBones[] hips = new HumanBodyBones[] { HumanBodyBones.Hips };
             EnemyReplacements.LoadResource("moisture_animationreplacements");
             EnemyReplacements.LoadBNK("Emotes");
-            CustomEmotesAPI.AddCustomAnimation("Loser", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Loser.anim", true, "Loser", "LoserStop");
-            CustomEmotesAPI.AddCustomAnimation("SPEEEN", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinstart.anim", false, secondaryAnimation: "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinloop.anim");
-            CustomEmotesAPI.AddCustomAnimation("Dab", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Dab.anim", false, "Dab", "DabStop", dab, hips);
-            CustomEmotesAPI.AddCustomAnimation("Floss", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Floss.anim", true, "Floss", "FlossStop");
-            CustomEmotesAPI.AddCustomAnimation("Default Dance", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Default Dance.anim", false, "DefaultDance", "DefaultDanceStop");
-            CustomEmotesAPI.AddCustomAnimation("Caramelldansen", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Caramelldansen.anim", false);
-            CustomEmotesAPI.AddCustomAnimation("Facepalm", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Facepalm.anim", false, "", "", Facepalm, hips);
-            CustomEmotesAPI.AddCustomAnimation("Orange Justice", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Orange Justice.anim", true, "OrangeJustice", "OrangeJusticeStop");
-            CustomEmotesAPI.AddCustomAnimation("nobones", "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/nobones.anim", true);
+            CustomEmotesAPI.AddCustomAnimation("Loser", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Loser.anim"), true, "Loser", "LoserStop", dimWhenClose: true);
+            CustomEmotesAPI.AddCustomAnimation("SPEEEN", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinstart.anim"), false, secondaryAnimation: Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinloop.anim"));
+            CustomEmotesAPI.AddCustomAnimation("Dab", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Dab.anim"), false, "Dab", "DabStop", dab, hips);
+            CustomEmotesAPI.AddCustomAnimation("Floss", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Floss.anim"), true, "Floss", "FlossStop", dimWhenClose: true);
+            CustomEmotesAPI.AddCustomAnimation("Default Dance", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Default Dance.anim"), false, "DefaultDance", "DefaultDanceStop", dimWhenClose: true);
+            CustomEmotesAPI.AddCustomAnimation("Caramelldansen", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Caramelldansen.anim"), false);
+            CustomEmotesAPI.AddCustomAnimation("Facepalm", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Facepalm.anim"), false, "", "", Facepalm, hips);
+            CustomEmotesAPI.AddCustomAnimation("Orange Justice", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Orange Justice.anim"), true, "OrangeJustice", "OrangeJusticeStop", dimWhenClose: true);
+            CustomEmotesAPI.AddCustomAnimation("nobones", Resources.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/nobones.anim"), true);
         }
     }
 }
