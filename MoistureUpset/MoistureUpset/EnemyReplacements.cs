@@ -2631,7 +2631,6 @@ namespace MoistureUpset
             }
             LoadResource("scavenger");
             LoadBNK("Abungus");
-            DebugClass.Log($"----------replacing scav stuff");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("prefabs/networkedobjects/ScavBackpack", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh");
             ReplaceModel("prefabs/characterbodies/ScavBody", "@MoistureUpset_na:assets/na1.mesh", 1);
