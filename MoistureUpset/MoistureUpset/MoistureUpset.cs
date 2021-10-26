@@ -36,6 +36,11 @@ namespace MoistureUpset
             Assets.PopulateAssets();
             Settings.RunAll();
             EnemyReplaceMentsRunAll();
+            MLG.Setup();
+
+
+
+
 
             //
 
@@ -107,6 +112,23 @@ namespace MoistureUpset
                 bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
                 bonzi.layer = 5;
                 BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
+
+
+                GameObject Gamer = Instantiate(new GameObject());
+                DontDestroyOnLoad(Gamer);
+                Gamer.SetActive(true);
+                MLG.MemeMachine = Gamer.AddComponent<MLG>();
+
+                GameObject slider = Instantiate(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/TestSlider.prefab"));
+                DontDestroyOnLoad(slider);
+                slider.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+                slider.SetActive(true);
+                slider.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+                slider.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+                slider.layer = 5;
+                slider.GetComponent<RectTransform>().localScale = new Vector3(4, 4, 4);
+                slider.GetComponent<RectTransform>().localPosition = new Vector3(0, -300, 0);
+                MLG.MemeMachine.slider = slider;
 
                 orig(self);
             };

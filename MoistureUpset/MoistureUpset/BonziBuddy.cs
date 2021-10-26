@@ -95,6 +95,8 @@ namespace MoistureUpset
         public float dontSpeak = 0;
         public static bool doHooks = true;
         int dioUsed = 0, dioHeld = 0;
+        float casinoTimer = 0;
+        bool cheated = false;
 
         bool bonziActive = false;
         void Start()
@@ -119,6 +121,68 @@ namespace MoistureUpset
             if (!doHooks)
                 return;
             doHooks = false;
+            //On.RoR2.Interactor.AttemptInteraction += (orig, self, g) =>
+            //{
+            //    //LunarRecycler
+            //    //SeerStation
+            //    //CasinoChest
+            //    //DebugClass.Log($"----------{g.name}");
+            //    //ShouldSpeak(g.name);
+            //    orig(self, g);
+            //};
+            On.RoR2.UI.PauseScreenController.OnEnable += (orig, self) =>
+            {
+                orig(self);
+                if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length < 2 && RoR2.UI.PauseScreenController.instancesList.Count == 1 && casinoTimer > 0)
+                {
+                    casinoTimer = 10;
+                    cheated = true;
+                }
+            };
+            On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
+            {
+                orig(self, i);
+                if (self.CanBeAffordedByInteractor(i))
+                {
+                    try
+                    {
+                        if (self.gameObject.ToString().StartsWith("LunarRecycler"))
+                        {
+                            if (self.cost == 128)
+                            {
+                                ShouldSpeak("You do realise that you could just play on command right?");
+                            }
+                            else if (self.cost == 2048)
+                            {
+                                ShouldSpeak("I don't think you heard me the first time, so let me reiterate. The command artifact lets you choose your items instead of being stuck rerolling here.");
+                            }
+                            else if (self.cost == 65536)
+                            {
+                                ShouldSpeak("Ok so let me just put this over there, you can choose to use it or not.");
+                                if (bonziActive)
+                                    new SyncLunarReRoll(new Vector3(-94, -25, -47)).Send(R2API.Networking.NetworkDestination.Server);
+                            }
+                            else if (self.cost == 536870912)
+                            {
+                                if (BigJank.getOptionValue("Currency Changes", "UI Changes"))
+                                    ShouldSpeak("I'm just going to do this before you overflow your robux into the negatives");
+                                else
+                                    ShouldSpeak("I'm just going to do this before you overflow your coins into the negatives");
+
+                                if (bonziActive)
+                                    StartCoroutine(RestOfDroplets());
+                            }
+                        }
+                        else if (self.gameObject.ToString().StartsWith("CasinoChest"))
+                        {
+                            casinoTimer = 10;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            };
             On.EntityStates.Missions.BrotherEncounter.Phase4.OnEnter += (orig, self) =>
             {
                 orig(self);
@@ -376,6 +440,60 @@ namespace MoistureUpset
                     new SyncMountain(index, mountainShrineCount).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             };
+        }
+        public void FreeCommand(Vector3 v)
+        {
+            GameObject table = GameObject.Find("HOLDER: Store").transform.Find("LunarShop").Find("LunarTable").gameObject;
+            foreach (var item in table.GetComponentsInChildren<PurchaseInteraction>())
+            {
+                if (item.Networkavailable)
+                {
+                    item.Networkavailable = false;
+                    item.available = false;
+                    item.gameObject.transform.Find("Display").Find("mdlBazaarBabyFlower").Find("PickupDisplay").gameObject.SetActive(false);
+                    StartCoroutine(DropletCoroutine(v));
+                    return;
+                }
+            }
+        }
+        bool Lock = false;
+        IEnumerator RestOfDroplets()
+        {
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-98, -16, -43)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-97, -13, -36)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-93, -10, -31)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-94, -7, -28)).Send(R2API.Networking.NetworkDestination.Server);
+        }
+        IEnumerator DropletCoroutine(Vector3 v)
+        {
+            PickupDropletController.onDropletHitGroundServer += OnDropletHitGroundServer;
+            PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(RoR2Content.Items.LunarBadLuck.itemIndex), v, new Vector3(0, 0, 0));
+            yield return new WaitForSeconds(1);
+            PickupDropletController.onDropletHitGroundServer -= OnDropletHitGroundServer;
+            Lock = false;
+        }
+
+        private static void OnDropletHitGroundServer(ref GenericPickupController.CreatePickupInfo createPickupInfo, ref bool shouldSpawn)
+        {
+            PickupIndex pickupIndex = createPickupInfo.pickupIndex;
+            PickupDef pickupDef = PickupCatalog.GetPickupDef(pickupIndex);
+            if (pickupDef == null || (pickupDef.itemIndex == ItemIndex.None && pickupDef.equipmentIndex == EquipmentIndex.None))
+            {
+                return;
+            }
+            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("prefabs/networkedobjects/CommandCube"), createPickupInfo.position, createPickupInfo.rotation);
+            gameObject.GetComponent<PickupIndexNetworker>().NetworkpickupIndex = pickupIndex;
+            gameObject.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(pickupIndex);
+            NetworkServer.Spawn(gameObject);
+            shouldSpawn = false;
         }
 
         private void HoldoutZoneController_FixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
@@ -789,7 +907,11 @@ namespace MoistureUpset
                     switch (itemToken)
                     {
                         case "ITEM_SYRINGE_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.Syringe) == 11)
+                            if (inventory.GetItemCount(RoR2Content.Items.Syringe) > 10 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Did you really need to pause buffer to get more attack speed?");
+                            }
+                            else if (inventory.GetItemCount(RoR2Content.Items.Syringe) == 11)
                             {
                                 ShouldSpeak("Don't you think you have enough attack speed?");
                             }
@@ -824,10 +946,18 @@ namespace MoistureUpset
                             //monster tooth
                             break;
                         case "ITEM_CRITGLASSES_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.CritGlasses) > 10 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot");
+                            }
                             break;
                         case "ITEM_HOOF_NAME":
                             break;
                         case "ITEM_FEATHER_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Feather) > 8 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Bro you have too many jumps already, why did you cheese the game to get more?");
+                            }
                             break;
                         case "ITEM_AACANNON_NAME":
                             //not used
@@ -870,6 +1000,10 @@ namespace MoistureUpset
                         case "ITEM_ATTACKSPEEDONCRIT_NAME":
                             break;
                         case "ITEM_BLEEDONHIT_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) > 10 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot");
+                            }
                             if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 10)
                             {
                                 ShouldSpeak("Oh yeah, it's gamer time.");
@@ -914,6 +1048,10 @@ namespace MoistureUpset
                             //not used
                             break;
                         case "ITEM_CLOVER_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("I would normally congratualte you but you cheated so ehhhh");
+                            }
                             if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 0)
                             {
                                 if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
@@ -933,6 +1071,10 @@ namespace MoistureUpset
                         case "ITEM_MEDKIT_NAME":
                             break;
                         case "ITEM_BANDOLIER_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("You could have pause buffered for litterally any other item");
+                            }
                             break;
                         case "ITEM_BOUNCENEARBY_NAME":
                             //meat hook
@@ -946,6 +1088,10 @@ namespace MoistureUpset
                         case "ITEM_STUNCHANCEONHIT_NAME":
                             break;
                         case "ITEM_FIREWORK_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("You know, I actually don't blame you for buffering to get this item");
+                            }
                             break;
                         case "ITEM_LUNARDAGGER_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 1)
@@ -1014,6 +1160,10 @@ namespace MoistureUpset
                         case "ITEM_SECONDARYSKILLMAGAZINE_NAME":
                             break;
                         case "ITEM_STICKYBOMB_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.StickyBomb) > 20 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot");
+                            }
                             break;
                         case "ITEM_TREASURECACHE_NAME":
                             //rusted key
@@ -1029,6 +1179,10 @@ namespace MoistureUpset
                         case "ITEM_SLOWONHIT_NAME":
                             break;
                         case "ITEM_EXTRALIFE_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("I hope you lose it quickly");
+                            }
                             dioHeld += count;
                             break;
                         case "ITEM_EXTRALIFECONSUMED_NAME":
@@ -1126,6 +1280,10 @@ namespace MoistureUpset
                         case "ITEM_ARMORREDUCTIONONHIT_NAME":
                             break;
                         case "ITEM_TPHEALINGNOVA_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahaha I bet you missed a great item to get this instead");
+                            }
                             //shiton daisy
                             break;
                         case "ITEM_NEARBYDAMAGEBONUS_NAME":
@@ -1568,6 +1726,14 @@ namespace MoistureUpset
         const int speed = 2;
         void Update()
         {
+            if (casinoTimer > 0)
+            {
+                casinoTimer -= Time.deltaTime;
+                if (!(casinoTimer > 0))
+                {
+                    cheated = false;
+                }
+            }
             if (dontSpeak > 0)
             {
                 dontSpeak -= Time.deltaTime;
@@ -1576,6 +1742,25 @@ namespace MoistureUpset
             {
                 if (Vector3.Distance(charPosition.position, new Vector3(1105, -283, 1181)) < 35f)
                 {
+                    if (!Directory.Exists($"{documents}\\My Games"))
+                    {
+                        DebugClass.Log($"How do you not even have a \"My Games\" folder???? What happened");
+                        Directory.CreateDirectory($"{documents}\\My Games");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset"))
+                    {
+                        DebugClass.Log($"Creating Folder");
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data"))
+                    {
+                        DebugClass.Log($"Creating Folder");
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset\\data");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                    {
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked");
+                    }
                     LocalUserManager.readOnlyLocalUsersList[0].userProfile.GrantUnlockable(UnlockableCatalog.GetUnlockableDef("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"));
                     Activate();
                     new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
@@ -1904,16 +2089,28 @@ namespace MoistureUpset
                     switch (idlenum)
                     {
                         case 11:
-                            ShouldSpeak("Did you know? Me neither...");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?");
+                            else
+                                ShouldSpeak("Did you know? Me neither...");
                             break;
                         case 12:
-                            ShouldSpeak("We live in a society");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?");
+                            else
+                                ShouldSpeak("We live in a society");
                             break;
                         case 13:
-                            ShouldSpeak("Bottom Text");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?");
+                            else
+                                ShouldSpeak("Bottom Text");
                             break;
                         case 14:
-                            ShouldSpeak("Can I ask?........... Thanks that's all.");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?");
+                            else
+                                ShouldSpeak("Can I ask?........... Thanks that's all.");
                             break;
                         default:
                             break;
@@ -2130,16 +2327,28 @@ namespace MoistureUpset
 
         //    buddy.Activate();
         //}
+        List<string> words = new List<string>();
+        bool sayingWords = false;
         public void ShouldSpeak(string whatToSay)
         {
-            StartCoroutine(ShouldSpeak(whatToSay, false));
+            words.Add(whatToSay);
+            if (!sayingWords)
+            {
+                sayingWords = true;
+                StartCoroutine(ShouldSpeak());
+            }
         }
-        public IEnumerator ShouldSpeak(string whatToSay, bool bigma)
+        public IEnumerator ShouldSpeak()
         {
             if (bonziActive)
             {
-                yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
-                StartCoroutine(Speak(whatToSay));
+                while (words.Count > 0)
+                {
+                    yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
+                    StartCoroutine(Speak(words[0]));
+                    words.RemoveAt(0);
+                }
+                sayingWords = false;
             }
         }
         public IEnumerator Speak(string whatToSay)
