@@ -68,6 +68,7 @@ namespace MoistureUpset
 
             AddSlider("HitMarker Volume", "This sound is also tied to SFX, but has a separate slider if you want it to be less noisy", 100, 0, 100, "Audio", survivorsSkinsOnlySlider);
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<float>(BigToasterClass.HitMarker), "HitMarker Volume", "Audio");
+            AddCheckBox("Scale HitMarker with Crit", "This will scale down the crit sound effect as your crit goes up", true, "Audio", survivorSkinsOnlyCheckBox);
             AddSlider("Modded Music Volume", "The default music slider also work for modded music, but this effects modded music only. In case you want a different audio balance", 50, 0, 100, "Audio");
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<float>(BigToasterClass.Modded_MSX), "Modded Music Volume", "Audio");
             AddSlider("Modded SFX Volume", "The default sound slider also work for modded SFX, but this effects modded sfx only. In case you want a different audio balance", 50, 0, 100, "Audio");
@@ -113,6 +114,7 @@ namespace MoistureUpset
             AddCheckBox("Currency Changes", "Replaces currency types with robux and tix", true, "UI Changes", survivorSkinsOnlyCheckBox);
             AddCheckBox("Top Secret Setting", "You'll probably know it when you see it", true, "Misc", survivorSkinsOnlyCheckBox);
             ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive), "Top Secret Setting", "Misc");
+            AddCheckBox("MLG Mode", "What year is it", true, "Misc", survivorSkinsOnlyCheckBox);
             //AddCheckBox("Force Restart Bonzi Buddy", "Bonzi Buddy isn't a perfect creation. If something goes horribly wrong this might fix him right up.", true, "Misc", survivorSkinsOnlyCheckBox);
             //ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.ForceRestart), "Force Restart Bonzi Buddy", "Misc");
             //ModSettingsManager.addListener(ModSettingsManager.getOption("Top Secret Setting"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive));
@@ -132,8 +134,8 @@ namespace MoistureUpset
         }
         private static void Misc()
         {
-            AddCheckBox("Original REDACTED TTS", "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.", false, "Misc", survivorSkinsOnlyCheckBox);
-            ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS), "Original REDACTED TTS", "Misc");
+            AddCheckBox("Accurate REDACTED TTS", "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.", false, "Misc", survivorSkinsOnlyCheckBox);
+            ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS), "Accurate REDACTED TTS", "Misc");
             AddCheckBox("NSFW", "Toggles 'NSFW' content. Not actually NSFW like boobies, just some questionable words if you aren't into that kinda thing", false, "Misc", survivorSkinsOnlyCheckBox);
             AddCheckBox("Fanfare", "Adds fanfare to the end of the teleporter event", true, "Audio", survivorSkinsOnlyCheckBox);
             AddCheckBox("Pizza Roll", "Replaces that diamond UI element with a pizza roll", true, "UI Changes", survivorSkinsOnlyCheckBox);

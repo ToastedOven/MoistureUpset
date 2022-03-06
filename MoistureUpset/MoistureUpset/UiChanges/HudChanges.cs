@@ -13,7 +13,6 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
-using UnityEngine.Experimental.UIElements;
 using RoR2.UI;
 
 namespace MoistureUpset
@@ -165,7 +164,7 @@ namespace MoistureUpset
                     return orig(self, i);
                 };
 
-                On.RoR2.UI.HUD.Update += (orig, self) =>
+                On.RoR2.UI.HUD.Update += (orig, self) => //optimize? but probably fine
                 {
                     orig(self);
                     if (!context.activeSelf)

@@ -381,7 +381,7 @@ namespace MoistureUpset
                 orig(self);
                 UImods.ReplaceUIObject("Image", "MoistureUpset.Resources.MoistureUpsetFinal.png");
             };
-            On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) =>
+            On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) => //optimize?
             {
                 orig(self);
                 if (BigJank.getOptionValue("Logo", "UI Changes"))
@@ -765,6 +765,7 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
                     if (BigJank.getOptionValue("Fanfare", "Audio"))
                         AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
+                    MLG.bossOver = true;
                 }
                 catch (Exception)
                 {

@@ -1,25 +1,38 @@
-using UnityEngine;
 using System.Collections;
-[ExecuteInEditMode]
-public class MLGEffect : MonoBehaviour
-{
-    public float intensity;
-    private Material material;
-    // Creates a private material used to the effect
-    void Awake()
-    {
-        material = new Material(Resources.Load<Shader>("@MoistureUpset_2014:assets/2014/TestShader.shader"));
-    }
+using System.Collections.Generic;
+using UnityEngine;
 
-    // Postprocess the image
+[ExecuteInEditMode]
+public class MLGCamera : MonoBehaviour
+{
+    public Material material;
+    public bool FastApproximately(float a, float b, float threshold)
+    {
+        return ((a - b) < 0 ? ((a - b) * -1) : (a - b)) <= threshold;
+    }
+    // Start is called before the first frame update
     void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        Graphics.Blit(source, destination);
-        return;
-        if (intensity == 0)
+
+        if (FastApproximately(material.GetFloat("_cr"), material.GetFloat("_dr"), .025f))
         {
+            material.SetFloat("_dr", Mathf.Abs(.5f - material.GetFloat("_dr")));
         }
-        material.SetFloat("_bwBlend", intensity);
+        material.SetFloat("_cr", Mathf.Lerp(material.GetFloat("_cr"), material.GetFloat("_dr"), Time.deltaTime * 1.75f));
+
+        if (FastApproximately(material.GetFloat("_cg"), material.GetFloat("_dg"), .025f))
+        {
+            material.SetFloat("_dg", Mathf.Abs(.5f - material.GetFloat("_dg")));
+        }
+        material.SetFloat("_cg", Mathf.Lerp(material.GetFloat("_cg"), material.GetFloat("_dg"), Time.deltaTime * 1.25f));
+
+        if (FastApproximately(material.GetFloat("_cb"), material.GetFloat("_db"), .025f))
+        {
+            material.SetFloat("_db", Mathf.Abs(.5f - material.GetFloat("_db")));
+        }
+        material.SetFloat("_cb", Mathf.Lerp(material.GetFloat("_cb"), material.GetFloat("_db"), Time.deltaTime * 2));
+
+
         Graphics.Blit(source, destination, material);
     }
 }

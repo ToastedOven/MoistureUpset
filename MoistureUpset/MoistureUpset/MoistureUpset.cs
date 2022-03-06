@@ -73,65 +73,41 @@ namespace MoistureUpset
             //{
             //    addContentPackProvider(new MoistureUpsetContent());
             //};
+            BonziBuddy.SetupGameObjects();
+            //On.RoR2.ContentManagement.ContentManager.SetContentPacks += (orig, self) =>
+            //{
+            //    orig(self);
 
-            On.RoR2.ContentManagement.ContentManager.SetContentPacks += (orig, self) =>
-            {
-                orig(self);
-
-                //UnlockableDef s = ScriptableObject.CreateInstance<UnlockableDef>();
-                //AchievementDef achievementDef = new AchievementDef
-                //{
-                //    identifier = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID",
-                //    unlockableRewardIdentifier = "MOISTURE_BONZIBUDDY_REWARD_ID",
-                //    prerequisiteAchievementIdentifier = "MOISTURE_BONZIBUDDY_PREREQ_ID",
-                //    nameToken = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME",
-                //    descriptionToken = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC",
-                //    iconPath = "@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png",
-                //};
-                //s.nameToken = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
-                ////s.cachedName = "He awakens";
-                //s.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
-                //{
-                //    Language.GetString(achievementDef.nameToken),
-                //    Language.GetString(achievementDef.descriptionToken)
-                //}));
-                //s.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
-                //{
-                //    Language.GetString(achievementDef.nameToken),
-                //    Language.GetString(achievementDef.descriptionToken)
-                //}));
-                //List<UnlockableDef> unlockableDefs = new List<UnlockableDef>(RoR2.ContentManagement.ContentManager._unlockableDefs);
-                //unlockableDefs.Add(s);
-                //RoR2.ContentManagement.ContentManager._unlockableDefs = unlockableDefs.ToArray();
-
-                GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
-                DontDestroyOnLoad(bonzi);
-                bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
-                bonzi.SetActive(true);
-                bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
-                bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
-                bonzi.layer = 5;
-                BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
+            //    //UnlockableDef s = ScriptableObject.CreateInstance<UnlockableDef>();
+            //    //AchievementDef achievementDef = new AchievementDef
+            //    //{
+            //    //    identifier = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID",
+            //    //    unlockableRewardIdentifier = "MOISTURE_BONZIBUDDY_REWARD_ID",
+            //    //    prerequisiteAchievementIdentifier = "MOISTURE_BONZIBUDDY_PREREQ_ID",
+            //    //    nameToken = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME",
+            //    //    descriptionToken = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC",
+            //    //    iconPath = "@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png",
+            //    //};
+            //    //s.nameToken = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
+            //    ////s.cachedName = "He awakens";
+            //    //s.getHowToUnlockString = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
+            //    //{
+            //    //    Language.GetString(achievementDef.nameToken),
+            //    //    Language.GetString(achievementDef.descriptionToken)
+            //    //}));
+            //    //s.getUnlockedString = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
+            //    //{
+            //    //    Language.GetString(achievementDef.nameToken),
+            //    //    Language.GetString(achievementDef.descriptionToken)
+            //    //}));
+            //    //List<UnlockableDef> unlockableDefs = new List<UnlockableDef>(RoR2.ContentManagement.ContentManager._unlockableDefs);
+            //    //unlockableDefs.Add(s);
+            //    //RoR2.ContentManagement.ContentManager._unlockableDefs = unlockableDefs.ToArray();
 
 
-                GameObject Gamer = Instantiate(new GameObject());
-                DontDestroyOnLoad(Gamer);
-                Gamer.SetActive(true);
-                MLG.MemeMachine = Gamer.AddComponent<MLG>();
 
-                GameObject slider = Instantiate(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/TestSlider.prefab"));
-                DontDestroyOnLoad(slider);
-                slider.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
-                slider.SetActive(true);
-                slider.GetComponent<RectTransform>().anchorMin = Vector2.zero;
-                slider.GetComponent<RectTransform>().anchorMax = Vector2.zero;
-                slider.layer = 5;
-                slider.GetComponent<RectTransform>().localScale = new Vector3(4, 4, 4);
-                slider.GetComponent<RectTransform>().localPosition = new Vector3(0, -300, 0);
-                MLG.MemeMachine.slider = slider;
-
-                orig(self);
-            };
+            //    orig(self);
+            //};
 
             //On.RoR2.RoR2Application.OnLoad += (orig, self) =>
             //{
