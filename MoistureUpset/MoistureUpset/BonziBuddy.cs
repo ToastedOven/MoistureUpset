@@ -355,7 +355,7 @@ namespace MoistureUpset
                 mountainShrineCount = 0;
                 activeMountainShrine = false;
             };
-            On.RoR2.PickupDropletController.CreatePickupDroplet += (orig, index, pos, vector) =>
+            On.RoR2.PickupDropletController.CreatePickupDroplet_PickupIndex_Vector3_Vector3 += (orig, index, pos, vector) =>
             {
                 orig(index, pos, vector);
                 if (mountainShrineItems > 0)

@@ -31,7 +31,8 @@ namespace MoistureUpset.Skins
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
+                //ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
+                Moisture_Upset.Moisture_Asset_Bundles.Add($"@MoistureUpset", MainAssetBundle);
             }
         }
 

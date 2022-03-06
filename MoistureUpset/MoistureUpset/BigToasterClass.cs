@@ -171,10 +171,15 @@ namespace MoistureUpset
         }
         public static void PreGame()
         {
-            On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
+            //On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
+            //{
+            //    orig(self);
+            //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+            //};
+            On.RoR2.UI.CharacterSelectController.Awake += (orig, self) =>
             {
-                orig(self);
                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+                orig(self);
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {

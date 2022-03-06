@@ -7,7 +7,6 @@ using System.Reflection;
 using static R2API.SoundAPI;
 using System;
 using UnityEngine;
-using UnityEngine.Networking;
 using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
@@ -18,6 +17,8 @@ using MoistureUpset.Skins;
 using MoistureUpset;
 using R2API.Networking.Interfaces;
 using MoistureUpset.NetMessages;
+using UnityEngine.Networking;
+using RoR2.Networking;
 
 public class mousechecker : MonoBehaviour
 {
@@ -83,7 +84,7 @@ public class mousechecker : MonoBehaviour
 
                         if (!NetworkServer.active)
                         {
-                            new SyncAnimationToServer(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Server);
+                            //new SyncAnimationToServer(identity.netId, "none").Send(R2API.Networking.NetworkDestination.Server);
                         }
                         else
                         {
@@ -100,7 +101,7 @@ public class mousechecker : MonoBehaviour
 
                         if (!NetworkServer.active)
                         {
-                            new SyncAnimationToServer(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Server);
+                            //new SyncAnimationToServer(identity.netId, selected.GetComponentInChildren<TextMeshProUGUI>().text).Send(R2API.Networking.NetworkDestination.Server);
                         }
                         else
                         {

@@ -266,7 +266,8 @@ namespace MoistureUpset
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{resource}", MainAssetBundle));
+                //ResourcesAPI.AddProvider(new AssetBundleResourcesProvider($"@MoistureUpset_{resource}", MainAssetBundle));
+                Moisture_Upset.Moisture_Asset_Bundles.Add($"@MoistureUpset_{resource}", MainAssetBundle);
             }
         }
         public static void LoadBNK(string bnk)

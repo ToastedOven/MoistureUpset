@@ -23,6 +23,7 @@ namespace MoistureUpset
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
+        internal static Dictionary<string, AssetBundle> Moisture_Asset_Bundles;
         public const string VERSION = "1.4.1";
         
         public void Awake()
@@ -149,7 +150,8 @@ namespace MoistureUpset
             {
                 var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
 
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_Intro", MainAssetBundle));
+                //ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_Intro", MainAssetBundle));
+                Moisture_Upset.Moisture_Asset_Bundles.Add("@MoistureUpset_Intro", MainAssetBundle);
             }
         }
 
@@ -206,26 +208,26 @@ namespace MoistureUpset
             //self.Network_shouldAttemptToSpawnShopPortal = true;
         }
 
-        private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
-        {
-            self.selectedSurvivorIndex = survivor;
+        //private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
+        //{
+        //    self.selectedSurvivorIndex = survivor;
+        //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+        //    //if (survivor == SurvivorIndex.Commando)
+        //    //{
+        //    //    AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
+        //    //}
 
-            //if (survivor == SurvivorIndex.Commando)
-            //{
-            //    AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
-            //}
+        //    orig(self, survivor);
 
-            orig(self, survivor);
+        //    HGTextMeshProUGUI[] objects = GameObject.FindObjectsOfType<HGTextMeshProUGUI>();
 
-            HGTextMeshProUGUI[] objects = GameObject.FindObjectsOfType<HGTextMeshProUGUI>();
-
-            foreach (var item in objects)
-            {
-                if (item.text == "Locked In")
-                {
-                    //Debug.Log(item.transform.parent.name);
-                }
-            }
-        }
+        //    foreach (var item in objects)
+        //    {
+        //        if (item.text == "Locked In")
+        //        {
+        //            //Debug.Log(item.transform.parent.name);
+        //        }
+        //    }
+        //}
     }
 }

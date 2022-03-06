@@ -7,7 +7,7 @@ using System.Reflection;
 using static R2API.SoundAPI;
 using System;
 using UnityEngine;
-using UnityEngine.Networking;
+using RoR2.Networking;
 using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
@@ -15,6 +15,7 @@ using System.Text;
 using RiskOfOptions;
 using MoistureUpset.InteractReplacements.SodaBarrel;
 using R2API.Networking.Interfaces;
+using UnityEngine.Networking;
 
 namespace MoistureUpset.InteractReplacements
 {
@@ -154,18 +155,24 @@ namespace MoistureUpset.InteractReplacements
                 Skins.Utils.LoadAsset("InteractReplacements.SodaBarrel.sodaspritz");
                 On.RoR2.BarrelInteraction.OnInteractionBegin += SpraySoda;
                 On.RoR2.BarrelInteraction.OnDeserialize += SpraySoda;
-
-
-                On.RoR2.MultiShopController.DisableAllTerminals += (orig, self, i) =>
+                On.RoR2.MultiShopController.OnPurchase += (orig, self, interactor, interaction) =>
                 {
-                    orig(self, i);
+                    orig(self, interactor, interaction);
                     List<NetworkInstanceId> ids = new List<NetworkInstanceId>();
                     ids.Add(self.GetComponent<NetworkIdentity>().netId);
+                    int available = 0;
                     foreach (var item in self.GetFieldValue<GameObject[]>("terminalGameObjects")) //these have networkidentities, find netID?
                     {
                         ids.Add(item.GetComponent<NetworkIdentity>().netId);
+                        if (item.GetComponent<MultiShopController>().Networkavailable)
+                        {
+                            available += 1;
+                        }
                     }
-                    new SyncFidget(ids[0], ids[1], ids[2], ids[3]).Send(R2API.Networking.NetworkDestination.Clients);
+                    if (available == 0 && ids.Count == 4)
+                    {
+                        new SyncFidget(ids[0], ids[1], ids[2], ids[3]).Send(R2API.Networking.NetworkDestination.Clients);
+                    }
                 };
 
 

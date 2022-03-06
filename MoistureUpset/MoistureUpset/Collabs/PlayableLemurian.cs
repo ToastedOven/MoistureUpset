@@ -23,7 +23,7 @@ namespace MoistureUpset.Collabs
         {
             EnemyReplacements.ReplaceModel(Lemurian.Lemurian.ElderLemurianPrefab, "@MoistureUpset_bowser:assets/bowser.mesh");
             EnemyReplacements.ReplaceModel(Lemurian.Lemurian.LemurianPrefab, "@MoistureUpset_mike:assets/mike.mesh");
-            foreach (var item in SurvivorAPI.SurvivorDefinitions)
+            foreach (var item in SurvivorCatalog.allSurvivorDefs)
             {
                 if (item.bodyPrefab.name == "LEMURIAN_NAME")
                 {
