@@ -21,7 +21,7 @@ namespace MoistureUpset.Skins
         {
             PopulateAssets();
 
-            Utils.AddSkin("LoaderBody", LoaderSkin);
+            SkinManager.AddSkin("LoaderBody", LoaderSkin);
         }
 
         // Load assets here

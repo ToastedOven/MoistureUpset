@@ -8,75 +8,66 @@ namespace MoistureUpset
 {
 
     // Still not the best idea, but much better than what I was doing previously. Technically there is like a few frames where you can see the old models, but oh well.
-    class EngiDisplayFix : MonoBehaviour
+    internal class EngiDisplayFix : MonoBehaviour
     {
-        private static Mesh engiturretmesh;
-        private static Mesh engiwalkerturretmesh;
-        private static Mesh engispiderminemesh;
-        private static Mesh engiminemesh;
-
-        private static Material engiminetex;
-
-        private void Start()
-        {
-
-        }
-
+        private static Mesh _turretMesh;
+        private static Mesh _walkerTurretMesh;
+        private static Mesh _spiderMineMesh;
+        private static Mesh _mineMesh;
+        private static Material _mineTex;
 
         private void Update()
         {
-            bool isTF2Skin = false;
+            bool isTf2Skin = false;
 
             foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 if (smr.sharedMesh.name == SkinHelper.SkinNameToSkinMeshName["THE_TF2_ENGINEER_SKIN"])
-                {
-                    isTF2Skin = true;
-                }
+                    isTf2Skin = true;
             }
 
 
-            if (isTF2Skin)
+            if (isTf2Skin)
             {
                 foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
                 {
                     switch (smr.sharedMesh.name)
                     {
                         case "EngiTurretMesh":
-                            if (engiturretmesh == null)
+                            if (_turretMesh == null)
                             {
-                                engiturretmesh = smr.sharedMesh;
+                                _turretMesh = smr.sharedMesh;
                             }
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/normal_sentry.mesh");
-                            smr.material = Assets.CreateMaterial("@MoistureUpset_unifiedturret:assets/unified_turret_tex.png");
+                            smr.sharedMesh = Assets.Load<Mesh>("assets/normal_sentry.mesh");
+                            smr.material = Assets.LoadMaterial("assets/unified_turret_tex.png");
                             break;
                         case "EngiWalkerTurretMesh":
-                            if (engiwalkerturretmesh == null)
+                            if (_walkerTurretMesh == null)
                             {
-                                engiwalkerturretmesh = smr.sharedMesh;
+                                _walkerTurretMesh = smr.sharedMesh;
                             }
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_unifiedturret:assets/walker_turret.mesh");
-                            smr.material = Assets.CreateMaterial("@MoistureUpset_unifiedturret:assets/unified_turret_tex.png");
+                            smr.sharedMesh = Assets.Load<Mesh>("assets/walker_turret.mesh");
+                            smr.material = Assets.LoadMaterial("assets/unified_turret_tex.png");
                             break;
                         case "EngiSpiderMineMesh":
-                            if (engispiderminemesh == null)
+                            if (_spiderMineMesh == null)
                             {
-                                engispiderminemesh = smr.sharedMesh;
+                                _spiderMineMesh = smr.sharedMesh;
                             }
-                            engiminetex = smr.material;
+                            _mineTex = smr.material;
 
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_Models_mines:assets/spidermine.mesh");
-                            smr.material = Assets.CreateMaterial("@MoistureUpset_Models_mines:assets/mines.png");
+                            smr.sharedMesh = Assets.Load<Mesh>("assets/spidermine.mesh");
+                            smr.material = Assets.LoadMaterial("assets/mines.png");
                             break;
                         case "EngiMineMesh":
-                            if (engiminemesh == null)
+                            if (_mineMesh == null)
                             {
-                                engiminemesh = smr.sharedMesh;
+                                _mineMesh = smr.sharedMesh;
                             }
-                            engiminetex = smr.material;
+                            _mineTex = smr.material;
 
-                            smr.sharedMesh = Resources.Load<Mesh>("@MoistureUpset_Models_mines:assets/harpoon.mesh");
-                            smr.material = Assets.CreateMaterial("@MoistureUpset_Models_mines:assets/mines.png");
+                            smr.sharedMesh = Assets.Load<Mesh>("assets/harpoon.mesh");
+                            smr.material = Assets.LoadMaterial("assets/mines.png");
                             break;
                     }
                 }
@@ -88,29 +79,29 @@ namespace MoistureUpset
                     switch (smr.sharedMesh.name)
                     {
                         case "Normal_Sentry":
-                            if (engiturretmesh != null)
+                            if (_turretMesh)
                             {
-                                smr.sharedMesh = engiturretmesh;
+                                smr.sharedMesh = _turretMesh;
                             }
                             break;
                         case "walker_turret":
-                            if (engiwalkerturretmesh != null)
+                            if (_walkerTurretMesh)
                             {
-                                smr.sharedMesh = engiwalkerturretmesh;
+                                smr.sharedMesh = _walkerTurretMesh;
                             }
                             break;
                         case "spidermine":
-                            if (engispiderminemesh != null && engiminetex != null)
+                            if (_spiderMineMesh && _mineTex)
                             {
-                                smr.sharedMesh = engispiderminemesh;
-                                smr.material = engiminetex;
+                                smr.sharedMesh = _spiderMineMesh;
+                                smr.material = _mineTex;
                             }
                             break;
                         case "harpoon":
-                            if (engiminemesh != null && engiminetex != null)
+                            if (_mineMesh && _mineTex)
                             {
-                                smr.sharedMesh = engiminemesh;
-                                smr.material = engiminetex;
+                                smr.sharedMesh = _mineMesh;
+                                smr.material = _mineTex;
                             }
                             break;
                     }

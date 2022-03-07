@@ -20,7 +20,7 @@ namespace MoistureUpset.Skins
         {
             PopulateAssets();
 
-            Utils.AddSkin("CommandoBody", CommandoSkin);
+            SkinManager.AddSkin("CommandoBody", CommandoSkin);
         }
 
         // Load assets here

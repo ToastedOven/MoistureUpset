@@ -21,19 +21,19 @@ namespace MoistureUpset
         }
         public static void PingAll()
         {
-            EnemyReplacements.LoadResource("na");
+            Assets.AddBundle("Models.na");
 
             BigToasterClass.HitMarker(BigJank.getOptionValue("HitMarker Volume"));
             BigToasterClass.Modded_MSX(BigJank.getOptionValue("Modded Music Volume"));
             BigToasterClass.Modded_SFX(BigJank.getOptionValue("Modded SFX Volume"));
-            InteractReplacements.Interactables.Init();
-            EnemyReplacements.RunAll();
-            HudChanges.RunAll();
-            BigToasterClass.RunAll();
+            //InteractReplacements.Interactables.Init();
+            //EnemyReplacements.RunAll();
+            //HudChanges.RunAll();
+            //BigToasterClass.RunAll();
         }
         private static void Setup()
         {
-            ModSettingsManager.setPanelDescription($"Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion {Moisture_Upset.VERSION}");
+            ModSettingsManager.setPanelDescription($"Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion {Moisture_Upset.Version}");
             ModSettingsManager.setPanelTitle("Moisture Upset");
         }
         private static void HitMarker()

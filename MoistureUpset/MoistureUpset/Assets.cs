@@ -8,24 +8,25 @@ using R2API.Utils;
 using System.Reflection;
 using static R2API.SoundAPI;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace MoistureUpset
 {
     public static class Assets
     {
+        private static readonly List<AssetBundle> AssetBundles = new List<AssetBundle>();
+        private static readonly Dictionary<string, int> AssetIndices = new Dictionary<string, int>();
+        
         private static Material _prefab;
 
-        private static List<AssetBundle> _assetBundles = new List<AssetBundle>();
-        private static Dictionary<string, int> _assetIndices = new Dictionary<string, int>();
-
-        public static Material CreateMaterial(string texture)
+        public static Material LoadMaterial(string texture)
         {
             if (!_prefab)
-                _prefab = GameObject.Instantiate<Material>(Resources.Load<GameObject>("prefabs/characterbodies/commandobody").GetComponentInChildren<SkinnedMeshRenderer>().material);
+                _prefab = Object.Instantiate<Material>(Resources.Load<GameObject>("prefabs/characterbodies/commandobody").GetComponentInChildren<SkinnedMeshRenderer>().material);
 
-            Material newMat = GameObject.Instantiate<Material>(_prefab);
+            Material newMat = Object.Instantiate<Material>(_prefab);
 
-            newMat.mainTexture = Resources.Load<Texture>(texture);
+            newMat.mainTexture = Load<Texture>(texture);
 
             newMat.SetColor("_Color", Color.white);
             newMat.SetFloat("_EmPower", 0f);
@@ -40,9 +41,9 @@ namespace MoistureUpset
         public static Material CopyMaterial(Texture texture)
         {
             if (!_prefab)
-                _prefab = GameObject.Instantiate<Material>(Resources.Load<GameObject>("prefabs/characterbodies/commandobody").GetComponentInChildren<SkinnedMeshRenderer>().material);
+                _prefab = Object.Instantiate<Material>(Resources.Load<GameObject>("prefabs/characterbodies/commandobody").GetComponentInChildren<SkinnedMeshRenderer>().material);
 
-            Material newMat = GameObject.Instantiate<Material>(_prefab);
+            Material newMat = Object.Instantiate<Material>(_prefab);
 
             newMat.mainTexture = texture;
 
@@ -83,33 +84,46 @@ namespace MoistureUpset
             }
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assetBundleLocation"></param>
         public static void AddBundle(string assetBundleLocation)
         {
             using var assetBundleStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{assetBundleLocation}");
             AssetBundle assetBundle = AssetBundle.LoadFromStream(assetBundleStream);
 
-            int index = _assetBundles.Count;
-            _assetBundles.Add(assetBundle);
+            int index = AssetBundles.Count;
+            AssetBundles.Add(assetBundle);
 
-            
-            // TODO remove "assets/" from the path
             foreach (var assetName in assetBundle.GetAllAssetNames())
-                _assetIndices[assetName] = index;
-            
-            DebugClass.Log($"Loaded Asset: {assetBundleLocation}");
+            {
+                string path = assetName;
+                
+                if (path.StartsWith("assets/"))
+                    path = path.Remove(0, "assets/".Length);
+                
+                AssetIndices[path] = index;
+            }
+
+            DebugClass.Log($"Loaded AssetBundle: {assetBundleLocation}");
         }
 
         public static T Load<T>(string assetName) where T : UnityEngine.Object
         {
-            if (assetName.StartsWith("MoistureUpset."))
-                assetName = assetName.Replace("MoistureUpset.", "");
-            
-            if (assetName.StartsWith("MoistureUpset_"))
-                assetName = assetName.Replace("MoistureUpset_", "");
+            if (assetName.Contains(":"))
+            {
+                string[] path = assetName.Split(':');
 
-            int index = _assetIndices[assetName];
+                assetName = path[1];
+            }
 
-            return _assetBundles[index].LoadAsset<T>(assetName);
+            if (assetName.StartsWith("assets/"))
+                assetName = assetName.Remove(0, "assets/".Length);
+
+            int index = AssetIndices[assetName];
+
+            return AssetBundles[index].LoadAsset<T>($"assets/{assetName}");
         }
     }
 }

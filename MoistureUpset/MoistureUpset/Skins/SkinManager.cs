@@ -5,17 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using HG;
 using R2API.Utils;
 using RoR2.ContentManagement;
 using UnityEngine;
-using ContentManager = On.RoR2.ContentManagement.ContentManager;
-using LoadStaticContentAsyncArgs = RoR2.ContentManagement.LoadStaticContentAsyncArgs;
-using ReadOnlyContentPack = RoR2.ContentManagement.ReadOnlyContentPack;
-using RoR2Content = On.RoR2.RoR2Content;
 
 namespace MoistureUpset.Skins
 {
-    public static class Utils
+    public static class SkinManager
     {
         public delegate SkinDef[] CreateSkin(GameObject bodyPrefab);
 
@@ -23,31 +20,20 @@ namespace MoistureUpset.Skins
 
         private static Dictionary<string, CreateSkin> skinDelegates;
 
-        private static GameObject[] tempBodyPrefabs;
+        internal static void Init()
+        {
+            LoadAllSkins();
+            
+            ContentManager.onContentPacksAssigned += FinalizeSkins;
+        }
 
-
-        // Makes loading assets easier
-        // public static void LoadAsset(string ResourceStream, string name = null)
-        // {
-        //     using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{ResourceStream}"))
-        //     {
-        //         var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-        //
-        //         if (name == null)
-        //         {
-        //             name = $"@MoistureUpset_{ResourceStream.Replace(".", "_")}";
-        //         }
-        //
-        //         DebugClass.Log($"Loading Asset: {ResourceStream}");
-        //
-        //         //LoadAsset(name, MainAssetBundle);
-        //
-        //         ResourcesAPI.AddProvider(new AssetBundleResourcesProvider(name, MainAssetBundle));
-        //     }
-        // }
+        private static void FinalizeSkins(ReadOnlyArray<ReadOnlyContentPack> obj)
+        {
+            AddSkinsToBodyPrefabs(ContentManager._bodyPrefabs);
+        }
 
         // Add all the skins to load here
-        internal static void LoadAllSkins()
+        private static void LoadAllSkins()
         {
             skins = new Dictionary<string, SkinDef>();
             skinDelegates = new Dictionary<string, CreateSkin>();
@@ -55,36 +41,30 @@ namespace MoistureUpset.Skins
 
             //CommandoTest.Init();
             TF2Engi.Init();
-            //JotaroCaptain.Init();
+            JotaroCaptain.Init();
             //StarPlatinumLoader.Init();
             //
 
             //AnimationReplacements.RunAll();
 
-            AddSkinsToBodyPrefabs();
-
             On.RoR2.SurvivorCatalog.Init += AddSkinReloader;
         }
 
-        private static void AddSkinsToBodyPrefabs()
+        private static void AddSkinsToBodyPrefabs(GameObject[] bodyPrefabs)
         {
-            tempBodyPrefabs = Resources.LoadAll<GameObject>("prefabs/characterbodies/");
-
             DebugClass.Log($"Loading skins...");
-
+            
             foreach (var bodyName in skinDelegates.Keys)
             {
-                DebugClass.Log($"Loading skins for {tempBodyPrefabs.GetBodyPrefab(bodyName).name}");
+                DebugClass.Log($"Loading skins for {bodyPrefabs.GetBodyPrefab(bodyName).name}");
 
-                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(tempBodyPrefabs.GetBodyPrefab(bodyName));
+                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(bodyPrefabs.GetBodyPrefab(bodyName));
 
-                tempBodyPrefabs[tempBodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
+                bodyPrefabs[bodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
 
                 skins.Add(bodyName, skinDefs[skinDefs.Length - 1]);
             }
-
-            tempBodyPrefabs = Array.Empty<GameObject>();
-
+            
             skins.Clear();
             skinDelegates.Clear();
             
@@ -160,11 +140,11 @@ namespace MoistureUpset.Skins
 
         internal static GameObject GetBodyPrefab(string bodyName)
         {
-            for (int i = 0; i < tempBodyPrefabs.Length; i++)
+            for (int i = 0; i < ContentManager._bodyPrefabs.Length; i++)
             {
-                if (string.Equals(tempBodyPrefabs[i].name, bodyName, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(ContentManager._bodyPrefabs[i].name, bodyName, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return tempBodyPrefabs[i];
+                    return ContentManager._bodyPrefabs[i];
                 }
             }
 

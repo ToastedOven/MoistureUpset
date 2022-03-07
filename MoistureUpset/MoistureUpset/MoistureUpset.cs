@@ -19,12 +19,13 @@ namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("com.rune580.riskofoptions")]
-    [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", VERSION)]
+    [BepInPlugin(Guid, "Moisture Upset", Version)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
-        public const string VERSION = "1.4.1";
+        public const string Version = "1.4.1";
+        public const string Guid = "com.gemumoddo.MoistureUpset";
         
         public void Awake()
         {
@@ -35,29 +36,25 @@ namespace MoistureUpset
             Settings.RunAll();
             
             Assets.PopulateAssets();
-            //
-            Skins.Utils.LoadAllSkins();
+            
+            Skins.SkinManager.Init();
 
             SoundAssets.RegisterSoundEvents();
 
             NetworkAssistant.InitSNA();
-
-            //On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
-
+            
             //On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
 
             //ligmaballs();
 
-            ItemDisplayPositionFixer.Init();
+            //ItemDisplayPositionFixer.Init();
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
             ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
 
-
-
-            EnemyReplacements.LoadResource("moisture_bonzibuddy");
-            EnemyReplacements.LoadResource("moisture_bonzistatic");
+            //EnemyReplacements.LoadResource("moisture_bonzibuddy");
+            //EnemyReplacements.LoadResource("moisture_bonzistatic");
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
