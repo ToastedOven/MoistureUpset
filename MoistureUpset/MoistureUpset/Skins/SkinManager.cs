@@ -41,7 +41,7 @@ namespace MoistureUpset.Skins
 
             //CommandoTest.Init();
             TF2Engi.Init();
-            JotaroCaptain.Init();
+            //JotaroCaptain.Init();
             //StarPlatinumLoader.Init();
             //
 
