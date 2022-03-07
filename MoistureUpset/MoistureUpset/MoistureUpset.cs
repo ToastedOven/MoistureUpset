@@ -13,6 +13,7 @@ using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
 using R2API.Networking;
+using System.IO;
 
 namespace MoistureUpset
 {
@@ -28,16 +29,14 @@ namespace MoistureUpset
         
         public void Awake()
         {
-
             DebugClass.SetLogger(base.Logger);
-
+            
             NetMessages.Register.Init();
 
             Settings.RunAll();
-
+            
             Assets.PopulateAssets();
             //
-
             Skins.Utils.LoadAllSkins();
 
             SoundAssets.RegisterSoundEvents();
@@ -60,6 +59,7 @@ namespace MoistureUpset
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");
+            
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
