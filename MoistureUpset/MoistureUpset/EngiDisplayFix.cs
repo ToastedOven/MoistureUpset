@@ -29,7 +29,7 @@ namespace MoistureUpset
 
             foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
             {
-                if (smr.sharedMesh.name == SkinHelper.skinNametoskinMeshName["THE_TF2_ENGINEER_SKIN"])
+                if (smr.sharedMesh.name == SkinHelper.SkinNameToSkinMeshName["THE_TF2_ENGINEER_SKIN"])
                 {
                     isTF2Skin = true;
                 }

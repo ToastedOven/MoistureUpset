@@ -30,8 +30,8 @@ namespace MoistureUpset.Skins
         // Load assets here
         private static void PopulateAssets()
         {
-            Utils.LoadAsset("Skins.Jotaro.jotarosubtitle");
-            Utils.LoadAsset("Skins.Jotaro.jotaro");
+            Assets.AddBundle("Skins.Jotaro.jotarosubtitle");
+            Assets.AddBundle("Skins.Jotaro.jotaro");
         }
 
         // Skindef stuff here

@@ -28,7 +28,7 @@ namespace MoistureUpset
 
         public static void DEBUG()
         {
-            Skins.Utils.LoadAsset("Resources.xpbar");
+            Assets.AddBundle("Resources.xpbar");
             On.RoR2.UI.HUD.Awake += HUD_Awake;
         }
 

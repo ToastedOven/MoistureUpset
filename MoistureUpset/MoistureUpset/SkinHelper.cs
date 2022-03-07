@@ -13,34 +13,32 @@ namespace MoistureUpset
 {
     internal static class SkinHelper // Originally we used skinIndex == 2, but I realized that that may be incompatible with other skins for the engi, so we do this jank instead.
     {
-        internal static Dictionary<string, string> skinNametoskinMeshName = new Dictionary<string, string>();
+        internal static readonly Dictionary<string, string> SkinNameToSkinMeshName = new Dictionary<string, string>();
 
-        private static Dictionary<string, uint> skinNameToSkinIndex = new Dictionary<string, uint>();
+        private static readonly Dictionary<string, uint> SkinNameToSkinIndex = new Dictionary<string, uint>();
 
-        public static int engiTurretSkinIndex = -1;
+        public static int EngiTurretSkinIndex = -1;
 
         public static void RegisterSkin(string skinName, string skinMeshName)
         {
-            skinNametoskinMeshName.Add(skinName, skinMeshName);
+            SkinNameToSkinMeshName.Add(skinName, skinMeshName);
         }
 
-        public static bool isSkin(this CharacterBody cb, string skinName)
+        public static bool IsSkin(this CharacterBody cb, string skinName)
         {
             if (!cb)
                 return false;
 
-            if (skinNameToSkinIndex.ContainsKey(skinName))
-            {
-                return cb.skinIndex == skinNameToSkinIndex[skinName];
-            }
+            if (SkinNameToSkinIndex.ContainsKey(skinName))
+                return cb.skinIndex == SkinNameToSkinIndex[skinName];
 
             if (!cb.modelLocator)
                 return false;
 
-            if (!skinNametoskinMeshName.ContainsKey(skinName))
+            if (!SkinNameToSkinMeshName.ContainsKey(skinName))
                 return false;
 
-            string meshName = skinNametoskinMeshName[skinName];
+            string meshName = SkinNameToSkinMeshName[skinName];
             
 
             foreach (var smr in cb.modelLocator.modelTransform.GetComponentsInChildren<SkinnedMeshRenderer>()) // I tried using the skincatalog previously, but for some reason the skincatalog keeps throwing a null reference exception.
@@ -51,7 +49,7 @@ namespace MoistureUpset
 
                 if (smr.sharedMesh.name == meshName)
                 {
-                    skinNameToSkinIndex.Add(skinName, cb.skinIndex);
+                    SkinNameToSkinIndex.Add(skinName, cb.skinIndex);
                     return true;
                 }
             }

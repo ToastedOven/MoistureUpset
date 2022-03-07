@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
 using Chip;
+using RoR2.ContentManagement;
 
 namespace MoistureUpset.Collabs
 {
@@ -22,7 +23,7 @@ namespace MoistureUpset.Collabs
         public static void Run()
         {
             Chip.Beetlegod beetlegod = new Beetlegod();
-            foreach (var item in SurvivorCatalog.allSurvivorDefs)
+            foreach (var item in ContentManager.survivorDefs)
             {
                 if (item.bodyPrefab.name == "Chip")
                 {

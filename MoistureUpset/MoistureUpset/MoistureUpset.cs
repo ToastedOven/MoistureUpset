@@ -24,7 +24,6 @@ namespace MoistureUpset
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
-        internal static Dictionary<string, AssetBundle> Moisture_Asset_Bundles;
         public const string VERSION = "1.4.1";
         
         public void Awake()
@@ -59,7 +58,6 @@ namespace MoistureUpset
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");
-            
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
@@ -146,13 +144,14 @@ namespace MoistureUpset
 
         private static void LoadIntro()
         {
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.mu2intro"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                //ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_Intro", MainAssetBundle));
-                Moisture_Upset.Moisture_Asset_Bundles.Add("@MoistureUpset_Intro", MainAssetBundle);
-            }
+            Assets.AddBundle("Resources.mu2intro");
+            
+            // using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.mu2intro"))
+            // {
+            //     var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+            //
+            //     ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_Intro", MainAssetBundle));
+            // }
         }
 
 
@@ -185,49 +184,14 @@ namespace MoistureUpset
         {
             DebugClass.GetAllTransforms();
         }
-
-
-        //public void Start()
-        //{
-        //    if (BigJank.getOptionValue("Replace Intro Scene") == 1)
-        //    {
-        //        RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
-        //    }
-
-        //}
-
-        private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
+        
+        public void Start()
         {
-            //self.shouldAttemptToSpawnShopPortal = true;
-            //self.Network_shouldAttemptToSpawnShopPortal = true;
-            //self.baseShopSpawnChance = 1;
+            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
+            {
+                RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
+            }
 
-            orig(self);
-
-            //self.shouldAttemptToSpawnShopPortal = true;
-            //self.Network_shouldAttemptToSpawnShopPortal = true;
         }
-
-        //private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
-        //{
-        //    self.selectedSurvivorIndex = survivor;
-        //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
-        //    //if (survivor == SurvivorIndex.Commando)
-        //    //{
-        //    //    AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
-        //    //}
-
-        //    orig(self, survivor);
-
-        //    HGTextMeshProUGUI[] objects = GameObject.FindObjectsOfType<HGTextMeshProUGUI>();
-
-        //    foreach (var item in objects)
-        //    {
-        //        if (item.text == "Locked In")
-        //        {
-        //            //Debug.Log(item.transform.parent.name);
-        //        }
-        //    }
-        //}
     }
 }

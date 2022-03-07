@@ -27,13 +27,14 @@ namespace MoistureUpset.Skins
         // Load assets here
         private static void PopulateAssets()
         {
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                //ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
-                Moisture_Upset.Moisture_Asset_Bundles.Add($"@MoistureUpset", MainAssetBundle);
-            }
+            Assets.AddBundle("sploaderskin");
+            
+            // using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
+            // {
+            //     var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+            //
+            //     ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
+            // }
         }
 
         // Skindef stuff here

@@ -27,28 +27,25 @@ namespace MoistureUpset.Skins
 
 
         // Makes loading assets easier
-        public static void LoadAsset(string ResourceStream, string name = null)
-        {
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{ResourceStream}"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+        // public static void LoadAsset(string ResourceStream, string name = null)
+        // {
+        //     using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{ResourceStream}"))
+        //     {
+        //         var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+        //
+        //         if (name == null)
+        //         {
+        //             name = $"@MoistureUpset_{ResourceStream.Replace(".", "_")}";
+        //         }
+        //
+        //         DebugClass.Log($"Loading Asset: {ResourceStream}");
+        //
+        //         //LoadAsset(name, MainAssetBundle);
+        //
+        //         ResourcesAPI.AddProvider(new AssetBundleResourcesProvider(name, MainAssetBundle));
+        //     }
+        // }
 
-                if (name == null)
-                {
-                    name = $"@MoistureUpset_{ResourceStream.Replace(".", "_")}";
-                }
-                DebugClass.Log($"Loading Asset: {ResourceStream}");
-
-                //LoadAsset(name, MainAssetBundle);
-
-                //ResourcesAPI.AddProvider(new AssetBundleResourcesProvider(name, MainAssetBundle));
-                Moisture_Upset.Moisture_Asset_Bundles.Add(name, MainAssetBundle);
-            }
-        }
-        //public static T Load<T>(string asset) where T : UnityEngine.Object
-        //{
-        //    return _
-        //}
         // Add all the skins to load here
         internal static void LoadAllSkins()
         {
@@ -90,8 +87,7 @@ namespace MoistureUpset.Skins
 
             skins.Clear();
             skinDelegates.Clear();
-
-
+            
             DebugClass.Log($"Finished Loading skins!");
         }
 

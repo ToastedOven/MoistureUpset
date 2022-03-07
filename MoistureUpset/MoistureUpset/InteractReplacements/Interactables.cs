@@ -152,7 +152,7 @@ namespace MoistureUpset.InteractReplacements
                 EnemyReplacements.LoadBNK("Chest");
                 EnemyReplacements.LoadResource("moisture_chests");
                 EnemyReplacements.LoadResource("moisture_newtaltar");
-                Skins.Utils.LoadAsset("InteractReplacements.SodaBarrel.sodaspritz");
+                Assets.AddBundle("InteractReplacements.SodaBarrel.sodaspritz");
                 On.RoR2.BarrelInteraction.OnInteractionBegin += SpraySoda;
                 On.RoR2.BarrelInteraction.OnDeserialize += SpraySoda;
                 On.RoR2.MultiShopController.OnPurchase += (orig, self, interactor, interaction) =>

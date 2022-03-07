@@ -52,7 +52,7 @@ namespace MoistureUpset
         {
             try
             {
-                var fab = Resources.Load<Texture2D>(path);
+                var fab = Assets.Load<Texture2D>(path);
                 byte[] bytes = ByteReader.readbytes(png);
                 fab.LoadImage(bytes);
             }
