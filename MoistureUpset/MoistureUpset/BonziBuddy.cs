@@ -201,10 +201,10 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            if (BigJank.getOptionValue("Top Secret Setting") == 1 /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/ && !bonziActive)
-                            {
-                                Activate();
-                            }
+                            //if (BigJank.getOptionValue("Top Secret Setting") /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/ && !bonziActive)
+                            //{
+                            //    Activate();
+                            //}
                             GoTo(MAINMENU);
                             break;
                         case "lobby":
@@ -947,7 +947,7 @@ namespace MoistureUpset
                         case "ITEM_KNURL_NAME":
                             break;
                         case "ITEM_BEETLEGLAND_NAME":
-                            if (BigJank.getOptionValue("Winston") == 1)
+                            if (BigJank.getOptionValue(Settings.Winston))
                             {
                                 ShouldSpeak("Winston please switch");
                             }
@@ -1687,13 +1687,13 @@ namespace MoistureUpset
                             switch (victimBody.baseNameToken)
                             {
                                 case "TITAN_BODY_NAME":
-                                    if (BigJank.getOptionValue("Roblox Titan") == 1)
+                                    if (BigJank.getOptionValue(Settings.RobloxTitan))
                                     {
                                         ShouldSpeak($"ooooooooof");
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
-                                    if (BigJank.getOptionValue("Twitch") == 1)
+                                    if (BigJank.getOptionValue(Settings.Twitch))
                                     {
                                         ShouldSpeak($"Poggers");
                                     }
@@ -1715,7 +1715,7 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "JELLYFISH_BODY_NAME":
-                                    if (BigJank.getOptionValue("Comedy") == 1)
+                                    if (BigJank.getOptionValue(Settings.Comedy))
                                     {
                                         ShouldSpeak($"I'm something of a comedian myself.");
                                     }
@@ -1736,13 +1736,13 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "BELL_BODY_NAME":
-                                    if (BigJank.getOptionValue("Taco Bell") == 1)
+                                    if (BigJank.getOptionValue(Settings.TacoBell))
                                     {
                                         ShouldSpeak($"Now I'm feeling kind of hungry.");
                                     }
                                     break;
                                 case "GOLEM_BODY_NAME":
-                                    if (BigJank.getOptionValue("Robloxian") == 1)
+                                    if (BigJank.getOptionValue(Settings.Robloxian))
                                     {
                                         ShouldSpeak($"oof");
                                     }
@@ -1767,13 +1767,13 @@ namespace MoistureUpset
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
                                 case "TITAN_BODY_NAME":
-                                    if (BigJank.getOptionValue("Roblox Titan") == 1)
+                                    if (BigJank.getOptionValue(Settings.RobloxTitan))
                                     {
                                         ShouldSpeak($"ooooooooof");
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
-                                    if (BigJank.getOptionValue("Twitch") == 1)
+                                    if (BigJank.getOptionValue(Settings.Twitch))
                                     {
                                         ShouldSpeak($"Poggers");
                                     }
@@ -1837,14 +1837,14 @@ namespace MoistureUpset
                     {
                         lastIdle.RemoveAt(0);
                     }
-                    if (BigJank.getOptionValue("Original REDACTED TTS") != 1)
-                    {
-                        if (UnityEngine.Random.Range(0, 150) == 0)
-                        {
-                            ShouldSpeak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!");
-                            idlenum = -1;
-                        }
-                    }
+                    //if (BigJank.getOptionValue("Original REDACTED TTS") != 1)
+                    //{
+                    //    if (UnityEngine.Random.Range(0, 150) == 0)
+                    //    {
+                    //        ShouldSpeak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!");
+                    //        idlenum = -1;
+                    //    }
+                    //}
                     a.SetInteger("idle", idlenum);
                     switch (idlenum)
                     {
@@ -2140,14 +2140,14 @@ namespace MoistureUpset
                 startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = balconPath;
-                if (BigJank.getOptionValue("Original REDACTED TTS") == 1)
-                {
-                    startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
-                }
-                else
-                {
-                    startInfo.Arguments = $"-n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w {joemamaPath}";
-                }
+                //if (BigJank.getOptionValue("Original REDACTED TTS"))
+                //{
+                //    startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
+                //}
+                //else
+                //{
+                //    startInfo.Arguments = $"-n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w {joemamaPath}";
+                //}
                 process.StartInfo = startInfo;
                 process.Start();
 

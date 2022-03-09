@@ -78,7 +78,7 @@ namespace MoistureUpset
         private static void Currency()
         {
             EnemyReplacements.LoadResource("moisture_pungas");
-            if (BigJank.getOptionValue("Currency Changes") == 1)
+            if (BigJank.getOptionValue(Settings.CurrencyChanges))
             {
                 var setting = Addressables.LoadAssetAsync<TMPro.TMP_Settings>("TextMesh Pro/TMP Settings.asset").WaitForCompletion();
                 setting.SetFieldValue("m_defaultSpriteAsset", Assets.Load<TMPro.TMP_SpriteAsset>("@MoistureUpset_moisture_pungas:assets/pungas/texInlineSprites.asset"));

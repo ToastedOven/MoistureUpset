@@ -2,20 +2,28 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using BepInEx.Configuration;
 using RiskOfOptions;
 
 namespace MoistureUpset
 {
     public static class BigJank
     {
-        public static int getOptionValue(string option)
+        public static bool getOptionValue(ConfigEntry<bool> configEntry)
         {
-            Moisture_Upset.instance.Config
-            if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) == 1)
+            if (Settings.OnlySurvivorSkins.Value)
+            {
+                return false;
+            }
+            return configEntry.Value;
+        }
+        public static float getOptionValue(ConfigEntry<float> configEntry)
+        {
+            if (Settings.OnlySurvivorSkins.Value)
             {
                 return 0;
             }
-            return (int)float.Parse(ModSettingsManager.getOptionValue(option), CultureInfo.InvariantCulture);
+            return configEntry.Value;
         }
     }
 } 

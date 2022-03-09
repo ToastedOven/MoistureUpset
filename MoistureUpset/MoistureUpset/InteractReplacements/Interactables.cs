@@ -30,7 +30,7 @@ namespace MoistureUpset.InteractReplacements
         public static void ReloadChests()
         {
 
-            if (BigJank.getOptionValue("Interactables") == 1)
+            if (BigJank.getOptionValue(Settings.Interactables))
             {
 
                 var blank = Assets.Load<Texture>("@MoistureUpset_na:assets/blank.png");
@@ -131,7 +131,7 @@ namespace MoistureUpset.InteractReplacements
                 EnemyReplacements.ReplaceModel("RoR2/Base/MultiShopEquipmentTerminal/MultiShopEquipmentTerminal.prefab", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerpart.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/spinnerred.png");
                 cUm.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Assets.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/faheet.png"));
                 cUm.AddComponent<NewSplatSystemRemover>();
-                if (BigJank.getOptionValue("Currency Changes") == 1)
+                if (BigJank.getOptionValue(Settings.CurrencyChanges))
                 {
                     cUm = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/NewtStatue/NewtStatue.prefab").WaitForCompletion();
                     GameObject g = Assets.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab");
@@ -140,7 +140,7 @@ namespace MoistureUpset.InteractReplacements
                     g.transform.localEulerAngles = Vector3.zero;
                 }
             }
-            if (BigJank.getOptionValue("Shrine Changes") == 1)
+            if (BigJank.getOptionValue(Settings.ShrineChanges))
             {
                 GameObject gathan = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ShrineChance/ShrineChance.prefab").WaitForCompletion();
                 foreach (var item in gathan.GetComponentInChildren<MeshRenderer>().material.GetTexturePropertyNames())
@@ -153,11 +153,11 @@ namespace MoistureUpset.InteractReplacements
         }
         private static void Chests()
         {
-            if (BigJank.getOptionValue("Shrine Changes") == 1)
+            if (BigJank.getOptionValue(Settings.ShrineChanges))
             {
                 EnemyReplacements.LoadResource("moisture_lego");
             }
-            if (BigJank.getOptionValue("Interactables") == 1)
+            if (BigJank.getOptionValue(Settings.Interactables))
             {
                 EnemyReplacements.LoadBNK("Chest");
                 EnemyReplacements.LoadResource("moisture_chests");
@@ -200,7 +200,7 @@ namespace MoistureUpset.InteractReplacements
                         item.GetComponentInChildren<RandomizeSplatBias>().InvokeMethod("Start");
                     }
                 };
-                if (BigJank.getOptionValue("Currency Changes") == 1)
+                if (BigJank.getOptionValue(Settings.CurrencyChanges))
                 {
                     On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
                     {

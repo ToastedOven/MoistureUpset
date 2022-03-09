@@ -43,7 +43,7 @@ namespace MoistureUpset.NetMessages
                 {
                     BonziBuddy.buddy.Chance(succ);
                 }
-                if (BigJank.getOptionValue("Shrine Changes") == 1)
+                if (BigJank.getOptionValue(Settings.ShrineChanges))
                 {
                     AkSoundEngine.PostEvent(sound, g);
                 }

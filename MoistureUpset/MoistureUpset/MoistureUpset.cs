@@ -66,12 +66,12 @@ namespace MoistureUpset
 
         public void IntroReplaceAction()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) == 1)
+            if (Settings.OnlySurvivorSkins.Value)
             {
                 SyncAudio.doMinecraftOofSound = false;
                 SyncAudio.doShrineSound = false;
             }
-            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
+            if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
             {
                 LoadIntro();
 
@@ -186,7 +186,7 @@ namespace MoistureUpset
         
         public void Start()
         {
-            if (BigJank.getOptionValue("Replace Intro Scene") == 1)
+            if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
             {
                 RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
             }

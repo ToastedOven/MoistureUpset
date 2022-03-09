@@ -11,6 +11,7 @@ using System.Linq;
 using RewiredConsts;
 using System.Collections;
 using RiskOfOptions;
+using MoistureUpset;
 
 namespace MoistureUpset
 {
@@ -134,16 +135,8 @@ public class MoistureUpsetNetworkedComponent : NetworkBehaviour
         _instance = this;
         soundPlayer = new GameObject("Temp Audio Player");
 
-        string temp = ModSettingsManager.getOptionValue("Minecraft Oof Sounds");
+        MineCraftHurt = Settings.MinecraftOofSounds.Value;
 
-        if (temp == "1")
-        {
-            MineCraftHurt = true;
-        }
-        else
-        {
-            MineCraftHurt = false;
-        }
     }
 
     public static void Invoke(NetworkUser user, string soundIDString, int playerIndex)
