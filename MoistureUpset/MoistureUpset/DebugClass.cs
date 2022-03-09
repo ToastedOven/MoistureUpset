@@ -12,6 +12,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Text;
 using BepInEx.Logging;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
@@ -89,7 +90,7 @@ namespace MoistureUpset
         }
         public static void TextureDebugReplace()
         {
-            Texture t = Resources.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
+            Texture t = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
             SkinnedMeshRenderer[] objects = GameObject.FindObjectsOfType<SkinnedMeshRenderer>();
             for (int i = 0; i < objects.Length; i++)
             {
@@ -141,7 +142,7 @@ namespace MoistureUpset
         }
         public static void DebugBones(string resource)
         {
-            var fab = Resources.Load<GameObject>(resource);
+            var fab = Addressables.LoadAssetAsync<GameObject>(resource).WaitForCompletion();
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             StringBuilder sb = new StringBuilder();
             sb.Append($"rendererererer: {meshes[0]}\n");

@@ -27,7 +27,7 @@ namespace MoistureUpset
         public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
         public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
 
-        public override Sprite Sprite { get; } = Resources.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
+        public override Sprite Sprite { get; } = Assets.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
         public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
         {
             orig(self);
@@ -91,7 +91,7 @@ namespace MoistureUpset
         float bloodShrineTimer = 0;
         Transform charPosition = null;
         GameObject obj1, obj2, obj3, obj4, obj5, obj6;
-        GameObject preloaded = Resources.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
+        GameObject preloaded = Assets.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
         public float dontSpeak = 0;
 
         bool bonziActive = false;
@@ -108,7 +108,7 @@ namespace MoistureUpset
             text.gameObject.transform.localPosition = new Vector3(0.06f, 0, -.1f);
             dest = new Vector2(.5f, .5f);
             textBox.SetActive(false);
-            preloaded.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/frames.png");
+            preloaded.GetComponent<ParticleSystemRenderer>().material.mainTexture = Assets.Load<Texture>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/frames.png");
             Hooks();
             SetupBalcon();
         }
@@ -131,8 +131,8 @@ namespace MoistureUpset
                     foreach (var item in Camera.allCameras)
                     {
                         var effect = item.gameObject.AddComponent<GlitchEffect>();
-                        effect.Shader = Resources.Load<Shader>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/GlitchShader.shader");
-                        effect.displacementMap = Resources.Load<Texture2D>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/test.png");
+                        effect.Shader = Assets.Load<Shader>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/GlitchShader.shader");
+                        effect.displacementMap = Assets.Load<Texture2D>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/test.png");
                         effect.intensity = 0;
                         effect.flipIntensity = 0;
                         effect.colorIntensity = 0;

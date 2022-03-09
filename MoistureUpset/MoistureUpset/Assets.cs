@@ -9,6 +9,7 @@ using System.Reflection;
 using static R2API.SoundAPI;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
@@ -22,7 +23,7 @@ namespace MoistureUpset
         public static Material LoadMaterial(string texture)
         {
             if (!_prefab)
-                _prefab = Object.Instantiate<Material>(Resources.Load<GameObject>("prefabs/characterbodies/commandobody").GetComponentInChildren<SkinnedMeshRenderer>().material);
+                _prefab = Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
 
             Material newMat = Object.Instantiate<Material>(_prefab);
 
@@ -41,7 +42,7 @@ namespace MoistureUpset
         public static Material CopyMaterial(Texture texture)
         {
             if (!_prefab)
-                _prefab = Object.Instantiate<Material>(Resources.Load<GameObject>("prefabs/characterbodies/commandobody").GetComponentInChildren<SkinnedMeshRenderer>().material);
+                _prefab = Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
 
             Material newMat = Object.Instantiate<Material>(_prefab);
 
@@ -98,7 +99,7 @@ namespace MoistureUpset
 
             foreach (var assetName in assetBundle.GetAllAssetNames())
             {
-                string path = assetName;
+                string path = assetName.ToLower();
                 
                 if (path.StartsWith("assets/"))
                     path = path.Remove(0, "assets/".Length);
@@ -115,7 +116,7 @@ namespace MoistureUpset
             {
                 string[] path = assetName.Split(':');
 
-                assetName = path[1];
+                assetName = path[1].ToLower();
             }
 
             if (assetName.StartsWith("assets/"))

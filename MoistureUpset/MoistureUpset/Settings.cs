@@ -26,10 +26,10 @@ namespace MoistureUpset
             BigToasterClass.HitMarker(BigJank.getOptionValue("HitMarker Volume"));
             BigToasterClass.Modded_MSX(BigJank.getOptionValue("Modded Music Volume"));
             BigToasterClass.Modded_SFX(BigJank.getOptionValue("Modded SFX Volume"));
-            //InteractReplacements.Interactables.Init();
-            //EnemyReplacements.RunAll();
-            //HudChanges.RunAll();
-            //BigToasterClass.RunAll();
+            InteractReplacements.Interactables.Init();
+            EnemyReplacements.RunAll();
+            HudChanges.RunAll();
+            BigToasterClass.RunAll();
         }
         private static void Setup()
         {

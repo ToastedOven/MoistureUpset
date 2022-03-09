@@ -50,7 +50,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset_moisture_puro:assets/puro/puro.mat"),
+                        defaultMaterial = Assets.Load<Material>("@MoistureUpset_moisture_puro:assets/puro/puro.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[2]
@@ -61,7 +61,7 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_puro:assets/puro/puro.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_moisture_puro:assets/puro/puro.mesh"),
                         renderer = renderers[2]
                     },
                 },
@@ -70,9 +70,9 @@ namespace MoistureUpset.Skins
             };
 
             //skin.RendererInfos[0].defaultMaterial = GameObject.Instantiate<Material>(bodyPrefab.GetComponentInChildren<SkinnedMeshRenderer>().material);
-            //skin.RendererInfos[0].defaultMaterial.mainTexture = Resources.Load<Material>("@MoistureUpset_moisture_puro:assets/puro/puro.mat").mainTexture;
+            //skin.RendererInfos[0].defaultMaterial.mainTexture = Assets.Load<Material>("@MoistureUpset_moisture_puro:assets/puro/puro.mat").mainTexture;
 
-            skin.RendererInfos[0].defaultMaterial = Assets.CopyMaterial(Resources.Load<Material>("@MoistureUpset_moisture_puro:assets/puro/puro.mat").mainTexture);
+            skin.RendererInfos[0].defaultMaterial = Assets.CopyMaterial(Assets.Load<Material>("@MoistureUpset_moisture_puro:assets/puro/puro.mat").mainTexture);
 
 
             Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
@@ -95,7 +95,7 @@ namespace MoistureUpset.Skins
             BoneAdder.AppendAtoB("EarC.R", "head");
             BoneAdder.AppendAtoB("EarC.L", "head");
 
-            //GameObject animcontroller = Resources.Load<GameObject>("@MoistureUpset_moisture_puro:assets/puro/IGOTITPOGGGGG.prefab");
+            //GameObject animcontroller = Assets.Load<GameObject>("@MoistureUpset_moisture_puro:assets/puro/IGOTITPOGGGGG.prefab");
             //animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
             //animcontroller.transform.localPosition = Vector3.zero;
             //animcontroller.transform.localEulerAngles = Vector3.zero;

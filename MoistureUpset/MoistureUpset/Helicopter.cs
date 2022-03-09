@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using Unity;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace MoistureUpset
 {
     class Helicopter : MonoBehaviour
     {
-        GameObject fab = Resources.Load<GameObject>("prefabs/characterbodies/LunarWispBody");
+        GameObject fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarWisp/LunarWispBody.prefab").WaitForCompletion();
         Transform head;
         void Start()
         {

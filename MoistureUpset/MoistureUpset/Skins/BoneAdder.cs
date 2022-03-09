@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MoistureUpset;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class BoneAdder //if you manage to find this class, feel free to use it for adding bones to models, I haven't released this cause I don't want to step on other people's toes. I just feel this works better
@@ -19,7 +20,7 @@ public static class BoneAdder //if you manage to find this class, feel free to u
 
     public static Transform[] AddToBoneList(string resource, string badBone = "", bool trimEnds = true) //just a helper function incase you have a resource that is just the bones
     {
-        var bones = Resources.Load<GameObject>(resource);
+        var bones = Assets.Load<GameObject>(resource);
         return AddToBoneList(bones.GetComponentsInChildren<Transform>(), badBone, trimEnds);
     }
 

@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
@@ -39,7 +40,7 @@ namespace MoistureUpset
         {
             try
             {
-                var fab = Resources.Load<Sprite>(path);
+                var fab = Addressables.LoadAssetAsync<Sprite>(path).WaitForCompletion();
                 byte[] bytes = ByteReader.readbytes(png);
                 fab.texture.LoadImage(bytes);
             }
@@ -52,7 +53,7 @@ namespace MoistureUpset
         {
             try
             {
-                var fab = Assets.Load<Texture2D>(path);
+                var fab = Addressables.LoadAssetAsync<Texture2D>(path).WaitForCompletion();
                 byte[] bytes = ByteReader.readbytes(png);
                 fab.LoadImage(bytes);
             }

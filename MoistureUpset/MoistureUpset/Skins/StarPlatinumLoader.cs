@@ -58,21 +58,21 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultMaterial = Assets.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[0]
                     },
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultMaterial = Assets.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[1]
                     },
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultMaterial = Assets.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[2]
@@ -83,17 +83,17 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
                         renderer = renderers[0]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
                         renderer = renderers[1]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
                         renderer = renderers[2]
                     }
 

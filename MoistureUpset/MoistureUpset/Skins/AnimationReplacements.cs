@@ -33,7 +33,7 @@ namespace MoistureUpset.Skins
 
 
 
-                GameObject g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/emotewheel/emotewheel.prefab"));
+                GameObject g = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/emotewheel/emotewheel.prefab"));
                 foreach (var item in g.GetComponentsInChildren<TextMeshProUGUI>())
                 {
                     item.font = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().font;
@@ -78,7 +78,7 @@ namespace MoistureUpset.Skins
                 }
 
                 //bodyPrefab = survivorDef.displayPrefab;
-                //animcontroller = Resources.Load<GameObject>(resource);
+                //animcontroller = Assets.Load<GameObject>(resource);
                 //animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
                 //animcontroller.transform.localPosition = Vector3.zero;
                 //animcontroller.transform.localEulerAngles = Vector3.zero;
@@ -96,7 +96,7 @@ namespace MoistureUpset.Skins
         {
             var survivorDef = index;
             var bodyPrefab = survivorDef.bodyPrefab;
-            GameObject animcontroller = Resources.Load<GameObject>(resource);
+            GameObject animcontroller = Assets.Load<GameObject>(resource);
             animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
             animcontroller.transform.localPosition = Vector3.zero;
             animcontroller.transform.localEulerAngles = Vector3.zero;

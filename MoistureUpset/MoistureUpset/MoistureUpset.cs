@@ -24,11 +24,13 @@ namespace MoistureUpset
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
+        public static Moisture_Upset instance;
         public const string Version = "1.4.1";
         public const string Guid = "com.gemumoddo.MoistureUpset";
         
         public void Awake()
         {
+            instance = this;
             DebugClass.SetLogger(base.Logger);
             
             NetMessages.Register.Init();
@@ -101,7 +103,7 @@ namespace MoistureUpset
                 DestroyImmediate(GameObject.Find("Scene Camera").GetComponent<TranslucentImageSource>());
                 DestroyImmediate(GameObject.Find("Scene Camera").GetComponent<PostProcessLayer>());
 
-                var videoPlayer = Instantiate(Resources.Load<GameObject>("@MoistureUpset_Intro:assets/video/introplayer.prefab"));
+                var videoPlayer = Instantiate(Assets.Load<GameObject>("@MoistureUpset_Intro:assets/video/introplayer.prefab"));
 
                 videoPlayer.GetComponentInChildren<VideoPlayer>().targetCamera = GameObject.Find("Scene Camera").GetComponent<Camera>();
 
@@ -188,6 +190,11 @@ namespace MoistureUpset
             {
                 RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
             }
+
+        }
+
+        public void CofigSetup()
+        {
 
         }
     }

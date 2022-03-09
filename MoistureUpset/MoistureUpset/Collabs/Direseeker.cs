@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
 using DireseekerMod;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset.Collabs
 {
@@ -22,10 +23,10 @@ namespace MoistureUpset.Collabs
         public static void Run()
         {
             EnemyReplacements.LoadResource("moisture_direseeker");
-            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = Resources.Load<Material>("@MoistureUpset_moisture_direseeker:assets/collab/giggabowser.mat");
-            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial.shader = Resources.Load<GameObject>("prefabs/characterbodies/LemurianBruiserBody").GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.shader;
-            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
-            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
+            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = Assets.Load<Material>("@MoistureUpset_moisture_direseeker:assets/collab/giggabowser.mat");
+            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial.shader = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LemurianBruiser/LemurianBruiserBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.shader;
+            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
+            DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
             EnemyReplacements.ReplaceModel(DireseekerMod.Modules.Prefabs.bodyPrefab, "@MoistureUpset_moisture_direseeker:assets/collab/giggabowser.mesh");
 
             var skills = DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<RoR2.SkillLocator>();

@@ -10,6 +10,7 @@ namespace MoistureUpset
     {
         public static int getOptionValue(string option)
         {
+            Moisture_Upset.instance.Config
             if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) == 1)
             {
                 return 0;
@@ -17,4 +18,4 @@ namespace MoistureUpset
             return (int)float.Parse(ModSettingsManager.getOptionValue(option), CultureInfo.InvariantCulture);
         }
     }
-}
+} 

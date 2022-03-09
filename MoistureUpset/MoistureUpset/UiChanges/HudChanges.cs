@@ -15,6 +15,7 @@ using System.Text;
 using RiskOfOptions;
 using UnityEngine.UIElements;
 using RoR2.UI;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
@@ -38,7 +39,7 @@ namespace MoistureUpset
 
             GameObject EXPBar = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("BottomLeftCluster").Find("BarRoots").Find("LevelDisplayCluster").Find("ExpBarRoot").Find("ShrunkenRoot").gameObject;
 
-            var XPTest = Resources.Load<GameObject>("@MoistureUpset_Resources_xpbar:assets/minecraft_xp/xpbarholder.prefab");
+            var XPTest = Assets.Load<GameObject>("@MoistureUpset_Resources_xpbar:assets/minecraft_xp/xpbarholder.prefab");
 
             XPTest.transform.SetParent(self.mainContainer.transform);
 
@@ -71,7 +72,7 @@ namespace MoistureUpset
 
             //fillbar.transform.localPosition = Vector3.zero;
 
-            //EXPBar.GetComponent<UnityEngine.UI.Image>().sprite = Resources.Load<Sprite>("@MoistureUpset_Resources_xpbar:assets/minecraft_xp/xpbarfull.png");
+            //EXPBar.GetComponent<UnityEngine.UI.Image>().sprite = Assets.Load<Sprite>("@MoistureUpset_Resources_xpbar:assets/minecraft_xp/xpbarfull.png");
             //EXPBar.GetComponent<UnityEngine.UI.Image>().color = Color.white;
         }
         private static void Currency()
@@ -79,10 +80,10 @@ namespace MoistureUpset
             EnemyReplacements.LoadResource("moisture_pungas");
             if (BigJank.getOptionValue("Currency Changes") == 1)
             {
-                var setting = Resources.Load<TMPro.TMP_Settings>("TMP Settings");
-                setting.SetFieldValue("m_defaultSpriteAsset", Resources.Load<TMPro.TMP_SpriteAsset>("@MoistureUpset_moisture_pungas:assets/pungas/texInlineSprites.asset"));
+                var setting = Addressables.LoadAssetAsync<TMPro.TMP_Settings>("TextMesh Pro/TMP Settings.asset").WaitForCompletion();
+                setting.SetFieldValue("m_defaultSpriteAsset", Assets.Load<TMPro.TMP_SpriteAsset>("@MoistureUpset_moisture_pungas:assets/pungas/texInlineSprites.asset"));
 
-                EnemyReplacements.ReplaceMeshFilter("prefabs/pickupmodels/PickupLunarCoin", "@MoistureUpset_moisture_pungas:assets/pungas/coin.mesh", "@MoistureUpset_moisture_pungas:assets/pungas/goldrobux_16.png");
+                EnemyReplacements.ReplaceMeshFilter("RoR2/Base/LunarCoin/PickupLunarCoin.prefab", "@MoistureUpset_moisture_pungas:assets/pungas/coin.mesh", "@MoistureUpset_moisture_pungas:assets/pungas/goldrobux_16.png");
 
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
                 {
@@ -129,7 +130,7 @@ namespace MoistureUpset
                 {
                     orig(self);
                     var image = self.moneyText.gameObject.AddComponent<UnityEngine.UI.Image>();
-                    image.sprite = Resources.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/tixSprite.png");
+                    image.sprite = Assets.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/tixSprite.png");
                     image.preserveAspect = true;
                     foreach (var item in self.moneyText.gameObject.GetComponentsInChildren<RoR2.UI.HGTextMeshProUGUI>())
                     {
@@ -143,7 +144,7 @@ namespace MoistureUpset
                     g.transform.parent = self.mainContainer.transform;
                     g.transform.localPosition = new Vector3(0, 1000, 0);
                     image = g.AddComponent<UnityEngine.UI.Image>();
-                    image.sprite = Resources.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/gamepass.png");
+                    image.sprite = Assets.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/gamepass.png");
                     image.preserveAspect = true;
                     g.transform.localScale = new Vector3(3, 3, 3);
 
@@ -180,18 +181,18 @@ namespace MoistureUpset
                     }
                 };
 
-                var fab = Resources.Load<GameObject>("prefabs/effects/CoinEmitter");
+                var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/CoinEmitter.prefab").WaitForCompletion();
                 var b = fab.GetComponentInChildren<CoinBehavior>();
-                b.coinTiers[0].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
-                b.coinTiers[0].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Resources.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/obc.mat");
-                b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
-                b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Resources.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/tbc.mat");
-                b.coinTiers[2].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Resources.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
-                b.coinTiers[2].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Resources.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/bc.mat");
-                b.coinTiers[4].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/tix.png");
+                b.coinTiers[0].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Assets.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
+                b.coinTiers[0].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Assets.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/obc.mat");
+                b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Assets.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
+                b.coinTiers[1].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Assets.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/tbc.mat");
+                b.coinTiers[2].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().mesh = Assets.Load<Mesh>("@MoistureUpset_moisture_pungas:assets/pungas/buildersclub.mesh");
+                b.coinTiers[2].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().material = Assets.Load<Material>("@MoistureUpset_moisture_pungas:assets/pungas/bc.mat");
+                b.coinTiers[4].particleSystem.gameObject.GetComponentInChildren<ParticleSystemRenderer>().sharedMaterial.mainTexture = Assets.Load<Texture>("@MoistureUpset_moisture_pungas:assets/pungas/tix.png");
                 foreach (var item in b.coinTiers[3].particleSystem.gameObject.GetComponentsInChildren<ParticleSystemRenderer>())
                 {
-                    item.mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
+                    item.mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
                 }
             }
         }
