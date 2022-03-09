@@ -192,10 +192,5 @@ namespace MoistureUpset
             }
 
         }
-
-        public void CofigSetup()
-        {
-
-        }
     }
 }

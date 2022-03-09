@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using BepInEx.Configuration;
 using MoistureUpset.NetMessages;
 using RiskOfOptions;
 
@@ -9,6 +10,7 @@ namespace MoistureUpset
 {
     public static class Settings
     {
+        public static ConfigEntry<bool> OnlySurvivorSkins;
         public static void RunAll()
         {
             Setup();
@@ -18,6 +20,10 @@ namespace MoistureUpset
             EnemyOptions();
             CollabOptions();
             SoundOptions();
+        }
+        public static void SetupConfig()
+        {
+            OnlySurvivorSkins = Moisture_Upset.instance.Config.Bind<bool>("", "", false, "");
         }
         public static void PingAll()
         {
