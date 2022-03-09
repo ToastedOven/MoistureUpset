@@ -105,7 +105,11 @@ namespace MoistureUpset
             HitMarkerVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "HitMarker Volume", 100.0f, "This sound is also tied to SFX, but has a seperate slider if you want it to be less noisy");
             ModdedMusicVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "Modded Music Volume", 50.0f, "The default music slider also works for modded music, but this affects modded music only. Incase you want a different audio balance");
             ModdedSFXVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "Modded SFX Volume", 50.0f, "The default sound slider also works for modded SFX, but this affects modded sfx only. Incase you want a different audio balance");
-            
+
+            HitMarkerVolume.SettingChanged += HitMarkerVolume_SettingChanged;
+            ModdedMusicVolume.SettingChanged += ModdedMusicVolume_SettingChanged;
+            ModdedSFXVolume.SettingChanged += ModdedSFXVolume_SettingChanged;
+
             Dogplane = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Dogplane", true, "Replaces wisps with a dogplanes");
             Comedy = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Comedy", true, "Replaces jellyfish with an astounding amount of comedy");
             FroggyChair = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Froggy Chair", true, "Replaces beetles with froggy chairs");
@@ -169,6 +173,22 @@ namespace MoistureUpset
             ReplaceIntroScene = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Replace Intro Scene", true, "Replaces the default intro cutscene with one that UnsavedTrash made");
 
         }
+
+        private static void ModdedSFXVolume_SettingChanged(object sender, EventArgs e)
+        {
+            AkSoundEngine.SetRTPCValue("Modded_SFX", ModdedSFXVolume.Value);
+        }
+
+        private static void ModdedMusicVolume_SettingChanged(object sender, EventArgs e)
+        {
+            AkSoundEngine.SetRTPCValue("Modded_MSX", ModdedMusicVolume.Value);
+        }
+
+        private static void HitMarkerVolume_SettingChanged(object sender, EventArgs e)
+        {
+            AkSoundEngine.SetRTPCValue("RuneBadNoise", HitMarkerVolume.Value);
+        }
+
         internal static void SetupROO()
         {
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.OnlySurvivorSkins));
