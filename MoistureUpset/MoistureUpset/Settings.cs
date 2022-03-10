@@ -7,6 +7,7 @@ using MoistureUpset.NetMessages;
 using RiskOfOptions;
 using RiskOfOptions.OptionConfigs;
 using RiskOfOptions.Options;
+using UnityEngine;
 
 namespace MoistureUpset
 {
@@ -105,6 +106,10 @@ namespace MoistureUpset
             HitMarkerVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "HitMarker Volume", 100.0f, "This sound is also tied to SFX, but has a seperate slider if you want it to be less noisy");
             ModdedMusicVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "Modded Music Volume", 50.0f, "The default music slider also works for modded music, but this affects modded music only. Incase you want a different audio balance");
             ModdedSFXVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "Modded SFX Volume", 50.0f, "The default sound slider also works for modded SFX, but this affects modded sfx only. Incase you want a different audio balance");
+
+            HitMarkerVolume.Value = Mathf.Clamp(HitMarkerVolume.Value, 0, 100);
+            ModdedMusicVolume.Value = Mathf.Clamp(ModdedMusicVolume.Value, 0, 100);
+            ModdedSFXVolume.Value = Mathf.Clamp(ModdedSFXVolume.Value, 0, 100);
 
             HitMarkerVolume.SettingChanged += HitMarkerVolume_SettingChanged;
             ModdedMusicVolume.SettingChanged += ModdedMusicVolume_SettingChanged;

@@ -17,6 +17,7 @@ using MoistureUpset.InteractReplacements.SodaBarrel;
 using R2API.Networking.Interfaces;
 using UnityEngine.Networking;
 using UnityEngine.AddressableAssets;
+using MoistureUpset.NetMessages;
 
 namespace MoistureUpset.InteractReplacements
 {
@@ -25,6 +26,19 @@ namespace MoistureUpset.InteractReplacements
         public static void Init()
         {
             Chests();
+            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                float yes = self.GetFieldValue<int>("successfulPurchaseCount");
+                orig(self, activator);
+                if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+                else
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+            };
         }
         public static GameObject particles;
         public static void ReloadChests()
@@ -148,7 +162,22 @@ namespace MoistureUpset.InteractReplacements
                     gathan.GetComponentInChildren<MeshRenderer>().sharedMaterial.SetTexture(item, Assets.Load<Texture>("@MoistureUpset_na:assets/blank.png"));
                 }
                 EnemyReplacements.ReplaceMeshRenderer("RoR2/Base/ShrineChance/ShrineChance.prefab", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/lego.mesh", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/lego.png", 0);
+
+                gathan = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ShrineChance/ShrineChanceSnowy Variant.prefab").WaitForCompletion();
+                gathan.GetComponentInChildren<Renderer>().material = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ShrineChance/ShrineChance.prefab").WaitForCompletion().GetComponentInChildren<Renderer>().material;
+
+                gathan = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ShrineChance/ShrineChanceSandy Variant.prefab").WaitForCompletion();
+                gathan.GetComponentInChildren<Renderer>().material = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ShrineChance/ShrineChance.prefab").WaitForCompletion().GetComponentInChildren<Renderer>().material;
+
+                EnemyReplacements.ReplaceMeshRenderer("RoR2/Base/ShrineChance/ShrineChanceSnowy Variant.prefab", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/legoSnow.mesh", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/lego.png", 0);
+                EnemyReplacements.ReplaceMeshFilter("RoR2/Base/ShrineChance/ShrineChanceSnowy Variant.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
+
+                EnemyReplacements.ReplaceMeshRenderer("RoR2/Base/ShrineChance/ShrineChanceSandy Variant.prefab", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/legoIndia.mesh", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/legoIndia.png", 0);
+                EnemyReplacements.ReplaceMeshFilter("RoR2/Base/ShrineChance/ShrineChanceSandy Variant.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
+
                 EnemyReplacements.ReplaceMeshRenderer("RoR2/Base/ShrineChance/ShrineChance.prefab", "@MoistureUpset_moisture_lego:assets/arbitraryfolder/chancesymbol.png", 1);
+
+
             }
         }
         private static void Chests()

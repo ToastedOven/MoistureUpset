@@ -451,7 +451,6 @@ namespace MoistureUpset
         public static void Modded_SFX(float _Vol)
         {
             AkSoundEngine.SetRTPCValue("Modded_SFX", _Vol);
-            DebugClass.Log($"----------setting SFX to {_Vol}");
         }
         public static void OnHit()
         {

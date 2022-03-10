@@ -16,6 +16,9 @@ using RiskOfOptions;
 using MoistureUpset.NetMessages;
 using R2API.Networking.Interfaces;
 using UnityEngine.AddressableAssets;
+using MoistureUpset.Collabs;
+using System.Collections;
+using MoistureUpset.Fixers;
 
 namespace MoistureUpset
 {
@@ -164,7 +167,6 @@ namespace MoistureUpset
             var fab = Addressables.LoadAssetAsync<GameObject>(prefab).WaitForCompletion();
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             var texture = Assets.Load<Texture>(png);
-            var blank = Assets.Load<Texture>("@MoistureUpset_na:assets/blank.png");
             for (int i = 0; i < meshes[position].sharedMaterials.Length; i++)
             {
                 if (prefab == "RoR2/Base/Shopkeeper/ShopkeeperBody.prefab" || prefab == "RoR2/Base/Titan/TitanGoldBody.prefab")
@@ -174,7 +176,7 @@ namespace MoistureUpset
                 }
                 meshes[position].sharedMaterials[i].color = Color.white;
                 meshes[position].sharedMaterials[i].mainTexture = texture;
-                meshes[position].sharedMaterials[i].SetTexture("_EmTex", blank);
+                meshes[position].sharedMaterials[i].SetTexture("_EmTex", RandomTwitch.blank);
                 meshes[position].sharedMaterials[i].SetTexture("_NormalTex", null);
                 if (png.Contains("frog"))
                 {
@@ -199,7 +201,7 @@ namespace MoistureUpset
                 renderers[position].sharedMaterials[i].shader = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
                 renderers[position].sharedMaterials[i].color = Color.white;
                 renderers[position].sharedMaterials[i].mainTexture = texture;
-                renderers[position].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[position].sharedMaterials[i].SetTexture("_EmTex", RandomTwitch.blank);
                 renderers[position].sharedMaterials[i].SetTexture("_NormalTex", null);
             }
 
@@ -232,7 +234,7 @@ namespace MoistureUpset
             {
                 renderers[spot].sharedMaterials[i].color = Color.white;
                 renderers[spot].sharedMaterials[i].mainTexture = texture;
-                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", RandomTwitch.blank);
                 renderers[spot].sharedMaterials[i].SetTexture("_NormalTex", null);
             }
             meshes[spot].sharedMesh = Assets.Load<Mesh>(mesh);
@@ -246,7 +248,7 @@ namespace MoistureUpset
             {
                 renderers[spot].sharedMaterials[i].color = Color.white;
                 renderers[spot].sharedMaterials[i].mainTexture = texture;
-                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", RandomTwitch.blank);
                 renderers[spot].sharedMaterials[i].SetTexture("_NormalTex", null);
             }
         }
@@ -259,7 +261,7 @@ namespace MoistureUpset
             {
                 renderers[spot].sharedMaterials[i].color = Color.white;
                 renderers[spot].sharedMaterials[i].mainTexture = texture;
-                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", texture);
+                renderers[spot].sharedMaterials[i].SetTexture("_EmTex", RandomTwitch.blank);
                 renderers[spot].sharedMaterials[i].SetTexture("_NormalTex", null);
             }
             meshes[spot].sharedMesh = Assets.Load<Mesh>(mesh);
@@ -1147,6 +1149,11 @@ namespace MoistureUpset
             LoadBNK("comedy");
             LoadResource("jelly");
             ReplaceModel("RoR2/Base/Jellyfish/JellyfishBody.prefab", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
+            On.EntityStates.JellyfishMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                self.outer.commonComponents.sfxLocator.deathSound = "ComedyDeath";
+            };
             On.EntityStates.JellyfishMonster.JellyNova.Detonate += (orig, self) =>
             {
                 SoundAssets.PlaySound("JellyDetonate", self.outer.gameObject);
@@ -1400,8 +1407,10 @@ namespace MoistureUpset
             LoadResource("ghast");
             ReplaceModel("RoR2/Base/GreaterWisp/GreaterWispBody.prefab", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion();
-            var meshes = fab.GetComponentsInChildren<Component>();
-            foreach (var item in meshes)
+            fab.GetComponentInChildren<FlickerLight>().enabled = false;
+            //var fixer = fab.AddComponent<GhastFixer>();
+            var components = fab.GetComponentsInChildren<Component>();
+            foreach (var item in components)
             {
                 if (item.name == "Fire" || item.name == "Flames")
                 {
@@ -1414,6 +1423,61 @@ namespace MoistureUpset
                     }
                 }
             }
+
+            fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/ChargeGreaterWisp.prefab").WaitForCompletion();
+            fab.AddComponent<FireballFixer>();
+            fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/WispCannonGhost.prefab").WaitForCompletion();
+            fab.AddComponent<FireballFixer>();
+            fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/OmniExplosionVFXGreaterWisp.prefab").WaitForCompletion();
+            fab.AddComponent<GhastFixer>();
+            fab.GetComponentInChildren<EffectComponent>().soundName = "MinecraftExplosion";
+
+            bool doneit = false;
+            On.EntityStates.GreaterWispMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                if (!doneit)
+                {
+                    fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/ChargeGreaterWisp.prefab").WaitForCompletion();
+                    foreach (var item in fab.GetComponentsInChildren<Renderer>())
+                    {
+                        item.enabled = false;
+                    }
+                    foreach (var item in fab.GetComponentsInChildren<Light>())
+                    {
+                        item.enabled = false;
+                    }
+
+
+                    fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/WispCannonGhost.prefab").WaitForCompletion();
+                    foreach (var item in fab.GetComponentsInChildren<Renderer>())
+                    {
+                        item.enabled = false;
+                    }
+                    foreach (var item in fab.GetComponentsInChildren<Light>())
+                    {
+                        item.enabled = false;
+                    }
+
+
+                    fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/OmniExplosionVFXGreaterWisp.prefab").WaitForCompletion();
+                    foreach (var item in fab.GetComponentsInChildren<ParticleSystem>())
+                    {
+                        item.maxParticles = 0;
+                    }
+                    foreach (var item in fab.GetComponentsInChildren<Light>())
+                    {
+                        item.enabled = false;
+                    }
+                    doneit = true;
+                }
+            };
+            On.EntityStates.GreaterWispMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                //DebugClass.Log($"----------{self.outer.gameObject}");
+                //self.outer.gameObject.GetComponent<GhastFixer>().mat = self.outer.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial;
+                orig(self);
+            };
             On.EntityStates.GreaterWispMonster.DeathState.OnEnter += (orig, self) =>
             {
                 Util.PlaySound("GhastDeath", self.outer.gameObject);
@@ -1422,20 +1486,9 @@ namespace MoistureUpset
             On.EntityStates.GreaterWispMonster.FireCannons.OnEnter += (orig, self) =>
             {
                 Util.PlaySound("GhastAttack", self.outer.gameObject);
+                //self.outer.gameObject.GetComponent<GhastFixer>().shootfire();
                 orig(self);
             };
-            //On.EntityStates.EntityState.OnEnter += (orig, self) =>
-            //{
-            //    if (self.outer.gameObject.name.Contains("GreaterWispMaster"))
-            //    {
-            //        Util.PlaySound("GhastSpawn", self.outer.gameObject);
-            //    }
-            //    else if (self.outer.gameObject.name.Contains("GreaterWispBody"))
-            //    {
-            //        Util.PlaySound("GhastSpawn", self.outer.gameObject);
-            //    }
-            //    orig(self);
-            //};
         }
         private static void Wisp()
         {
@@ -1492,6 +1545,15 @@ namespace MoistureUpset
             ReplaceMeshFilter("RoR2/Base/RoboBallBoss/SuperRoboBallBossBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 4);
             ReplaceMeshFilter("RoR2/Base/RoboBallBoss/SuperRoboBallBossBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 5);
             ReplaceMeshFilter("RoR2/Base/RoboBallBoss/SuperRoboBallBossBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_obamaprism:assets/crown.png", 6);
+
+            ReplaceModel("RoR2/Base/RoboBallBuddy/RoboBallGreenBuddyBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
+            ReplaceModel("RoR2/Base/RoboBallBuddy/RoboBallGreenBuddyBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceModel("RoR2/Base/RoboBallBuddy/RoboBallGreenBuddyBody.prefab", "@MoistureUpset_obamaprism:assets/Obamium.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png", 2);
+            ReplaceMeshFilter("RoR2/Base/RoboBallBuddy/RoboBallGreenBuddyBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
+
+            ReplaceModel("RoR2/Base/RoboBallBuddy/RoboBallRedBuddyBody.prefab", "@MoistureUpset_obamaprism:assets/Obamium.mesh", "@MoistureUpset_obamaprism:assets/Obruhma.png", 1);
+            ReplaceMeshFilter("RoR2/Base/RoboBallBuddy/RoboBallRedBuddyBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
+            ReplaceModel("RoR2/Base/RoboBallBuddy/RoboBallRedBuddyBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
             //"@MoistureUpset_na:assets/na1.mesh"
             On.EntityStates.RoboBallBoss.DeathState.OnEnter += (orig, self) =>
             {
@@ -2187,8 +2249,11 @@ namespace MoistureUpset
                 item.baseLightInfos[0].defaultColor = new Color(0, 0, 0, 0);
                 item.baseLightInfos[0].light.color = new Color(0, 0, 0, 0);
             }
-
-            EntityStates.VagrantMonster.FireMegaNova.novaSoundString = "DiscordExplosion";
+            On.EntityStates.VagrantMonster.FireMegaNova.Detonate += (orig, self) =>
+            {
+                EntityStates.VagrantMonster.FireMegaNova.novaSoundString = "DiscordExplosion";
+                orig(self);
+            };
 
 
             //Play_vagrant_R_explode
@@ -2418,7 +2483,7 @@ namespace MoistureUpset
             ReplaceModel("RoR2/Base/Gravekeeper/GravekeeperBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 3);
             ReplaceModel("RoR2/Base/Gravekeeper/GravekeeperBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
             ReplaceMeshFilter("RoR2/Base/Gravekeeper/GravekeeperHookGhost.prefab", "@MoistureUpset_moisture_twitch:assets/Bosses/GAMER.mesh", "@MoistureUpset_moisture_twitch:assets/twitch.png");
-            
+
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Gravekeeper/GravekeeperHookGhost.prefab").WaitForCompletion();
             fab.GetComponentInChildren<TrailRenderer>().material = Assets.Load<Material>("@MoistureUpset_moisture_twitch:assets/Bosses/Matt.mat");
 

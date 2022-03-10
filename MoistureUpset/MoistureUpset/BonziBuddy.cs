@@ -277,19 +277,19 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
-            {
-                float yes = self.GetFieldValue<int>("successfulPurchaseCount");
-                orig(self, activator);
-                if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
-                {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
-                }
-                else
-                {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
-                }
-            };
+            //On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>//FIX WHEN PULL
+            //{
+            //    float yes = self.GetFieldValue<int>("successfulPurchaseCount");
+            //    orig(self, activator);
+            //    if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
+            //    {
+            //        new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
+            //    }
+            //    else
+            //    {
+            //        new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
+            //    }
+            //};
             On.RoR2.ShrineBloodBehavior.AddShrineStack += (orig, self, activator) =>
             {
                 orig(self, activator);
