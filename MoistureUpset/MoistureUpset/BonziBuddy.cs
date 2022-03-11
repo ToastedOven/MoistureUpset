@@ -95,6 +95,10 @@ namespace MoistureUpset
         public float dontSpeak = 0;
         public static bool doHooks = true;
         int dioUsed = 0, dioHeld = 0;
+        float casinoTimer = 0;
+        bool cheated = false;
+        bool daniel = false, sapi4 = false;
+        bool dank = false;
 
         bool bonziActive = false;
         void Start()
@@ -113,12 +117,173 @@ namespace MoistureUpset
             preloaded.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load<Texture>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/frames.png");
             Hooks();
             SetupBalcon();
+            string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+            if (File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi"))
+            {
+                daniel = true;
+            }
+            if (File.Exists(s + "\\Speech\\speech.dll") && File.Exists(s + "\\lhsp\\help\\tv_enua.hlp"))
+            {
+                sapi4 = true;
+            }
+        }
+
+        internal static void SetupGameObjects()
+        {
+            GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+            DontDestroyOnLoad(bonzi);
+            bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+            bonzi.SetActive(true);
+            bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+            bonzi.layer = 5;
+            BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
+
+
+            GameObject Gamer = Instantiate(new GameObject());
+            DontDestroyOnLoad(Gamer);
+            Gamer.SetActive(true);
+            MLG.MemeMachine = Gamer.AddComponent<MLG>();
+
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "HopeWillDieStage1",
+                Stage2 = "HopeWillDieStage2",
+                Interval = "HopeWillDieInterval",
+                Stage1StartDuration = 47.18f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "BangStage1",
+                Stage2 = "BangStage2",
+                Interval = "BangInterval",
+                Stage1StartDuration = 17.584f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "BignisStage1",
+                Stage2 = "BignisStage2",
+                Interval = "BignisInterval",
+                Stage1StartDuration = 33.133f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "TooLoudStage1",
+                Stage2 = "TooLoudStage2",
+                Interval = "TooLoudInterval",
+                Stage1StartDuration = 55.622f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "FireStage1",
+                Stage2 = "FireStage2",
+                Interval = "FireInterval",
+                Stage1StartDuration = 18.345f,
+            });
+            MLG.MemeMachine.ActiveTrack = UnityEngine.Random.Range(0, MLG.MemeMachine.tracks.Count);
+
+
+            //GameObject slider = Instantiate(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
+            //DontDestroyOnLoad(slider);
+            //slider.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+            //slider.SetActive(true);
+            ////slider.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            ////slider.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+            ////slider.layer = 5;
+            ////foreach (var item in slider.GetComponentsInChildren<GameObject>())
+            ////{
+            ////    item.layer = 5;
+            ////}
+            ////slider.GetComponent<RectTransform>().localScale = new Vector3(.5f, .5f, .5f);
+            ////slider.GetComponent<RectTransform>().localPosition = new Vector3(-929.4f, -550, 37);
+            ////slider.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 10, 0);
+            ////slider.GetComponent<RectTransform>().localScale = new Vector3(.4f, .4f, .4f);
+            //MLG.MemeMachine.slider = slider;
+
+
+            GameObject ScreenStuff = Instantiate(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/Sniper/MLGScreenStuff.prefab"));
+            DontDestroyOnLoad(ScreenStuff);
+            ScreenStuff.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+            ScreenStuff.SetActive(true);
+            ScreenStuff.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            ScreenStuff.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+            ScreenStuff.layer = 5;
+            //ScreenStuff.GetComponent<RectTransform>().localScale = new Vector3(4, 4, 4);
+            //ScreenStuff.GetComponent<RectTransform>().localPosition = new Vector3(0, -300, 0);
+            MLG.MemeMachine.UIAnimator = ScreenStuff;
         }
         private void Hooks()
         {
             if (!doHooks)
                 return;
             doHooks = false;
+            //On.RoR2.Interactor.AttemptInteraction += (orig, self, g) =>
+            //{
+            //    //LunarRecycler
+            //    //SeerStation
+            //    //CasinoChest
+            //    //DebugClass.Log($"----------{g.name}");
+            //    //ShouldSpeak(g.name);
+            //    orig(self, g);
+            //};
+            On.RoR2.UI.PauseScreenController.OnEnable += (orig, self) =>
+            {
+                orig(self);
+                if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length < 2 && RoR2.UI.PauseScreenController.instancesList.Count == 1 && casinoTimer > 0)
+                {
+                    casinoTimer = 10;
+                    cheated = true;
+                }
+            };
+            On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
+            {
+                orig(self, i);
+                if (self.CanBeAffordedByInteractor(i))
+                {
+                    try
+                    {
+                        if (self.gameObject.ToString().StartsWith("LunarRecycler"))
+                        {
+                            if (self.cost == 128)
+                            {
+                                ShouldSpeak("You do realise that you could just play on command right?"
+                                    , "Just use command M9");
+                            }
+                            else if (self.cost == 2048)
+                            {
+                                ShouldSpeak("I don't think you heard me the first time, so let me reiterate. The command artifact lets you choose your items instead of being stuck rerolling here."
+                                    , "What the fuck did I just say to you?");
+                            }
+                            else if (self.cost == 65536)
+                            {
+                                ShouldSpeak("Ok so let me just put this over there, you can choose to use it or not."
+                                    , "Bro, just take this item");
+                                if (bonziActive)
+                                    new SyncLunarReRoll(new Vector3(-94, -25, -47)).Send(R2API.Networking.NetworkDestination.Server);
+                            }
+                            else if (self.cost == 536870912)
+                            {
+                                if (BigJank.getOptionValue("Currency Changes", "UI Changes"))
+                                    ShouldSpeak("I'm just going to do this before you overflow your robux into the negatives"
+                                    , "I'm just going to do this before you overflow your robux into the negatives");
+                                else
+                                    ShouldSpeak("I'm just going to do this before you overflow your coins into the negatives"
+                                    , "I'm just going to do this before you overflow your coins into the negatives");
+
+                                if (bonziActive)
+                                    StartCoroutine(RestOfDroplets());
+                            }
+                        }
+                        else if (self.gameObject.ToString().StartsWith("CasinoChest"))
+                        {
+                            casinoTimer = 10;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            };
             On.EntityStates.Missions.BrotherEncounter.Phase4.OnEnter += (orig, self) =>
             {
                 orig(self);
@@ -189,7 +354,8 @@ namespace MoistureUpset
                 {
                     if (report.gameEnding.endingTextToken == "GAME_RESULT_UNKNOWN")
                     {
-                        ShouldSpeak("Kind of a cop-out isn't it?");
+                        ShouldSpeak("Kind of a cop-out isn't it?"
+                            , "What a bitch");
                     }
                     GoTo(DEATH);
                 }
@@ -280,7 +446,8 @@ namespace MoistureUpset
                     }
                     else if (resetRun && (self.inputField.text.ToUpper() == "NO" || self.inputField.text.ToUpper() == "N"))
                     {
-                        ShouldSpeak("Fine, that's your loss");
+                        ShouldSpeak("Fine, that's your loss"
+                            , "Swag");
                         resetRun = false;
                     }
                 }
@@ -376,6 +543,60 @@ namespace MoistureUpset
                     new SyncMountain(index, mountainShrineCount).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             };
+        }
+        public void FreeCommand(Vector3 v)
+        {
+            GameObject table = GameObject.Find("HOLDER: Store").transform.Find("LunarShop").Find("LunarTable").gameObject;
+            foreach (var item in table.GetComponentsInChildren<PurchaseInteraction>())
+            {
+                if (item.Networkavailable)
+                {
+                    item.Networkavailable = false;
+                    item.available = false;
+                    item.gameObject.transform.Find("Display").Find("mdlBazaarBabyFlower").Find("PickupDisplay").gameObject.SetActive(false);
+                    StartCoroutine(DropletCoroutine(v));
+                    return;
+                }
+            }
+        }
+        bool Lock = false;
+        IEnumerator RestOfDroplets()
+        {
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-98, -16, -43)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-97, -13, -36)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-93, -10, -31)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock);
+            Lock = true;
+            new SyncLunarReRoll(new Vector3(-94, -7, -28)).Send(R2API.Networking.NetworkDestination.Server);
+        }
+        IEnumerator DropletCoroutine(Vector3 v)
+        {
+            PickupDropletController.onDropletHitGroundServer += OnDropletHitGroundServer;
+            PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(RoR2Content.Items.LunarBadLuck.itemIndex), v, new Vector3(0, 0, 0));
+            yield return new WaitForSeconds(1);
+            PickupDropletController.onDropletHitGroundServer -= OnDropletHitGroundServer;
+            Lock = false;
+        }
+
+        private static void OnDropletHitGroundServer(ref GenericPickupController.CreatePickupInfo createPickupInfo, ref bool shouldSpawn)
+        {
+            PickupIndex pickupIndex = createPickupInfo.pickupIndex;
+            PickupDef pickupDef = PickupCatalog.GetPickupDef(pickupIndex);
+            if (pickupDef == null || (pickupDef.itemIndex == ItemIndex.None && pickupDef.equipmentIndex == EquipmentIndex.None))
+            {
+                return;
+            }
+            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("prefabs/networkedobjects/CommandCube"), createPickupInfo.position, createPickupInfo.rotation);
+            gameObject.GetComponent<PickupIndexNetworker>().NetworkpickupIndex = pickupIndex;
+            gameObject.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(pickupIndex);
+            NetworkServer.Spawn(gameObject);
+            shouldSpawn = false;
         }
 
         private void HoldoutZoneController_FixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
@@ -538,39 +759,71 @@ namespace MoistureUpset
             }
             if (squidCount != 0)
             {
-                ShouldSpeak($"You got {squidCount} {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}s, nothing else matters");
+                ShouldSpeak($"You got {squidCount} {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}s, nothing else matters"
+                    , $"You got {squidCount} {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}s, nothing else matters");
             }
             else
             {
                 List<string> quotes = new List<string>();
-                if (goodPercent > .95f)
+                if (daniel && (int)MLG.progress > 0)
                 {
-                    quotes.Add("It can't get any better than this");
-                    quotes.Add("Just like the simulations");
-                }
-                else if (goodPercent > .75f)
-                {
-                    quotes.Add("Hey... that's pretty good");
-                    quotes.Add("Not too shabby");
-                }
-                else if (goodPercent > .55f)
-                {
-                    quotes.Add("I'll allow it");
-                    quotes.Add("Could have been worse");
-                }
-                else if (goodPercent > .35f)
-                {
-                    quotes.Add("Gee... thanks");
-                    quotes.Add("This is why people don't do mountain shrines");
+                    if (goodPercent > .95f)
+                    {
+                        quotes.Add("Holy shit M8");
+                        quotes.Add("Damn bro that's some nice loot");
+                    }
+                    else if (goodPercent > .75f)
+                    {
+                        quotes.Add("I could quickscope you with these items");
+                        quotes.Add("Not too shabby");
+                    }
+                    else if (goodPercent > .55f)
+                    {
+                        quotes.Add("I'll allow it");
+                        quotes.Add("It could have been worse M9");
+                    }
+                    else if (goodPercent > .35f)
+                    {
+                        quotes.Add("Gee... thanks");
+                        quotes.Add("Why would anyone do a mountain shrine for this");
+                    }
+                    else
+                    {
+                        quotes.Add("What the fuck");
+                        quotes.Add("Wow, it's nothing");
+                    }
                 }
                 else
                 {
-                    quotes.Add("I expected nothing and I'm still dissapointed");
-                    quotes.Add("Wow, it's nothing");
-                    quotes.Add("My disappointment is immeasurable and my day is ruined");
-                    quotes.Add("This has been the worst trade deal in the history of trade deals, maybe ever");
+                    if (goodPercent > .95f)
+                    {
+                        quotes.Add("It can't get any better than this");
+                        quotes.Add("Just like the simulations");
+                    }
+                    else if (goodPercent > .75f)
+                    {
+                        quotes.Add("Hey... that's pretty good");
+                        quotes.Add("Not too shabby");
+                    }
+                    else if (goodPercent > .55f)
+                    {
+                        quotes.Add("I'll allow it");
+                        quotes.Add("Could have been worse");
+                    }
+                    else if (goodPercent > .35f)
+                    {
+                        quotes.Add("Gee... thanks");
+                        quotes.Add("This is why people don't do mountain shrines");
+                    }
+                    else
+                    {
+                        quotes.Add("I expected nothing and I'm still dissapointed");
+                        quotes.Add("Wow, it's nothing");
+                        quotes.Add("My disappointment is immeasurable and my day is ruined");
+                        quotes.Add("This has been the worst trade deal in the history of trade deals, maybe ever");
+                    }
                 }
-                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)]);
+                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)], quotes[UnityEngine.Random.Range(0, quotes.Count)]);
             }
         }
         public void Chance(bool number1VictoryRoyale)
@@ -587,28 +840,36 @@ namespace MoistureUpset
                     case 1:
                         break;
                     case 2:
-                        ShouldSpeak("Wow");
+                        ShouldSpeak("Wow"
+                            , "Wow");
                         break;
                     case 3:
-                        ShouldSpeak("Really?");
+                        ShouldSpeak("Really?"
+                            , "Oh baby a triple");
                         break;
                     case 4:
-                        ShouldSpeak("This has to be rigged... right?");
+                        ShouldSpeak("This has to be rigged... right?"
+                            , "Fucking luminaty");
                         break;
                     case 5:
-                        ShouldSpeak("Yeah it's rigged");
+                        ShouldSpeak("Yeah it's rigged"
+                            , "R U Serious M8");
                         break;
                     case 6:
-                        ShouldSpeak("What did you do to deserve this?");
+                        ShouldSpeak("What did you do to deserve this?"
+                            , "Get fucked XD");
                         break;
                     case 7:
-                        ShouldSpeak("I didn't really think that you would ever make it this far so I kinda ran out of things to say");
+                        ShouldSpeak("I didn't really think that you would ever make it this far so I kinda ran out of things to say"
+                            , "I guess you just suck at this game");
                         break;
                     case 8:
-                        ShouldSpeak("Maybe I'll just start counting how many times you fail in a row");
+                        ShouldSpeak("Maybe I'll just start counting how many times you fail in a row"
+                            , "Just give up");
                         break;
                     default:
-                        ShouldSpeak($"That's {failCount}");
+                        ShouldSpeak($"That's {failCount}"
+                            , $"That's {failCount}");
                         break;
                 }
             }
@@ -755,7 +1016,7 @@ namespace MoistureUpset
                     break;
             }
             if (quotes.Count != 0)
-                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)]);
+                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)], true);
         }
         public void NotEnoughMoney()
         {
@@ -764,7 +1025,7 @@ namespace MoistureUpset
                 if (UnityEngine.Random.Range(0, 5) == 0)
                 {
                     string[] quotes = { "Woah there buddy, you don't have enough money for that one.", $"Sorry {username}, I can't give credit. Come back when you're a little hmmmmm, richer.", "hmmmmmmmmmm, no" };
-                    ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Length)]);
+                    ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Length)], true);
                 }
             }
         }
@@ -775,13 +1036,23 @@ namespace MoistureUpset
         }
         public IEnumerator Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g, bool yeet)
         {
+
             yield return new WaitForSeconds(.1f);
+            if (BigJank.getOptionValue("Scale HitMarker with Crit", "Audio"))
+            {
+                AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+            }
+            else
+            {
+                AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+            }
             if (dontSpeak <= 0)
             {
                 string itemToken = ItemCatalog.GetItemDef(index).nameToken;
                 if (inventory.GetTotalItemCountOfTier(ItemTier.Tier3) == 1 && itemToken == RoR2Content.Items.Plant.nameToken)
                 {
-                    ShouldSpeak($"I see that you have received {RoR2.Language.GetString(itemToken)} as your first red item, would you like me to end the run now? yes or no?");
+                    ShouldSpeak($"I see that you have received {RoR2.Language.GetString(itemToken)} as your first red item, would you like me to end the run now? yes or no."
+                            , "Ah I see you received this fucking garbage as your first red item, would you like to end your suffering now? yes or no.");
                     resetRun = true;
                 }
                 else
@@ -789,23 +1060,32 @@ namespace MoistureUpset
                     switch (itemToken)
                     {
                         case "ITEM_SYRINGE_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.Syringe) == 11)
+                            if (inventory.GetItemCount(RoR2Content.Items.Syringe) > 10 && casinoTimer > 0 && cheated)
                             {
-                                ShouldSpeak("Don't you think you have enough attack speed?");
+                                ShouldSpeak("Did you really need to pause buffer to get more attack speed?"
+                            , "I saw you cheating M8");
+                            }
+                            else if (inventory.GetItemCount(RoR2Content.Items.Syringe) == 11)
+                            {
+                                ShouldSpeak("Don't you think you have enough attack speed?"
+                                    , "Don't you think you have enough attack speed?");
                             }
                             break;
                         case "ITEM_BEAR_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.Bear) == 50)
                             {
-                                ShouldSpeak("I don't know if you really need any more block chance");
+                                ShouldSpeak("I don't know if you really need any more block chance"
+                                    , "Still not enough chance to block my quickscopes");
                             }
                             if (inventory.GetItemCount(RoR2Content.Items.Bear) == 101)
                             {
-                                ShouldSpeak("You know stacking them further is almost pointless...");
+                                ShouldSpeak("You know stacking them further is almost pointless..."
+                                    , "No no, keep stacking block chance, I'm sure it's a great use of your time");
                             }
                             break;
                         case "ITEM_BEHEMOTH_NAME":
-                            ShouldSpeak("Haha rocket launcher go boom");
+                            ShouldSpeak("Haha rocket launcher go boom"
+                                    , "Tactical nuke incoming!");
                             break;
                         case "ITEM_MISSILE_NAME":
                             //ShouldSpeak("This really pogs my champ");
@@ -817,17 +1097,28 @@ namespace MoistureUpset
                             //red dagger
                             if (inventory.GetItemCount(RoR2Content.Items.Dagger) == 1)
                             {
-                                ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
+                                ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!"
+                                    , "Have jojo references gone too far?!");
                             }
                             break;
                         case "ITEM_TOOTH_NAME":
                             //monster tooth
                             break;
                         case "ITEM_CRITGLASSES_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.CritGlasses) > 10 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot"
+                                    , "You really suck at this cheating don't you");
+                            }
                             break;
                         case "ITEM_HOOF_NAME":
                             break;
                         case "ITEM_FEATHER_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Feather) > 8 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Bro you have too many jumps already, why did you cheese the game to get more?"
+                                    , "noclip hax enabled");
+                            }
                             break;
                         case "ITEM_AACANNON_NAME":
                             //not used
@@ -842,22 +1133,26 @@ namespace MoistureUpset
                             //leeching
                             break;
                         case "ITEM_ICICLE_NAME":
-                            ShouldSpeak("Wow gee thanks");
+                            ShouldSpeak("At least they buffed it"
+                                    , "At least they buffed it");
                             //frost relic
                             break;
                         case "ITEM_GHOSTONKILL_NAME":
-                            ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2Content.Items.Plant.nameToken)}");
+                            ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2Content.Items.Plant.nameToken)}"
+                                    , "Well that fucking sucks");
                             break;
                         case "ITEM_MUSHROOM_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.Mushroom) == 1)
                             {
                                 if (SurvivorCatalog.FindSurvivorDefFromBody(g.GetComponentInChildren<CharacterBody>().gameObject) == RoR2Content.Survivors.Engi)
                                 {
-                                    ShouldSpeak("Oh yeah, it's all coming together");
+                                    ShouldSpeak("Oh yeah, it's all coming together"
+                                    , "Oh yeah, it's all coming together");
                                 }
                                 else
                                 {
-                                    ShouldSpeak("BUNGUS");
+                                    ShouldSpeak("BUNGUS"
+                                    , "BUNGUS");
                                 }
                             }
                             //bungus
@@ -870,9 +1165,15 @@ namespace MoistureUpset
                         case "ITEM_ATTACKSPEEDONCRIT_NAME":
                             break;
                         case "ITEM_BLEEDONHIT_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) > 10 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot"
+                                    , "You fucking dipshit");
+                            }
                             if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 10)
                             {
-                                ShouldSpeak("Oh yeah, it's gamer time.");
+                                ShouldSpeak("Oh yeah, it's gamer time."
+                                    , "I'm enabling Windows G");
                             }
                             break;
                         case "ITEM_SPRINTOUTOFCOMBAT_NAME":
@@ -914,25 +1215,38 @@ namespace MoistureUpset
                             //not used
                             break;
                         case "ITEM_CLOVER_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("I would normally congratualte you but you cheated so ehhhh"
+                                    , "Cheating is just part of the game");
+                            }
                             if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 0)
                             {
                                 if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
                                 {
-                                    ShouldSpeak("run = won");
+                                    ShouldSpeak("run = won"
+                                    , "Oh fuck yeah M9");
                                 }
                             }
                             else if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 1)
                             {
-                                ShouldSpeak("I bet you are regretting that purity now aren't ya?");
+                                ShouldSpeak("I bet you are regretting that purity now aren't ya?"
+                                    , "I bet you are regretting that purity now aren't ya?");
                             }
                             else
                             {
-                                ShouldSpeak("I bet you are regretting those purities now aren't ya?");
+                                ShouldSpeak("I bet you are regretting those purities now aren't ya?"
+                                    , "I bet you are regretting those purities now aren't ya?");
                             }
                             break;
                         case "ITEM_MEDKIT_NAME":
                             break;
                         case "ITEM_BANDOLIER_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("You could have pause buffered for litterally any other item"
+                                    , "Why the fuck would you cheat just to get this trash");
+                            }
                             break;
                         case "ITEM_BOUNCENEARBY_NAME":
                             //meat hook
@@ -946,26 +1260,35 @@ namespace MoistureUpset
                         case "ITEM_STUNCHANCEONHIT_NAME":
                             break;
                         case "ITEM_FIREWORK_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("You know, I actually don't blame you for buffering to get this item"
+                                    , "You kinda suck at this cheating thing don't you");
+                            }
                             break;
                         case "ITEM_LUNARDAGGER_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 1)
                             {
                                 if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length == 2)
                                 {
-                                    ShouldSpeak("At least you have your teammate to pickup the slack when you inevitably die");
+                                    ShouldSpeak("At least you have your teammate to pickup the slack when you inevitably die"
+                                        , "At least you have your teammate to pickup the slack when you inevitably die");
                                 }
                                 else if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 2)
                                 {
-                                    ShouldSpeak("At least you have your teammates to pickup the slack when you inevitably die");
+                                    ShouldSpeak("At least you have your teammates to pickup the slack when you inevitably die"
+                                        , "At least you have your teammates to pickup the slack when you inevitably die");
                                 }
                                 else
                                 {
-                                    ShouldSpeak("Should you really be doing this?");
+                                    ShouldSpeak("Should you really be doing this?"
+                                        , "This is absolutely the correct decision");
                                 }
                             }
                             else
                             {
-                                ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(RoR2Content.Items.LunarDagger) - 1} of them, how much could one more hurt?");
+                                ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(RoR2Content.Items.LunarDagger) - 1} of them, how much could one more hurt?"
+                                    , "Yes, obtain more damage");
                             }
                             break;
                         case "ITEM_GOLDONHIT_NAME":
@@ -984,7 +1307,8 @@ namespace MoistureUpset
                             //not used
                             break;
                         case "ITEM_SHIELDONLY_NAME":
-                            ShouldSpeak($"Ah I see you are a gamer of culture.");
+                            ShouldSpeak($"Ah I see you are a gamer of culture."
+                                , "Health is for bitches anyway");
                             //trans
                             break;
                         case "ITEM_ALIENHEAD_NAME":
@@ -997,7 +1321,8 @@ namespace MoistureUpset
                         case "ITEM_BEETLEGLAND_NAME":
                             if (BigJank.getOptionValue("Winston", "Enemy Skins"))
                             {
-                                ShouldSpeak("Winston please switch");
+                                ShouldSpeak("Winston please switch"
+                                    , "Ded game xd");
                             }
                             break;
                         case "ITEM_BURNNEARBY_NAME":
@@ -1014,6 +1339,11 @@ namespace MoistureUpset
                         case "ITEM_SECONDARYSKILLMAGAZINE_NAME":
                             break;
                         case "ITEM_STICKYBOMB_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.StickyBomb) > 20 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot"
+                                    , "Nice going");
+                            }
                             break;
                         case "ITEM_TREASURECACHE_NAME":
                             //rusted key
@@ -1029,6 +1359,11 @@ namespace MoistureUpset
                         case "ITEM_SLOWONHIT_NAME":
                             break;
                         case "ITEM_EXTRALIFE_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("I hope you lose it quickly"
+                                    , "I hope you lose it quickly");
+                            }
                             dioHeld += count;
                             break;
                         case "ITEM_EXTRALIFECONSUMED_NAME":
@@ -1046,13 +1381,16 @@ namespace MoistureUpset
                             switch (UnityEngine.Random.Range(0, 2))
                             {
                                 case 0:
-                                    ShouldSpeak("That better have been an accident");
+                                    ShouldSpeak("That better have been an accident"
+                                        , "Why the fuck you would take this");
                                     break;
                                 case 1:
-                                    ShouldSpeak("Get a load of this idiot");
+                                    ShouldSpeak("Get a load of this idiot"
+                                        , "Get a load of this idiot");
                                     break;
                                 case 2:
-                                    ShouldSpeak("You're going to regret this later");
+                                    ShouldSpeak("You're going to regret this later"
+                                        , "I thought you were a real gamer");
                                     break;
                                 default:
                                     break;
@@ -1073,7 +1411,8 @@ namespace MoistureUpset
                                 && inventory.currentEquipmentState.equipmentDef.nameToken == "EQUIPMENT_TONIC_NAME"
                                 && inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) <= 0)
                             {
-                                ShouldSpeak("I hope you enjoy the tonic afflictions");
+                                ShouldSpeak("I hope you enjoy the tonic afflictions"
+                                        , "I hope you enjoy the tonic afflictions");
                             }
                             //gesture
                             break;
@@ -1089,7 +1428,8 @@ namespace MoistureUpset
                         case "ITEM_EXECUTELOWHEALTHELITE_NAME":
                             if (RoR2.Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(RoR2Content.Items.ExecuteLowHealthElite) == 1)
                             {
-                                ShouldSpeak("Finally");
+                                ShouldSpeak("Finally"
+                                    , "Fucking finally");
                             }
                             break;
                         case "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME":
@@ -1100,7 +1440,8 @@ namespace MoistureUpset
                         case "ITEM_TONICAFFLICTION_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) < 0)
                             {
-                                ShouldSpeak("What are you even thinking!?");
+                                ShouldSpeak("What are you even thinking!?"
+                                    , "What the fuck are were you thinking?!");
                             }
                             else if (inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) + inventory.GetItemCount(RoR2Content.Items.EquipmentMagazine) < 4
                                 && inventory.GetItemCount(RoR2Content.Items.Talisman) == 0
@@ -1108,11 +1449,13 @@ namespace MoistureUpset
                                 && inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) <= 0
                                 && inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) > 0)
                             {
-                                ShouldSpeak("You deserve that one");
+                                ShouldSpeak("You deserve that one"
+                                    , "You deserve that on");
                             }
                             else
                             {
-                                ShouldSpeak("Maybe the tonic life shouldn't be for you?");
+                                ShouldSpeak("Maybe the tonic life shouldn't be for you?"
+                                    , "Maybe the tonic life shouldn't be for you?");
                             }
                             break;
                         case "ITEM_TITANGOLDDURINGTP_NAME":
@@ -1126,6 +1469,11 @@ namespace MoistureUpset
                         case "ITEM_ARMORREDUCTIONONHIT_NAME":
                             break;
                         case "ITEM_TPHEALINGNOVA_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahaha I bet you missed a great item to get this instead"
+                                    , "Smoke weed every day");
+                            }
                             //shiton daisy
                             break;
                         case "ITEM_NEARBYDAMAGEBONUS_NAME":
@@ -1146,7 +1494,8 @@ namespace MoistureUpset
                         case "ITEM_PEARL_NAME":
                             break;
                         case "ITEM_SHINYPEARL_NAME":
-                            ShouldSpeak("bruh");
+                            ShouldSpeak("bruh"
+                                    , "Ez Clap");
                             break;
                         case "ITEM_BONUSGOLDPACKONKILL_NAME":
                             //ghor
@@ -1162,11 +1511,13 @@ namespace MoistureUpset
                         case "ITEM_LUNARTRINKET_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.LunarTrinket) == 1)
                             {
-                                ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later");
+                                ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later"
+                                    , "Ten bucks you only grabbed these to dump them into a pool later");
                             }
                             else if (inventory.GetItemCount(RoR2Content.Items.LunarTrinket) == 2)
                             {
-                                ShouldSpeak("I knew it");
+                                ShouldSpeak("I knew it"
+                                    , "I knew it");
                             }
                             //beads
                             break;
@@ -1185,12 +1536,14 @@ namespace MoistureUpset
                         case "ITEM_DEATHMARK_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.DeathMark) == 2)
                             {
-                                ShouldSpeak("You do realise stacking these does basically nothing right?");
+                                ShouldSpeak("You do realise stacking these does basically nothing right?"
+                                    , "Why would you ever grab more than one?");
                             }
                             break;
                         case "ITEM_PLANT_NAME":
                             //idp
-                            ShouldSpeak("Well well well, if it isn't the best item in the game");
+                            ShouldSpeak("Well well well, if it isn't the best item in the game"
+                                , "Holy shit M8, the run has been won");
                             break;
                         case "ITEM_INCUBATOR_NAME":
                             //not used
@@ -1223,7 +1576,8 @@ namespace MoistureUpset
                         case "ITEM_SCRAPGREEN_NAME":
                             break;
                         case "ITEM_SCRAPRED_NAME":
-                            ShouldSpeak("Good luck ever finding a printer for this");
+                            ShouldSpeak("Good luck ever finding a printer for this"
+                                , "Good luck ever finding a printer for this");
                             break;
                         case "ITEM_SCRAPYELLOW_NAME":
                             break;
@@ -1232,15 +1586,18 @@ namespace MoistureUpset
                             {
                                 if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
                                 {
-                                    ShouldSpeak("There goes your luck Sadge");
+                                    ShouldSpeak("There goes your luck Sadge"
+                                        , "Hippity Hoppity your luck is no longer your property");
                                 }
                                 else if (inventory.GetItemCount(RoR2Content.Items.Clover) > 1)
                                 {
-                                    ShouldSpeak("It's ok, you have some luck to spare");
+                                    ShouldSpeak("It's ok, you have some luck to spare"
+                                        , "At least you have some excess luck");
                                 }
                                 else
                                 {
-                                    ShouldSpeak("This is almost definitely a bad idea.");
+                                    ShouldSpeak("This is almost definitely a bad idea."
+                                        , "I have never seen a better idea");
                                 }
                             }
                             break;
@@ -1288,7 +1645,8 @@ namespace MoistureUpset
                         }
                         else if (dioUsed == 2)
                         {
-                            ShouldSpeak("T t t triple kill");
+                            ShouldSpeak("T t t triple kill"
+                                , "Oh baby a triple!");
                             return;
                         }
                         else if (dioUsed == 3)
@@ -1323,14 +1681,15 @@ namespace MoistureUpset
                         {
                             deathQuotes.Add($"{dioUsed + 1}");
                         }
-                        ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
+                        ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)], true);
                         dioHeld -= 1;
                         dioUsed += 1;
                         return;
                     }
                     if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
                     {
-                        ShouldSpeak("good");
+                        ShouldSpeak("good"
+                            , "F");
                         return;
                     }
                     if (bloodShrineTimer > 0)
@@ -1387,7 +1746,7 @@ namespace MoistureUpset
                     {
                         lastQuotes.RemoveAt(0);
                     }
-                    ShouldSpeak(theQuote);
+                    ShouldSpeak(theQuote, true);
                 }
             }
             catch (Exception e)
@@ -1465,7 +1824,7 @@ namespace MoistureUpset
             {
                 lastQuotesAllyDeath.RemoveAt(0);
             }
-            ShouldSpeak(theQuote);
+            ShouldSpeak(theQuote, true);
             //if (inventory.GetItemCount(ItemIndex.ExtraLife) != 0)
             //{
             //    deathQuotes.Clear();
@@ -1568,6 +1927,14 @@ namespace MoistureUpset
         const int speed = 2;
         void Update()
         {
+            if (casinoTimer > 0)
+            {
+                casinoTimer -= Time.deltaTime;
+                if (!(casinoTimer > 0))
+                {
+                    cheated = false;
+                }
+            }
             if (dontSpeak > 0)
             {
                 dontSpeak -= Time.deltaTime;
@@ -1576,6 +1943,25 @@ namespace MoistureUpset
             {
                 if (Vector3.Distance(charPosition.position, new Vector3(1105, -283, 1181)) < 35f)
                 {
+                    if (!Directory.Exists($"{documents}\\My Games"))
+                    {
+                        DebugClass.Log($"How do you not even have a \"My Games\" folder???? What happened");
+                        Directory.CreateDirectory($"{documents}\\My Games");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset"))
+                    {
+                        DebugClass.Log($"Creating Folder");
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data"))
+                    {
+                        DebugClass.Log($"Creating Folder");
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset\\data");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                    {
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked");
+                    }
                     LocalUserManager.readOnlyLocalUsersList[0].userProfile.GrantUnlockable(UnlockableCatalog.GetUnlockableDef("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"));
                     Activate();
                     new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
@@ -1744,13 +2130,13 @@ namespace MoistureUpset
                                 case "TITAN_BODY_NAME":
                                     if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins"))
                                     {
-                                        ShouldSpeak($"ooooooooof");
+                                        ShouldSpeak($"ooooooooof", true);
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
                                     if (BigJank.getOptionValue("Twitch", "Enemy Skins"))
                                     {
-                                        ShouldSpeak($"Poggers");
+                                        ShouldSpeak($"Poggers", true);
                                     }
                                     break;
                                 default:
@@ -1772,7 +2158,7 @@ namespace MoistureUpset
                                 case "JELLYFISH_BODY_NAME":
                                     if (BigJank.getOptionValue("Comedy", "Enemy Skins"))
                                     {
-                                        ShouldSpeak($"I'm something of a comedian myself.");
+                                        ShouldSpeak($"I'm something of a comedian myself.", true);
                                     }
                                     break;
                                 case "BEETLE_BODY_NAME":
@@ -1793,13 +2179,13 @@ namespace MoistureUpset
                                 case "BELL_BODY_NAME":
                                     if (BigJank.getOptionValue("Taco Bell", "Enemy Skins"))
                                     {
-                                        ShouldSpeak($"Now I'm feeling kind of hungry.");
+                                        ShouldSpeak($"Now I'm feeling kind of hungry.", true);
                                     }
                                     break;
                                 case "GOLEM_BODY_NAME":
                                     if (BigJank.getOptionValue("Robloxian", "Enemy Skins"))
                                     {
-                                        ShouldSpeak($"oof");
+                                        ShouldSpeak($"oof", true);
                                     }
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
@@ -1824,13 +2210,13 @@ namespace MoistureUpset
                                 case "TITAN_BODY_NAME":
                                     if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins"))
                                     {
-                                        ShouldSpeak($"ooooooooof");
+                                        ShouldSpeak($"ooooooooof", true);
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
                                     if (BigJank.getOptionValue("Twitch", "Enemy Skins"))
                                     {
-                                        ShouldSpeak($"Poggers");
+                                        ShouldSpeak($"Poggers", true);
                                     }
                                     break;
                                 case "BROTHER_BODY_NAME":
@@ -1861,7 +2247,7 @@ namespace MoistureUpset
                     }
                     else if (victimBody.baseNameToken == "SHOPKEEPER_BODY_NAME")
                     {
-                        ShouldSpeak("I see we are at that point in the game now");
+                        ShouldSpeak("I see we are at that point in the game now", true);
                     }
                 }
             }
@@ -1892,11 +2278,11 @@ namespace MoistureUpset
                     {
                         lastIdle.RemoveAt(0);
                     }
-                    if (!BigJank.getOptionValue("Original REDACTED TTS", "Misc"))
+                    if (!BigJank.getOptionValue("Accurate REDACTED TTS", "Misc"))
                     {
                         if (UnityEngine.Random.Range(0, 150) == 0)
                         {
-                            ShouldSpeak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!");
+                            ShouldSpeak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!", true);
                             idlenum = -1;
                         }
                     }
@@ -1904,16 +2290,32 @@ namespace MoistureUpset
                     switch (idlenum)
                     {
                         case 11:
-                            ShouldSpeak("Did you know? Me neither...");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                                    ,"Imagine cheating in my achievement");
+                            else
+                                ShouldSpeak("Did you know? Me neither...", true);
                             break;
                         case 12:
-                            ShouldSpeak("We live in a society");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                                    , "Imagine cheating in my achievement");
+                            else
+                                ShouldSpeak("We live in a society", true);
                             break;
                         case 13:
-                            ShouldSpeak("Bottom Text");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                                    , "Imagine cheating in my achievement");
+                            else
+                                ShouldSpeak("Bottom Text", true);
                             break;
                         case 14:
-                            ShouldSpeak("Can I ask?........... Thanks that's all.");
+                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                                    , "Imagine cheating in my achievement");
+                            else
+                                ShouldSpeak("Can I ask?........... Thanks that's all.", true);
                             break;
                         default:
                             break;
@@ -2009,7 +2411,7 @@ namespace MoistureUpset
             }
             if (Input.GetKeyDown(KeyCode.M))
             {
-                ShouldSpeak("This is a test to see where my textbox will be.");
+                ShouldSpeak("This is a test to see where my textbox will be.", true);
             }
         }
         public static void GoTo(float x, float y)
@@ -2130,16 +2532,44 @@ namespace MoistureUpset
 
         //    buddy.Activate();
         //}
-        public void ShouldSpeak(string whatToSay)
+        List<string> words = new List<string>();
+        bool sayingWords = false;
+        public void ShouldSpeak(string whatToSay, string whatToMLG)
         {
-            StartCoroutine(ShouldSpeak(whatToSay, false));
+            if (daniel && (int)MLG.progress > 0)
+            {
+                words.Add(whatToMLG);
+            }
+            else
+            {
+                words.Add(whatToSay);
+            }
+            if (!sayingWords)
+            {
+                sayingWords = true;
+                StartCoroutine(ShouldSpeak());
+            }
         }
-        public IEnumerator ShouldSpeak(string whatToSay, bool bigma)
+        public void ShouldSpeak(string whatToSay, bool same)
+        {
+            words.Add(whatToSay);
+            if (!sayingWords)
+            {
+                sayingWords = true;
+                StartCoroutine(ShouldSpeak());
+            }
+        }
+        public IEnumerator ShouldSpeak()
         {
             if (bonziActive)
             {
-                yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
-                StartCoroutine(Speak(whatToSay));
+                while (words.Count > 0)
+                {
+                    yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
+                    StartCoroutine(Speak(words[0]));
+                    words.RemoveAt(0);
+                }
+                sayingWords = false;
             }
         }
         public IEnumerator Speak(string whatToSay)
@@ -2215,9 +2645,16 @@ namespace MoistureUpset
                 startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = balconPath;
-                if (BigJank.getOptionValue("Original REDACTED TTS", "Misc"))
+                if (BigJank.getOptionValue("Accurate REDACTED TTS", "Misc"))
                 {
-                    startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
+                    if (daniel && (int)MLG.progress > 0)
+                    {
+                        startInfo.Arguments = $"-n \"ScanSoft Daniel_Full_22kHz\" -t \"{text}\" -w {joemamaPath}";
+                    }
+                    else if (sapi4)
+                    {
+                        startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
+                    }
                 }
                 else
                 {
@@ -2304,6 +2741,16 @@ namespace MoistureUpset
                     }
                 }
             }
+            if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\Daniel 22Khz MLG voice.exe"))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.Daniel 22Khz MLG voice.exe"))
+                {
+                    using (var file = new FileStream($"{documents}\\My Games\\Moisture Upset\\data\\Daniel 22Khz MLG voice.exe", FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
             if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\readme.txt"))
             {
                 using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.readme.txt"))
@@ -2325,7 +2772,6 @@ namespace MoistureUpset
                 }
             }
         }
-
         public static void FixTTS(bool yeet)
         {
             if (yeet)
@@ -2341,6 +2787,17 @@ namespace MoistureUpset
                     File.Create($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed");
                     System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\spchapi.exe");
                     System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\tv_enua.exe");
+                }
+
+                if (!File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi") && File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed"))
+                {
+                    File.Delete($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed");
+                }
+                //string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+                if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed"))
+                {
+                    File.Create($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed");
+                    System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\Daniel 22Khz MLG voice.exe");
                 }
             }
         }

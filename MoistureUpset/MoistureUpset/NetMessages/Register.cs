@@ -23,6 +23,7 @@ namespace MoistureUpset.NetMessages
             NetworkingAPI.RegisterMessageType<SyncShrine>();
             NetworkingAPI.RegisterMessageType<SyncBroke>();
             NetworkingAPI.RegisterMessageType<SyncBonziApproach>();
+            NetworkingAPI.RegisterMessageType<SyncLunarReRoll>();
         }
     }
 }
