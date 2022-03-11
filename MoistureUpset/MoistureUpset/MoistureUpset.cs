@@ -48,6 +48,7 @@ namespace MoistureUpset
             //Skins.Utils.LoadAllSkins();
             
             Assets.PopulateAssets();
+
             
             Skins.SkinManager.Init();
 
@@ -74,7 +75,11 @@ namespace MoistureUpset
             //{
             //    addContentPackProvider(new MoistureUpsetContent());
             //};
-            BonziBuddy.SetupGameObjects();
+            On.RoR2.SteamworksClientManager.ctor += (orig, self) =>
+            {
+                orig(self);
+                BonziBuddy.SetupGameObjects();
+            };
             //On.RoR2.ContentManagement.ContentManager.SetContentPacks += (orig, self) =>
             //{
             //    orig(self);
@@ -284,10 +289,10 @@ namespace MoistureUpset
         }
         public void Start()
         {
-            if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
-            {
-                RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
-            }
+            //if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
+            //{
+            //    RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
+            //}
 
         }
     }

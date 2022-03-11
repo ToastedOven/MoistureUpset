@@ -140,12 +140,10 @@ namespace MoistureUpset
             bonzi.layer = 5;
             BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
 
-
             GameObject Gamer = Instantiate(new GameObject());
             DontDestroyOnLoad(Gamer);
             Gamer.SetActive(true);
             MLG.MemeMachine = Gamer.AddComponent<MLG>();
-
             MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
             {
                 Stage1 = "HopeWillDieStage1",
@@ -182,7 +180,6 @@ namespace MoistureUpset
                 Stage1StartDuration = 18.345f,
             });
             MLG.MemeMachine.ActiveTrack = UnityEngine.Random.Range(0, MLG.MemeMachine.tracks.Count);
-
 
             //GameObject slider = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
             //DontDestroyOnLoad(slider);
@@ -2032,7 +2029,6 @@ namespace MoistureUpset
                 {
                     currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
                 }
-
                 bool equalX = AlmostEqual(dest.x, screenPos.x, .004f);
                 bool equalY = AlmostEqual(dest.y, screenPos.y, .004f);
                 atDest = equalX && equalY;
@@ -2077,7 +2073,6 @@ namespace MoistureUpset
                 }
                 //DebugMovement();
                 IdleAnimation();
-
 
                 MovingAnimations();
             }
