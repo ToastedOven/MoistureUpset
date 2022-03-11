@@ -32,15 +32,29 @@ Anything Else, send them to Metrosexual Fruitcake#6969 or Rune#0001
 
 None, we are perfect coders :)
 
-Rex's r makes the nyan cat noise if nyan cat is enabled
+Rex's r makes the nyan cat noise if nyan cat is enabled (I swear we will get to this eventually)
 
 # Compatibility
 
-In general this mod should work with other mods, however here is a list you might be interested in.
+~~In general this mod should work with other mods, however here is a list you might be interested in.~~
 
-Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithrix(CDClarke){side note this mod is already buggy on it's own}, PlayableScavenger(RyanPallesen){same as mithrix}, Direseeker(rob), ChipTheBeetle(SleeperHavel)
+~~Lemurian(Tymmey), PlayableTemplar(rob), PlayableGrovetender(rob), PlayableMithrix(CDClarke){side note this mod is already buggy on it's own}, PlayableScavenger(RyanPallesen){same as mithrix}, Direseeker(rob), ChipTheBeetle(SleeperHavel)~~ Gone for now, when mods get updated will add back in maybe
 
 # Changelog
+
+ 1.5.0: Fixed a couple of long lasting issues, added compatibility with survivors of the void and the new risk of options. As a result, we now have a bepinex config like most normal people, however you can still find the settings in game if that's your thing.
+
+ 1.4.1: Fixed issue where Imposters weren't loading correctly. Fixed an unintentional spoiler
+
+ 1.4.0: Updated to have compatibility with the new patch.
+ 
+ 1.3.4: Fixed issue with a few more effects causing errors, you should also get like maybe 1/10th of a frame per second back because it's more optimized now. I know all these small patches might get a tad annoying, but I feel in our case it's better to fix stuff as soon as it gets reported rather than gathering them all up and fixing it a week later.
+
+ 1.3.3: Fixed issue with Alex Jones sfx being carried over to other stuff. I probably need to take a look at all the hacky solutions I used and fix more of them.
+
+ 1.3.1: Fixed issue with artifact of command and breaking other mods using EnigmaticThunder's unlockable system.
+
+ 1.3.0: Added compatibility for the new update! Not much else to note here but do know that we are still working on stuff. We acknowledge that some enemies are now incomplete but we will get to them soonTM.
 
  1.2.1: Fixed a few bugs with sounds still playing when turned off.
 
