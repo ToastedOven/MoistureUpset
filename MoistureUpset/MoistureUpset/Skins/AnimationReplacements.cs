@@ -17,6 +17,7 @@ using TMPro;
 using R2API.Networking.Interfaces;
 using UnityEngine.Animations;
 using UnityEngine.UI;
+using EmotesAPI;
 
 namespace MoistureUpset.Skins
 {
