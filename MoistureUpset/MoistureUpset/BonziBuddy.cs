@@ -15,6 +15,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
@@ -130,7 +131,7 @@ namespace MoistureUpset
 
         internal static void SetupGameObjects()
         {
-            GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+            GameObject bonzi = Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
             DontDestroyOnLoad(bonzi);
             bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
             bonzi.SetActive(true);
@@ -183,7 +184,7 @@ namespace MoistureUpset
             MLG.MemeMachine.ActiveTrack = UnityEngine.Random.Range(0, MLG.MemeMachine.tracks.Count);
 
 
-            //GameObject slider = Instantiate(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
+            //GameObject slider = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
             //DontDestroyOnLoad(slider);
             //slider.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
             //slider.SetActive(true);
@@ -201,7 +202,7 @@ namespace MoistureUpset
             //MLG.MemeMachine.slider = slider;
 
 
-            GameObject ScreenStuff = Instantiate(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/Sniper/MLGScreenStuff.prefab"));
+            GameObject ScreenStuff = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Sniper/MLGScreenStuff.prefab"));
             DontDestroyOnLoad(ScreenStuff);
             ScreenStuff.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
             ScreenStuff.SetActive(true);
@@ -591,7 +592,7 @@ namespace MoistureUpset
             {
                 return;
             }
-            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Resources.Load<GameObject>("prefabs/networkedobjects/CommandCube"), createPickupInfo.position, createPickupInfo.rotation);
+            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Command/CommandCube.prefab").WaitForCompletion(), createPickupInfo.position, createPickupInfo.rotation);
             gameObject.GetComponent<PickupIndexNetworker>().NetworkpickupIndex = pickupIndex;
             gameObject.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(pickupIndex);
             NetworkServer.Spawn(gameObject);
@@ -2514,7 +2515,7 @@ namespace MoistureUpset
         //{
         //    Destroy(buddy.gameObject);
 
-        //    GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+        //    GameObject bonzi = Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
         //    DontDestroyOnLoad(bonzi);
         //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
         //    bonzi.SetActive(true);

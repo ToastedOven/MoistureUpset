@@ -31,9 +31,9 @@ namespace MoistureUpset
         float timer = 0;
         public static CharacterBody localBody = null;
         GameObject HUD;
-        Sprite stage0 = Resources.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage0.png");
-        Sprite stage1 = Resources.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage1.png");
-        Sprite stage2 = Resources.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage2Alt.png");
+        Sprite stage0 = Assets.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage0.png");
+        Sprite stage1 = Assets.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage1.png");
+        Sprite stage2 = Assets.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage2Alt.png");
         GameObject sliderObject;
         int ENABLE = -1;
         public struct AudioTrack
@@ -100,7 +100,7 @@ namespace MoistureUpset
                             if (!cam)
                             {
                                 cam = GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>();
-                                //new Material(Resources.Load<Shader>("@MoistureUpset_2014:assets/2014/TutorialShader.shader"));
+                                //new Material(Assets.Load<Shader>("@MoistureUpset_2014:assets/2014/TutorialShader.shader"));
                             }
 
 
@@ -312,8 +312,8 @@ namespace MoistureUpset
                     {
                         cam = GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>();
                         //var comp = cam.uiCam.gameObject.AddComponent<MLGCamera>();
-                        //comp.material = Resources.Load<Material>("@MoistureUpset_2014:assets/2014/MLGCameraMaterial.mat");
-                        //comp.material.shader = Resources.Load<Shader>("@MoistureUpset_2014:assets/2014/TutorialShader.shader");
+                        //comp.material = Assets.Load<Material>("@MoistureUpset_2014:assets/2014/MLGCameraMaterial.mat");
+                        //comp.material.shader = Assets.Load<Shader>("@MoistureUpset_2014:assets/2014/TutorialShader.shader");
                     }
                     if (origFOV != -1)
                     {
@@ -481,19 +481,19 @@ namespace MoistureUpset
                     rainbowTimer = 0;
                     increasingDecay = 0;
                     GameObject player = localBody.gameObject;
-                    memeEmitter = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/MLGEmitter.prefab"));
+                    memeEmitter = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/MLGEmitter.prefab"));
                     memeEmitter.transform.SetParent(player.transform);
                     memeEmitter.transform.localPosition = Vector3.zero;
-                    GameObject hitmarker = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
+                    GameObject hitmarker = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
                     hitmarker.transform.SetParent(player.transform);
                     hitmarker.transform.localPosition = Vector3.zero;
                     HitMarkerCreator = hitmarker.GetComponent<ParticleSystem>();
 
-                    GameObject deatheffect = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
+                    GameObject deatheffect = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
                     DeathEffects = deatheffect.GetComponent<ParticleSystem>();
 
 
-                    slider = Instantiate(Resources.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
+                    slider = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
                     //DontDestroyOnLoad(slider);
                     slider.GetComponent<RectTransform>().SetParent(GameObject.Find("HUDSimple(Clone)").transform.Find("MainContainer"), false);
                     slider.SetActive(true);

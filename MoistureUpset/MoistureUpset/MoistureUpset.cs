@@ -142,7 +142,7 @@ namespace MoistureUpset
 
 
 
-            //    GameObject bonzi = Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+            //    GameObject bonzi = Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
             //    DontDestroyOnLoad(bonzi);
             //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
             //    bonzi.SetActive(true);
