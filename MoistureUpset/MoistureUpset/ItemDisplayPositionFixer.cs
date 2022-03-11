@@ -10,6 +10,7 @@ using DisplayRuleGroup = RoR2.DisplayRuleGroup;
 using ItemDef = RoR2.ItemDef;
 using ItemDisplayRuleSet = RoR2.ItemDisplayRuleSet;
 using RoR2Content = RoR2.RoR2Content;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
@@ -28,6 +29,7 @@ namespace MoistureUpset
         {
             for (int i = 0; i < idrs.keyAssetRuleGroups.Length; i++)
             {
+                //Debug.Log($"idrs: {idrs.keyAssetRuleGroups[i].keyAsset}, itemdef: {item}");
                 if (idrs.keyAssetRuleGroups[i].keyAsset == item)
                 {
                     return idrs.keyAssetRuleGroups[i].displayRuleGroup;
@@ -48,7 +50,7 @@ namespace MoistureUpset
             //});
 
 
-            var engiBody = Resources.Load<GameObject>("prefabs/characterbodies/EngiBody");
+            var engiBody = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion();
 
             var cm = engiBody.GetComponentInChildren<CharacterModel>();
 

@@ -21,18 +21,20 @@ namespace MoistureUpset.Skins
         {
             PopulateAssets();
 
-            Utils.AddSkin("LoaderBody", LoaderSkin);
+            SkinManager.AddSkin("LoaderBody", LoaderSkin);
         }
 
         // Load assets here
         private static void PopulateAssets()
         {
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
-            }
+            Assets.AddBundle("sploaderskin");
+            
+            // using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.sploaderskin"))
+            // {
+            //     var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+            //
+            //     ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset", MainAssetBundle));
+            // }
         }
 
         // Skindef stuff here
@@ -56,21 +58,21 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultMaterial = Assets.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[0]
                     },
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultMaterial = Assets.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[1]
                     },
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Resources.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
+                        defaultMaterial = Assets.Load<Material>("@MoistureUpset:assets/starplatinummat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[2]
@@ -81,17 +83,17 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset:assets/sphist.mesh"),
                         renderer = renderers[0]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset:assets/speniscloth.mesh"),
                         renderer = renderers[1]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset:assets/splatinum.mesh"),
                         renderer = renderers[2]
                     }
 

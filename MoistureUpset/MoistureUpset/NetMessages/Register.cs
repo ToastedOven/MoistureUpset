@@ -9,8 +9,8 @@ namespace MoistureUpset.NetMessages
     {
         public static void Init()
         {
-            //NetworkingAPI.RegisterMessageType<SyncAnimationToServer>();
-            //NetworkingAPI.RegisterMessageType<SyncAnimationToClients>();
+            NetworkingAPI.RegisterMessageType<SyncAnimationToServer>();
+            NetworkingAPI.RegisterMessageType<SyncAnimationToClients>();
 
             NetworkingAPI.RegisterMessageType<InteractReplacements.SyncFidget>();
 

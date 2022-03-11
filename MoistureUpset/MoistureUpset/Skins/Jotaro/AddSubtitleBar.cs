@@ -11,7 +11,7 @@ namespace MoistureUpset.Skins.Jotaro
         public GameObject subtitleBar;
         void Start()
         {
-            GameObject subtitleBarPrefab = Resources.Load<GameObject>("@MoistureUpset_Skins_Jotaro_jotarosubtitle:assets/jotaro/SubtitleHolder.prefab");
+            GameObject subtitleBarPrefab = Assets.Load<GameObject>("@MoistureUpset_Skins_Jotaro_jotarosubtitle:assets/jotaro/SubtitleHolder.prefab");
 
             subtitleBar = Instantiate<GameObject>(subtitleBarPrefab, GetComponent<ModelLocator>().modelTransform.GetComponent<ChildLocator>().FindChild("Base"));
 

@@ -13,29 +13,30 @@ using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
 using R2API.Networking;
-using System;
+using System.IO;
 
 namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("com.rune580.riskofoptions")]
-    [BepInPlugin("com.gemumoddo.MoistureUpset", "Moisture Upset", VERSION)]
+    [BepInPlugin(Guid, "Moisture Upset", Version)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
-        public const string VERSION = "1.4.1";
+        public static Moisture_Upset instance;
+        public const string Version = "1.5.0";
+        public const string Guid = "com.gemumoddo.MoistureUpset";
+        
         public void Awake()
         {
-
+            instance = this;
             DebugClass.SetLogger(base.Logger);
-
+            
             NetMessages.Register.Init();
 
-
-            Assets.PopulateAssets();
             Settings.RunAll();
-            EnemyReplaceMentsRunAll();
+            //EnemyReplaceMentsRunAll();
             MLG.Setup();
 
 
@@ -44,23 +45,23 @@ namespace MoistureUpset
 
             //
 
-            Skins.Utils.LoadAllSkins();
+            //Skins.Utils.LoadAllSkins();
+            
+            Assets.PopulateAssets();
+            
+            Skins.SkinManager.Init();
 
             SoundAssets.RegisterSoundEvents();
 
-            //On.RoR2.UI.CharacterSelectController.SelectSurvivor += CharacterSelectController_SelectSurvivor;
-
+            NetworkAssistant.InitSNA();
+            
             //On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
 
             //ligmaballs();
 
-            ItemDisplayPositionFixer.Init();
+            //ItemDisplayPositionFixer.Init();
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
-
-            ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
-
-            
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");
@@ -153,81 +154,23 @@ namespace MoistureUpset
 
 
             //UnlockableAPI.AddUnlockable<BonziUnlocked>(true);
+            IntroReplaceAction();
+
         }
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
         //    BonziBuddy.buddy.StartCoroutine(BonziBuddy.buddy.Speak(self.text));
         //    return orig(self);
         //}
-        internal static int completed = 0;
-        public void EnemyReplaceMentsRunAll()
-        {
-            try
-            {
-                EnemyReplacements.LoadBNK("ImWettest");
-                EnemyReplacements.LoadBNK("ImWettest2");
-                StartCoroutine(EnemyReplacements.ThanosQuotes());
-                StartCoroutine(EnemyReplacements.DEBUG());
-                StartCoroutine(EnemyReplacements.Twitch());
-                StartCoroutine(EnemyReplacements.Cereal());
-                StartCoroutine(EnemyReplacements.Thanos());
-                StartCoroutine(EnemyReplacements.RobloxTitan());
-                StartCoroutine(EnemyReplacements.Alex());
-                StartCoroutine(EnemyReplacements.ElderLemurian());
-                StartCoroutine(EnemyReplacements.Lemurian());
-                StartCoroutine(EnemyReplacements.Golem());
-                StartCoroutine(EnemyReplacements.Bison());
-                StartCoroutine(EnemyReplacements.SolusUnit());
-                StartCoroutine(EnemyReplacements.Templar());
-                StartCoroutine(EnemyReplacements.GreaterWisp());
-                StartCoroutine(EnemyReplacements.Wisp());
-                StartCoroutine(EnemyReplacements.Sans());
-                StartCoroutine(EnemyReplacements.Imp());
-                StartCoroutine(EnemyReplacements.MiniMushroom());
-                StartCoroutine(EnemyReplacements.BeetleGuard());
-                StartCoroutine(EnemyReplacements.Beetle());
-                StartCoroutine(EnemyReplacements.TacoBell());
-                StartCoroutine(EnemyReplacements.Jelly());
-                StartCoroutine(EnemyReplacements.Shop());
-                StartCoroutine(EnemyReplacements.Names());
-                StartCoroutine(EnemyReplacements.Icons());
-                StartCoroutine(EnemyReplacements._UI());
-                StartCoroutine(EnemyReplacements.NonEnemyNames());
-                StartCoroutine(EnemyReplacements.Shrines());
-                StartCoroutine(EnemyReplacements.LemmeSmash());
-                StartCoroutine(EnemyReplacements.Hagrid());
-                StartCoroutine(EnemyReplacements.Noodle());
-                StartCoroutine(EnemyReplacements.Skeleton());
-                StartCoroutine(EnemyReplacements.CrabRave());
-                StartCoroutine(EnemyReplacements.PUDDI());
-                StartCoroutine(EnemyReplacements.StringWorm());
-                StartCoroutine(EnemyReplacements.Discord());
-                StartCoroutine(EnemyReplacements.Copter());
-                StartCoroutine(EnemyReplacements.Rob());
-                StartCoroutine(EnemyReplacements.Nyan());
-                StartCoroutine(EnemyReplacements.Imposter());
-                StartCoroutine(EnemyReplacements.Collab());
-                DebugClass.Log($"Haulting until everything finishes");
-                while (completed < 41)
-                {
-                    DebugClass.Log($"----------{completed}");
-                }
-                DebugClass.Log($"Done");
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
-        }
 
         public void IntroReplaceAction()
         {
-            if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) == 1)
+            if (Settings.OnlySurvivorSkins.Value)
             {
                 SyncAudio.doMinecraftOofSound = false;
                 SyncAudio.doShrineSound = false;
             }
-            if (BigJank.getOptionValue("Replace Intro Scene", "UI Changes"))
+            if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
             {
                 LoadIntro();
 
@@ -259,7 +202,7 @@ namespace MoistureUpset
                 DestroyImmediate(GameObject.Find("Scene Camera").GetComponent<TranslucentImageSource>());
                 DestroyImmediate(GameObject.Find("Scene Camera").GetComponent<PostProcessLayer>());
 
-                var videoPlayer = Instantiate(Resources.Load<GameObject>("@MoistureUpset_Intro:assets/video/introplayer.prefab"));
+                var videoPlayer = Instantiate(Assets.Load<GameObject>("@MoistureUpset_Intro:assets/video/introplayer.prefab"));
 
                 videoPlayer.GetComponentInChildren<VideoPlayer>().targetCamera = GameObject.Find("Scene Camera").GetComponent<Camera>();
 
@@ -299,12 +242,14 @@ namespace MoistureUpset
 
         private static void LoadIntro()
         {
-            using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.mu2intro"))
-            {
-                var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
-
-                ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_Intro", MainAssetBundle));
-            }
+            Assets.AddBundle("Resources.mu2intro");
+            
+            // using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.mu2intro"))
+            // {
+            //     var MainAssetBundle = AssetBundle.LoadFromStream(assetStream);
+            //
+            //     ResourcesAPI.AddProvider(new AssetBundleResourcesProvider("@MoistureUpset_Intro", MainAssetBundle));
+            // }
         }
 
 
@@ -337,39 +282,13 @@ namespace MoistureUpset
         {
             DebugClass.GetAllTransforms();
         }
-
-        private void TeleporterInteraction_Awake(On.RoR2.TeleporterInteraction.orig_Awake orig, TeleporterInteraction self)
+        public void Start()
         {
-            //self.shouldAttemptToSpawnShopPortal = true;
-            //self.Network_shouldAttemptToSpawnShopPortal = true;
-            //self.baseShopSpawnChance = 1;
+            if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
+            {
+                RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene intro");
+            }
 
-            orig(self);
-
-            //self.shouldAttemptToSpawnShopPortal = true;
-            //self.Network_shouldAttemptToSpawnShopPortal = true;
         }
-
-        //private void CharacterSelectController_SelectSurvivor(On.RoR2.UI.CharacterSelectController.orig_SelectSurvivor orig, RoR2.UI.CharacterSelectController self, SurvivorIndex survivor)
-        //{
-        //    self.selectedSurvivorIndex = survivor;
-
-        //    //if (survivor == SurvivorIndex.Commando)
-        //    //{
-        //    //    AkSoundEngine.PostEvent("YourMother", self.characterDisplayPads[0].displayInstance.gameObject);
-        //    //}
-
-        //    orig(self, survivor);
-
-        //    HGTextMeshProUGUI[] objects = GameObject.FindObjectsOfType<HGTextMeshProUGUI>();
-
-        //    foreach (var item in objects)
-        //    {
-        //        if (item.text == "Locked In")
-        //        {
-        //            //Debug.Log(item.transform.parent.name);
-        //        }
-        //    }
-        //}
     }
 }

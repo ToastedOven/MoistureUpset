@@ -12,6 +12,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Text;
 using BepInEx.Logging;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
@@ -89,7 +90,7 @@ namespace MoistureUpset
         }
         public static void TextureDebugReplace()
         {
-            Texture t = Resources.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
+            Texture t = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
             SkinnedMeshRenderer[] objects = GameObject.FindObjectsOfType<SkinnedMeshRenderer>();
             for (int i = 0; i < objects.Length; i++)
             {
@@ -139,24 +140,24 @@ namespace MoistureUpset
             }
             Log($"------------------------------------------");
         }
-        public static void DebugBones(string resource, int spot = 0)
+        public static void DebugBones(string resource)
         {
-            var fab = Resources.Load<GameObject>(resource);
+            var fab = Addressables.LoadAssetAsync<GameObject>(resource).WaitForCompletion();
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
             StringBuilder sb = new StringBuilder();
-            sb.Append($"rendererererer: {meshes[spot]}\n");
-            sb.Append($"bone count: {meshes[spot].bones.Length}\n");
+            sb.Append($"rendererererer: {meshes[0]}\n");
+            sb.Append($"bone count: {meshes[0].bones.Length}\n");
             sb.Append($"mesh count: {meshes.Length}\n");
-            sb.Append($"root bone: {meshes[spot].rootBone.name}\n");
+            sb.Append($"root bone: {meshes[0].rootBone.name}\n");
             sb.Append($"{resource}:\n");
-            if (meshes[spot].bones.Length == 0)
+            if (meshes[0].bones.Length == 0)
             {
                 sb.Append("No bones");
             }
             else
             {
                 sb.Append("[");
-                foreach (var bone in meshes[spot].bones)
+                foreach (var bone in meshes[0].bones)
                 {
                     sb.Append($"'{bone.name}', ");
                 }

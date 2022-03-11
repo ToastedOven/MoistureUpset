@@ -39,11 +39,11 @@ namespace MoistureUpset.NetMessages
             GameObject g = Util.FindNetworkObject(netId);
             if (g)
             {
-                if (g.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
-                {
-                    BonziBuddy.buddy.Chance(succ);
-                }
-                if (BigJank.getOptionValue("Shrine Changes", "Interactables"))
+                //if (g.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
+                //{
+                //    BonziBuddy.buddy.Chance(succ);
+                //}//FIX WHEN PULL
+                if (BigJank.getOptionValue(Settings.ShrineChanges))
                 {
                     AkSoundEngine.PostEvent(sound, g);
                 }

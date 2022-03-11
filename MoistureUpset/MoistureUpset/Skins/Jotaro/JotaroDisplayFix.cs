@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using RoR2;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset.Skins.Jotaro
 {
@@ -15,7 +16,7 @@ namespace MoistureUpset.Skins.Jotaro
 
         private void Start()
         {
-            var fab = Resources.Load<GameObject>("prefabs/characterdisplays/CaptainDisplay");
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Captain/CaptainDisplay.prefab").WaitForCompletion();
 
             foreach (var smr in fab.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
@@ -52,7 +53,7 @@ namespace MoistureUpset.Skins.Jotaro
             foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 //DebugClass.Log($"Token: {JotaroCaptain.NameToken}, name: {SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken]}, name2: {smr.material.mainTexture.name}");
-                if (smr.material.mainTexture.name.ToLower() == SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken].ToLower())
+                if (smr.material.mainTexture.name.ToLower() == SkinHelper.SkinNameToSkinMeshName[JotaroCaptain.NameToken].ToLower())
                 {
                     isJotaroSkin = true;
                 }

@@ -17,6 +17,8 @@ using AK;
 using System.Collections;
 using MoistureUpset.NetMessages;
 using R2API.Networking.Interfaces;
+using UnityEngine.AddressableAssets;
+using MoistureUpset.Collabs;
 
 namespace MoistureUpset
 {
@@ -37,7 +39,7 @@ namespace MoistureUpset
         }
         public static void DeathRespawn()
         {
-            if (BigJank.getOptionValue("Respawn SFX", "Audio"))
+            if (BigJank.getOptionValue(Settings.RespawnSFX))
                 EnemyReplacements.LoadBNK("Respawn");
         }
 
@@ -48,7 +50,7 @@ namespace MoistureUpset
                 orig(self);
                 try
                 {
-                    if (BigJank.getOptionValue("Player death sound", "Audio"))
+                    if (BigJank.getOptionValue(Settings.PlayerDeathSound))
                         if (self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>() && self.outer.gameObject.GetComponentInChildren<RoR2.PositionIndicator>().name == "PlayerPositionIndicator(Clone)")
                         {
                             AkSoundEngine.PostEvent("PlayerDeath", self.outer.gameObject);
@@ -62,54 +64,55 @@ namespace MoistureUpset
 
         public static void DifficultyIcons()
         {
-            if (BigJank.getOptionValue("Difficulty Icons", "UI Changes"))
+            if (BigJank.getOptionValue(Settings.DifficultyIcons))
             {
-                UImods.ReplaceUIBetter("Textures/DifficultyIcons/texDifficultyEasyIcon", "MoistureUpset.Resources.easy.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEasyIconDisabled", "MoistureUpset.Resources.easyDisabled.png");
+                UImods.ReplaceUIBetter("RoR2/Base/Common/texDifficultyEasyIcon.png", "MoistureUpset.Resources.easy.png");
+                //UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEasyIconDisabled", "MoistureUpset.Resources.easyDisabled.png");
 
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIcon", "MoistureUpset.Resources.medium.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIconDisabled", "MoistureUpset.Resources.mediumDisabled.png");
+                UImods.ReplaceUIBetter("RoR2/Base/Common/texDifficultyNormalIcon.png", "MoistureUpset.Resources.medium.png");
+                //UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyNormalIconDisabled", "MoistureUpset.Resources.mediumDisabled.png");
 
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIcon", "MoistureUpset.Resources.hard.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
+                UImods.ReplaceUIBetter("RoR2/Base/Common/texDifficultyHardIcon.png", "MoistureUpset.Resources.hard.png");
+                //UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyHardIconDisabled", "MoistureUpset.Resources.hardDisabled.png");
 
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse1Icon", "MoistureUpset.Resources.e1.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse2Icon", "MoistureUpset.Resources.e2.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse3Icon", "MoistureUpset.Resources.e3.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse4Icon", "MoistureUpset.Resources.e4.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse5Icon", "MoistureUpset.Resources.e5.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse6Icon", "MoistureUpset.Resources.e6.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse7Icon", "MoistureUpset.Resources.e7.png");
-                UImods.ReplaceUIBetter("textures/difficultyicons/texDifficultyEclipse8Icon", "MoistureUpset.Resources.e8.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse1Icon.png", "MoistureUpset.Resources.e1.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse2Icon.png", "MoistureUpset.Resources.e2.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse3Icon.png", "MoistureUpset.Resources.e3.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse4Icon.png", "MoistureUpset.Resources.e4.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse5Icon.png", "MoistureUpset.Resources.e5.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse6Icon.png", "MoistureUpset.Resources.e6.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse7Icon.png", "MoistureUpset.Resources.e7.png");
+                UImods.ReplaceUIBetter("RoR2/Base/EclipseRun/texDifficultyEclipse8Icon.png", "MoistureUpset.Resources.e8.png");
             }
 
-            if (BigJank.getOptionValue("Pizza Roll", "UI Changes"))
-            {
-                byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.pizzaroll.png");
-                var r = Resources.LoadAll<GameObject>("prefabs/ui");
-                foreach (var sex in r)
-                {
-                    foreach (var item in sex.GetComponentsInChildren<UnityEngine.UI.Image>())
-                    {
-                        try
-                        {
-                            //Debug.Log($"89-------{item.name}");
-                            if (item.name == "Checkbox")
-                            {
-                                item.overrideSprite.texture.LoadImage(bytes);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
+            DebugClass.Log($"----------FIX LATER");
+            //if (BigJank.getOptionValue("Pizza Roll"))
+            //{
+            //    byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.pizzaroll.png");
+            //    var r = Assets.LoadAll<GameObject>("prefabs/ui");
+            //    foreach (var sex in r)
+            //    {
+            //        foreach (var item in sex.GetComponentsInChildren<UnityEngine.UI.Image>())
+            //        {
+            //            try
+            //            {
+            //                //Debug.Log($"89-------{item.name}");
+            //                if (item.name == "Checkbox")
+            //                {
+            //                    item.overrideSprite.texture.LoadImage(bytes);
+            //                }
+            //            }
+            //            catch (Exception)
+            //            {
+            //            }
 
-                    }
-                }
-            }
+            //        }
+            //    }
+            //}
         }
         public static void PlayerDeath()
         {
-            if (BigJank.getOptionValue("Player death chat", "Misc"))
+            if (BigJank.getOptionValue(Settings.PlayerDeathChat))
                 On.RoR2.GlobalEventManager.OnPlayerCharacterDeath += (orig, self, report, user) =>
             {
                 orig(self, report, user);
@@ -120,7 +123,7 @@ namespace MoistureUpset
                         return;
                     }
                     List<string> quotes = new List<string> { "I wasn't even trying", "If ya'll would help me I wouldn't have died...", "Nice one hit protection game", "HOW DID I DIE?????", "The first game was better", "Whatever", "Yeah alright, thats cool" };
-                    if (BigJank.getOptionValue("NSFW", "Misc"))
+                    if (BigJank.getOptionValue(Settings.NSFW))
                     {
                         quotes.Add("I fucking hate this game");
                     }
@@ -171,32 +174,51 @@ namespace MoistureUpset
         }
         public static void PreGame()
         {
-            On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
+            //On.RoR2.UI.PregameCharacterSelection.Awake += (orig, self) =>
+            //{
+            //    orig(self);
+            //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+            //};
+            On.RoR2.Inventory.GiveItem_ItemIndex_int += (orig, self, index, count) => //FIX WHEN PULL
             {
-                orig(self);
+                orig(self, index, count);
+                if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                }
+                else
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                }
+            };
+            On.RoR2.UI.CharacterSelectController.Awake += (orig, self) =>
+            {
                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
+                orig(self);
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                BigToasterClass.HitMarker(BigJank.getOptionValue(Settings.HitMarkerVolume));
+                BigToasterClass.Modded_MSX(BigJank.getOptionValue(Settings.ModdedMusicVolume));
+                BigToasterClass.Modded_SFX(BigJank.getOptionValue(Settings.ModdedSFXVolume));
                 brother = 0;
-                var sugondeez = Resources.Load<RoR2.InteractableSpawnCard>("spawncards/interactablespawncard/iscChest1");
+                var sugondeez = Addressables.LoadAssetAsync<RoR2.InteractableSpawnCard>("RoR2/Base/Chest1/iscChest1.asset").WaitForCompletion();
                 if (sugondeez.prefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.name != "smallchest")
                 {
-                    //Debug.Log($"--------reloading chests");
                     InteractReplacements.Interactables.ReloadChests();
                 }
 
                 EnemyReplacements.kindlyKillYourselfRune = true;
                 AkSoundEngine.SetRTPCValue("Dicks", 0);
-                if (BigJank.getOptionValue("Nyan Cat", "Enemy Skins"))
+                if (BigJank.getOptionValue(Settings.NyanCat))
                 {
-                    var fab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/BeetleWard");
-                    fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");
-                    fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].material = Resources.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.mat");
+                    var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Beetle/BeetleWard.prefab").WaitForCompletion();
+                    fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_beetlequeen:assets/bosses/Poptart.mesh");
+                    fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].material = Assets.Load<Material>("@MoistureUpset_beetlequeen:assets/bosses/nyancat.mat");
                 }
-                if (BigJank.getOptionValue("Taco Bell", "Enemy Skins"))
+                if (BigJank.getOptionValue(Settings.TacoBell))
                     EnemyReplacements.ReplaceMeshRenderer(EntityStates.Bell.BellWeapon.ChargeTrioBomb.preppedBombPrefab, "@MoistureUpset_tacobell:assets/toco.mesh", "@MoistureUpset_tacobell:assets/toco.png");
-                if (BigJank.getOptionValue("Toad", "Enemy Skins"))
+                if (BigJank.getOptionValue(Settings.Toad))
                 {
                     EnemyReplacements.ReplaceParticleSystemmesh(EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab, "@MoistureUpset_toad1:assets/toadbombfull.mesh", 1);
                     var skin = EntityStates.MiniMushroom.SporeGrenade.chargeEffectPrefab.GetComponentsInChildren<ParticleSystemRenderer>()[1];
@@ -209,10 +231,11 @@ namespace MoistureUpset
                     skin.sharedMaterial.renderQueue = 3000;
                 }
 
-                if (BigJank.getOptionValue("Roblox Titan", "Enemy Skins"))
-                    EnemyReplacements.ReplaceTexture("prefabs/characterbodies/TitanBody", "@MoistureUpset_roblox:assets/robloxtitan.png");
-                if (BigJank.getOptionValue("Sans", "Enemy Skins"))
+                if (BigJank.getOptionValue(Settings.RobloxTitan))
+                    EnemyReplacements.ReplaceTexture("RoR2/Base/Titan/TitanBody.prefab", "@MoistureUpset_roblox:assets/robloxtitan.png");
+                if (BigJank.getOptionValue(Settings.Sans))
                     EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
+                StopBossMusic(new UInt32[] { 2369706651, 2369706649, 2369706648, 2369706654 });
                 StopBossMusic(new UInt32[] { 311764514, 405315856, 829504566, 1557982612, 4106775434 });
                 StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 454706293, 541788247 });
                 orig(oldS, newS);
@@ -224,14 +247,27 @@ namespace MoistureUpset
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 0f);
                             break;
                         case "title":
-                            if (BigJank.getOptionValue("Shreks outhouse", "Misc"))
+                            if (BigJank.getOptionValue(Settings.Interactables))
+                            {
+                                GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                                foreach (var fab in objects)
+                                {
+                                    if (fab.ToString().StartsWith("mdlChest1"))
+                                    {
+                                        EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
+                                        fab.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Assets.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
+                                        fab.AddComponent<NewSplatSystemRemover>();
+                                    }
+                                }
+                            }
+                            if (BigJank.getOptionValue(Settings.ShreksOuthouse))
                             {
                                 GameObject pod = GameObject.Find("SurvivorPod");
-                                pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shreklet.mesh");
+                                pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_shreklet:assets/shreklet.mesh");
                                 pod = GameObject.Find("EscapePodDoorMesh");
-                                pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shrekletdoor.mesh");
+                                pod.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_shreklet:assets/shrekletdoor.mesh");
                             }
-                            if (BigJank.getOptionValue("Main menu music", "Audio"))
+                            if (BigJank.getOptionValue(Settings.MainMenuMusic))
                                 AkSoundEngine.PostEvent("PlayMainMenu", GameObject.FindObjectOfType<GameObject>());
                             AkSoundEngine.SetRTPCValue("MainMenuMusic", 1);
                             AkSoundEngine.SetRTPCValue("LobbyActivated", 1);
@@ -273,13 +309,13 @@ namespace MoistureUpset
                 //muMenu
                 orig(self);
                 var c = GameObject.FindObjectOfType<MusicController>();
-                if (BigJank.getOptionValue("Replace Intro Scene", "UI Changes"))
+                if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
                 {
                     MusicAPI.StopSong(ref c, "muIntroCutscene");
                 }
-                if (BigJank.getOptionValue("Logo", "UI Changes"))
+                if (BigJank.getOptionValue(Settings.Logo))
                     UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png");
-                if (BigJank.getOptionValue("Roblox Cursor", "UI Changes"))
+                if (BigJank.getOptionValue(Settings.RobloxCursor))
                 {
                     UImods.ReplaceUIObject("MousePointer", "MoistureUpset.Resources.robloxhover.png");
                     UImods.ReplaceUIObject("MouseHover", "MoistureUpset.Resources.roblox.png");
@@ -288,7 +324,7 @@ namespace MoistureUpset
                 {
                     string song = self.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
 
-                    if (BigJank.getOptionValue("Main menu music", "Audio"))
+                    if (BigJank.getOptionValue(Settings.MainMenuMusic))
                         if (song == "muMenu" || song == "muLogbook")
                         {
                             self.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
@@ -297,12 +333,12 @@ namespace MoistureUpset
                     //muFULLSong07
                     //muFULLSong18
                     //muSong04
-                    if (BigJank.getOptionValue("Merchant", "Enemy Skins"))
+                    if (BigJank.getOptionValue(Settings.Merchant))
                         if (MusicAPI.ReplaceSong(ref self, "muSong04", "PlayShopMusic"))
                         {
                             AkSoundEngine.SetRTPCValue("BossDead", 0f);
                         }
-                    if (BigJank.getOptionValue("Creative Void Zone", "Audio"))
+                    if (BigJank.getOptionValue(Settings.CreativeVoidZone))
                         if (MusicAPI.ReplaceSong(ref self, "muSong08", "Play_Dicks"))
                         {
                             AkSoundEngine.SetRTPCValue("BossDead", 0f);
@@ -321,7 +357,7 @@ namespace MoistureUpset
                     StopBossMusic(new UInt32[] { 311764514, 405315856, 829504566, 1557982612, 4106775434 });
                     StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 1214003200, 541788247 });
                     var c = GameObject.FindObjectOfType<Transform>();
-                    if (BigJank.getOptionValue("Imposter", "Enemy Skins"))
+                    if (BigJank.getOptionValue(Settings.Imposter))
                     {
                         var cs = GameObject.FindObjectsOfType<RoR2.CharacterMaster>();
                         foreach (var item in cs)
@@ -336,12 +372,12 @@ namespace MoistureUpset
                             }
                         }
                     }
-                    if (BigJank.getOptionValue("End of game music", "Audio"))
+                    if (BigJank.getOptionValue(Settings.EndOfGameMusic))
                         if (report.gameEnding.ToString() == "StandardLoss (RoR2.GameEndingDef)")
                         {
                             AkSoundEngine.PostEvent("Defeat", c.gameObject);
                         }
-                    if (BigJank.getOptionValue("Imposter", "Enemy Skins"))
+                    if (BigJank.getOptionValue(Settings.Imposter))
                         if (report.gameEnding.ToString() == "LimboEnding (RoR2.GameEndingDef)")
                         {
                             AkSoundEngine.PostEvent("ScavVictory", c.gameObject);
@@ -375,7 +411,7 @@ namespace MoistureUpset
             //    }
             //    return orig(self, index);
             //};
-            if (BigJank.getOptionValue("Logo", "UI Changes"))
+            if (BigJank.getOptionValue(Settings.Logo))
                 On.RoR2.CreditsController.OnEnable += (orig, self) =>
             {
                 orig(self);
@@ -384,9 +420,9 @@ namespace MoistureUpset
             On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) => //optimize?
             {
                 orig(self);
-                if (BigJank.getOptionValue("Logo", "UI Changes"))
+                if (BigJank.getOptionValue(Settings.Logo))
                     UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png");
-                if (BigJank.getOptionValue("Roblox Cursor", "UI Changes"))
+                if (BigJank.getOptionValue(Settings.RobloxCursor))
                 {
                     UImods.ReplaceUIObject("MousePointer", "MoistureUpset.Resources.robloxhover.png");
                     UImods.ReplaceUIObject("MouseHover", "MoistureUpset.Resources.roblox.png");
@@ -458,159 +494,165 @@ namespace MoistureUpset
             On.EntityStates.Missions.BrotherEncounter.PreEncounter.OnEnter += (orig, self) =>
             {
                 orig(self);
-                if ((BigJank.getOptionValue("Thanos", "Enemy Skins") != true))
+                if (!(BigJank.getOptionValue(Settings.Thanos)))
                     return;
                 StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                 var c = GameObject.FindObjectOfType<MusicController>();
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref c, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);
+                AkSoundEngine.PostEvent("Thanos1", mainBody.gameObject);//FIX WHEN PULL
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
-                try
+                if (self.baseNameToken == "COMMANDO_BODY_NAME" || self.baseNameToken == "MERC_BODY_NAME" || self.baseNameToken == "ENGI_BODY_NAME" || self.baseNameToken == "HUNTRESS_BODY_NAME" || self.baseNameToken == "MAGE_BODY_NAME" || self.baseNameToken == "TOOLBOT_BODY_NAME" || self.baseNameToken == "TREEBOT_BODY_NAME" || self.baseNameToken == "LOADER_BODY_NAME" || self.baseNameToken == "CROCO_BODY_NAME" || self.baseNameToken == "CAPTAIN_BODY_NAME" || self.baseNameToken == "BANDIT2_BODY_NAME" || self.baseNameToken == "HERETIC_BODY_NAME" || self.baseNameToken == "RAILGUNNER_BODY_NAME" || self.baseNameToken == "VOIDSURVIVOR_BODY_NAME" || self.baseNameToken == "VOIDRAIDCRAB_BODY_NAME")
                 {
-                    if (self.baseNameToken == "COMMANDO_BODY_NAME" || self.baseNameToken == "MERC_BODY_NAME" || self.baseNameToken == "ENGI_BODY_NAME" || self.baseNameToken == "HUNTRESS_BODY_NAME" || self.baseNameToken == "MAGE_BODY_NAME" || self.baseNameToken == "TOOLBOT_BODY_NAME" || self.baseNameToken == "TREEBOT_BODY_NAME" || self.baseNameToken == "LOADER_BODY_NAME" || self.baseNameToken == "CROCO_BODY_NAME" || self.baseNameToken == "CAPTAIN_BODY_NAME")
-                    {
-                        return orig(self);
-                    }
-                    if (self.master && self.master.isBoss)
-                    {
-                        var c = GameObject.FindObjectOfType<MusicController>();
-                        bool resetThanos = true;
-                        var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
-                        bool stop = false;
-                        StopBossMusic(new UInt32[] { 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
-                        if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (BigJank.getOptionValue("Sans", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "ARTIFACTSHELL_BODY_NAME" && (BigJank.getOptionValue("Cereal", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("ArtifactIntro", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue("Obama Prism", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlayObama", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue("Obama Prism", "Enemy Skins")))
-                        {
-
-                        }
-                        else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (BigJank.getOptionValue("Alex Jones", "Enemy Skins")))
-                        {
-
-                        }
-                        else if (self.baseNameToken.StartsWith("SCAVLUNAR") && (BigJank.getOptionValue("Imposter", "Enemy Skins")))
-                        {
-
-                        }
-                        else if (self.baseNameToken.StartsWith("DIRESEEKER_BOSS_BODY_NAME") && (BigJank.getOptionValue("DireSeeker", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("DireSeekerMusic", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME"))
-                        {
-                            if ((BigJank.getOptionValue("Thanos", "Enemy Skins")))
-                            {
-                                resetThanos = false;
-                                brother++;
-                                MusicAPI.StopSong(ref c, "muSong25");
-                                switch (brother)
-                                {
-                                    case 1:
-                                        break;
-                                    case 2:
-                                        AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
-                                        AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);
-                                        break;
-                                    case 3:
-                                        AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);
-                                        break;
-                                    case 4:
-                                        AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                stop = true;
-                            }
-                        }
-                        else if (self.baseNameToken == "ELECTRICWORM_BODY_NAME" && (BigJank.getOptionValue("Squirmles", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlaySquirmles", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "GRAVEKEEPER_BODY_NAME" && (BigJank.getOptionValue("Twitch", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlayTwitch", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "BEETLEQUEEN_BODY_NAME" && (BigJank.getOptionValue("Nyan Cat", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlayNyan", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "VAGRANT_BODY_NAME" && (BigJank.getOptionValue("WanderingAtEveryone", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlayDiscord", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "CLAYBOSS_BODY_NAME" && (BigJank.getOptionValue("Giga Puddi", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlayPudi", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "MAGMAWORM_BODY_NAME" && (BigJank.getOptionValue("Pool Noodle", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("PlayNoodle", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue("Roblox Titan", "Enemy Skins")))
-                        {
-                            AkSoundEngine.PostEvent("RobloxMusic", mainBody.gameObject);
-                            stop = true;
-                        }
-                        else if (BigJank.getOptionValue("Generic boss music", "Enemy Skins"))
-                        {
-                            AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
-                            stop = true;
-                        }
-                        if (resetThanos)
-                        {
-                            brother = 0;
-                            AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
-                        }
-                        try
-                        {
-                            if (stop)
-                            {
-                                //muEscape
-                                //muSong25
-                                //muSong05
-                                MusicAPI.StopSong(ref c, "muSong05");
-                                MusicAPI.StopSong(ref c, "muSong23");
-                                MusicAPI.StopSong(ref c, "muSong13");
-                                //MusicAPI.GetCurrentSong(ref c);
-                                //AkSoundEngine.exec
-                                AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                                var con = GameObject.FindObjectOfType<MusicController>();
-                                MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
+                    return orig(self);
                 }
-                catch (Exception)
+                if (self.master && self.master.isBoss)
                 {
+                    var c = GameObject.FindObjectOfType<MusicController>();
+                    bool resetThanos = true;
+                    var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+                    bool stop = false;
+                    StopBossMusic(new UInt32[] { 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
+                    if (self.baseNameToken == "IMPBOSS_BODY_NAME" && (BigJank.getOptionValue(Settings.Sans)))
+                    {
+                        AkSoundEngine.PostEvent("PlaySans", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "ARTIFACTSHELL_BODY_NAME" && (BigJank.getOptionValue(Settings.Cereal)))
+                    {
+                        AkSoundEngine.PostEvent("ArtifactIntro", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "ROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue(Settings.ObamaPrism)))
+                    {
+                        AkSoundEngine.PostEvent("PlayObama", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "SUPERROBOBALLBOSS_BODY_NAME" && (BigJank.getOptionValue(Settings.ObamaPrism)))
+                    {
 
+                    }
+                    else if (self.baseNameToken == "TITANGOLD_BODY_NAME" && (BigJank.getOptionValue(Settings.AlexJones)))
+                    {
+
+                    }
+                    else if (self.baseNameToken.StartsWith("SCAVLUNAR") && (BigJank.getOptionValue(Settings.Imposter)))
+                    {
+
+                    }
+                    else if (self.baseNameToken.StartsWith("DIRESEEKER_BOSS_BODY_NAME") && (BigJank.getOptionValue(Settings.DireSeeker)))
+                    {
+                        AkSoundEngine.PostEvent("DireSeekerMusic", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME") || self.baseNameToken == "LUNAREXPLODER_BODY_NAME")
+                    {
+                        if ((BigJank.getOptionValue(Settings.Thanos)))
+                        {
+                            resetThanos = false;
+                            brother++;
+                            DebugClass.Log($"----------{brother}");
+                            MusicAPI.StopSong(ref c, "muSong25");
+                            switch (brother)
+                            {
+                                case 1:
+                                    break;
+                                case 2:
+                                    AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    AkSoundEngine.ExecuteActionOnEvent(2369706651, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    AkSoundEngine.PostEvent("Thanos2", mainBody.gameObject);//FIX WHEN PULL
+                                    break;
+                                case 3:
+                                    AkSoundEngine.ExecuteActionOnEvent(2369706648, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    //2369706648
+                                    AkSoundEngine.PostEvent("Thanos3", mainBody.gameObject);//FIX WHEN PULL
+                                    break;
+                                case 4:
+                                    AkSoundEngine.ExecuteActionOnEvent(2369706649, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    //2369706649
+                                    AkSoundEngine.PostEvent("Thanos4", mainBody.gameObject);//FIX WHEN PULL
+                                    //2369706651
+                                    //2369706649
+                                    //2369706648
+                                    //2369706654
+                                    break;
+                                default:
+                                    break;
+                            }
+                            stop = true;
+                        }
+                    }
+                    else if (self.baseNameToken == "ELECTRICWORM_BODY_NAME" && (BigJank.getOptionValue(Settings.Squirmles)))
+                    {
+                        AkSoundEngine.PostEvent("PlaySquirmles", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "GRAVEKEEPER_BODY_NAME" && (BigJank.getOptionValue(Settings.Twitch)))
+                    {
+                        AkSoundEngine.PostEvent("PlayTwitch", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "BEETLEQUEEN_BODY_NAME" && (BigJank.getOptionValue(Settings.NyanCat)))
+                    {
+                        AkSoundEngine.PostEvent("PlayNyan", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "VAGRANT_BODY_NAME" && (BigJank.getOptionValue(Settings.WanderingAtEveryone)))
+                    {
+                        AkSoundEngine.PostEvent("PlayDiscord", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "CLAYBOSS_BODY_NAME" && (BigJank.getOptionValue(Settings.GigaPuddi)))
+                    {
+                        AkSoundEngine.PostEvent("PlayPudi", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "MAGMAWORM_BODY_NAME" && (BigJank.getOptionValue(Settings.PoolNoodle)))
+                    {
+                        AkSoundEngine.PostEvent("PlayNoodle", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue(Settings.RobloxTitan)))
+                    {
+                        AkSoundEngine.PostEvent("RobloxMusic", mainBody.gameObject);
+                        stop = true;
+                    }
+                    else if (BigJank.getOptionValue(Settings.GenericBossMusic))
+                    {
+                        AkSoundEngine.PostEvent("PlayBossMusic", mainBody.gameObject);
+                        stop = true;
+                    }
+                    if (resetThanos)
+                    {
+                        brother = 0;
+                        AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
+                    }
+                    try
+                    {
+                        if (stop)
+                        {
+                            //muEscape
+                            //muSong25
+                            //muSong05
+                            //MusicAPI.GetCurrentSong(ref c);
+                            //muBossfightDLC1_10
+                            //MusicAPI.StopSong(ref c, "muSong05");
+                            //MusicAPI.StopSong(ref c, "muSong23");
+                            //MusicAPI.StopSong(ref c, "muSong13");
+                            MusicAPI.StopSong(ref c, c.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName);
+                            //MusicAPI.GetCurrentSong(ref c);
+                            //AkSoundEngine.exec
+                            AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
+                            var con = GameObject.FindObjectOfType<MusicController>();
+                            MusicAPI.StopCustomSong(ref con, "StopLevelMusic");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
                 return orig(self);
             };
@@ -674,10 +716,10 @@ namespace MoistureUpset
                 catch (Exception)
                 {
                 }
-                if (tracker.ToString() == "RoR2.UI.ObjectivePanelController+FindTeleporterObjectiveTracker")
+                if (tracker.ToString() == "RoR2.UI.ObjectivePanelController+FindTeleporterObjectiveTracker" || tracker.ToString() == "RoR2.UI.ObjectivePanelController+ActivateGoldshoreBeaconTracker")
                     try
                     {
-                        if (BigJank.getOptionValue("Interactables", "Interactables"))
+                        if (BigJank.getOptionValue(Settings.Interactables))
                         {
                             GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
                             foreach (var fab in objects)
@@ -686,10 +728,10 @@ namespace MoistureUpset
                                 {
                                     if (!InteractReplacements.Interactables.particles)
                                     {
-                                        InteractReplacements.Interactables.particles = Resources.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
+                                        InteractReplacements.Interactables.particles = Assets.Load<GameObject>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/particles.prefab");
                                     }
                                     EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/goldchest.png");
-                                    fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Resources.Load<GameObject>("prefabs/networkedobjects/chest/Chest2").GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
+                                    fab.GetComponentInChildren<SkinnedMeshRenderer>().material.shader = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Chest2/Chest2.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
                                     fab.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture.filterMode = FilterMode.Point;
                                     fab.GetComponentInChildren<ParticleSystem>().maxParticles = 0;
                                     fab.GetComponentInChildren<SfxLocator>().openSound = "GoldChest";
@@ -698,23 +740,29 @@ namespace MoistureUpset
                                     obj.transform.SetParent(fab.transform);
                                     obj.transform.localPosition = Vector3.zero;
                                 }
+                                else if (fab.ToString().StartsWith("mdlChest1"))
+                                {
+                                    EnemyReplacements.ReplaceModel(fab, "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.mesh", "@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchest.png");
+                                    fab.GetComponentInChildren<SkinnedMeshRenderer>().material.SetTexture("_SplatmapTex", Assets.Load<Texture>("@MoistureUpset_moisture_chests:assets/arbitraryfolder/smallchestsplat.png"));
+                                    fab.AddComponent<NewSplatSystemRemover>();
+                                }
                                 else if (fab.ToString().StartsWith("NewtStatue"))
                                 {
-                                    if (BigJank.getOptionValue("Currency Changes", "UI Changes") && fab.GetComponentsInChildren<Fixers.robloxfixer>().Length == 0)
+                                    if (BigJank.getOptionValue(Settings.CurrencyChanges) && fab.GetComponentsInChildren<Fixers.robloxfixer>().Length == 0)
                                     {
                                         int num = UnityEngine.Random.Range(0, 3);
                                         GameObject g;
                                         if (num == 0)
                                         {
-                                            g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab"));
+                                            g = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/atoasteroven.prefab"));
                                         }
                                         else if (num == 1)
                                         {
-                                            g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/kevinaltar.prefab"));
+                                            g = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/kevinaltar.prefab"));
                                         }
                                         else
                                         {
-                                            g = GameObject.Instantiate(Resources.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/RuneMasterGaming580808080808080ADHD.prefab"));
+                                            g = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_newtaltar:assets/testing/RuneMasterGaming580808080808080ADHD.prefab"));
                                         }
                                         g.transform.parent = fab.transform;
                                         g.transform.localPosition = new Vector3(0, -1.15f, 0);
@@ -763,7 +811,7 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                     AkSoundEngine.PostEvent("StopFanFare", c.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    if (BigJank.getOptionValue("Fanfare", "Audio"))
+                    if (BigJank.getOptionValue(Settings.Fanfare))
                         AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
                     MLG.bossOver = true;
                 }
@@ -774,7 +822,7 @@ namespace MoistureUpset
         }
         public static void Somebody()
         {
-            if (BigJank.getOptionValue("Shreks outhouse", "Misc"))
+            if (BigJank.getOptionValue(Settings.ShreksOuthouse))
             {
                 On.EntityStates.SurvivorPod.PreRelease.OnEnter += (orig, self) =>
                 {
@@ -797,13 +845,21 @@ namespace MoistureUpset
                     AkSoundEngine.PostEvent("SomebodyStop", self.outer.gameObject);
                 };
                 EnemyReplacements.LoadResource("shreklet");
-                foreach (var item in Resources.Load<GameObject>("prefabs/networkedobjects/SurvivorPod").GetComponentsInChildren<ChildLocator>())
+                foreach (var item in Addressables.LoadAssetAsync<GameObject>("RoR2/Base/SurvivorPod/SurvivorPod.prefab").WaitForCompletion().GetComponentsInChildren<ChildLocator>())
                 {
-                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_shreklet:assets/shrekletdoorphysics.mesh");
-                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshRenderer>()[1].sharedMaterial.mainTexture = Resources.Load<Texture>("@MoistureUpset_shreklet:assets/shreklet.png");
+                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_shreklet:assets/shrekletdoorphysics.mesh");
+                    item.FindChild("ReleaseExhaustFX").gameObject.GetComponentsInChildren<MeshRenderer>()[1].sharedMaterial.mainTexture = Assets.Load<Texture>("@MoistureUpset_shreklet:assets/shreklet.png");
                 }
-                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_shreklet:assets/shreklet.mesh", "@MoistureUpset_shreklet:assets/shreklet.png", 1);
-                EnemyReplacements.ReplaceMeshFilter("prefabs/networkedobjects/SurvivorPod", "@MoistureUpset_shreklet:assets/shrekletdoor.mesh", "@MoistureUpset_shreklet:assets/shreklet.png", 0);
+                EnemyReplacements.ReplaceMeshFilter("RoR2/Base/SurvivorPod/SurvivorPod.prefab", "@MoistureUpset_shreklet:assets/shreklet.mesh", "@MoistureUpset_shreklet:assets/shreklet.png", 1);
+                EnemyReplacements.ReplaceMeshFilter("RoR2/Base/SurvivorPod/SurvivorPod.prefab", "@MoistureUpset_shreklet:assets/shrekletdoor.mesh", "@MoistureUpset_shreklet:assets/shreklet.png", 0);
+                var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/SurvivorPod/SurvivorPod.prefab").WaitForCompletion();
+                var renderers = fab.GetComponentsInChildren<Renderer>();
+                renderers[1].sharedMaterials[0].SetTexture("_GreenChannelTex", RandomTwitch.blank);
+                renderers[1].sharedMaterials[0].SetTexture("_BlueChannelTex", RandomTwitch.blank);
+                renderers[1].sharedMaterials[0].SetTexture("_EmTex", RandomTwitch.blank);
+                renderers[0].sharedMaterials[0].SetTexture("_GreenChannelTex", RandomTwitch.blank);
+                renderers[0].sharedMaterials[0].SetTexture("_BlueChannelTex", RandomTwitch.blank);
+                renderers[0].sharedMaterials[0].SetTexture("_EmTex", RandomTwitch.blank);
             }
         }
         public static void BossMusic()
@@ -812,7 +868,7 @@ namespace MoistureUpset
             {
                 orig();
                 //RoR2.WwiseUtils.CommonWwiseIds.bossfight = AkSoundEngine.GetIDFromString("ooflongestloop");
-                if (BigJank.getOptionValue("Generic boss music", "Audio"))
+                if (BigJank.getOptionValue(Settings.GenericBossMusic))
                     try
                     {
 

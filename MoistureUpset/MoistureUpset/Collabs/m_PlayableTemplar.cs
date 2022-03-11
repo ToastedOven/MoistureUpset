@@ -32,7 +32,7 @@ namespace MoistureUpset.Collabs
             {
                 if (i != 0 && i != 1)
                 {
-                    meshes[i].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na.mesh");
+                    meshes[i].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na.mesh");
                 }
             }
             meshes = t.GetFieldValue<PlayableTemplar.PlayableTemplar>("instance").characterDisplay.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -40,7 +40,7 @@ namespace MoistureUpset.Collabs
             {
                 if (i != 0 && i != 1)
                 {
-                    meshes[i].sharedMesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na.mesh");
+                    meshes[i].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na.mesh");
                 }
             }
         }

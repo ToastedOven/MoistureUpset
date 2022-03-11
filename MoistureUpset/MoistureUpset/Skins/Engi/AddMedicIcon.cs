@@ -12,7 +12,7 @@ namespace MoistureUpset.Skins.Engi
 
         void Start()
         {
-            GameObject MedicIconPrefab = Resources.Load<GameObject>("@MoistureUpset_Resources_medic:assets/misc/medic.prefab");
+            GameObject MedicIconPrefab = Assets.Load<GameObject>("@MoistureUpset_Resources_medic:assets/misc/medic.prefab");
 
             MedicIcon = Instantiate<GameObject>(MedicIconPrefab, GetComponent<ModelLocator>().modelTransform.GetComponent<ChildLocator>().FindChild("Base"));
 

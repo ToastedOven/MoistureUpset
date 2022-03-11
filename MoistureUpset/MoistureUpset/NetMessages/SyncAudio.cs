@@ -42,9 +42,9 @@ namespace MoistureUpset.NetMessages
         {
             if ((!doMinecraftOofSound && soundId == "MinecraftHurt") || (doShrineSound && (soundId == "ChanceFailure" || soundId == "ChanceSuccess")))
                 return;
-            if (soundId == "NoodleSplash" && BigJank.getOptionValue("Pool Noodle", "Enemy Skins") != true)
+            if (soundId == "NoodleSplash" && !BigJank.getOptionValue(Settings.PoolNoodle))
                 return;
-            else if (soundId == "JellyDetonate" && BigJank.getOptionValue("Comedy", "Enemy Skins") != true)
+            else if (soundId == "JellyDetonate" && !BigJank.getOptionValue(Settings.Comedy))
                 return;
             GameObject bodyObject = Util.FindNetworkObject(netId);
             if (!bodyObject)

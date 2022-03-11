@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset.Skins
 {
@@ -21,7 +22,7 @@ namespace MoistureUpset.Skins
         {
             PopulateAssets();
 
-            Utils.AddSkin("CaptainBody", CaptainSkin);
+            SkinManager.AddSkin("CaptainBody", CaptainSkin);
 
             AddToPrefab();
             CaptainDisplayFix();
@@ -30,8 +31,8 @@ namespace MoistureUpset.Skins
         // Load assets here
         private static void PopulateAssets()
         {
-            Utils.LoadAsset("Skins.Jotaro.jotarosubtitle");
-            Utils.LoadAsset("Skins.Jotaro.jotaro");
+            Assets.AddBundle("Skins.Jotaro.jotarosubtitle");
+            Assets.AddBundle("Skins.Jotaro.jotaro");
         }
 
         // Skindef stuff here
@@ -54,14 +55,14 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Assets.CreateMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.png"),
+                        defaultMaterial = Assets.LoadMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.png"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[0]
                     },
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Assets.CreateMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotarohurt.png"),
+                        defaultMaterial = Assets.LoadMaterial("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotarohurt.png"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[2]
@@ -72,42 +73,42 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"),
                         renderer = renderers[0]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
                         renderer = renderers[1]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"), // We use this skinnedmeshrenderer to be the hurt jotaro.
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_Skins_Jotaro_jotaro:assets/jotaro/jotaro.mesh"), // We use this skinnedmeshrenderer to be the hurt jotaro.
                         renderer = renderers[2]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
                         renderer = renderers[3]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
                         renderer = renderers[4]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
                         renderer = renderers[5]
                     },
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Resources.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
+                        mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh"),
                         renderer = renderers[6]
                     }
                 },
-                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
-                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
+                ProjectileGhostReplacements = Array.Empty<SkinDef.ProjectileGhostReplacement>(),
+                MinionSkinReplacements = Array.Empty<SkinDef.MinionSkinReplacement>()
             };
 
             Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
@@ -118,10 +119,12 @@ namespace MoistureUpset.Skins
             return skinController.skins;
         }
 
+        
+       
 
         private static void CaptainDisplayFix()
         {
-            var fab = Resources.Load<GameObject>("prefabs/characterdisplays/CaptainDisplay");
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Captain/CaptainDisplay.prefab").WaitForCompletion();
 
             fab.AddComponent<Jotaro.JotaroDisplayFix>(); // To fix the models not swapping back on skin change.
         }
@@ -129,7 +132,7 @@ namespace MoistureUpset.Skins
         // Add stuff to the character prefab here
         private static void AddToPrefab()
         {
-            GameObject captainBody = Resources.Load<GameObject>("prefabs/characterbodies/captainbody"); // load captain prefab
+            GameObject captainBody = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Captain/CaptainBody.prefab").WaitForCompletion(); // load captain prefab
             captainBody.AddComponent<Jotaro.AddSubtitleBar>(); // add a script that will load the subtitle bar
             captainBody.AddComponent<Jotaro.SubtitleController>();
             captainBody.AddComponent<Jotaro.JotaroHurt>();

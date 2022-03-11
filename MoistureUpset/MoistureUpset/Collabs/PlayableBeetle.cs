@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
 using Chip;
+using RoR2.ContentManagement;
 
 namespace MoistureUpset.Collabs
 {
@@ -22,12 +23,12 @@ namespace MoistureUpset.Collabs
         public static void Run()
         {
             Chip.Beetlegod beetlegod = new Beetlegod();
-            foreach (var item in SurvivorAPI.SurvivorDefinitions)
+            foreach (var item in ContentManager.survivorDefs)
             {
                 if (item.bodyPrefab.name == "Chip")
                 {
-                    item.bodyPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
-                    item.displayPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Resources.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
+                    item.bodyPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Assets.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
+                    item.displayPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Assets.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
 
                     List<Transform> t = new List<Transform>();
                     foreach (var boner in item.bodyPrefab.GetComponentsInChildren<Transform>())
