@@ -228,7 +228,7 @@ namespace MoistureUpset
         bool active = false;
         void Start()
         {
-            active = BigJank.getOptionValue("MLG Mode", "Misc");
+            active = BigJank.getOptionValue(Settings.MLGMode);
             if (active)
             {
                 Hooks();
