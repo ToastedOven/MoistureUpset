@@ -400,6 +400,7 @@ namespace MoistureUpset
                     }
                     if (newS.name != "moon2")
                     {
+                        On.RoR2.Run.FixedUpdate -= HoldoutZoneController_FixedUpdate;
                         On.RoR2.Run.FixedUpdate -= Run_FixedUpdate;
                     }
                     charPosition = null;
@@ -592,7 +593,19 @@ namespace MoistureUpset
             NetworkServer.Spawn(gameObject);
             shouldSpawn = false;
         }
-
+        private void HoldoutZoneController_FixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
+        {
+            float num = Time.fixedDeltaTime * dist;
+            if (NetworkServer.active)
+            {
+                Time.fixedDeltaTime -= num;
+            }
+            orig(self);
+            if (NetworkServer.active)
+            {
+                Time.fixedDeltaTime += num;
+            }
+        }
         private void Run_FixedUpdate(On.RoR2.Run.orig_FixedUpdate orig, Run self)
         {
             orig(self);
