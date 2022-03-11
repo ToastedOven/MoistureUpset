@@ -1553,7 +1553,7 @@ namespace MoistureUpset
                         {
                             num = 800;
                         }
-                        AkSoundEngine.SetRTPCValue("DistanceToBonzi", num);
+                        //AkSoundEngine.SetRTPCValue("DistanceToBonzi", num); FIX WHEN PULL
                         foreach (var item in Camera.allCameras)
                         {
                             var glitch = item.GetComponent<GlitchEffect>();

@@ -344,7 +344,6 @@ namespace MoistureUpset
                 Nyan();
                 Imposter();
                 Collab();
-                DebugClass.Log($"----------enemies done");
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -430,8 +429,15 @@ namespace MoistureUpset
         }
         private static void NonEnemyNames()
         {
+            //StringBuilder s = new StringBuilder();
+            //On.RoR2.Run.Start += (orig, self) =>
+            //{
+            //    File.WriteAllText("CandiceDickFitInYourMouth.txt", s.ToString());
+            //    orig(self);
+            //};
             On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
             {
+                //s.Append($"[{token}]    [{st}]" + '\n');
                 if (BigJank.getOptionValue(Settings.NSFW) && BigJank.getOptionValue(Settings.DifficultyNames))
                 {
                     if (st == "Drizzle")

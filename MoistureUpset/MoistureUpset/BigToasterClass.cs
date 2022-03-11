@@ -223,6 +223,7 @@ namespace MoistureUpset
                     EnemyReplacements.ReplaceTexture("RoR2/Base/Titan/TitanBody.prefab", "@MoistureUpset_roblox:assets/robloxtitan.png");
                 if (BigJank.getOptionValue(Settings.Sans))
                     EntityStates.ImpBossMonster.GroundPound.slamEffectPrefab.GetComponentInChildren<ParticleSystemRenderer>().mesh = null;
+                StopBossMusic(new UInt32[] { 2369706651, 2369706649, 2369706648, 2369706654 });
                 StopBossMusic(new UInt32[] { 311764514, 405315856, 829504566, 1557982612, 4106775434 });
                 StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 454706293, 541788247 });
                 orig(oldS, newS);
@@ -488,11 +489,11 @@ namespace MoistureUpset
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref c, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);
+                AkSoundEngine.PostEvent("Thanos1", mainBody.gameObject);//FIX WHEN PULL
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
-                if (self.baseNameToken == "COMMANDO_BODY_NAME" || self.baseNameToken == "MERC_BODY_NAME" || self.baseNameToken == "ENGI_BODY_NAME" || self.baseNameToken == "HUNTRESS_BODY_NAME" || self.baseNameToken == "MAGE_BODY_NAME" || self.baseNameToken == "TOOLBOT_BODY_NAME" || self.baseNameToken == "TREEBOT_BODY_NAME" || self.baseNameToken == "LOADER_BODY_NAME" || self.baseNameToken == "CROCO_BODY_NAME" || self.baseNameToken == "CAPTAIN_BODY_NAME")
+                if (self.baseNameToken == "COMMANDO_BODY_NAME" || self.baseNameToken == "MERC_BODY_NAME" || self.baseNameToken == "ENGI_BODY_NAME" || self.baseNameToken == "HUNTRESS_BODY_NAME" || self.baseNameToken == "MAGE_BODY_NAME" || self.baseNameToken == "TOOLBOT_BODY_NAME" || self.baseNameToken == "TREEBOT_BODY_NAME" || self.baseNameToken == "LOADER_BODY_NAME" || self.baseNameToken == "CROCO_BODY_NAME" || self.baseNameToken == "CAPTAIN_BODY_NAME" || self.baseNameToken == "BANDIT2_BODY_NAME" || self.baseNameToken == "HERETIC_BODY_NAME" || self.baseNameToken == "RAILGUNNER_BODY_NAME" || self.baseNameToken == "VOIDSURVIVOR_BODY_NAME" || self.baseNameToken == "VOIDRAIDCRAB_BODY_NAME")
                 {
                     return orig(self);
                 }
@@ -535,12 +536,13 @@ namespace MoistureUpset
                         AkSoundEngine.PostEvent("DireSeekerMusic", mainBody.gameObject);
                         stop = true;
                     }
-                    else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME"))
+                    else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME") || self.baseNameToken == "LUNAREXPLODER_BODY_NAME")
                     {
                         if ((BigJank.getOptionValue(Settings.Thanos)))
                         {
                             resetThanos = false;
                             brother++;
+                            DebugClass.Log($"----------{brother}");
                             MusicAPI.StopSong(ref c, "muSong25");
                             switch (brother)
                             {
@@ -548,13 +550,22 @@ namespace MoistureUpset
                                     break;
                                 case 2:
                                     AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
-                                    AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);
+                                    AkSoundEngine.ExecuteActionOnEvent(2369706651, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    AkSoundEngine.PostEvent("Thanos2", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 3:
-                                    AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);
+                                    AkSoundEngine.ExecuteActionOnEvent(2369706648, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    //2369706648
+                                    AkSoundEngine.PostEvent("Thanos3", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 4:
-                                    AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);
+                                    AkSoundEngine.ExecuteActionOnEvent(2369706649, AkActionOnEventType.AkActionOnEventType_Stop);
+                                    //2369706649
+                                    AkSoundEngine.PostEvent("Thanos4", mainBody.gameObject);//FIX WHEN PULL
+                                    //2369706651
+                                    //2369706649
+                                    //2369706648
+                                    //2369706654
                                     break;
                                 default:
                                     break;
@@ -614,9 +625,12 @@ namespace MoistureUpset
                             //muEscape
                             //muSong25
                             //muSong05
-                            MusicAPI.StopSong(ref c, "muSong05");
-                            MusicAPI.StopSong(ref c, "muSong23");
-                            MusicAPI.StopSong(ref c, "muSong13");
+                            //MusicAPI.GetCurrentSong(ref c);
+                            //muBossfightDLC1_10
+                            //MusicAPI.StopSong(ref c, "muSong05");
+                            //MusicAPI.StopSong(ref c, "muSong23");
+                            //MusicAPI.StopSong(ref c, "muSong13");
+                            MusicAPI.StopSong(ref c, c.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName);
                             //MusicAPI.GetCurrentSong(ref c);
                             //AkSoundEngine.exec
                             AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
