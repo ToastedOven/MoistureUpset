@@ -404,6 +404,8 @@ namespace MoistureUpset
                     }
                     charPosition = null;
                     AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
+                    SyncBonziApproach.netIds.Clear();
+                    SyncBonziApproach.distances.Clear();
                 }
                 catch (Exception)
                 {
@@ -597,16 +599,26 @@ namespace MoistureUpset
             if (charPosition != null)
             {
                 float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
-                if (num < 800)
+                if (num >= 0)
                 {
-                    num = 1f - (num / 800f) + .2f;
-                    if (num > 1)
-                    {
-                        num = 1;
-                    }
-                    Run.instance.fixedTime -= Time.deltaTime * num;
+                    new SyncBonziApproach((int)num, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             }
+        }
+        public void BonziApproach(int distance)
+        {
+            if (distance < 800)
+            {
+                float distance2;
+                distance2 = ((1f - ((float)distance / 800f)) * .6f) + .4f;
+                if (distance2 > 1)
+                {
+                    distance2 = 1;
+                }
+                dist = distance2;
+                return;
+            }
+            dist = 0f;
         }
 
         public void Mountain(List<PickupIndex> pickups)
@@ -1247,7 +1259,7 @@ namespace MoistureUpset
                                         , "This is absolutely the correct decision");
                                 }
                             }
-                            else
+                            else if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 2)
                             {
                                 ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(RoR2Content.Items.LunarDagger) - 1} of them, how much could one more hurt?"
                                     , "Yes, obtain more damage");
@@ -1924,6 +1936,7 @@ namespace MoistureUpset
                     }
                     LocalUserManager.readOnlyLocalUsersList[0].userProfile.GrantUnlockable(UnlockableCatalog.GetUnlockableDef("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"));
                     Activate();
+                    new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                     charPosition = null;
                 }
                 if (obj2 && obj2.transform.position == new Vector3(1105, -283, 1181))
