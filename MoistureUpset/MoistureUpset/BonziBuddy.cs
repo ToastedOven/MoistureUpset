@@ -296,6 +296,8 @@ namespace MoistureUpset
                 //MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID
                 if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))//achievement not unlocked
                 {
+                    On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
+                    On.RoR2.HoldoutZoneController.FixedUpdate += HoldoutZoneController_FixedUpdate;
                     Chat.AddMessage($"<style=cWorldEvent>You hear a rumbling coming from the teleporter...</style>");
                     foreach (var item in Camera.allCameras)
                     {
