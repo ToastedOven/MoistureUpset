@@ -388,7 +388,6 @@ namespace MoistureUpset
                             break;
                         case "moon2":
                             //frogge 
-                            On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
                             break;
                         default:
                             GoTo(M1);
@@ -400,7 +399,7 @@ namespace MoistureUpset
                     }
                     if (newS.name != "moon2")
                     {
-                        On.RoR2.Run.FixedUpdate -= HoldoutZoneController_FixedUpdate;
+                        On.RoR2.HoldoutZoneController.FixedUpdate -= HoldoutZoneController_FixedUpdate;
                         On.RoR2.Run.FixedUpdate -= Run_FixedUpdate;
                     }
                     charPosition = null;
