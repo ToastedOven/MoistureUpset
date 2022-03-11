@@ -2634,16 +2634,22 @@ namespace MoistureUpset
                 startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = balconPath;
-                if (Settings.AccurateTTS.Value)
+                string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+                if (File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi"))
                 {
-                    if (daniel && (int)MLG.progress > 0)
-                    {
-                        startInfo.Arguments = $"-n \"ScanSoft Daniel_Full_22kHz\" -t \"{text}\" -w {joemamaPath}";
-                    }
-                    else if (sapi4)
-                    {
-                        startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
-                    }
+                    daniel = true;
+                }
+                if (File.Exists(s + "\\Speech\\speech.dll") && File.Exists(s + "\\lhsp\\help\\tv_enua.hlp"))
+                {
+                    sapi4 = true;
+                }
+                if (daniel && (int)MLG.progress > 0 && Settings.AccurateTTS.Value)
+                {
+                    startInfo.Arguments = $"-n \"ScanSoft Daniel_Full_22kHz\" -t \"{text}\" -w {joemamaPath}";
+                }
+                else if (sapi4 && Settings.AccurateTTS.Value)
+                {
+                    startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
                 }
                 else
                 {
