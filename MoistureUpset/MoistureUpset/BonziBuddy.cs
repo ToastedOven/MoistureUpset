@@ -455,7 +455,7 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>//FIX WHEN PULL
+            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
             {
                 float yes = self.GetFieldValue<int>("successfulPurchaseCount");
                 orig(self, activator);

@@ -489,7 +489,7 @@ namespace MoistureUpset
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref c, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                AkSoundEngine.PostEvent("Thanos1", mainBody.gameObject);//FIX WHEN PULL
+                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);//FIX WHEN PULL
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
@@ -551,17 +551,17 @@ namespace MoistureUpset
                                 case 2:
                                     AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
                                     AkSoundEngine.ExecuteActionOnEvent(2369706651, AkActionOnEventType.AkActionOnEventType_Stop);
-                                    AkSoundEngine.PostEvent("Thanos2", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 3:
                                     AkSoundEngine.ExecuteActionOnEvent(2369706648, AkActionOnEventType.AkActionOnEventType_Stop);
                                     //2369706648
-                                    AkSoundEngine.PostEvent("Thanos3", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 4:
                                     AkSoundEngine.ExecuteActionOnEvent(2369706649, AkActionOnEventType.AkActionOnEventType_Stop);
                                     //2369706649
-                                    AkSoundEngine.PostEvent("Thanos4", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);//FIX WHEN PULL
                                     //2369706651
                                     //2369706649
                                     //2369706648
