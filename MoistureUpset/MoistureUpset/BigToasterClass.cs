@@ -179,6 +179,18 @@ namespace MoistureUpset
             //    orig(self);
             //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
             //};
+            On.RoR2.Inventory.GiveItem_ItemIndex_int += (orig, self, index, count) => //FIX WHEN PULL
+            {
+                orig(self, index, count);
+                if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                }
+                else
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                }
+            };
             On.RoR2.UI.CharacterSelectController.Awake += (orig, self) =>
             {
                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);

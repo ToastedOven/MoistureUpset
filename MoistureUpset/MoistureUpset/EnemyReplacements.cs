@@ -35,10 +35,15 @@ namespace MoistureUpset
             {
                 //Debug.Log($"-=============={meshes[position].sharedMaterials[i].shader.name}");
                 //meshes[position].sharedMaterials[i].shader = Shader.Find("Hopoo Games/Deferred/Standard");
-                if (prefab == "RoR2/Base/Shopkeeper/ShopkeeperBody.prefab" || prefab == "RoR2/Base/Titan/TitanGoldBody.prefab")
+                if (prefab == "RoR2/Base/Titan/TitanGoldBody.prefab")
                 {
                     //meshes[position].sharedMaterials[i].shader = LegacyShaderAPI.Find("Hopoo Games/Deferred/Standard");
                     meshes[position].sharedMaterials[i].shader = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material.shader;
+                }
+                else if (prefab == "RoR2/Base/Shopkeeper/ShopkeeperBody.prefab")
+                {
+                    //meshes[position].sharedMaterials[i] = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material;
+                    meshes[position].sharedMaterials[i] = Assets.LoadMaterial(png);
                 }
                 meshes[position].sharedMaterials[i].color = Color.white;
                 meshes[position].sharedMaterials[i].mainTexture = texture;
@@ -316,7 +321,6 @@ namespace MoistureUpset
                 Bison();
                 SolusUnit();
                 Templar();
-                GreaterWisp();
                 Wisp();
                 Sans();
                 Imp();
@@ -343,6 +347,7 @@ namespace MoistureUpset
                 Rob();
                 Nyan();
                 Imposter();
+                GreaterWisp();
                 Collab();
                 //SneakyFontReplacement();
             }
@@ -1100,6 +1105,10 @@ namespace MoistureUpset
                 return;
             LoadResource("shop");
             ReplaceModel("RoR2/Base/Shopkeeper/ShopkeeperBody.prefab", "@MoistureUpset_shop:assets/shop.mesh", "@MoistureUpset_shop:assets/shop.png");
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Shopkeeper/ShopkeeperBody.prefab").WaitForCompletion();
+            fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shaderKeywords = null;
+           
+
         }
         private static void BeetleGuard()
         {
@@ -1444,6 +1453,16 @@ namespace MoistureUpset
                 orig(self);
                 if (!doneit)
                 {
+                    foreach (var item in self.outer.gameObject.GetComponentsInChildren<Light>())
+                    {
+                        item.enabled = false;
+                    }
+                    fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion();
+                    foreach (var item in fab.GetComponentsInChildren<Light>())
+                    {
+                        item.enabled = false;
+                    }
+
                     fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/ChargeGreaterWisp.prefab").WaitForCompletion();
                     foreach (var item in fab.GetComponentsInChildren<Renderer>())
                     {
@@ -1678,6 +1697,7 @@ namespace MoistureUpset
             if (!BigJank.getOptionValue(Settings.Thomas))
                 return;
             LoadResource("thomas");
+            LoadBNK("bison");
             On.EntityStates.Bison.Charge.OnEnter += (orig, self) =>
             {
                 EntityStates.Bison.Charge.startSoundString = "BisonCharge";

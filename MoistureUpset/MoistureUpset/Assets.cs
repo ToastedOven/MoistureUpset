@@ -33,6 +33,7 @@ namespace MoistureUpset
             newMat.SetFloat("_EmPower", 0f);
             newMat.SetColor("_EmColor", Color.white);
             newMat.SetTexture("_EmTex", null);
+            newMat.SetTexture("_FresnelRamp", null);
             newMat.SetFloat("_NormalStrength", 0.5f);
             newMat.SetTexture("_NormalTex", null);
 
@@ -103,7 +104,6 @@ namespace MoistureUpset
                 
                 if (path.StartsWith("assets/"))
                     path = path.Remove(0, "assets/".Length);
-                
                 AssetIndices[path] = index;
             }
 
@@ -118,12 +118,9 @@ namespace MoistureUpset
 
                 assetName = path[1].ToLower();
             }
-
             if (assetName.StartsWith("assets/"))
                 assetName = assetName.Remove(0, "assets/".Length);
-
             int index = AssetIndices[assetName];
-
             return AssetBundles[index].LoadAsset<T>($"assets/{assetName}");
         }
     }

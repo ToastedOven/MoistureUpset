@@ -25,7 +25,7 @@ namespace MoistureUpset
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public static Moisture_Upset instance;
-        public const string Version = "1.4.1";
+        public const string Version = "1.5.0";
         public const string Guid = "com.gemumoddo.MoistureUpset";
         
         public void Awake()
@@ -53,8 +53,8 @@ namespace MoistureUpset
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
-            ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
-
+            //ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(IntroReplaceAction));
+            IntroReplaceAction();
             //EnemyReplacements.LoadResource("moisture_bonzibuddy");
             //EnemyReplacements.LoadResource("moisture_bonzistatic");
         }

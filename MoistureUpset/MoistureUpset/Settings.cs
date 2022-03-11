@@ -7,6 +7,7 @@ using MoistureUpset.NetMessages;
 using RiskOfOptions;
 using RiskOfOptions.OptionConfigs;
 using RiskOfOptions.Options;
+using RoR2;
 using UnityEngine;
 
 namespace MoistureUpset
@@ -80,13 +81,14 @@ namespace MoistureUpset
         public static ConfigEntry<bool> EndOfGameMusic;
         public static ConfigEntry<bool> RespawnSFX;
         public static ConfigEntry<bool> ReplaceIntroScene;
+        public static ConfigEntry<bool> ScaleHitMarkerWithCrit;
 
         public static void RunAll()
         {
-            Setup();
             SetupConfig();
             SetupROO();
             PingAll();
+            Setup();
             //HitMarker();
             //ModSettingsManager.addStartupListener(new UnityEngine.Events.UnityAction(PingAll));
             //Misc();
@@ -107,6 +109,8 @@ namespace MoistureUpset
             ModdedMusicVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "Modded Music Volume", 50.0f, "The default music slider also works for modded music, but this affects modded music only. Incase you want a different audio balance");
             ModdedSFXVolume = Moisture_Upset.instance.Config.Bind<float>("Audio", "Modded SFX Volume", 50.0f, "The default sound slider also works for modded SFX, but this affects modded sfx only. Incase you want a different audio balance");
 
+            ScaleHitMarkerWithCrit = Moisture_Upset.instance.Config.Bind<bool>("Audio", "Scale Hit Marker With Crit", false, "Lowers crit sfx volume as crit chance goes up");
+
             HitMarkerVolume.Value = Mathf.Clamp(HitMarkerVolume.Value, 0, 100);
             ModdedMusicVolume.Value = Mathf.Clamp(ModdedMusicVolume.Value, 0, 100);
             ModdedSFXVolume.Value = Mathf.Clamp(ModdedSFXVolume.Value, 0, 100);
@@ -114,6 +118,7 @@ namespace MoistureUpset
             HitMarkerVolume.SettingChanged += HitMarkerVolume_SettingChanged;
             ModdedMusicVolume.SettingChanged += ModdedMusicVolume_SettingChanged;
             ModdedSFXVolume.SettingChanged += ModdedSFXVolume_SettingChanged;
+            ScaleHitMarkerWithCrit.SettingChanged += ScaleHitMarkerWithCrit_SettingChanged;
 
             Dogplane = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Dogplane", true, "Replaces wisps with a dogplanes");
             Comedy = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Comedy", true, "Replaces jellyfish with an astounding amount of comedy");
@@ -179,6 +184,22 @@ namespace MoistureUpset
 
         }
 
+        private static void ScaleHitMarkerWithCrit_SettingChanged(object sender, EventArgs e)
+        {
+            var body = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+            if (body)
+            {
+                if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - body.crit);
+                }
+                else
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                }
+            }
+        }
+
         private static void ModdedSFXVolume_SettingChanged(object sender, EventArgs e)
         {
             AkSoundEngine.SetRTPCValue("Modded_SFX", ModdedSFXVolume.Value);
@@ -196,74 +217,83 @@ namespace MoistureUpset
 
         internal static void SetupROO()
         {
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.OnlySurvivorSkins));
-            ModSettingsManager.AddOption(new SliderOption(Settings.HitMarkerVolume, new SliderConfig()));
-            ModSettingsManager.AddOption(new SliderOption(Settings.ModdedMusicVolume, new SliderConfig()));
-            ModSettingsManager.AddOption(new SliderOption(Settings.ModdedSFXVolume, new SliderConfig()));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.OnlySurvivorSkins, new CheckBoxConfig() { restartRequired = true }));
+            ModSettingsManager.AddOption(new SliderOption(Settings.HitMarkerVolume, new SliderConfig() { checkIfDisabled = CheckOnlySurvivorSkins }));
+            ModSettingsManager.AddOption(new SliderOption(Settings.ModdedMusicVolume, new SliderConfig() { checkIfDisabled = CheckOnlySurvivorSkins }));
+            ModSettingsManager.AddOption(new SliderOption(Settings.ModdedSFXVolume, new SliderConfig() { checkIfDisabled = CheckOnlySurvivorSkins }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ScaleHitMarkerWithCrit, new CheckBoxConfig() { checkIfDisabled = CheckCritMarkerScaler }));
 
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Dogplane));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Comedy));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.FroggyChair));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MikeWazowski));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.SkeletonCrab));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.TrumpetSkeleton));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.LemmeSmash));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ObamaPrism));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Toad));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.TacoBell));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Winston));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Thomas));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Robloxian));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Heavy));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Ghast));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Roflcopter));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Bowser));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Hagrid));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Thanos));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Rob));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.CrabRave));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.NyanCat));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.GigaPuddi));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.RobloxTitan));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.AlexJones));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.WanderingAtEveryone));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PoolNoodle));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Twitch));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Sans));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Imposter));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Squirmles));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Merchant));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Cereal));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Dogplane, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Comedy, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.FroggyChair, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MikeWazowski, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.SkeletonCrab, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.TrumpetSkeleton, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.LemmeSmash, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ObamaPrism, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Toad, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.TacoBell, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Winston, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Thomas, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Robloxian, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Heavy, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Ghast, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Roflcopter, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Bowser, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Hagrid, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Thanos, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Rob, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.CrabRave, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.NyanCat, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.GigaPuddi, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.RobloxTitan, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.AlexJones, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.WanderingAtEveryone, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PoolNoodle, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Twitch, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Sans, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Imposter, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Squirmles, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Merchant, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Cereal, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Interactables));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.CurrencyChanges));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Interactables, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.CurrencyChanges, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.DireSeeker));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.DireSeeker, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MinecraftOofSounds));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MinecraftOofSounds, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.NSFW));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Fanfare));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PizzaRoll));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.RobloxCursor));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Logo));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.GenericBossMusic));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.AwpUI));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ChestNoises));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PlayerDeathSound));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PlayerDeathChat));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.DifficultyIcons));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.DifficultyNames));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.InRunDifficultyNames));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MainMenuMusic));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ShreksOuthouse));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ShrineChanges));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MiscOptions));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.CreativeVoidZone));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.EndOfGameMusic));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.RespawnSFX));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ReplaceIntroScene));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.NSFW, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Fanfare, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PizzaRoll, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.RobloxCursor, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Logo, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.GenericBossMusic, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.AwpUI, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ChestNoises, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PlayerDeathSound, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.PlayerDeathChat, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.DifficultyIcons, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.DifficultyNames, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.InRunDifficultyNames, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MainMenuMusic, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ShreksOuthouse, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ShrineChanges, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MiscOptions, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.CreativeVoidZone, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.EndOfGameMusic, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.RespawnSFX, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ReplaceIntroScene, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
+        }
+        private static bool CheckOnlySurvivorSkins()
+        {
+            return OnlySurvivorSkins.Value;
+        }
+        private static bool CheckCritMarkerScaler()
+        {
+            return OnlySurvivorSkins.Value || HitMarkerVolume.Value <= 0;
         }
         public static void PingAll()
         {
@@ -275,7 +305,9 @@ namespace MoistureUpset
         }
         private static void Setup()
         {
-            //ModSettingsManager.setPanelDescription($"Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion {Moisture_Upset.Version}");
+            ModSettingsManager.SetModDescription($"Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion {Moisture_Upset.Version}");
+            EnemyReplacements.LoadResource("moisture_defaults");
+            ModSettingsManager.SetModIcon(Assets.Load<Sprite>("@MoistureUpset_moisture_defaults:assets/newlogo.png"));
             //ModSettingsManager.setPanelTitle("Moisture Upset");
         }
         private static void HitMarker()
