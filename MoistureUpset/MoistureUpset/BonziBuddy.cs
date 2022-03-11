@@ -604,7 +604,9 @@ namespace MoistureUpset
                     new SyncBonziApproach((int)num, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             }
+            Run.instance.fixedTime -= Time.deltaTime * dist;
         }
+        float dist = 0;
         public void BonziApproach(int distance)
         {
             if (distance < 800)
