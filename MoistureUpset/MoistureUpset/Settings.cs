@@ -82,6 +82,9 @@ namespace MoistureUpset
         public static ConfigEntry<bool> RespawnSFX;
         public static ConfigEntry<bool> ReplaceIntroScene;
         public static ConfigEntry<bool> ScaleHitMarkerWithCrit;
+        public static ConfigEntry<bool> BonziBuddyBool;
+        public static ConfigEntry<bool> AccurateTTS;
+        public static ConfigEntry<bool> MLGMode;
 
         public static void RunAll()
         {
@@ -182,6 +185,23 @@ namespace MoistureUpset
             RespawnSFX = Moisture_Upset.instance.Config.Bind<bool>("Audio", "Respawn SFX", true, "Yeah");
             ReplaceIntroScene = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Replace Intro Scene", true, "Replaces the default intro cutscene with one that UnsavedTrash made");
 
+            BonziBuddyBool = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Top Secret Setting", true, "You'll probably know it when you see it");
+            AccurateTTS = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Accurate REDACTED TTS", false, "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.");
+            MLGMode = Moisture_Upset.instance.Config.Bind<bool>("Misc", "MLG Mode", false, "What year is it");
+
+            BonziBuddyBool.SettingChanged += BonziBuddyBool_SettingChanged; ;
+            AccurateTTS.SettingChanged += AccurateTTS_SettingChanged; ;
+
+        }
+
+        private static void AccurateTTS_SettingChanged(object sender, EventArgs e)
+        {
+            BonziBuddy.FixTTS(AccurateTTS.Value);
+        }
+
+        private static void BonziBuddyBool_SettingChanged(object sender, EventArgs e)
+        {
+            BonziBuddy.SetActive(BonziBuddyBool.Value);
         }
 
         private static void ScaleHitMarkerWithCrit_SettingChanged(object sender, EventArgs e)
@@ -286,6 +306,10 @@ namespace MoistureUpset
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.RespawnSFX, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.ReplaceIntroScene, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.BonziBuddyBool, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = false }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.AccurateTTS, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = false }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MLGMode, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+
         }
         private static bool CheckOnlySurvivorSkins()
         {
@@ -321,9 +345,6 @@ namespace MoistureUpset
         }
         private static void EnemyOptions()
         {
-			AddCheckBox("Top Secret Setting", "You'll probably know it when you see it", true, "Misc", survivorSkinsOnlyCheckBox);
-            ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive), "Top Secret Setting", "Misc");
-            AddCheckBox("MLG Mode", "What year is it", true, "Misc", survivorSkinsOnlyCheckBox);
 			//AddCheckBox("Force Restart Bonzi Buddy", "Bonzi Buddy isn't a perfect creation. If something goes horribly wrong this might fix him right up.", true, "Misc", survivorSkinsOnlyCheckBox);
             //ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.ForceRestart), "Force Restart Bonzi Buddy", "Misc");
             //ModSettingsManager.addListener(ModSettingsManager.getOption("Top Secret Setting"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive));
@@ -339,8 +360,6 @@ namespace MoistureUpset
         }
         private static void Misc()
         {
-            AddCheckBox("Accurate REDACTED TTS", "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.", false, "Misc", survivorSkinsOnlyCheckBox);
-            ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS), "Accurate REDACTED TTS", "Misc");
             ////ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Original REDACTED TTS", "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.", "0"));
             ////ModSettingsManager.addListener(ModSettingsManager.getOption("Original REDACTED TTS"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS));
             //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "NSFW", "Toggles 'NSFW' content. Not actually NSFW like boobies, just some questionable words if you aren't into that kinda thing", "0"));
@@ -365,27 +384,6 @@ namespace MoistureUpset
             //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Respawn SFX", "Yeah", "1"));
             //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Replace Intro Scene", "Replaces the default intro cutscene with one that UnsavedTrash made", "1"));
             ////ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Shreks outhouse", "SOMEBODY", "1"));
-        }
-
-
-        private static void AddCheckBox(string name, string desc, bool restart, string category, CheckBoxOverride over = null)
-        {
-            var thing = new RiskOfOptions.OptionConstructors.CheckBox() { Name = name, Description = desc, RestartRequired = restart, CategoryName = category };
-            if (over != null)
-            {
-                thing.Override = over;
-            }
-            ModSettingsManager.AddOption(thing);
-        }
-        private static void AddSlider(string name, string desc, int starting, int min, int max, string category, SliderOverride over = null)
-        {
-            //ModSettingsManager.AddSlider("HitMarker Volume", "This sound is also tied to SFX, but has a separate slider if you want it to be less noisy", 100, 0, 100, "Audio", survivorsSkinsOnlySlider);
-            var thing = new RiskOfOptions.OptionConstructors.Slider() { Name = name, Description = desc, CategoryName = category, DefaultValue = starting, Min = min, Max = max };
-            if (over != null)
-            {
-                thing.Override = over;
-            }
-            ModSettingsManager.AddOption(thing);
         }
     }
 }

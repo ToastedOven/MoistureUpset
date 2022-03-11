@@ -263,7 +263,7 @@ namespace MoistureUpset
                             }
                             else if (self.cost == 536870912)
                             {
-                                if (BigJank.getOptionValue("Currency Changes", "UI Changes"))
+                                if (Settings.CurrencyChanges.Value)
                                     ShouldSpeak("I'm just going to do this before you overflow your robux into the negatives"
                                     , "I'm just going to do this before you overflow your robux into the negatives");
                                 else
@@ -1000,7 +1000,7 @@ namespace MoistureUpset
         {
 
             yield return new WaitForSeconds(.1f);
-            if (BigJank.getOptionValue("Scale HitMarker with Crit", "Audio"))
+            if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
             {
                 AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
             }
@@ -1645,7 +1645,6 @@ namespace MoistureUpset
                         ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)], true);
                         dioHeld -= 1;
                         dioUsed += 1;
-                        ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
                         return;
                     }
                     if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
@@ -2238,7 +2237,7 @@ namespace MoistureUpset
                     {
                         lastIdle.RemoveAt(0);
                     }
-                    if (!BigJank.getOptionValue("Accurate REDACTED TTS", "Misc"))
+                    if (!Settings.AccurateTTS.Value)
                     {
                         if (UnityEngine.Random.Range(0, 150) == 0)
                         {
@@ -2600,7 +2599,7 @@ namespace MoistureUpset
                 startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = balconPath;
-                if (BigJank.getOptionValue("Accurate REDACTED TTS", "Misc"))
+                if (Settings.AccurateTTS.Value)
                 {
                     if (daniel && (int)MLG.progress > 0)
                     {
