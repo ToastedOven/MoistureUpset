@@ -179,16 +179,24 @@ namespace MoistureUpset
             //    orig(self);
             //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
             //};
-            On.RoR2.Inventory.GiveItem_ItemIndex_int += (orig, self, index, count) => //FIX WHEN PULL
+            On.RoR2.Inventory.HandleInventoryChanged += (orig, self) => //FIX WHEN PULL
             {
-                orig(self, index, count);
-                if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                orig(self);
+                try
                 {
-                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                    DebugClass.Log($"----------inventory changed");
+                    if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                    {
+                        AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                    }
+                    else
+                    {
+                        AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                    }
+                    DebugClass.Log($"----------and we didn't break it");
                 }
-                else
+                catch (Exception)
                 {
-                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
                 }
             };
             On.RoR2.UI.CharacterSelectController.Awake += (orig, self) =>
