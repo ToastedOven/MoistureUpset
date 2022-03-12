@@ -166,7 +166,7 @@ namespace MoistureUpset
                     return orig(self, i);
                 };
 
-                On.RoR2.UI.HUD.Update += (orig, self) =>
+                On.RoR2.UI.HUD.Update += (orig, self) => //optimize? but probably fine
                 {
                     orig(self);
                     if (!context.activeSelf)
