@@ -1423,7 +1423,7 @@ namespace MoistureUpset
             ReplaceModel("RoR2/Base/GreaterWisp/GreaterWispBody.prefab", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion();
             fab.GetComponentInChildren<FlickerLight>().enabled = false;
-            var fixer = fab.AddComponent<GhastFixerButTheGhastNotTheFireballs>();
+            //var fixer = fab.AddComponent<GhastFixer>();
             var components = fab.GetComponentsInChildren<Component>();
             foreach (var item in components)
             {
@@ -1511,7 +1511,7 @@ namespace MoistureUpset
             On.EntityStates.GreaterWispMonster.FireCannons.OnEnter += (orig, self) =>
             {
                 Util.PlaySound("GhastAttack", self.outer.gameObject);
-                self.outer.gameObject.GetComponent<GhastFixerButTheGhastNotTheFireballs>().Shot();
+                //self.outer.gameObject.GetComponent<GhastFixer>().shootfire();
                 orig(self);
             };
         }
@@ -1624,20 +1624,58 @@ namespace MoistureUpset
                 return;
             LoadBNK("oof");
             LoadResource("noob");
-            Material nolaser = UnityEngine.Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
-            nolaser.mainTexture = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1Tex.png");
-            Material laser = UnityEngine.Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
-            laser.mainTexture = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
             On.EntityStates.GolemMonster.ChargeLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.ChargeLaser.attackSoundString = "GolemChargeLaser";
-                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = laser;
+                try
+                {
+                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                    GameObject g = self.outer.gameObject.GetComponent<Rigidbody>().gameObject;
+                    for (int i = 0; i < objects.Length; i++)
+                    {
+                        if (objects[i] == g)
+                        {
+                            Texture t = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
+                            var mesh = objects[i - 3].GetComponent<SkinnedMeshRenderer>();
+                            foreach (var item in mesh.sharedMaterials)
+                            {
+                                item.mainTexture = t;
+                            }
+                            break;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Debug.Log(e);
+                }
                 orig(self);
             };
             On.EntityStates.GolemMonster.FireLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.FireLaser.attackSoundString = "GolemFireLaser";
-                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = nolaser;
+                try
+                {
+                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                    GameObject g = self.outer.gameObject.GetComponent<Rigidbody>().gameObject;
+                    for (int i = 0; i < objects.Length; i++)
+                    {
+                        if (objects[i] == g)
+                        {
+                            Texture t = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1Tex.png");
+                            var mesh = objects[i - 3].GetComponent<SkinnedMeshRenderer>();
+                            foreach (var item in mesh.sharedMaterials)
+                            {
+                                item.mainTexture = t;
+                            }
+                            break;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Debug.Log(e);
+                }
                 orig(self);
             };
             On.EntityStates.GolemMonster.ClapState.OnEnter += (orig, self) =>
@@ -1653,25 +1691,6 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
-            //var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/GolemBody.prefab").WaitForCompletion();
-            //fab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial.mainTexture = 
-            //foreach (var item in fab.GetComponentsInChildren<RoR2.ModelSkinController>())
-            //{
-            //    foreach (var info in item.skins[0].rendererInfos)
-            //    {
-            //        if (info.defaultMaterial.name != "matTitan" && info.defaultMaterial.name != "Billboard")
-            //        {
-            //            info.defaultMaterial.color = new Color(0, 0, 0, 0);
-            //        }
-            //    }
-            //    for (int i = 0; i < item.skins.Length; i++)
-            //    {
-            //        if (i != 0)
-            //        {
-            //            item.skins[i] = item.skins[0];
-            //        }
-            //    }
-            //}
         }
         private static void Bison()
         {
@@ -2347,11 +2366,9 @@ namespace MoistureUpset
             p.startLifetime = 10;
             var shape = p.shape;
             shape.shapeType = ParticleSystemShapeType.Sprite;
-            //fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Beetle/BeetleSpitExplosion.prefab").WaitForCompletion();
-            fab.AddComponent<NyanFixer>();
 
-            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
-            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
+            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
+            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
 
 
             var vel = p.limitVelocityOverLifetime;
@@ -2660,8 +2677,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.DireSeeker))
                 {
-                    Collabs.Direseeker.Run();
-                    DebugClass.Log($"Direseeker installed, modifying");
+                    //Collabs.Direseeker.Run();
+                    //DebugClass.Log($"Direseeker installed, modifying");
                 }
             }
             catch (Exception)
@@ -2675,8 +2692,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.MikeWazowski))
                 {
-                    Collabs.PlayableLemurian.Run();
-                    DebugClass.Log($"Playable Lemurian installed, modifying");
+                    //Collabs.PlayableLemurian.Run();
+                    //DebugClass.Log($"Playable Lemurian installed, modifying");
                 }
             }
             catch (Exception)
@@ -2690,8 +2707,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Twitch))
                 {
-                    Collabs.m_PlayableGrovetender.Run();
-                    DebugClass.Log($"PlayableGrovetender installed, modifying");
+                    //Collabs.m_PlayableGrovetender.Run();
+                   // DebugClass.Log($"PlayableGrovetender installed, modifying");
                 }
             }
             catch (Exception)
@@ -2705,8 +2722,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Imposter))
                 {
-                    Collabs.PlayableScavenger.Run();
-                    DebugClass.Log($"PlayableScavenger installed, modifying");
+                    //Collabs.PlayableScavenger.Run();
+                    //DebugClass.Log($"PlayableScavenger installed, modifying");
                 }
             }
             catch (Exception)
@@ -2720,8 +2737,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Heavy))
                 {
-                    Collabs.m_PlayableTemplar.Run();
-                    DebugClass.Log($"PlayableTemplar installed, modifying");
+                    //Collabs.m_PlayableTemplar.Run();
+                    //DebugClass.Log($"PlayableTemplar installed, modifying");
                 }
             }
             catch (Exception)
@@ -2735,8 +2752,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Thanos))
                 {
-                    Collabs.PlayableMithrix.Run();
-                    DebugClass.Log($"PlayableMithrix installed, modifying");
+                    //Collabs.PlayableMithrix.Run();
+                    //DebugClass.Log($"PlayableMithrix installed, modifying");
                 }
             }
             catch (Exception)
@@ -2750,8 +2767,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.FroggyChair))
                 {
-                    Collabs.PlayableBeetle.Run();
-                    DebugClass.Log($"ChipTheBeetle installed, modifying");
+                   // Collabs.PlayableBeetle.Run();
+                    //DebugClass.Log($"ChipTheBeetle installed, modifying");
                 }
             }
             catch (Exception)
