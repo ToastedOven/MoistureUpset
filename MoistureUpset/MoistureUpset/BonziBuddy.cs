@@ -1030,13 +1030,19 @@ namespace MoistureUpset
         {
 
             yield return new WaitForSeconds(.1f);
-            if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+            try
             {
-                AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                }
+                else
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                }
             }
-            else
+            catch (Exception)
             {
-                AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
             }
             if (dontSpeak <= 0)
             {
