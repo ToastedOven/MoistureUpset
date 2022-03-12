@@ -42,6 +42,7 @@ Rex's r makes the nyan cat noise if nyan cat is enabled (I swear we will get to 
 
 # Changelog
 
+
  1.5.0: Fixed a couple of long lasting issues, added compatibility with survivors of the void and the new risk of options. As a result, we now have a bepinex config like most normal people, however you can still find the settings in game if that's your thing.
 
  1.4.1: Fixed issue where Imposters weren't loading correctly. Fixed an unintentional spoiler

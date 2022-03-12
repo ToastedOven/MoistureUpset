@@ -2679,8 +2679,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.DireSeeker))
                 {
-                    Collabs.Direseeker.Run();
-                    DebugClass.Log($"Direseeker installed, modifying");
+                    //Collabs.Direseeker.Run();
+                    //DebugClass.Log($"Direseeker installed, modifying");
                 }
             }
             catch (Exception)
@@ -2694,8 +2694,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.MikeWazowski))
                 {
-                    Collabs.PlayableLemurian.Run();
-                    DebugClass.Log($"Playable Lemurian installed, modifying");
+                    //Collabs.PlayableLemurian.Run();
+                    //DebugClass.Log($"Playable Lemurian installed, modifying");
                 }
             }
             catch (Exception)
@@ -2709,8 +2709,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Twitch))
                 {
-                    Collabs.m_PlayableGrovetender.Run();
-                    DebugClass.Log($"PlayableGrovetender installed, modifying");
+                    //Collabs.m_PlayableGrovetender.Run();
+                   // DebugClass.Log($"PlayableGrovetender installed, modifying");
                 }
             }
             catch (Exception)
@@ -2724,8 +2724,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Imposter))
                 {
-                    Collabs.PlayableScavenger.Run();
-                    DebugClass.Log($"PlayableScavenger installed, modifying");
+                    //Collabs.PlayableScavenger.Run();
+                    //DebugClass.Log($"PlayableScavenger installed, modifying");
                 }
             }
             catch (Exception)
@@ -2739,8 +2739,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Heavy))
                 {
-                    Collabs.m_PlayableTemplar.Run();
-                    DebugClass.Log($"PlayableTemplar installed, modifying");
+                    //Collabs.m_PlayableTemplar.Run();
+                    //DebugClass.Log($"PlayableTemplar installed, modifying");
                 }
             }
             catch (Exception)
@@ -2754,8 +2754,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.Thanos))
                 {
-                    Collabs.PlayableMithrix.Run();
-                    DebugClass.Log($"PlayableMithrix installed, modifying");
+                    //Collabs.PlayableMithrix.Run();
+                    //DebugClass.Log($"PlayableMithrix installed, modifying");
                 }
             }
             catch (Exception)
@@ -2769,8 +2769,8 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.FroggyChair))
                 {
-                    Collabs.PlayableBeetle.Run();
-                    DebugClass.Log($"ChipTheBeetle installed, modifying");
+                   // Collabs.PlayableBeetle.Run();
+                    //DebugClass.Log($"ChipTheBeetle installed, modifying");
                 }
             }
             catch (Exception)
