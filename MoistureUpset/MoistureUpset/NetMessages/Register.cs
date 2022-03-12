@@ -9,6 +9,8 @@ namespace MoistureUpset.NetMessages
     {
         public static void Init()
         {
+            NetworkingAPI.RegisterMessageType<SyncAnimationToServer>();
+            NetworkingAPI.RegisterMessageType<SyncAnimationToClients>();
 
             NetworkingAPI.RegisterMessageType<InteractReplacements.SyncFidget>();
 
@@ -20,8 +22,6 @@ namespace MoistureUpset.NetMessages
             NetworkingAPI.RegisterMessageType<SyncChance>();
             NetworkingAPI.RegisterMessageType<SyncShrine>();
             NetworkingAPI.RegisterMessageType<SyncBroke>();
-            NetworkingAPI.RegisterMessageType<SyncBonziApproach>();
-            NetworkingAPI.RegisterMessageType<SyncLunarReRoll>();
         }
     }
 }
