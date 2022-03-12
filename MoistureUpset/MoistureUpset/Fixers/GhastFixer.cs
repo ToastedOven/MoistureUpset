@@ -1,8 +1,10 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset.Fixers
 {
@@ -16,7 +18,27 @@ namespace MoistureUpset.Fixers
             explosion.transform.position = this.transform.position;
             explosion.transform.localScale = new Vector3(2, 2, 2);
             var timer = explosion.AddComponent<DeleteAfterTime>();
-            StartCoroutine(timer.DeleteAfter(1.95f));
+            StartCoroutine(timer.DeleteAfter(1.9f));
+        }
+    }
+    class GhastFixerButTheGhastNotTheFireballs : MonoBehaviour
+    {
+        static Material normal = UnityEngine.Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
+        static Material shoot = UnityEngine.Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
+        void Start()
+        {
+            normal.mainTexture = Assets.Load<Texture>("@MoistureUpset_ghast:assets/ghast.png");
+            shoot.mainTexture = Assets.Load<Texture>("@MoistureUpset_ghast:assets/ghastfire.png");
+        }
+        public void Shot()
+        {
+            gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = shoot;
+            StartCoroutine(yeet());
+        }
+        IEnumerator yeet()
+        {
+            yield return new WaitForSeconds(1f);
+            gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = normal;
         }
     }
 }
