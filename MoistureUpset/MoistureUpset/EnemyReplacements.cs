@@ -962,125 +962,125 @@ namespace MoistureUpset
         {
             if (BigJank.getOptionValue(Settings.Thanos))
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
-            {
-                if (token == "BROTHER_SPAWN_PHASE1_1")
                 {
-                    st = "When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.";
-                }
-                else if (token == "BROTHER_SPAWN_PHASE1_2")
-                {
-                    st = "I will shred this universe down to it’s last atom and then, with the stones you’ve collected for me, create a new one. It is not what is lost but only what it is been given… a grateful universe.";
-                }
-                else if (token == "BROTHER_SPAWN_PHASE1_3")
-                {
-                    st = "Dread it. Run from it. Destiny still arrives. Or should I say, I have.";
-                }
-                else if (token == "BROTHER_SPAWN_PHASE1_4")
-                {
-                    st = "You couldn’t live with your own failure. Where did that bring you? Back to me.";
-                }
+                    if (token == "BROTHER_SPAWN_PHASE1_1")
+                    {
+                        st = "When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.";
+                    }
+                    else if (token == "BROTHER_SPAWN_PHASE1_2")
+                    {
+                        st = "I will shred this universe down to it’s last atom and then, with the stones you’ve collected for me, create a new one. It is not what is lost but only what it is been given… a grateful universe.";
+                    }
+                    else if (token == "BROTHER_SPAWN_PHASE1_3")
+                    {
+                        st = "Dread it. Run from it. Destiny still arrives. Or should I say, I have.";
+                    }
+                    else if (token == "BROTHER_SPAWN_PHASE1_4")
+                    {
+                        st = "You couldn’t live with your own failure. Where did that bring you? Back to me.";
+                    }
 
 
-                else if (token == "BROTHER_DAMAGEDEALT_1" || token == "BROTHERHURT_DAMAGEDEALT_1")
-                {
-                    st = "You’re strong. But I could snap my fingers, and you’d all cease to exist.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_2" || token == "BROTHERHURT_DAMAGEDEALT_2")
-                {
-                    st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_3" || token == "BROTHERHURT_DAMAGEDEALT_3")
-                {
-                    st = "I'm a survivor.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_4" || token == "BROTHERHURT_DAMAGEDEALT_4")
-                {
-                    st = "You're not the only one cursed with knowledge.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_5" || token == "BROTHERHURT_DAMAGEDEALT_5")
-                {
-                    st = "You should be grateful.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_6" || token == "BROTHERHURT_DAMAGEDEALT_6")
-                {
-                    st = "I don't even know who you are.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_7" || token == "BROTHERHURT_DAMAGEDEALT_7")
-                {
-                    st = "I am...inevitable.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_8" || token == "BROTHERHURT_DAMAGEDEALT_8")
-                {
-                    st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_9" || token == "BROTHERHURT_DAMAGEDEALT_9")
-                {
-                    st = "I am...inevitable.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_10" || token == "BROTHERHURT_DAMAGEDEALT_10")
-                {
-                    st = "You should be grateful.";
-                }
+                    else if (token == "BROTHER_DAMAGEDEALT_1" || token == "BROTHERHURT_DAMAGEDEALT_1")
+                    {
+                        st = "You’re strong. But I could snap my fingers, and you’d all cease to exist.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_2" || token == "BROTHERHURT_DAMAGEDEALT_2")
+                    {
+                        st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_3" || token == "BROTHERHURT_DAMAGEDEALT_3")
+                    {
+                        st = "I'm a survivor.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_4" || token == "BROTHERHURT_DAMAGEDEALT_4")
+                    {
+                        st = "You're not the only one cursed with knowledge.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_5" || token == "BROTHERHURT_DAMAGEDEALT_5")
+                    {
+                        st = "You should be grateful.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_6" || token == "BROTHERHURT_DAMAGEDEALT_6")
+                    {
+                        st = "I don't even know who you are.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_7" || token == "BROTHERHURT_DAMAGEDEALT_7")
+                    {
+                        st = "I am...inevitable.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_8" || token == "BROTHERHURT_DAMAGEDEALT_8")
+                    {
+                        st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_9" || token == "BROTHERHURT_DAMAGEDEALT_9")
+                    {
+                        st = "I am...inevitable.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_10" || token == "BROTHERHURT_DAMAGEDEALT_10")
+                    {
+                        st = "You should be grateful.";
+                    }
 
 
-                else if (token == "BROTHER_KILL_1")
-                {
-                    st = "I know what it’s like to lose. To feel so desperately that you’re right, yet to fail nonetheless.";
-                }
-                else if (token == "BROTHER_KILL_2")
-                {
-                    st = "I ignored my destiny once, I can not do that again. Even for you. I’m sorry Little one.";
-                }
-                else if (token == "BROTHER_KILL_3")
-                {
-                    st = "The universe required correction.";
-                }
-                else if (token == "BROTHER_KILL_4")
-                {
-                    st = "I hope they remember you.";
-                }
-                else if (token == "BROTHER_KILL_5")
-                {
-                    st = "A small price to pay for salvation.";
-                }
+                    else if (token == "BROTHER_KILL_1")
+                    {
+                        st = "I know what it’s like to lose. To feel so desperately that you’re right, yet to fail nonetheless.";
+                    }
+                    else if (token == "BROTHER_KILL_2")
+                    {
+                        st = "I ignored my destiny once, I can not do that again. Even for you. I’m sorry Little one.";
+                    }
+                    else if (token == "BROTHER_KILL_3")
+                    {
+                        st = "The universe required correction.";
+                    }
+                    else if (token == "BROTHER_KILL_4")
+                    {
+                        st = "I hope they remember you.";
+                    }
+                    else if (token == "BROTHER_KILL_5")
+                    {
+                        st = "A small price to pay for salvation.";
+                    }
 
 
-                else if (token == "BROTHERHURT_KILL_1")
-                {
-                    st = "I... had... to.";
-                }
-                else if (token == "BROTHERHURT_KILL_2")
-                {
-                    st = "Rain fire!";
-                }
-                else if (token == "BROTHERHURT_KILL_3")
-                {
-                    st = "You should’ve gone for the head.";
-                }
-                else if (token == "BROTHERHURT_KILL_4")
-                {
-                    st = "Reality can be whatever I want.";
-                }
-                else if (token == "BROTHERHURT_KILL_5")
-                {
-                    st = "Your optimism is misplaced.";
-                }
+                    else if (token == "BROTHERHURT_KILL_1")
+                    {
+                        st = "I... had... to.";
+                    }
+                    else if (token == "BROTHERHURT_KILL_2")
+                    {
+                        st = "Rain fire!";
+                    }
+                    else if (token == "BROTHERHURT_KILL_3")
+                    {
+                        st = "You should’ve gone for the head.";
+                    }
+                    else if (token == "BROTHERHURT_KILL_4")
+                    {
+                        st = "Reality can be whatever I want.";
+                    }
+                    else if (token == "BROTHERHURT_KILL_5")
+                    {
+                        st = "Your optimism is misplaced.";
+                    }
 
 
-                else if (token == "BROTHERHURT_DEATH_4")
-                {
-                    st = "NO... NOT NOW...";
-                }
-                else if (token == "BROTHERHURT_DEATH_5")
-                {
-                    st = "WHY... WHY NOW...?";
-                }
-                else if (token == "BROTHERHURT_DEATH_6")
-                {
-                    st = "NO... NO...!";
-                }
-                orig(self, token, st);
-            };
+                    else if (token == "BROTHERHURT_DEATH_4")
+                    {
+                        st = "NO... NOT NOW...";
+                    }
+                    else if (token == "BROTHERHURT_DEATH_5")
+                    {
+                        st = "WHY... WHY NOW...?";
+                    }
+                    else if (token == "BROTHERHURT_DEATH_6")
+                    {
+                        st = "NO... NO...!";
+                    }
+                    orig(self, token, st);
+                };
         }
         private static void _UI()
         {
@@ -1107,7 +1107,7 @@ namespace MoistureUpset
             ReplaceModel("RoR2/Base/Shopkeeper/ShopkeeperBody.prefab", "@MoistureUpset_shop:assets/shop.mesh", "@MoistureUpset_shop:assets/shop.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Shopkeeper/ShopkeeperBody.prefab").WaitForCompletion();
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shaderKeywords = null;
-           
+
 
         }
         private static void BeetleGuard()
@@ -1423,7 +1423,7 @@ namespace MoistureUpset
             ReplaceModel("RoR2/Base/GreaterWisp/GreaterWispBody.prefab", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion();
             fab.GetComponentInChildren<FlickerLight>().enabled = false;
-            //var fixer = fab.AddComponent<GhastFixer>();
+            var fixer = fab.AddComponent<GhastFixerButTheGhastNotTheFireballs>();
             var components = fab.GetComponentsInChildren<Component>();
             foreach (var item in components)
             {
@@ -1511,7 +1511,7 @@ namespace MoistureUpset
             On.EntityStates.GreaterWispMonster.FireCannons.OnEnter += (orig, self) =>
             {
                 Util.PlaySound("GhastAttack", self.outer.gameObject);
-                //self.outer.gameObject.GetComponent<GhastFixer>().shootfire();
+                self.outer.gameObject.GetComponent<GhastFixerButTheGhastNotTheFireballs>().Shot();
                 orig(self);
             };
         }
@@ -1624,58 +1624,20 @@ namespace MoistureUpset
                 return;
             LoadBNK("oof");
             LoadResource("noob");
+            Material nolaser = UnityEngine.Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
+            nolaser.mainTexture = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1Tex.png");
+            Material laser = UnityEngine.Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
+            laser.mainTexture = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
             On.EntityStates.GolemMonster.ChargeLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.ChargeLaser.attackSoundString = "GolemChargeLaser";
-                try
-                {
-                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
-                    GameObject g = self.outer.gameObject.GetComponent<Rigidbody>().gameObject;
-                    for (int i = 0; i < objects.Length; i++)
-                    {
-                        if (objects[i] == g)
-                        {
-                            Texture t = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1TexLaser.png");
-                            var mesh = objects[i - 3].GetComponent<SkinnedMeshRenderer>();
-                            foreach (var item in mesh.sharedMaterials)
-                            {
-                                item.mainTexture = t;
-                            }
-                            break;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    //Debug.Log(e);
-                }
+                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = laser;
                 orig(self);
             };
             On.EntityStates.GolemMonster.FireLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.FireLaser.attackSoundString = "GolemFireLaser";
-                try
-                {
-                    GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
-                    GameObject g = self.outer.gameObject.GetComponent<Rigidbody>().gameObject;
-                    for (int i = 0; i < objects.Length; i++)
-                    {
-                        if (objects[i] == g)
-                        {
-                            Texture t = Assets.Load<Texture>("@MoistureUpset_noob:assets/Noob1Tex.png");
-                            var mesh = objects[i - 3].GetComponent<SkinnedMeshRenderer>();
-                            foreach (var item in mesh.sharedMaterials)
-                            {
-                                item.mainTexture = t;
-                            }
-                            break;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    //Debug.Log(e);
-                }
+                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = nolaser;
                 orig(self);
             };
             On.EntityStates.GolemMonster.ClapState.OnEnter += (orig, self) =>
@@ -1691,6 +1653,25 @@ namespace MoistureUpset
                 orig(self);
             };
             ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
+            //var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/GolemBody.prefab").WaitForCompletion();
+            //fab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial.mainTexture = 
+            //foreach (var item in fab.GetComponentsInChildren<RoR2.ModelSkinController>())
+            //{
+            //    foreach (var info in item.skins[0].rendererInfos)
+            //    {
+            //        if (info.defaultMaterial.name != "matTitan" && info.defaultMaterial.name != "Billboard")
+            //        {
+            //            info.defaultMaterial.color = new Color(0, 0, 0, 0);
+            //        }
+            //    }
+            //    for (int i = 0; i < item.skins.Length; i++)
+            //    {
+            //        if (i != 0)
+            //        {
+            //            item.skins[i] = item.skins[0];
+            //        }
+            //    }
+            //}
         }
         private static void Bison()
         {
@@ -2366,9 +2347,11 @@ namespace MoistureUpset
             p.startLifetime = 10;
             var shape = p.shape;
             shape.shapeType = ParticleSystemShapeType.Sprite;
+            //fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Beetle/BeetleSpitExplosion.prefab").WaitForCompletion();
+            fab.AddComponent<NyanFixer>();
 
-            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
-            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
+            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
+            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
 
 
             var vel = p.limitVelocityOverLifetime;
@@ -2708,7 +2691,7 @@ namespace MoistureUpset
                 if (BigJank.getOptionValue(Settings.Twitch))
                 {
                     //Collabs.m_PlayableGrovetender.Run();
-                   // DebugClass.Log($"PlayableGrovetender installed, modifying");
+                    //DebugClass.Log($"PlayableGrovetender installed, modifying");
                 }
             }
             catch (Exception)
@@ -2767,7 +2750,7 @@ namespace MoistureUpset
             {
                 if (BigJank.getOptionValue(Settings.FroggyChair))
                 {
-                   // Collabs.PlayableBeetle.Run();
+                    //Collabs.PlayableBeetle.Run();
                     //DebugClass.Log($"ChipTheBeetle installed, modifying");
                 }
             }
