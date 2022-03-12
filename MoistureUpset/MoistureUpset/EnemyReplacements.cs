@@ -2366,9 +2366,11 @@ namespace MoistureUpset
             p.startLifetime = 10;
             var shape = p.shape;
             shape.shapeType = ParticleSystemShapeType.Sprite;
+            //fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Beetle/BeetleSpitExplosion.prefab").WaitForCompletion();
+            fab.AddComponent<NyanFixer>();
 
-            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
-            ((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
+            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("objectName", "nyan");
+            //((AK.Wwise.BaseType)fab.GetComponentsInChildren<AkEvent>()[1].data).ObjectReference.SetFieldValue("id", (UInt32)1002825203);
 
 
             var vel = p.limitVelocityOverLifetime;
@@ -2574,7 +2576,6 @@ namespace MoistureUpset
                 return;
             LoadResource("scavenger");
             LoadBNK("Abungus");
-            DebugClass.Log($"----------replacing scav stuff");
             ReplaceModel("RoR2/Base/Scav/ScavBody.prefab", "@MoistureUpset_scavenger:assets/bosses/Backpack.mesh", "@MoistureUpset_scavenger:assets/bosses/Amongus.png", 0);
             ReplaceModel("RoR2/Base/Scav/ScavBackpack.prefab", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh");
             ReplaceModel("RoR2/Base/Scav/ScavBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);

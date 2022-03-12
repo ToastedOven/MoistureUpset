@@ -184,7 +184,6 @@ namespace MoistureUpset
                 orig(self);
                 try
                 {
-                    DebugClass.Log($"----------inventory changed");
                     if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
                     {
                         AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
@@ -193,7 +192,6 @@ namespace MoistureUpset
                     {
                         AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
                     }
-                    DebugClass.Log($"----------and we didn't break it");
                 }
                 catch (Exception)
                 {
