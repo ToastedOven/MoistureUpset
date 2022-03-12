@@ -26,6 +26,19 @@ namespace MoistureUpset.InteractReplacements
         public static void Init()
         {
             Chests();
+            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                float yes = self.GetFieldValue<int>("successfulPurchaseCount");
+                orig(self, activator);
+                if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+                else
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+            };
         }
         public static GameObject particles;
         public static void ReloadChests()

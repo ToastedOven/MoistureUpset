@@ -179,6 +179,24 @@ namespace MoistureUpset
             //    orig(self);
             //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
             //};
+            On.RoR2.Inventory.HandleInventoryChanged += (orig, self) => //FIX WHEN PULL
+            {
+                orig(self);
+                try
+                {
+                    if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                    {
+                        AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                    }
+                    else
+                    {
+                        AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            };
             On.RoR2.UI.CharacterSelectController.Awake += (orig, self) =>
             {
                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
@@ -405,7 +423,7 @@ namespace MoistureUpset
                 orig(self);
                 UImods.ReplaceUIObject("Image", "MoistureUpset.Resources.MoistureUpsetFinal.png");
             };
-            On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) => //optimize?
+            On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) =>
             {
                 orig(self);
                 if (BigJank.getOptionValue(Settings.Logo))
@@ -489,7 +507,7 @@ namespace MoistureUpset
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref c, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);//FIX WHEN PULL
+                AkSoundEngine.PostEvent("Thanos1", mainBody.gameObject);//FIX WHEN PULL
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
@@ -551,17 +569,17 @@ namespace MoistureUpset
                                 case 2:
                                     AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
                                     AkSoundEngine.ExecuteActionOnEvent(2369706651, AkActionOnEventType.AkActionOnEventType_Stop);
-                                    AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("Thanos2", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 3:
                                     AkSoundEngine.ExecuteActionOnEvent(2369706648, AkActionOnEventType.AkActionOnEventType_Stop);
                                     //2369706648
-                                    AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("Thanos3", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 4:
                                     AkSoundEngine.ExecuteActionOnEvent(2369706649, AkActionOnEventType.AkActionOnEventType_Stop);
                                     //2369706649
-                                    AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("Thanos4", mainBody.gameObject);//FIX WHEN PULL
                                     //2369706651
                                     //2369706649
                                     //2369706648
@@ -801,7 +819,6 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
                     if (BigJank.getOptionValue(Settings.Fanfare))
                         AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
-                    MLG.bossOver = true;
                 }
                 catch (Exception)
                 {

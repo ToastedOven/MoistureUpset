@@ -13,7 +13,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
-//using Chip;
+using Chip;
 using RoR2.ContentManagement;
 
 namespace MoistureUpset.Collabs
@@ -22,60 +22,60 @@ namespace MoistureUpset.Collabs
     {
         public static void Run()
         {
-            //Chip.Beetlegod beetlegod = new Beetlegod();
-            //foreach (var item in ContentManager.survivorDefs)
-            //{
-            //    if (item.bodyPrefab.name == "Chip")
-            //    {
-            //        item.bodyPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Assets.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
-            //        item.displayPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Assets.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
+            Chip.Beetlegod beetlegod = new Beetlegod();
+            foreach (var item in ContentManager.survivorDefs)
+            {
+                if (item.bodyPrefab.name == "Chip")
+                {
+                    item.bodyPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Assets.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
+                    item.displayPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = Assets.Load<Mesh>("@MoistureUpset_frog:assets/frogchair.mesh");
 
-            //        List<Transform> t = new List<Transform>();
-            //        foreach (var boner in item.bodyPrefab.GetComponentsInChildren<Transform>())
-            //        {
-            //            if (!boner.name.Contains("Hurtbox") && !boner.name.Contains("BeetleBody") && !boner.name.Contains("Mesh") && !boner.name.Contains("mdl"))
-            //            {
-            //                t.Add(boner);
-            //            }
-            //        }
-            //        Transform temp = t[14];
-            //        t[14] = t[11];
-            //        t[11] = temp;
-            //        temp = t[15];
-            //        t[15] = t[12];
-            //        t[12] = temp;
-            //        temp = t[16];
-            //        t[16] = t[13];
-            //        t[13] = temp;
-            //        foreach (var boner in item.bodyPrefab.GetComponentsInChildren<SkinnedMeshRenderer>())
-            //        {
-            //            boner.bones = t.ToArray();
-            //        }
+                    List<Transform> t = new List<Transform>();
+                    foreach (var boner in item.bodyPrefab.GetComponentsInChildren<Transform>())
+                    {
+                        if (!boner.name.Contains("Hurtbox") && !boner.name.Contains("BeetleBody") && !boner.name.Contains("Mesh") && !boner.name.Contains("mdl"))
+                        {
+                            t.Add(boner);
+                        }
+                    }
+                    Transform temp = t[14];
+                    t[14] = t[11];
+                    t[11] = temp;
+                    temp = t[15];
+                    t[15] = t[12];
+                    t[12] = temp;
+                    temp = t[16];
+                    t[16] = t[13];
+                    t[13] = temp;
+                    foreach (var boner in item.bodyPrefab.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    {
+                        boner.bones = t.ToArray();
+                    }
 
 
-            //        t = new List<Transform>();
-            //        foreach (var boner in item.displayPrefab.GetComponentsInChildren<Transform>())
-            //        {
-            //            if (!boner.name.Contains("Hurtbox") && !boner.name.Contains("BeetleBody") && !boner.name.Contains("Mesh") && !boner.name.Contains("mdl"))
-            //            {
-            //                t.Add(boner);
-            //            }
-            //        }
-            //        temp = t[14];
-            //        t[14] = t[11];
-            //        t[11] = temp;
-            //        temp = t[15];
-            //        t[15] = t[12];
-            //        t[12] = temp;
-            //        temp = t[16];
-            //        t[16] = t[13];
-            //        t[13] = temp;
-            //        foreach (var boner in item.displayPrefab.GetComponentsInChildren<SkinnedMeshRenderer>())
-            //        {
-            //            boner.bones = t.ToArray();
-            //        }
-            //    }
-            //}
+                    t = new List<Transform>();
+                    foreach (var boner in item.displayPrefab.GetComponentsInChildren<Transform>())
+                    {
+                        if (!boner.name.Contains("Hurtbox") && !boner.name.Contains("BeetleBody") && !boner.name.Contains("Mesh") && !boner.name.Contains("mdl"))
+                        {
+                            t.Add(boner);
+                        }
+                    }
+                    temp = t[14];
+                    t[14] = t[11];
+                    t[11] = temp;
+                    temp = t[15];
+                    t[15] = t[12];
+                    t[12] = temp;
+                    temp = t[16];
+                    t[16] = t[13];
+                    t[13] = temp;
+                    foreach (var boner in item.displayPrefab.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    {
+                        boner.bones = t.ToArray();
+                    }
+                }
+            }
 
         }
     }
