@@ -734,6 +734,20 @@ namespace MoistureUpset
         public IEnumerator Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g, bool yeet)
         {
             yield return new WaitForSeconds(.1f);
+            try
+            {
+                if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                }
+                else
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                }
+            }
+            catch (Exception)
+            {
+            }
             if (dontSpeak <= 0)
             {
                 string itemToken = ItemCatalog.GetItemDef(index).nameToken;
