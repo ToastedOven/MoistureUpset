@@ -37,6 +37,30 @@ namespace MoistureUpset
             newMat.SetFloat("_NormalStrength", 0.5f);
             newMat.SetTexture("_NormalTex", null);
 
+            newMat.name = texture;
+
+            return newMat;
+        }
+
+        public static Material RobloxMaterial(string texture)
+        {
+            if (!_prefab)
+                _prefab = Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/GolemBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
+
+            Material newMat = Object.Instantiate<Material>(_prefab);
+
+            newMat.mainTexture = Load<Texture>(texture);
+
+            newMat.SetColor("_Color", Color.white);
+            newMat.SetFloat("_EmPower", 0f);
+            newMat.SetColor("_EmColor", Color.white);
+            newMat.SetTexture("_EmTex", null);
+            newMat.SetTexture("_FresnelRamp", null);
+            newMat.SetFloat("_NormalStrength", 0.5f);
+            newMat.SetTexture("_NormalTex", null);
+
+            newMat.name = texture;
+
             return newMat;
         }
 
