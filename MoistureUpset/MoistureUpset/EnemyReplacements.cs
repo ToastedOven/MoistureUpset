@@ -1631,13 +1631,15 @@ namespace MoistureUpset
             On.EntityStates.GolemMonster.ChargeLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.ChargeLaser.attackSoundString = "GolemChargeLaser";
-                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = laser;
+                self.outer.gameObject.GetComponent<GolemRandomizer>().Charge();
+                //self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = laser;
                 orig(self);
             };
             On.EntityStates.GolemMonster.FireLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.FireLaser.attackSoundString = "GolemFireLaser";
-                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = nolaser;
+                self.outer.gameObject.GetComponent<GolemRandomizer>().Shoot();
+                //self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = nolaser;
                 orig(self);
             };
             On.EntityStates.GolemMonster.ClapState.OnEnter += (orig, self) =>
