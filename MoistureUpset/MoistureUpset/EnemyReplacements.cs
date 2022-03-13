@@ -1631,20 +1631,21 @@ namespace MoistureUpset
             On.EntityStates.GolemMonster.ChargeLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.ChargeLaser.attackSoundString = "GolemChargeLaser";
-                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = laser;
+                self.outer.gameObject.GetComponent<GolemRandomizer>().Charge();
+                //self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = laser;
                 orig(self);
             };
             On.EntityStates.GolemMonster.FireLaser.OnEnter += (orig, self) =>
             {
                 EntityStates.GolemMonster.FireLaser.attackSoundString = "GolemFireLaser";
-                self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = nolaser;
+                self.outer.gameObject.GetComponent<GolemRandomizer>().Shoot();
+                //self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = nolaser;
                 orig(self);
             };
             On.EntityStates.GolemMonster.ClapState.OnEnter += (orig, self) =>
             {
                 try
                 {
-
                     EntityStates.GolemMonster.ClapState.attackSoundString = "GolemMelee";
                 }
                 catch (Exception)
@@ -1652,26 +1653,74 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
+            On.EntityStates.GolemMonster.SpawnState.OnEnter += (orig, self) =>
+            {
+                Transform transform = self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform;
+                if (transform)
+                {
+                    transform.GetComponent<PrintController>().printTime = 4;
+                    transform.GetComponent<PrintController>().maxPrintHeight = 9;
+                }
+                orig(self);
+            };
             ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
-            //var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/GolemBody.prefab").WaitForCompletion();
-            //fab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial.mainTexture = 
-            //foreach (var item in fab.GetComponentsInChildren<RoR2.ModelSkinController>())
-            //{
-            //    foreach (var info in item.skins[0].rendererInfos)
-            //    {
-            //        if (info.defaultMaterial.name != "matTitan" && info.defaultMaterial.name != "Billboard")
-            //        {
-            //            info.defaultMaterial.color = new Color(0, 0, 0, 0);
-            //        }
-            //    }
-            //    for (int i = 0; i < item.skins.Length; i++)
-            //    {
-            //        if (i != 0)
-            //        {
-            //            item.skins[i] = item.skins[0];
-            //        }
-            //    }
-            //}
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/GolemBody.prefab").WaitForCompletion();
+            GolemRandomizer randomizer = fab.AddComponent<GolemRandomizer>();
+            foreach (var item in fab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().GetComponentsInChildren<RoR2.ModelSkinController>())
+            {
+                for (int i = 0; i < item.skins.Length; i++)
+                {
+                    if (i != 0)
+                    {
+                        item.skins[i] = item.skins[0];
+                    }
+                }
+            }
+
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/Noob1Tex.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/elsa.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/spiderman.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/pickle.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/guest.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/furry.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/naruto.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/fortnite.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/pizza.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/dream.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/soldier.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/police.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/inmate.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/robber.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/man.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/girl.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/default.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/dummy.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/builderman.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/telamon.png"));
+            GolemRandomizer.materials.Add(Assets.RobloxMaterial("@MoistureUpset_noob:assets/robloxcharacters/toothy.png"));
+
+
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/N00b.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/elsa.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/spiderman.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/pickle.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/guest.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/furry.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/naruto.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/fortnite.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/pizza.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/dream.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/soldier.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/police.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/inmate.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/robber.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/man.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/girl.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/N00b.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/N00b.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/builderman.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/telamon.mesh"));
+            GolemRandomizer.meshes.Add(Assets.Load<Mesh>("@MoistureUpset_noob:assets/robloxcharacters/toothy.mesh"));
         }
         private static void Bison()
         {
