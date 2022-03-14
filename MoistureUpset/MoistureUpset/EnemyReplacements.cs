@@ -358,6 +358,35 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+            //DebugClass.DebugBones("RoR2/DLC1/Gup/GupBody.prefab");//gup
+            //DebugClass.DebugBones("RoR2/DLC1/Gup/GeepBody.prefab");//geep
+            //DebugClass.DebugBones("RoR2/DLC1/Gup/GipBody.prefab");//gip
+            //DebugClass.DebugBones("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab");//jailer
+            //DebugClass.DebugBones("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab");//sonic
+            //DebugClass.DebugBones("RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab");//barnicle
+            //DebugClass.DebugBones("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab");//blind pest
+            //DebugClass.DebugBones("RoR2/DLC1/Vermin/VerminBody.prefab");//rats rats we are the rats
+            //DebugClass.DebugBones("RoR2/Base/LunarExploder/LunarExploderBody.prefab");//lunar roller
+            //DebugClass.DebugBones("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab");//contructs???
+            //DebugClass.DebugBones("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBody.prefab");//contructs???
+            //DebugClass.DebugBones("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab");//contructs???
+            //DebugClass.DebugBones("RoR2/DLC1/ClayGrenadier/ClayGrenadierBody.prefab");//new clay guy
+            //DebugClass.DebugBones("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabBody.prefab");//pussy devastator
+            //DebugClass.DebugBones("RoR2/Base/Grandparent/GrandParentBody.prefab");//grandparent
+            //DebugClass.DebugBones("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab");//little shits that spawn when you get a void item
+            //DebugClass.DebugBones("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabBody.prefab");//voidling
+            ////DebugClass.DebugBones("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabJointBody.prefab");//voidling parts????
+
+
+
+            //DebugClass.DebugBones("RoR2/DLC1/VoidSurvivor/VoidSurvivorBody.prefab");
+            //DebugClass.DebugBones("RoR2/DLC1/Railgunner/RailgunnerBody.prefab");
+
+
+
+            LoadResource("moisture_testing");
+            ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
+            ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
         }
         private static void Icons()
         {
