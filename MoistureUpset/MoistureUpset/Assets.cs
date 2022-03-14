@@ -36,6 +36,7 @@ namespace MoistureUpset
             newMat.SetTexture("_FresnelRamp", null);
             newMat.SetFloat("_NormalStrength", 0.5f);
             newMat.SetTexture("_NormalTex", null);
+            //newMat.SetTexture("_PrintRamp", null);
 
             newMat.name = texture;
 
