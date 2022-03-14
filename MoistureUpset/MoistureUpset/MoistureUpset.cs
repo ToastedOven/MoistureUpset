@@ -135,7 +135,7 @@ namespace MoistureUpset
             //    dialog.AddCancelButton("ok");
             //}
         }
-
+        internal static MusicController musicController;
         private void IntroFinished(VideoPlayer source)
         {
             RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene title");

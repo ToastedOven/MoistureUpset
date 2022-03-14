@@ -121,7 +121,7 @@ namespace MoistureUpset
                     sb.Remove(0, "<style=cDeath>".Length);
                     sb.Remove(sb.Length - 8, 8);
                     sb.Insert(29, "<style=cDeath>");
-                    sb.Insert(sb.Length-29, "</style>");
+                    sb.Insert(sb.Length - 29, "</style>");
                     return sb.ToString();
                 };
                 GameObject g = new GameObject();
@@ -173,7 +173,10 @@ namespace MoistureUpset
                     {
                         try
                         {
-                            g.transform.localPosition = new Vector3(0, 1000, 0);
+                            if (g.transform.localPosition.y != 1000)
+                            {
+                                g.transform.localPosition = new Vector3(0, 1000, 0);
+                            }
                         }
                         catch (Exception)
                         {
