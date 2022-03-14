@@ -14,6 +14,7 @@ using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
 using R2API.Networking;
 using System.IO;
+using System.Text;
 
 namespace MoistureUpset
 {
@@ -162,6 +163,7 @@ namespace MoistureUpset
             IntroReplaceAction();
 
         }
+        internal static MusicController musicController;
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)
         //{
         //    BonziBuddy.buddy.StartCoroutine(BonziBuddy.buddy.Speak(self.text));

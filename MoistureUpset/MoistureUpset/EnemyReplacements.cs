@@ -1694,7 +1694,7 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
+            //ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/GolemBody.prefab").WaitForCompletion();
             GolemRandomizer randomizer = fab.AddComponent<GolemRandomizer>();
             foreach (var item in fab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().GetComponentsInChildren<RoR2.ModelSkinController>())
@@ -2546,13 +2546,13 @@ namespace MoistureUpset
             {
                 try
                 {
-                    var c = GameObject.FindObjectOfType<MusicController>();
+                    //var c = GameObject.FindObjectOfType<MusicController>();
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
-                    AkSoundEngine.PostEvent("StopFanFare", c.gameObject);
+                    AkSoundEngine.PostEvent("StopFanFare", Moisture_Upset.musicController.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    AkSoundEngine.PostEvent("PlayFanFare", c.gameObject);
+                    AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
                 }
                 catch (Exception)
                 {
@@ -2650,26 +2650,7 @@ namespace MoistureUpset
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[2].sharedMaterial.shader = temp;
 
             fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scav/ScavBody.prefab").WaitForCompletion();
-            fab.GetComponentInChildren<SkinnedMeshRenderer>().gameObject.AddComponent<AbungusColors>();
-            Material mat = Assets.Load<Material>("@MoistureUpset_scavenger:assets/bosses/materials/gun.mat");
-            On.RoR2.CharacterModel.UpdateRendererMaterials += (orig, self, r, m, i) =>
-            {
-                orig(self, r, m, i);
-                try
-                {
-                    if (m.ToString().StartsWith("matScav"))
-                    {
-                        r.sharedMaterial = self.gameObject.GetComponentInChildren<AbungusColors>().material;
-                    }
-                    else if (m.ToString() == "matTrimSheetConstructionBlueScavenged (UnityEngine.Material)" || m.ToString() == "matTrimSheetConstructionBlueEmission (UnityEngine.Material)")
-                    {
-                        r.sharedMaterial = mat;
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            };
+            fab.AddComponent<AbungusColors>();
             On.EntityStates.ScavMonster.Death.OnEnter += (orig, self) =>
             {
                 if (kindlyKillYourselfRune)
@@ -2678,16 +2659,8 @@ namespace MoistureUpset
                     try
                     {
                         var backpack = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Scav/ScavBackpack.prefab").WaitForCompletion();
-                        GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
                         GameObject g = self.outer.gameObject;
-                        for (int i = 0; i < objects.Length; i++)
-                        {
-                            if (objects[i] == g)
-                            {
-                                backpack.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial = objects[i - 2].GetComponentInChildren<AbungusColors>().material;
-                                break;
-                            }
-                        }
+                        backpack.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial = g.GetComponentInChildren<AbungusColors>().material;
                     }
                     catch (Exception)
                     {
