@@ -335,8 +335,9 @@ namespace MoistureUpset
                         }
                     }
                 }
-                else
+                else if (rainbowTimer > -100)
                 {
+                    rainbowTimer = -101;
                     if (HUD == null)
                     {
                         HUD = GameObject.Find("HUDSimple(Clone)");
@@ -389,7 +390,6 @@ namespace MoistureUpset
                 {
                     stage1Active = false;
                     stage1Timer = 0;
-                    var controller = GameObject.FindObjectOfType<MusicController>();
                     switch ((int)progress)
                     {
                         case 0:
@@ -401,7 +401,7 @@ namespace MoistureUpset
                             break;
                         case 1:
                             slider.transform.Find("Image").gameObject.GetComponent<Image>().sprite = stage1;
-                            controller.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                            Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                             AkSoundEngine.SetRTPCValue("MLGActive", 1);
                             if (prevStage == 0)
                             {
@@ -415,7 +415,7 @@ namespace MoistureUpset
                             break;
                         case 2:
                             slider.transform.Find("Image").gameObject.GetComponent<Image>().sprite = stage2;
-                            controller.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                            Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                             AkSoundEngine.SetRTPCValue("MLGActive", 1);
                             AkSoundEngine.PostEvent(tracks[ActiveTrack].Stage2, localBody.gameObject);
 
