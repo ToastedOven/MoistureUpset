@@ -39,7 +39,7 @@ namespace MoistureUpset.Skins
             //On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
             //On.RoR2.CharacterMaster.OnBodyDamaged += mostRecentAttacker;
         }
-        
+
         private static void mostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
         {
             orig(self, damageReport);
@@ -70,8 +70,8 @@ namespace MoistureUpset.Skins
         {
             Assets.AddBundle("engineer");
             Assets.AddBundle("Resources.tf2_engineer_icon");
-            Assets.AddBundle("Models.dispener");
-            Assets.AddBundle("Models.demopill");
+            Assets.AddBundle("Models.engi_projectiles");
+            //Assets.AddBundle("Models.dispener");
             Assets.AddBundle("Models.rocket");
             Assets.AddBundle("Models.mines");
             Assets.AddBundle("Models.oopsideletedtheoldresource");
@@ -98,7 +98,7 @@ namespace MoistureUpset.Skins
                 BaseSkins = Array.Empty<SkinDef>(),
                 GameObjectActivations = Array.Empty<SkinDef.GameObjectActivation>(),
 
-                RendererInfos = new CharacterModel.RendererInfo[]
+                RendererInfos = new[]
                 {
                     new CharacterModel.RendererInfo
                     {
@@ -109,7 +109,7 @@ namespace MoistureUpset.Skins
                     }
 
                 },
-                MeshReplacements = new SkinDef.MeshReplacement[]
+                MeshReplacements = new[]
                 {
                     new SkinDef.MeshReplacement
                     {
@@ -148,7 +148,7 @@ namespace MoistureUpset.Skins
                 BaseSkins = Array.Empty<SkinDef>(),
                 GameObjectActivations = Array.Empty<SkinDef.GameObjectActivation>(),
 
-                RendererInfos = new CharacterModel.RendererInfo[]
+                RendererInfos = new[]
                 {
                     new CharacterModel.RendererInfo
                     {
@@ -159,7 +159,7 @@ namespace MoistureUpset.Skins
                     }
 
                 },
-                MeshReplacements = new SkinDef.MeshReplacement[]
+                MeshReplacements = new[]
                 {
                     new SkinDef.MeshReplacement
                     {
@@ -190,6 +190,9 @@ namespace MoistureUpset.Skins
             var engiTurretSkinDef = SkinManager.skins["EngiTurretBody"];
             var engiWalkerTurretSkinDef = SkinManager.skins["EngiWalkerTurretBody"];
 
+            var engiGrenadePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion();
+            var engiBubblePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBubbleShield.prefab").WaitForCompletion();
+
             var skin = new LoadoutAPI.SkinDefInfo
             {
                 Icon = Assets.Load<Sprite>("assets/tf2_engineer_icon.png"),
@@ -199,7 +202,7 @@ namespace MoistureUpset.Skins
                 BaseSkins = Array.Empty<SkinDef>(),
                 GameObjectActivations = Array.Empty<SkinDef.GameObjectActivation>(),
 
-                RendererInfos = new CharacterModel.RendererInfo[]
+                RendererInfos = new[]
                 {
                     new CharacterModel.RendererInfo
                     {
@@ -210,7 +213,7 @@ namespace MoistureUpset.Skins
                     }
 
                 },
-                MeshReplacements = new SkinDef.MeshReplacement[]
+                MeshReplacements = new[]
                 {
                     new SkinDef.MeshReplacement
                     {
@@ -218,7 +221,20 @@ namespace MoistureUpset.Skins
                         renderer = renderers[0]
                     }
                 },
-                ProjectileGhostReplacements = Array.Empty<SkinDef.ProjectileGhostReplacement>(),
+                ProjectileGhostReplacements = new[]
+                {
+                    new SkinDef.ProjectileGhostReplacement
+                    {
+                        projectilePrefab = engiGrenadePrefab,
+                        projectileGhostReplacementPrefab = EngiGrenade()
+                    },
+                    new SkinDef.ProjectileGhostReplacement
+                    {
+                        projectilePrefab = engiBubblePrefab,
+                        projectileGhostReplacementPrefab = EngiDispenser()
+
+                    }
+                },
                 MinionSkinReplacements = new[]
                 {
                     new SkinDef.MinionSkinReplacement
@@ -237,11 +253,41 @@ namespace MoistureUpset.Skins
             Array.Resize(ref skinController.skins, skinController.skins.Length + 1);
             skinController.skins[skinController.skins.Length - 1] = LoadoutAPI.CreateNewSkinDef(skin);
 
-            //LanguageAPI.Add(NameToken, Name);
+            LanguageAPI.Add(NameToken, Name);
 
             SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
 
             return skinController.skins;
+        }
+
+        private static GameObject EngiGrenade()
+        {
+            var engiGrenadeGhost = Assets.Load<GameObject>("tf2engi/engigrenadeghostskintf2.prefab");
+            engiGrenadeGhost.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("tf2engi/demopill.png");
+
+            AddProjectileComponents(engiGrenadeGhost);
+
+            return engiGrenadeGhost;
+        }
+
+        private static GameObject EngiDispenser()
+        {
+            var engiBubbleGhost = Assets.Load<GameObject>("tf2engi/engibubbleshieldghostskintf2.prefab");
+            engiBubbleGhost.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("tf2engi/dispenser.png");
+
+            AddProjectileComponents(engiBubbleGhost);
+
+            return engiBubbleGhost;
+        }
+
+        private static void AddProjectileComponents(GameObject projectile)
+        {
+            projectile.AddComponent<ProjectileGhostController>();
+
+            var attributes = projectile.AddComponent<VFXAttributes>();
+
+            attributes.vfxPriority = VFXAttributes.VFXPriority.Always;
+            attributes.vfxIntensity = VFXAttributes.VFXIntensity.Low;
         }
 
         // A working solution for the display elements to have the right skin.
@@ -265,69 +311,38 @@ namespace MoistureUpset.Skins
 
                 if (self.owner.name != "EngiBody(Clone)" || !cb.IsSkin("THE_TF2_ENGINEER_SKIN"))
                     return;
-                
+
                 switch (self.ghost.name)
                 {
-                    case "EngiSeekerGrenadeGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/dispenser.mesh");
-                        meshes[1].sharedMesh = Assets.Load<Mesh>("assets/na1.mesh");
-                        meshes[2].sharedMesh = Assets.Load<Mesh>("assets/na1.mesh");
-
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.mainTexture = Assets.Load<Texture>("assets/dispenser.png");
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_EmTex", Assets.Load<Texture>("assets/dispenser.png"));
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material.SetTexture("_NormalTex", null);
-
-                        meshes[0].transform.localScale = new Vector3(0.5f, 0.55f, 0.5f);
-                        meshes[0].transform.localPosition += new Vector3(0f, 0f, 0.5f);
-
-                        Object.DestroyImmediate(self.ghost.GetComponentInChildren<Rewired.ComponentControls.Effects.RotateAroundAxis>());
-
-                        SoundAssets.PlaySound("EngiBuildsDispenser", cb.gameObject);
-                        break;
-                    }
-                    case "EngiGrenadeGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/demopill.mesh");
-
-                        self.ghost.gameObject.GetComponentInChildren<Renderer>().material = Assets.Load<Material>("assets/demopill.mat");
-
-                        meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                        break;
-                    }
                     case "EngiHarpoonGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
 
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/rocket.mesh");
+                            meshes[0].sharedMesh = Assets.Load<Mesh>("assets/rocket.mesh");
 
-                        self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png");
+                            self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png");
 
-                        meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                        break;
-                    }
+                            meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+                            break;
+                        }
                     case "SpiderMineGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
 
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/spidermine.mesh");
+                            meshes[0].sharedMesh = Assets.Load<Mesh>("assets/spidermine.mesh");
 
-                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
-                        break;
-                    }
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
+                            break;
+                        }
                     case "EngiMineGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
 
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/harpoon.mesh");
+                            meshes[0].sharedMesh = Assets.Load<Mesh>("assets/harpoon.mesh");
 
-                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
-                        break;
-                    }
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
+                            break;
+                        }
                 }
             }
             catch (Exception)
