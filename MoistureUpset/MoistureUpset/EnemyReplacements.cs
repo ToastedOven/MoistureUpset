@@ -387,6 +387,25 @@ namespace MoistureUpset
             LoadResource("moisture_testing");
             ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
             ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceModel("RoR2/DLC1/Gup/GupBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup.mesh");
+            ReplaceModel("RoR2/DLC1/Gup/GeepBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup1.mesh");
+            ReplaceModel("RoR2/DLC1/Gup/GipBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup1.mesh");
+            ReplaceModel("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/jailer.mesh");
+            ReplaceModel("RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/barnacle1.mesh");
+            ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/flying1.mesh");
+            ReplaceModel("RoR2/DLC1/Vermin/VerminBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/vermin1.mesh");
+            ReplaceModel("RoR2/Base/LunarExploder/LunarExploderBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/exploder1.mesh");
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/minor1.mesh");
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/mega.mesh");
+            //ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/mega2.mesh", 1);
+            ReplaceModel("RoR2/DLC1/ClayGrenadier/ClayGrenadierBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/clay2.mesh", 1);
+            ReplaceModel("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/megacrab.mesh");
+            ReplaceModel("RoR2/Base/Grandparent/GrandParentBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/grandparent.mesh");
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/infestor1.mesh");
+            ReplaceModel("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase1.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/raidcrab.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
+
+
+
         }
         private static void Icons()
         {
