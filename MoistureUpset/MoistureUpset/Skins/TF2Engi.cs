@@ -71,8 +71,7 @@ namespace MoistureUpset.Skins
             Assets.AddBundle("engineer");
             Assets.AddBundle("Resources.tf2_engineer_icon");
             Assets.AddBundle("Models.engi_projectiles");
-            //Assets.AddBundle("Models.dispener");
-            Assets.AddBundle("Models.rocket");
+            Assets.AddBundle("Models.engi_rocket");
             Assets.AddBundle("Models.mines");
             Assets.AddBundle("Models.oopsideletedtheoldresource");
             Assets.AddBundle("unifiedturret");
@@ -192,6 +191,7 @@ namespace MoistureUpset.Skins
             
             var engiGrenadePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion();
             var engiBubblePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBubbleShield.prefab").WaitForCompletion();
+            var engiHarpoonPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiHarpoon.prefab").WaitForCompletion();
 
             var skin = new LoadoutAPI.SkinDefInfo
             {
@@ -232,7 +232,11 @@ namespace MoistureUpset.Skins
                     {
                         projectilePrefab = engiBubblePrefab,
                         projectileGhostReplacementPrefab = EngiDispenser()
-                        
+                    },
+                    new SkinDef.ProjectileGhostReplacement
+                    {
+                        projectilePrefab = engiHarpoonPrefab,
+                        projectileGhostReplacementPrefab = EngiRocket()
                     }
                 },
                 MinionSkinReplacements = new[]
@@ -280,6 +284,15 @@ namespace MoistureUpset.Skins
             return engiBubbleGhost;
         }
 
+        private static GameObject EngiRocket()
+        {
+            var engiRocket = Assets.Load<GameObject>("tf2engi/harpoon.prefab");
+            
+            engiRocket.transform.Find("Mesh").gameObject.GetComponent<MeshRenderer>().material = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png");
+
+            return engiRocket;
+        }
+
         private static void AddProjectileComponents(GameObject projectile)
         {
             projectile.AddComponent<ProjectileGhostController>();
@@ -313,18 +326,7 @@ namespace MoistureUpset.Skins
                     return;
                 
                 switch (self.ghost.name)
-                {
-                    case "EngiHarpoonGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/rocket.mesh");
-
-                        self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png");
-
-                        meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                        break;
-                    }
+                { 
                     case "SpiderMineGhost(Clone)":
                     {
                         var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -347,6 +349,7 @@ namespace MoistureUpset.Skins
             }
             catch (Exception)
             {
+                // L
             }
         }
 
@@ -386,7 +389,7 @@ namespace MoistureUpset.Skins
 
             if (tempPrefab != null)
             {
-                GameObject.Destroy(tempPrefab);
+                Object.Destroy(tempPrefab);
             }
         }
 
