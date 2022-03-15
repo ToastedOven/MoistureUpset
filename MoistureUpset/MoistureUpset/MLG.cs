@@ -494,19 +494,27 @@ namespace MoistureUpset
                     rainbowTimer = 0;
                     increasingDecay = 0;
                     GameObject player = localBody.gameObject;
-                    memeEmitter = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/MLGEmitter.prefab"));
+                    if (!memeEmitter)
+                        memeEmitter = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/MLGEmitter.prefab"));
                     memeEmitter.transform.SetParent(player.transform);
                     memeEmitter.transform.localPosition = Vector3.zero;
-                    GameObject hitmarker = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
-                    hitmarker.transform.SetParent(player.transform);
-                    hitmarker.transform.localPosition = Vector3.zero;
-                    HitMarkerCreator = hitmarker.GetComponent<ParticleSystem>();
 
-                    GameObject deatheffect = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
-                    DeathEffects = deatheffect.GetComponent<ParticleSystem>();
+                    if (!HitMarkerCreator)
+                    {
+                        GameObject hitmarker = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
+                        hitmarker.transform.SetParent(player.transform);
+                        hitmarker.transform.localPosition = Vector3.zero;
+                        HitMarkerCreator = hitmarker.GetComponent<ParticleSystem>();
+                    }
 
+                    if (!DeathEffects)
+                    {
+                        GameObject deatheffect = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
+                        DeathEffects = deatheffect.GetComponent<ParticleSystem>();
+                    }
 
-                    slider = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
+                    if (!slider)
+                        slider = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
                     //DontDestroyOnLoad(slider);
                     slider.GetComponent<RectTransform>().SetParent(GameObject.Find("HUDSimple(Clone)").transform.Find("MainContainer"), false);
                     slider.SetActive(true);
