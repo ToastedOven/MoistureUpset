@@ -87,7 +87,7 @@ namespace MoistureUpset
         List<int> lastIdle = new List<int>();
         bool idling = false;
         int failCount = 0;
-        bool activeMountainShrine = false;
+        public bool activeMountainShrine = false;
         int mountainShrineItems = 0, mountainShrineCount = 0;
         float bloodShrineTimer = 0;
         Transform charPosition = null;
@@ -374,9 +374,9 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            if (Settings.BonziBuddyBool.Value /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/ && !bonziActive)	
-                            {	
-                                Activate();	
+                            if (Settings.BonziBuddyBool.Value /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/ && !bonziActive)
+                            {
+                                Activate();
                             }
                             GoTo(MAINMENU);
                             break;
@@ -884,7 +884,6 @@ namespace MoistureUpset
                     }
                     break;
                 case ShrineType.mountain:
-                    activeMountainShrine = true;
                     quotes.Add("Is there really any reason to not hit these?");
                     quotes.Add($"I can't wait to get some extra {RoR2.Language.GetString(RoR2Content.Items.TPHealingNova.nameToken)}s");
                     quotes.Add("It's free real estate");
@@ -1305,8 +1304,11 @@ namespace MoistureUpset
                             //not used
                             break;
                         case "ITEM_SHIELDONLY_NAME":
-                            ShouldSpeak($"Ah I see you are a gamer of culture."
-                                , "Health is for bitches anyway");
+                            if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) == 1)
+                            {
+                                ShouldSpeak($"Ah I see you are a gamer of culture."
+                                            , "Health is for bitches anyway");
+                            }
                             //trans
                             break;
                         case "ITEM_ALIENHEAD_NAME":
@@ -2284,33 +2286,47 @@ namespace MoistureUpset
                     a.SetInteger("idle", idlenum);
                     switch (idlenum)
                     {
+                        //case 11:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            ,"Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("Did you know? Me neither...", true);
+                        //    break;
+                        //case 12:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            , "Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("We live in a society", true);
+                        //    break;
+                        //case 13:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            , "Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("Bottom Text", true);
+                        //    break;
+                        //case 14:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            , "Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("Can I ask?........... Thanks that's all.", true);
+                        //    break;
+                        //default:
+                        //    break;
                         case 11:
-                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
-                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
-                                    ,"Imagine cheating in my achievement");
-                            else
-                                ShouldSpeak("Did you know? Me neither...", true);
+                            ShouldSpeak("Did you know? Me neither...", true);
                             break;
                         case 12:
-                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
-                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
-                                    , "Imagine cheating in my achievement");
-                            else
-                                ShouldSpeak("We live in a society", true);
+                            ShouldSpeak("We live in a society", true);
                             break;
                         case 13:
-                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
-                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
-                                    , "Imagine cheating in my achievement");
-                            else
-                                ShouldSpeak("Bottom Text", true);
+                            ShouldSpeak("Bottom Text", true);
                             break;
                         case 14:
-                            if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
-                                ShouldSpeak("You know it isn't that hard to unlock me properly right?"
-                                    , "Imagine cheating in my achievement");
-                            else
-                                ShouldSpeak("Can I ask?........... Thanks that's all.", true);
+                            ShouldSpeak("Can I ask?........... Thanks that's all.", true);
                             break;
                         default:
                             break;

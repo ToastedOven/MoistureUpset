@@ -77,6 +77,7 @@ namespace MoistureUpset
 
         ShakeEmitter milkshake;
         float origFOV = -1;
+        float currFOV = 60;
         private void Hooks()
         {
             On.EntityStates.GenericCharacterDeath.OnEnter += (orig, self) =>
@@ -116,9 +117,17 @@ namespace MoistureUpset
                             milkshake.amplitudeTimeDecay = false;
                             if (origFOV == -1)
                             {
-                                origFOV = cam.baseFov;
+                                //origFOV = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value;
+                                origFOV = 60;
                             }
-                            cam.baseFov = 1;
+                            currFOV = 1;
+                            //CharacterCameraParamsData dat = new CharacterCameraParamsData();
+                            //dat.fov = 1;
+                            //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
+                            //{
+                            //    cameraParamsData = dat
+                            //}, 1);
+                            //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = 1;
                             FOVtimer = .06f;
 
 
@@ -302,9 +311,13 @@ namespace MoistureUpset
                         destColor = Color.red;
                     }
                 }
+                if (localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value != currFOV)
+                {
+                    localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = Mathf.Lerp(localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value, currFOV, Time.deltaTime);
+                }
                 if (FOVtimer >= 0)
                 {
-                    FOVtimer -= /*Time.deltaTime*/ .013f;
+                    FOVtimer -= /*Time.deltaTime*/ .01f;
                 }
                 else
                 {
@@ -317,7 +330,7 @@ namespace MoistureUpset
                     }
                     if (origFOV != -1)
                     {
-                        cam.baseFov = origFOV;
+                        currFOV = origFOV;
                     }
                 }
                 if (rainbowTimer > 0)
