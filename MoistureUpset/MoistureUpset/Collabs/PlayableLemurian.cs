@@ -13,23 +13,23 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Text;
 using RiskOfOptions;
-using Lemurian;
+//using Lemurian;
 
 namespace MoistureUpset.Collabs
 {
     class PlayableLemurian
     {
-        public static void Run()
-        {
-            EnemyReplacements.ReplaceModel(Lemurian.Lemurian.ElderLemurianPrefab, "@MoistureUpset_bowser:assets/bowser.mesh");
-            EnemyReplacements.ReplaceModel(Lemurian.Lemurian.LemurianPrefab, "@MoistureUpset_mike:assets/mike.mesh");
-            foreach (var item in SurvivorCatalog.allSurvivorDefs)
-            {
-                if (item.bodyPrefab.name == "LEMURIAN_NAME")
-                {
-                    EnemyReplacements.ReplaceModel(item.displayPrefab, "@MoistureUpset_mike:assets/mike.mesh");
-                }
-            }
-        }
+        //public static void Run()
+        //{
+        //    EnemyReplacements.ReplaceModel(Lemurian.Lemurian.ElderLemurianPrefab, "@MoistureUpset_bowser:assets/bowser.mesh");
+        //    EnemyReplacements.ReplaceModel(Lemurian.Lemurian.LemurianPrefab, "@MoistureUpset_mike:assets/mike.mesh");
+        //    foreach (var item in SurvivorCatalog.allSurvivorDefs)
+        //    {
+        //        if (item.bodyPrefab.name == "LEMURIAN_NAME")
+        //        {
+        //            EnemyReplacements.ReplaceModel(item.displayPrefab, "@MoistureUpset_mike:assets/mike.mesh");
+        //        }
+        //    }
+        //}
     }
 }
