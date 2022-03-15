@@ -166,14 +166,17 @@ namespace MoistureUpset
                     return orig(self, i);
                 };
 
-                On.RoR2.UI.HUD.Update += (orig, self) => //optimize? but probably fine
+                On.RoR2.UI.HUD.Update += (orig, self) =>
                 {
                     orig(self);
                     if (!context.activeSelf)
                     {
                         try
                         {
-                            g.transform.localPosition = new Vector3(0, 1000, 0);
+                            if (g.transform.localPosition.y != 1000)
+                            {
+                                g.transform.localPosition = new Vector3(0, 1000, 0);
+                            }
                         }
                         catch (Exception)
                         {
