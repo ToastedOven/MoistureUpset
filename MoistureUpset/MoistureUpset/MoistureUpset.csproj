@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RoR2Dir Condition="Exists('D:\SteamLibrary\steamapps\common\Risk of Rain 2')">D:\SteamLibrary\steamapps\common\Risk of Rain 2</RoR2Dir>
+	<RoR2Dir Condition="Exists('E:\David\SteamGames\steamapps\common\Risk of Rain 2')">E:\David\SteamGames\steamapps\common\Risk of Rain 2</RoR2Dir>
+    <RoR2Dir Condition="Exists('..\..\..\..\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2')">..\..\..\..\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2</RoR2Dir>
+    <RoR2Dir Condition="Exists('$(MSBuildProgramFiles32)\Steam\steamapps\common\Risk of Rain 2')">$(MSBuildProgramFiles32)\Steam\steamapps\common\Risk of Rain 2</RoR2Dir>
+
+    <ManagedDir>$(RoR2Dir)\Risk of Rain 2_Data\Managed\</ManagedDir>
+    <BepinexDir>$(RoR2Dir)\BepInEx\</BepinexDir>
+    <CoreDir>$(BepinexDir)core\</CoreDir>
+    <PluginsDir>$(BepinexDir)plugins\</PluginsDir>
+  </PropertyGroup>
+  
+  
+  
+  
+
+  <ItemGroup>
+    <Dependencies Include="$(PluginsDir)CustomEmotesAPI.dll" InProject="false"/>
+    <Dependencies Include="$(PluginsDir)RiskOfOptions.dll" InProject="false"/>
+    <Dependencies Include="$(PluginsDir)R2API\R2API.dll" InProject="false"/>
+    <Dependencies Include="$(PluginsDir)MMHOOK\MMHOOK_RoR2.dll" InProject="false"/>
+    <ExcludedAssemblyFiles Include="$(ManagedDir)netstandard.dll;$(ManagedDir)System.*" InProject="false"/>
+    <AssemblyFiles Include="$(ManagedDir)*.dll;$(CoreDir)*.dll;@(Dependencies)" Exclude="@(ExcludedAssemblyFiles)" InProject="false"/>
+
+    <Reference Include="@(AssemblyFiles)" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**" />
+    <EmbeddedResource Include="Models\**" />
+    <EmbeddedResource Include="bankfiles\**" />
+
+    <None Remove="engineer" />
+    <EmbeddedResource Include="engineer" />
+    <None Remove="ImMoist.bnk" />
+    <EmbeddedResource Include="ImMoist.bnk" />
+    <None Remove="ImReallyMoist.bnk" />
+    <EmbeddedResource Include="ImReallyMoist.bnk" />
+    <None Remove="Risk2GaySounds.bnk" />
+    <EmbeddedResource Include="Risk2GaySounds.bnk" />
+    <None Remove="sploaderskin" />
+    <EmbeddedResource Include="sploaderskin" />
+    <None Remove="unifiedturret" />
+    <EmbeddedResource Include="unifiedturret" />
+    <None Remove="InteractReplacements\SodaBarrel\sodaspritz" />
+    <EmbeddedResource Include="InteractReplacements\SodaBarrel\sodaspritz" />
+    <None Remove="Skins\Jotaro\jotaro" />
+    <EmbeddedResource Include="Skins\Jotaro\jotaro" />
+    <None Remove="Skins\Jotaro\jotarosubtitle" />
+    <EmbeddedResource Include="Skins\Jotaro\jotarosubtitle" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <OutputFiles Include="$(TargetPath);$(TargetDir)$(TargetName).pdb" InProject="false"/>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <!-- Copies dll and pdb to plugins folder -->
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(RoR2Dir)\BepInEx\plugins" />
+  </Target>
+</Project>

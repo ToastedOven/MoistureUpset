@@ -56,7 +56,6 @@ dlldata.c
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
-*.csproj
 
 # .NET Core
 project.lock.json
@@ -356,5 +355,3 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-
-*.csproj
