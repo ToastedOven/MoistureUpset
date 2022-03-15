@@ -39,6 +39,18 @@ namespace MoistureUpset
 
             newMat.name = texture;
 
+            string[] keywords = newMat.shaderKeywords;
+
+            List<string> newKeyWords = new List<string>();
+
+            foreach (var keyword in keywords)
+            {
+                if (!string.Equals(keyword, "print_cutoff", StringComparison.InvariantCultureIgnoreCase))
+                    newKeyWords.Add(keyword);
+            }
+
+            newMat.shaderKeywords = newKeyWords.ToArray();
+
             return newMat;
         }
 
