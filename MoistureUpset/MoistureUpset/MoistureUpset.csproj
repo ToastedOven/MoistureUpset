@@ -16,15 +16,13 @@
     <PluginsDir>$(BepinexDir)plugins\</PluginsDir>
   </PropertyGroup>
   
-  
-  
-  
 
   <ItemGroup>
-    <Dependencies Include="$(PluginsDir)CustomEmotesAPI.dll" InProject="false"/>
-    <Dependencies Include="$(PluginsDir)RiskOfOptions.dll" InProject="false"/>
-    <Dependencies Include="$(PluginsDir)R2API\R2API.dll" InProject="false"/>
-    <Dependencies Include="$(PluginsDir)MMHOOK\MMHOOK_RoR2.dll" InProject="false"/>
+    <Dependencies Include="$(PluginsDir)**\CustomEmotesAPI.dll" InProject="false"/>
+    <Dependencies Include="$(PluginsDir)**\RiskOfOptions.dll" InProject="false"/>
+    <Dependencies Include="$(PluginsDir)**\R2API.dll" InProject="false"/>
+    <Dependencies Include="$(PluginsDir)**\MMHOOK_RoR2.dll" InProject="false"/>
+    
     <ExcludedAssemblyFiles Include="$(ManagedDir)netstandard.dll;$(ManagedDir)System.*" InProject="false"/>
     <AssemblyFiles Include="$(ManagedDir)*.dll;$(CoreDir)*.dll;@(Dependencies)" Exclude="@(ExcludedAssemblyFiles)" InProject="false"/>
 
