@@ -77,6 +77,7 @@ namespace MoistureUpset
 
         ShakeEmitter milkshake;
         float origFOV = -1;
+        float currFOV = 60;
         private void Hooks()
         {
             On.EntityStates.GenericCharacterDeath.OnEnter += (orig, self) =>
@@ -116,9 +117,17 @@ namespace MoistureUpset
                             milkshake.amplitudeTimeDecay = false;
                             if (origFOV == -1)
                             {
-                                origFOV = cam.baseFov;
+                                //origFOV = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value;
+                                origFOV = 60;
                             }
-                            cam.baseFov = 1;
+                            currFOV = 1;
+                            //CharacterCameraParamsData dat = new CharacterCameraParamsData();
+                            //dat.fov = 1;
+                            //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
+                            //{
+                            //    cameraParamsData = dat
+                            //}, 1);
+                            //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = 1;
                             FOVtimer = .06f;
 
 
@@ -302,9 +311,13 @@ namespace MoistureUpset
                         destColor = Color.red;
                     }
                 }
+                if (localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value != currFOV)
+                {
+                    localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = Mathf.Lerp(localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value, currFOV, Time.deltaTime);
+                }
                 if (FOVtimer >= 0)
                 {
-                    FOVtimer -= /*Time.deltaTime*/ .013f;
+                    FOVtimer -= /*Time.deltaTime*/ .01f;
                 }
                 else
                 {
@@ -317,7 +330,7 @@ namespace MoistureUpset
                     }
                     if (origFOV != -1)
                     {
-                        cam.baseFov = origFOV;
+                        currFOV = origFOV;
                     }
                 }
                 if (rainbowTimer > 0)
@@ -481,19 +494,27 @@ namespace MoistureUpset
                     rainbowTimer = 0;
                     increasingDecay = 0;
                     GameObject player = localBody.gameObject;
-                    memeEmitter = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/MLGEmitter.prefab"));
+                    if (!memeEmitter)
+                        memeEmitter = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/MLGEmitter.prefab"));
                     memeEmitter.transform.SetParent(player.transform);
                     memeEmitter.transform.localPosition = Vector3.zero;
-                    GameObject hitmarker = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
-                    hitmarker.transform.SetParent(player.transform);
-                    hitmarker.transform.localPosition = Vector3.zero;
-                    HitMarkerCreator = hitmarker.GetComponent<ParticleSystem>();
 
-                    GameObject deatheffect = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
-                    DeathEffects = deatheffect.GetComponent<ParticleSystem>();
+                    if (!HitMarkerCreator)
+                    {
+                        GameObject hitmarker = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
+                        hitmarker.transform.SetParent(player.transform);
+                        hitmarker.transform.localPosition = Vector3.zero;
+                        HitMarkerCreator = hitmarker.GetComponent<ParticleSystem>();
+                    }
 
+                    if (!DeathEffects)
+                    {
+                        GameObject deatheffect = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
+                        DeathEffects = deatheffect.GetComponent<ParticleSystem>();
+                    }
 
-                    slider = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
+                    if (!slider)
+                        slider = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Progress/DankMeter.prefab"));
                     //DontDestroyOnLoad(slider);
                     slider.GetComponent<RectTransform>().SetParent(GameObject.Find("HUDSimple(Clone)").transform.Find("MainContainer"), false);
                     slider.SetActive(true);
