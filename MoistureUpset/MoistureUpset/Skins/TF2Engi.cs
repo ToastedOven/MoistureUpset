@@ -69,11 +69,12 @@ namespace MoistureUpset.Skins
         private static void PopulateAssets()
         {
             Assets.AddBundle("engineer");
+            Assets.AddBundle("Models.engi_model");
             Assets.AddBundle("Resources.tf2_engineer_icon");
             Assets.AddBundle("Models.engi_projectiles");
             Assets.AddBundle("Models.engi_rocket");
             Assets.AddBundle("Models.mines");
-            Assets.AddBundle("Models.oopsideletedtheoldresource");
+            //Assets.AddBundle("Models.oopsideletedtheoldresource");
             Assets.AddBundle("unifiedturret");
             Assets.AddBundle("Resources.medic");
         }
@@ -217,7 +218,7 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Assets.Load<Mesh>("assets/engi.mesh"),
+                        mesh = Assets.Load<Mesh>("tf2engi/engi.mesh"),
                         renderer = renderers[0]
                     }
                 },

@@ -27,8 +27,16 @@ namespace MoistureUpset.Skins
             ContentManager.onContentPacksAssigned += FinalizeSkins;
         }
 
+        private static void ExtractItems(GameObject[] bodyPrefabs)
+        {
+            var engiBody = bodyPrefabs.GetBodyPrefab("EngiBody");
+
+            ItemDisplayRuleOverrides.ExportRuleSet(engiBody);
+        }
+
         private static void FinalizeSkins(ReadOnlyArray<ReadOnlyContentPack> obj)
         {
+            //ExtractItems(ContentManager._bodyPrefabs);
             AddSkinsToBodyPrefabs(ContentManager._bodyPrefabs);
         }
 
