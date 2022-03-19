@@ -2637,70 +2637,89 @@ namespace MoistureUpset
             {
                 string balconPath = $"\"{documents}\\My Games\\Moisture Upset\\data\\balcon.exe\"";
                 string joemamaPath = $"\"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav\"";
-                System.Diagnostics.Process process;
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
                 System.Diagnostics.ProcessStartInfo startInfo;
-                if (File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"))
+                try
+                {
+                    if (File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"))
+                    {
+                        process = new System.Diagnostics.Process();
+                        startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.Arguments = $"/C del {joemamaPath}";
+                        process.StartInfo = startInfo;
+                        process.Start();
+                    }
+                }
+                catch (Exception e)
+                {
+                    DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
+                    yield break;
+                }
+                yield return new WaitUntil(() => !File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
+                try
                 {
                     process = new System.Diagnostics.Process();
                     startInfo = new System.Diagnostics.ProcessStartInfo();
                     startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.Arguments = $"/C del {joemamaPath}";
+                    startInfo.FileName = balconPath;
+                    string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+                    if (File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi"))
+                    {
+                        daniel = true;
+                    }
+                    if (File.Exists(s + "\\Speech\\speech.dll") && File.Exists(s + "\\lhsp\\help\\tv_enua.hlp"))
+                    {
+                        sapi4 = true;
+                    }
+                    if (daniel && (int)MLG.progress > 0 && Settings.AccurateTTS.Value)
+                    {
+                        startInfo.Arguments = $"-n \"ScanSoft Daniel_Full_22kHz\" -t \"{text}\" -w {joemamaPath}";
+                    }
+                    else if (sapi4 && Settings.AccurateTTS.Value)
+                    {
+                        startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
+                    }
+                    else
+                    {
+                        startInfo.Arguments = $"-n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w {joemamaPath}";
+                    }
                     process.StartInfo = startInfo;
                     process.Start();
                 }
-                yield return new WaitUntil(() => !File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
-
-
-                process = new System.Diagnostics.Process();
-                startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = balconPath;
-                string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
-                if (File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi"))
+                catch (Exception e)
                 {
-                    daniel = true;
+                    DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
+                    yield break;
                 }
-                if (File.Exists(s + "\\Speech\\speech.dll") && File.Exists(s + "\\lhsp\\help\\tv_enua.hlp"))
-                {
-                    sapi4 = true;
-                }
-                if (daniel && (int)MLG.progress > 0 && Settings.AccurateTTS.Value)
-                {
-                    startInfo.Arguments = $"-n \"ScanSoft Daniel_Full_22kHz\" -t \"{text}\" -w {joemamaPath}";
-                }
-                else if (sapi4 && Settings.AccurateTTS.Value)
-                {
-                    startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
-                }
-                else
-                {
-                    startInfo.Arguments = $"-n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w {joemamaPath}";
-                }
-                process.StartInfo = startInfo;
-                process.Start();
-
                 yield return new WaitUntil(() => process.HasExited);
-                //DebugClass.Log($"----------file is supposedly done");
                 yield return new WaitUntil(() => File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
                 FileInfo file = new FileInfo($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav");
                 yield return new WaitUntil(() => !isLocked(file));
-
-                if (text == "stop")
+                try
                 {
-                    speaking = false;
-                    a.SetBool("speaking", false);
-                    twostep = false;
-                    AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
+                    if (text == "stop")
+                    {
+                        speaking = false;
+                        a.SetBool("speaking", false);
+                        twostep = false;
+                        AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
 
+                    }
+                    else
+                    {
+                        a.Play("speaking");
+                        a.SetBool("speaking", true);
+                        speaking = true;
+
+                        AkAudioInputManager.PostAudioInputEvent("ttsInput", Moisture_Upset.musicController.gameObject, WavBufferToWwise, BeforePlayingAudio);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    a.Play("speaking");
-                    a.SetBool("speaking", true);
-                    speaking = true;
-
-                    AkAudioInputManager.PostAudioInputEvent("ttsInput", Moisture_Upset.musicController.gameObject, WavBufferToWwise, BeforePlayingAudio);
+                    DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
+                    yield break;
                 }
             }
         }
