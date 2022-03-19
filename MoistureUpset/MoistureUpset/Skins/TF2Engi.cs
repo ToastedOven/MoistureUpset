@@ -24,8 +24,6 @@ namespace MoistureUpset.Skins
         // Runs on Awake
         public static void Init()
         {
-            PopulateAssets();
-
             SkinManager.AddSkin("EngiTurretBody", EngiTurretSkin);
             SkinManager.AddSkin("EngiWalkerTurretBody", EngiWalkerTurretSkin);
             SkinManager.AddSkin("EngiBody", EngiSkin);
@@ -63,20 +61,6 @@ namespace MoistureUpset.Skins
                     body.GetComponent<EngiKillCam>().DoKillCam();
                 }
             }
-        }
-
-        // Load assets here
-        private static void PopulateAssets()
-        {
-            Assets.AddBundle("engineer");
-            Assets.AddBundle("Models.engi_model");
-            Assets.AddBundle("Resources.tf2_engineer_icon");
-            Assets.AddBundle("Models.engi_projectiles");
-            Assets.AddBundle("Models.engi_rocket");
-            Assets.AddBundle("Models.mines");
-            //Assets.AddBundle("Models.oopsideletedtheoldresource");
-            Assets.AddBundle("unifiedturret");
-            Assets.AddBundle("Resources.medic");
         }
 
         private static SkinDef[] EngiTurretSkin(GameObject bodyPrefab)
@@ -207,7 +191,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png"),
+                        defaultMaterial = Assets.Load<Material>("tf2engi/engimat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[0]
