@@ -283,24 +283,26 @@ namespace MoistureUpset
             //     Moisture_Upset.Moisture_Asset_Bundles.Add($"@MoistureUpset_{resource}", MainAssetBundle);
             // }
         }
+        
+        [Obsolete("SoundBanks are loaded automatically, calling this does literally nothing")]
         public static void LoadBNK(string bnk)
         {
-            string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
-            DebugClass.Log(s);
-            try
-            {
-                using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
-                {
-                    var bytes = new byte[bankStream.Length];
-                    bankStream.Read(bytes, 0, bytes.Length);
-
-                    SoundBanks.Add(bytes);
-                }
-            }
-            catch (Exception e)
-            {
-                DebugClass.Log(e);
-            }
+            // string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
+            // DebugClass.Log(s);
+            // try
+            // {
+            //     using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
+            //     {
+            //         var bytes = new byte[bankStream.Length];
+            //         bankStream.Read(bytes, 0, bytes.Length);
+            //
+            //         SoundBanks.Add(bytes);
+            //     }
+            // }
+            // catch (Exception e)
+            // {
+            //     DebugClass.Log(e);
+            // }
         }
         public static void RunAll()
         {

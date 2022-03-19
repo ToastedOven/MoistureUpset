@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BepInEx;
-using RoR2;
-using R2API;
-using R2API.MiscHelpers;
-using R2API.Utils;
 using System.Reflection;
 using static R2API.SoundAPI;
 using UnityEngine;
@@ -15,6 +10,7 @@ namespace MoistureUpset
 {
     public static class Assets
     {
+        private static readonly string[] KnownExtensions = { "png", "exe", "txt", "xcf", "bat" };
         private static readonly List<AssetBundle> AssetBundles = new List<AssetBundle>();
         private static readonly Dictionary<string, int> AssetIndices = new Dictionary<string, int>();
         
@@ -39,17 +35,20 @@ namespace MoistureUpset
 
             newMat.name = texture;
 
-            string[] keywords = newMat.shaderKeywords;
-
-            List<string> newKeyWords = new List<string>();
-
-            foreach (var keyword in keywords)
-            {
-                if (!string.Equals(keyword, "print_cutoff", StringComparison.InvariantCultureIgnoreCase))
-                    newKeyWords.Add(keyword);
-            }
-
-            newMat.shaderKeywords = newKeyWords.ToArray();
+            // string[] keywords = newMat.shaderKeywords;
+            //
+            // List<string> newKeyWords = new List<string>();
+            //
+            // foreach (var keyword in keywords)
+            // {
+            //     if (!string.Equals(keyword, "print_cutoff", StringComparison.InvariantCultureIgnoreCase))
+            //         newKeyWords.Add(keyword);
+            // }
+            //
+            // newMat.shaderKeywords = newKeyWords.ToArray();
+            
+            newMat.SetInt("_PrintOn", 0);
+            newMat.SetInt("_LimbRemovalOn", 1);
 
             return newMat;
         }
@@ -95,40 +94,62 @@ namespace MoistureUpset
             return newMat;
         }
 
-        public static void PopulateAssets()
+        internal static void PopulateAssets()
         {
-            using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ImMoist.bnk"))
+            string[] resourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+
+            foreach (var resource in resourceNames)
             {
-                var bytes = new byte[bankStream.Length];
-                bankStream.Read(bytes, 0, bytes.Length);
+                ResourceType resourceType = GetResourceType(resource);
 
-                SoundBanks.Add(bytes);
-            }
-
-            using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.ImReallyMoist.bnk"))
-            {
-                var bytes = new byte[bankStream.Length];
-                bankStream.Read(bytes, 0, bytes.Length);
-
-                SoundBanks.Add(bytes);
-            }
-
-            using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Risk2GaySounds.bnk"))
-            {
-                var bytes = new byte[bankStream.Length];
-                bankStream.Read(bytes, 0, bytes.Length);
-
-                SoundBanks.Add(bytes);
+                switch (resourceType)
+                {
+                    case ResourceType.AssetBundle:
+                        DebugClass.Log($"Loading AssetBundle {resource}");
+                        LoadAssetBundle(resource);
+                        break;
+                    case ResourceType.SoundBank:
+                        DebugClass.Log($"Loading SoundBank {resource}");
+                        LoadSoundBank(resource);
+                        break;
+                    case ResourceType.Other:
+                        DebugClass.Log($"Loading Other {resource}");
+                        // The majority of this stuff is manually loaded as needed.
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="assetBundleLocation"></param>
-        public static void AddBundle(string assetBundleLocation)
+
+        private static ResourceType GetResourceType(string resourceName)
         {
-            using var assetBundleStream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MoistureUpset.{assetBundleLocation}");
+            string[] split = resourceName.Split('.');
+
+            if (split.Length <= 0)
+                throw new Exception($"Invalid asset found: {resourceName}");
+
+            string lastItem = split[split.Length - 1];
+
+            if (lastItem == "bnk")
+                return ResourceType.SoundBank;
+
+            if (Array.IndexOf(KnownExtensions, lastItem) >= 0)
+                return ResourceType.Other;
+
+            return ResourceType.AssetBundle;
+        }
+
+        private enum ResourceType
+        {
+            AssetBundle,
+            SoundBank,
+            Other
+        }
+
+        private static void LoadAssetBundle(string location)
+        {
+            using var assetBundleStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(location);
             AssetBundle assetBundle = AssetBundle.LoadFromStream(assetBundleStream);
 
             int index = AssetBundles.Count;
@@ -143,7 +164,21 @@ namespace MoistureUpset
                 AssetIndices[path] = index;
             }
 
-            DebugClass.Log($"Loaded AssetBundle: {assetBundleLocation}");
+            DebugClass.Log($"Loaded AssetBundle: {location}");
+        }
+
+        private static void LoadSoundBank(string location)
+        {
+            using var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(location);
+            var bytes = new byte[bankStream!.Length];
+            bankStream.Read(bytes, 0, bytes.Length);
+            SoundBanks.Add(bytes);
+        }
+        
+        [Obsolete("AssetBundles are loaded automatically, calling this does literally nothing")]
+        public static void AddBundle(string assetBundleLocation)
+        {
+            // Empty method because I don't want to go and remove stuff right now.
         }
 
         public static T Load<T>(string assetName) where T : UnityEngine.Object

@@ -35,21 +35,12 @@ namespace MoistureUpset
             DebugClass.SetLogger(base.Logger);
             
             NetMessages.Register.Init();
-
-            Settings.RunAll();
-            //EnemyReplaceMentsRunAll();
-            MLG.Setup();
-
-
-
-
-
-            //
-
-            //Skins.Utils.LoadAllSkins();
             
             Assets.PopulateAssets();
 
+            Settings.RunAll();
+            
+            MLG.Setup();
             
             Skins.SkinManager.Init();
 
