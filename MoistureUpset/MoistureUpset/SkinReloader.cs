@@ -40,10 +40,10 @@ namespace MoistureUpset
                     skinController.ApplySkin(skinIndex);
                 }
 
-                if (GetComponentInChildren<CharacterBody>().IsSkin("THE_TF2_ENGINEER_SKIN"))
-                {
-                    GetComponentInChildren<CharacterModel>().itemDisplayRuleSet = ItemDisplayPositionFixer.TF2_Engi_IDRS; // We apply our own display rule set so that items look correct on our skin.
-                }
+                // if (GetComponentInChildren<CharacterBody>().IsSkin("THE_TF2_ENGINEER_SKIN"))
+                // {
+                //     GetComponentInChildren<CharacterModel>().itemDisplayRuleSet = ItemDisplayPositionFixer.TF2_Engi_IDRS; // We apply our own display rule set so that items look correct on our skin.
+                // }
             }
             catch (System.Exception)
             {
