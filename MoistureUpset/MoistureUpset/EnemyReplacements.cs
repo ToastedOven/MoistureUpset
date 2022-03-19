@@ -358,7 +358,7 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            //DebugClass.DebugBones("RoR2/DLC1/Gup/GupBody.prefab");//gup
+            //DebugClass.DebugBones("RoR2/Base/Huntress/HuntressBody.prefab");//gup
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GeepBody.prefab");//geep
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GipBody.prefab");//gip
             //DebugClass.DebugBones("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab");//jailer
@@ -377,12 +377,17 @@ namespace MoistureUpset
             //DebugClass.DebugBones("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabBody.prefab");//voidling
             ////DebugClass.DebugBones("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabJointBody.prefab");//voidling parts????
 
-
-
+            //LoadResource("moisture_sippi");
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_moisture_sippi:assets/sippi cup/cupbody.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 2);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_moisture_sippi:assets/sippi cup/gun.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 4);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_moisture_sippi:assets/sippi cup/backpack.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 0);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 1);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 3);
             //DebugClass.DebugBones("RoR2/DLC1/VoidSurvivor/VoidSurvivorBody.prefab");
+
             //DebugClass.DebugBones("RoR2/DLC1/Railgunner/RailgunnerBody.prefab");
 
-
+            LoadResource("moisture_diquesuckinglips");
 
             //LoadResource("moisture_testing");
             //ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
@@ -392,7 +397,9 @@ namespace MoistureUpset
             //ReplaceModel("RoR2/DLC1/Gup/GipBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup1.mesh");
             //ReplaceModel("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/jailer.mesh");
             //ReplaceModel("RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/barnacle1.mesh");
-            //ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/flying1.mesh");
+            ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png");
+            ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 1);
+            ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 2);
             //ReplaceModel("RoR2/DLC1/Vermin/VerminBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/vermin1.mesh");
             //ReplaceModel("RoR2/Base/LunarExploder/LunarExploderBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/exploder1.mesh");
             //ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/minor1.mesh");
