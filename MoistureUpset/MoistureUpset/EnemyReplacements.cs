@@ -284,9 +284,10 @@ namespace MoistureUpset
             // }
         }
         
-        [Obsolete("SoundBanks are loaded automatically, calling this does literally nothing")]
         public static void LoadBNK(string bnk)
         {
+            Assets.AddSoundBank($"{bnk}.bnk");
+            
             // string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
             // DebugClass.Log(s);
             // try

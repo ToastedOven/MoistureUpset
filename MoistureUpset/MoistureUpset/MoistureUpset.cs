@@ -39,7 +39,7 @@ namespace MoistureUpset
             Assets.PopulateAssets();
 
             Settings.RunAll();
-            
+
             MLG.Setup();
             
             Skins.SkinManager.Init();
@@ -48,11 +48,7 @@ namespace MoistureUpset
 
             NetworkAssistant.InitSNA();
             
-            //On.RoR2.TeleporterInteraction.Awake += TeleporterInteraction_Awake;
-
-            //ligmaballs();
-
-            //ItemDisplayPositionFixer.Init();
+            Assets.LoadSoundBanks();
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 

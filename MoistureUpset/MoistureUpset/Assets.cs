@@ -13,7 +13,9 @@ namespace MoistureUpset
         private static readonly string[] KnownExtensions = { "png", "exe", "txt", "xcf", "bat" };
         private static readonly List<AssetBundle> AssetBundles = new List<AssetBundle>();
         private static readonly Dictionary<string, int> AssetIndices = new Dictionary<string, int>();
-        
+        private static readonly List<string> SoundBanksToLoad = new List<string>();
+        private static readonly List<string> FoundSoundBanks = new List<string>();
+
         private static Material _prefab;
 
         public static Material LoadMaterial(string texture)
@@ -105,21 +107,46 @@ namespace MoistureUpset
                 switch (resourceType)
                 {
                     case ResourceType.AssetBundle:
-                        DebugClass.Log($"Loading AssetBundle {resource}");
+                        // DebugClass.Log($"Loading AssetBundle {resource}");
                         LoadAssetBundle(resource);
                         break;
                     case ResourceType.SoundBank:
-                        DebugClass.Log($"Loading SoundBank {resource}");
-                        LoadSoundBank(resource);
+                        FoundSoundBanks.Add(resource);
                         break;
                     case ResourceType.Other:
-                        DebugClass.Log($"Loading Other {resource}");
+                        // DebugClass.Log($"Loading Other {resource}");
                         // The majority of this stuff is manually loaded as needed.
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
+        }
+
+        internal static void LoadSoundBanks()
+        {
+            foreach (var soundBank in FoundSoundBanks)
+            {
+                int index = SoundBanksToLoad.IndexOf(GetSoundBankName(soundBank));
+
+                if (index < 0)
+                    continue;
+                
+                LoadSoundBank(soundBank);
+                SoundBanksToLoad.RemoveAt(index);
+            }
+        }
+
+        private static string GetSoundBankName(string resource)
+        {
+            string[] split = resource.Split('.');
+
+            return split[split.Length - 2] + "." + split[split.Length - 1];
+        }
+
+        internal static void AddSoundBank(string name)
+        {
+            SoundBanksToLoad.Add($"{name}.bnk");
         }
 
         private static ResourceType GetResourceType(string resourceName)
@@ -173,6 +200,8 @@ namespace MoistureUpset
             var bytes = new byte[bankStream!.Length];
             bankStream.Read(bytes, 0, bytes.Length);
             SoundBanks.Add(bytes);
+            
+            DebugClass.Log($"Loaded SoundBank: {location}");
         }
         
         [Obsolete("AssetBundles are loaded automatically, calling this does literally nothing")]
