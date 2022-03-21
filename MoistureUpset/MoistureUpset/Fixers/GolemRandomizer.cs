@@ -1,10 +1,13 @@
-﻿using R2API.Utils;
+﻿using MoistureUpset.NetMessages;
+using R2API.Networking.Interfaces;
+using R2API.Utils;
 using RoR2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace MoistureUpset.Fixers
 {
@@ -12,30 +15,45 @@ namespace MoistureUpset.Fixers
     {
         internal static List<Material> materials = new List<Material>();
         internal static List<Mesh> meshes = new List<Mesh>();
-        int num;
+        internal int num;
         SkinnedMeshRenderer mesh;
         GameObject shoop;
         bool check = true;
+        bool needToSetup = true;
         void Start()
         {
-            mesh = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
-            num = UnityEngine.Random.Range(0, meshes.Count);
-            GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = materials[num];
-            mesh.sharedMesh = meshes[num];
-
-            shoop = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_noob:assets/robloxcharacters/shoop.prefab"));
-            shoop.transform.parent = GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().transform.Find("GolemArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("head");
-            shoop.transform.localScale = Vector3.one;
-            if (num == 5)
+            if (NetworkServer.active)
             {
-                shoop.transform.localPosition = new Vector3(0, .39f, .51f);
+                num = UnityEngine.Random.Range(0, materials.Count);
+                Setup();
             }
             else
             {
-                shoop.transform.localPosition = new Vector3(0, .39f, .11f);
+                new RequestRoblox(gameObject.GetComponent<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Server);
             }
-            shoop.transform.localEulerAngles = new Vector3(0, 270, 0);
-            shoop.SetActive(false);
+        }
+        internal void Setup()
+        {
+            if (needToSetup)
+            {
+                needToSetup = false;
+                mesh = gameObject.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+                GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = materials[num];
+                mesh.sharedMesh = meshes[num];
+                shoop = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_noob:assets/robloxcharacters/shoop.prefab"));
+                shoop.transform.parent = GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().transform.Find("GolemArmature").Find("ROOT").Find("base").Find("stomach").Find("chest").Find("head");
+                shoop.transform.localScale = Vector3.one;
+                if (num == 5)
+                {
+                    shoop.transform.localPosition = new Vector3(0, .39f, .51f);
+                }
+                else
+                {
+                    shoop.transform.localPosition = new Vector3(0, .39f, .11f);
+                }
+                shoop.transform.localEulerAngles = new Vector3(0, 270, 0);
+                shoop.SetActive(false);
+            }
         }
         void Update()
         {
