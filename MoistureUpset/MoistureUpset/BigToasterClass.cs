@@ -800,8 +800,9 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                     AkSoundEngine.PostEvent("StopFanFare", Moisture_Upset.musicController.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    if (BigJank.getOptionValue(Settings.Fanfare))
-                        AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
+                    if (BigJank.getOptionValue(Settings.Fanfare) && NetworkServer.active)
+                        new SyncFanFare(UnityEngine.Random.Range(0, SyncFanFare.songs.Length)).Send(R2API.Networking.NetworkDestination.Clients);
+                    //AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
                     MLG.bossOver = true;
                 }
                 catch (Exception)
