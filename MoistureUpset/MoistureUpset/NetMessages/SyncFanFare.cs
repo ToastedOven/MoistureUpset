@@ -32,9 +32,7 @@ namespace MoistureUpset.NetMessages
 
         public void OnReceived()
         {
-            DebugClass.Log($"---------------{position}");
             var thing = AkSoundEngine.PostEvent(songs[position], NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject);
-            DebugClass.Log($"----------{thing}");
         }
 
         public void Serialize(NetworkWriter writer)
