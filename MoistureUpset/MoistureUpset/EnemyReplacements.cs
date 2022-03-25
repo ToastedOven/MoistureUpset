@@ -361,7 +361,8 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            //DebugClass.DebugBones("RoR2/Base/Huntress/HuntressBody.prefab");//gup
+            //DebugClass.DebugBones("RoR2/Base/CritGlasses/DisplayGlasses.prefab");//gup
+            
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GeepBody.prefab");//geep
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GipBody.prefab");//gip
             //DebugClass.DebugBones("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab");//jailer

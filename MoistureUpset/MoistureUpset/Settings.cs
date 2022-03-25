@@ -86,6 +86,7 @@ namespace MoistureUpset
         public static ConfigEntry<bool> AccurateTTS;
         public static ConfigEntry<bool> MLGMode;
 
+        public static ConfigEntry<bool> ReplaceItems;
         public static void RunAll()
         {
             SetupConfig();
@@ -192,6 +193,7 @@ namespace MoistureUpset
             BonziBuddyBool.SettingChanged += BonziBuddyBool_SettingChanged; ;
             AccurateTTS.SettingChanged += AccurateTTS_SettingChanged; ;
 
+            ReplaceItems = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Replace Items", true, "Replace all items with memes");
         }
 
         private static void AccurateTTS_SettingChanged(object sender, EventArgs e)
@@ -310,6 +312,7 @@ namespace MoistureUpset
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.AccurateTTS, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = false }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.MLGMode, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ReplaceItems, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
         }
         private static bool CheckOnlySurvivorSkins()
         {
@@ -324,6 +327,7 @@ namespace MoistureUpset
             Assets.AddBundle("Models.na");
             InteractReplacements.Interactables.Init();
             EnemyReplacements.RunAll();
+            ItemReplacements.RunAll();
             HudChanges.RunAll();
             BigToasterClass.RunAll();
         }
