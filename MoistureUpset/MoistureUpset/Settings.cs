@@ -52,6 +52,8 @@ namespace MoistureUpset
         public static ConfigEntry<bool> Squirmles;
         public static ConfigEntry<bool> Merchant;
         public static ConfigEntry<bool> Cereal;
+        public static ConfigEntry<bool> DQ;
+        public static ConfigEntry<bool> Gnome;
 
         public static ConfigEntry<bool> Interactables;
         public static ConfigEntry<bool> CurrencyChanges;
@@ -157,6 +159,8 @@ namespace MoistureUpset
             Squirmles = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Squirmles", true, "Replaces overloading worms with Squirmles");
             Merchant = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Merchant", true, "Replaces shop keeper with beedle");
             Cereal = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Cereal", true, "EAT EM UP EAT EM UP EAT EM UP!");
+            DQ = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "DQ Lips", true, "Incase you didn't get enough marketing from the brass contraptions");
+            Gnome = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Gnome", true, "I'm gnot a gvoid-infestor, I'm a gnome");
 
 
             Interactables = Moisture_Upset.instance.Config.Bind<bool>("Interactables", "Interactables", true, "Replaces chests and barrels with minecraft items");
@@ -278,6 +282,8 @@ namespace MoistureUpset
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Squirmles, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Merchant, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Cereal, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.DQ, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.Gnome, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Interactables, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.CurrencyChanges, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
@@ -337,57 +343,6 @@ namespace MoistureUpset
             EnemyReplacements.LoadResource("moisture_defaults");
             ModSettingsManager.SetModIcon(Assets.Load<Sprite>("@MoistureUpset_moisture_defaults:assets/newlogo.png"));
             //ModSettingsManager.setPanelTitle("Moisture Upset");
-        }
-        private static void HitMarker()
-        {
-			
-        }
-        
-        private static void CollabOptions()
-        {
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "DireSeeker", "Replaces Direseeker with Giga Bowser (Requires Direseeker mod)", "1"));
-        }
-        private static void EnemyOptions()
-        {
-			//AddCheckBox("Force Restart Bonzi Buddy", "Bonzi Buddy isn't a perfect creation. If something goes horribly wrong this might fix him right up.", true, "Misc", survivorSkinsOnlyCheckBox);
-            //ModSettingsManager.AddListener(new UnityEngine.Events.UnityAction<bool>(BonziBuddy.ForceRestart), "Force Restart Bonzi Buddy", "Misc");
-            //ModSettingsManager.addListener(ModSettingsManager.getOption("Top Secret Setting"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.SetActive));
-        }
-
-        private static void SoundOptions()
-        {
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Minecraft Oof Sounds", "Adds Minecraft oof sounds whenever you get hurt.", "1"));
-
-            //// Yeah I know this looks jank, but it sort of works.
-            //ModSettingsManager.addListener(ModSettingsManager.getOption("Minecraft Oof Sounds"), new UnityEngine.Events.UnityAction<bool>(delegate(bool temp) { if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) != 1) SyncAudio.doMinecraftOofSound = temp; }));
-            //ModSettingsManager.addListener(ModSettingsManager.getOption("Shrine Changes"), new UnityEngine.Events.UnityAction<bool>(delegate (bool temp) { if (float.Parse(ModSettingsManager.getOptionValue("Only Survivor Skins")) != 1) SyncAudio.doShrineSound = temp; }));
-        }
-        private static void Misc()
-        {
-            ////ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Original REDACTED TTS", "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.", "0"));
-            ////ModSettingsManager.addListener(ModSettingsManager.getOption("Original REDACTED TTS"), new UnityEngine.Events.UnityAction<bool>(BonziBuddy.FixTTS));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "NSFW", "Toggles 'NSFW' content. Not actually NSFW like boobies, just some questionable words if you aren't into that kinda thing", "0"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Fanfare", "Adds fanfare to the end of the teleporter event", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Pizza Roll", "Replaces that diamond UI element with a pizza roll", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Roblox Cursor", "Replaces the cursor with a roblox cursor", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Logo", "Replaces the logo with moisture upset", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Generic boss music", "Replaces generic boss music (horde of basic enemies) with custom music", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Awp UI", "Replaces clicks on the UI with awp shots and reloads", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Chest noises", "Replaces chest noises", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Player death sound", "Replaces player death sound", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Player death chat", "Complains about the game in chat so you don't have to", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Difficulty Icons", "Replaces difficulty icons with much more accurate images", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Difficulty Names", "Replaces difficulty names with uhh... humor", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "In-Run Difficulty Names", "AND THEY DON'T STOP COMING", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Main menu music", "WHATS GOING ON", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Shreks outhouse", "SOMEBODY", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Shrine Changes", "Very important updates for shrines", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Misc", "Random text changes, might fix later", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Creative Void Zone", "Adds some entertainment value to the Void Zone", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "End of game music", "Defeat theme", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Respawn SFX", "Yeah", "1"));
-            //ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Replace Intro Scene", "Replaces the default intro cutscene with one that UnsavedTrash made", "1"));
-            ////ModSettingsManager.addOption(new ModOption(ModOption.OptionType.Bool, "Shreks outhouse", "SOMEBODY", "1"));
         }
     }
 }
