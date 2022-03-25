@@ -127,10 +127,13 @@ namespace MoistureUpset
         {
             foreach (var soundBank in FoundSoundBanks)
             {
-                int index = SoundBanksToLoad.IndexOf(GetSoundBankName(soundBank));
 
+                int index = SoundBanksToLoad.IndexOf(GetSoundBankName(soundBank));
                 if (index < 0)
+                {
+                    //DebugClass.Log($"Not loading [{soundBank}] because rune is fat");
                     continue;
+                }
                 
                 LoadSoundBank(soundBank);
                 SoundBanksToLoad.RemoveAt(index);
@@ -146,7 +149,7 @@ namespace MoistureUpset
 
         internal static void AddSoundBank(string name)
         {
-            SoundBanksToLoad.Add($"{name}.bnk");
+            SoundBanksToLoad.Add($"{name}");
         }
 
         private static ResourceType GetResourceType(string resourceName)

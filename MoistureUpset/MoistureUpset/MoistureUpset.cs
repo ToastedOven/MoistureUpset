@@ -44,11 +44,14 @@ namespace MoistureUpset
             
             Skins.SkinManager.Init();
 
+            FixRunesFixBecauseWhyDidWeChangeSomethingThatWasAlreadyWorkingFFS();
+
+            Assets.LoadSoundBanks();
+
             SoundAssets.RegisterSoundEvents();
 
             NetworkAssistant.InitSNA();
             
-            Assets.LoadSoundBanks();
 
             R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
@@ -149,6 +152,12 @@ namespace MoistureUpset
             //UnlockableAPI.AddUnlockable<BonziUnlocked>(true);
             IntroReplaceAction();
 
+        }
+        internal void FixRunesFixBecauseWhyDidWeChangeSomethingThatWasAlreadyWorkingFFS()
+        {
+            EnemyReplacements.LoadBNK("ImMoist");
+            EnemyReplacements.LoadBNK("ImReallyMoist");
+            EnemyReplacements.LoadBNK("Risk2GaySounds");
         }
         internal static MusicController musicController;
         //private string PlaySound(On.RoR2.Chat.UserChatMessage.orig_ConstructChatString orig, Chat.UserChatMessage self)

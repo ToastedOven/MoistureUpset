@@ -1926,6 +1926,7 @@ namespace MoistureUpset
         const int speed = 2;
         void Update()
         {
+            emergencyTimer += Time.deltaTime;
             if (casinoTimer > 0)
             {
                 casinoTimer -= Time.deltaTime;
@@ -2631,6 +2632,7 @@ namespace MoistureUpset
             return false;
         }
         private static string documents = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+        float emergencyTimer = 0;
         public IEnumerator loadsong(string text)
         {
             if (!speaking)
@@ -2657,7 +2659,12 @@ namespace MoistureUpset
                     DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
                     yield break;
                 }
-                yield return new WaitUntil(() => !File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => !File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav") || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
+                {
+                    yield break;
+                }
                 try
                 {
                     process = new System.Diagnostics.Process();
@@ -2693,10 +2700,25 @@ namespace MoistureUpset
                     DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
                     yield break;
                 }
-                yield return new WaitUntil(() => process.HasExited);
-                yield return new WaitUntil(() => File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => process.HasExited || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
+                {
+                    yield break;
+                }
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav") || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
+                {
+                    yield break;
+                }
                 FileInfo file = new FileInfo($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav");
-                yield return new WaitUntil(() => !isLocked(file));
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => !isLocked(file) || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
+                {
+                    yield break;
+                }
                 try
                 {
                     if (text == "stop")

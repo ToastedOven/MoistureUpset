@@ -391,7 +391,7 @@ namespace MoistureUpset
 
             //DebugClass.DebugBones("RoR2/DLC1/Railgunner/RailgunnerBody.prefab");
 
-            LoadResource("moisture_diquesuckinglips");
+            //LoadResource("moisture_diquesuckinglips");
 
             //LoadResource("moisture_testing");
             //ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
@@ -401,9 +401,21 @@ namespace MoistureUpset
             //ReplaceModel("RoR2/DLC1/Gup/GipBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup1.mesh");
             //ReplaceModel("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/jailer.mesh");
             //ReplaceModel("RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/barnacle1.mesh");
+            LoadBNK("diquesuckinglips");
             ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png");
             ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 1);
             ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 2);
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab").WaitForCompletion();
+            foreach (var item in fab.GetComponentsInChildren<RoR2.ModelSkinController>())
+            {
+                for (int i = 0; i < item.skins.Length; i++)
+                {
+                    if (i != 0)
+                    {
+                        item.skins[i] = item.skins[0];
+                    }
+                }
+            }
             //ReplaceModel("RoR2/DLC1/Vermin/VerminBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/vermin1.mesh");
             //ReplaceModel("RoR2/Base/LunarExploder/LunarExploderBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/exploder1.mesh");
             //ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/minor1.mesh");
@@ -413,6 +425,34 @@ namespace MoistureUpset
             //ReplaceModel("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/megacrab.mesh");
             //ReplaceModel("RoR2/Base/Grandparent/GrandParentBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/grandparent.mesh");
             //ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/infestor1.mesh");
+
+
+
+
+
+
+
+            //infestor
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_moisture_cactuar:assets/cactuar/cactuar.mesh", "@MoistureUpset_moisture_cactuar:assets/cactuar/cactuar.png", 1);
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 0);
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 2);
+            fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab").WaitForCompletion();
+            fab.GetComponent<SfxLocator>().deathSound = "Play_gnome_death";
+            fab.GetComponent<SfxLocator>().barkSound = "";
+            //fab.GetComponent<SfxLocator>().landingSound = "Play_UI_menuClick";
+            fab.GetComponent<SfxLocator>().aliveLoopStart = "Play_gnome_aliveloop";
+            fab.GetComponent<SfxLocator>().aliveLoopStop = "Stop_gnome_aliveloop";
+            On.EntityStates.VoidInfestor.Spawn.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                EntityStates.VoidInfestor.Infest.enterSoundString = "Play_gnome_attack";
+            };
+
+
+
+
+
+
             //ReplaceModel("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase1.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/raidcrab.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
 
 
@@ -2582,7 +2622,9 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
                     AkSoundEngine.PostEvent("StopFanFare", Moisture_Upset.musicController.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
+                    if (BigJank.getOptionValue(Settings.Fanfare) && NetworkServer.active)
+                        new SyncFanFare(UnityEngine.Random.Range(0, SyncFanFare.songs.Length)).Send(R2API.Networking.NetworkDestination.Clients);
+                    //AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
                 }
                 catch (Exception)
                 {
