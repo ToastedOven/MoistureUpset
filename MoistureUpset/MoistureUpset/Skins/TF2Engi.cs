@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using MoistureUpset.Skins.ItemDisplayRules;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
@@ -18,8 +19,9 @@ namespace MoistureUpset.Skins
 {
     public static class TF2Engi
     {
-        public static readonly string Name = "The Engineer";
-        public static readonly string NameToken = "MOISTURE_UPSET_TF2_ENGINEER_ENGI_SKIN";
+        public const string Name = "The Engineer";
+        public const string NameToken = "MOISTURE_UPSET_TF2_ENGINEER_ENGI_SKIN";
+        public const string SkinName = "THE_TF2_ENGINEER_SKIN";
 
         // Runs on Awake
         public static void Init()
@@ -27,6 +29,8 @@ namespace MoistureUpset.Skins
             SkinManager.AddSkin("EngiTurretBody", EngiTurretSkin);
             SkinManager.AddSkin("EngiWalkerTurretBody", EngiWalkerTurretSkin);
             SkinManager.AddSkin("EngiBody", EngiSkin);
+            
+            ItemDisplayRuleOverrides.RegisterDisplayRuleOverride("EngiBody", SkinName, "tf2engi");
 
             On.RoR2.Projectile.ProjectileController.Start += ModifyProjectiles;
             On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += ModifyTurretBlueprint;
@@ -42,7 +46,7 @@ namespace MoistureUpset.Skins
         {
             orig(self, damageReport);
 
-            if (damageReport.victimBody.IsSkin("THE_TF2_ENGINEER_SKIN"))
+            if (damageReport.victimBody.IsSkin(SkinName))
             {
                 damageReport.victimBody.GetComponent<EngiKillCam>().attacker = damageReport.attackerBody;
             }
@@ -51,8 +55,8 @@ namespace MoistureUpset.Skins
         private static void KillCamTest(On.RoR2.CharacterMaster.orig_OnBodyDeath orig, CharacterMaster self, CharacterBody body)
         {
             orig(self, body);
-
-            if (body.IsSkin("THE_TF2_ENGINEER_SKIN"))
+            
+            if (body.IsSkin(SkinName))
             {
                 if (!self.preventGameOver)
                 {
@@ -244,7 +248,7 @@ namespace MoistureUpset.Skins
 
             LanguageAPI.Add(NameToken, Name);
 
-            SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
+            SkinHelper.RegisterSkin(SkinName, "Engi");
 
             return skinController.skins;
         }
@@ -307,7 +311,7 @@ namespace MoistureUpset.Skins
                 if (!cb)
                     return;
 
-                if (self.owner.name != "EngiBody(Clone)" || !cb.IsSkin("THE_TF2_ENGINEER_SKIN"))
+                if (self.owner.name != "EngiBody(Clone)" || !cb.IsSkin(SkinName))
                     return;
                 
                 switch (self.ghost.name)
@@ -345,7 +349,7 @@ namespace MoistureUpset.Skins
 
             GameObject tempPrefab = (GameObject)null;
 
-            if (cb.IsSkin("THE_TF2_ENGINEER_SKIN"))
+            if (cb.IsSkin(SkinName))
             {
                 if (self.blueprintPrefab != null)
                 {

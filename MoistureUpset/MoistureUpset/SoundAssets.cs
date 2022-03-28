@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using MoistureUpset.Skins;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -49,7 +50,7 @@ namespace MoistureUpset
             {
                 if (cm.minionOwnership.ownerMaster != null)
                 {
-                    if (cm.minionOwnership.ownerMaster.GetBody().IsSkin("THE_TF2_ENGINEER_SKIN") && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (cm.name == "EngiWalkerTurretMaster(Clone)" || cm.name == "EngiTurretMaster(Clone)"))
+                    if (cm.minionOwnership.ownerMaster.GetBody().IsSkin(TF2Engi.SkinName) && cm.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && (cm.name == "EngiWalkerTurretMaster(Clone)" || cm.name == "EngiTurretMaster(Clone)"))
                     {
                         PlaySound("EngiBuildsTurret", cm.minionOwnership.ownerMaster.GetBody().gameObject);
 
@@ -77,7 +78,7 @@ namespace MoistureUpset
                             if (!inPortal && !TeleporterInteraction.instance.isCharged)
                             {
                                 inPortal = true;
-                                if (targetBody.IsSkin("THE_TF2_ENGINEER_SKIN"))
+                                if (targetBody.IsSkin(TF2Engi.SkinName))
                                 {
                                     PlaySound("EngiChargingTeleporter", targetBody.gameObject);
                                 }
@@ -95,7 +96,7 @@ namespace MoistureUpset
                                 if (!portalFinished)
                                 {
                                     portalFinished = true;
-                                    if (targetBody.IsSkin("THE_TF2_ENGINEER_SKIN"))
+                                    if (targetBody.IsSkin(TF2Engi.SkinName))
                                     {
                                         PlaySound("EngiTeleporterComplete", targetBody.gameObject);
                                     }
@@ -134,11 +135,11 @@ namespace MoistureUpset
                 if (damageReport.victimTeamIndex == TeamIndex.Player)
                 {
                     //Debug.Log(damageReport.victimBody.name);
-                    if (damageReport.victimBody.IsSkin("THE_TF2_ENGINEER_SKIN") && damageReport.victimBody.name == "EngiBody(Clone)")
+                    if (damageReport.victimBody.IsSkin(TF2Engi.SkinName) && damageReport.victimBody.name == "EngiBody(Clone)")
                     {
                         PlaySound("EngiDying", damageReport.victimBody.gameObject);
                     }
-                    else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().IsSkin("THE_TF2_ENGINEER_SKIN") && (damageReport.victimBody.name == "EngiWalkerTurretBody(Clone)" || damageReport.victimBody.name == "EngiTurretBody(Clone)"))
+                    else if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().IsSkin(TF2Engi.SkinName) && (damageReport.victimBody.name == "EngiWalkerTurretBody(Clone)" || damageReport.victimBody.name == "EngiTurretBody(Clone)"))
                     {
                         //Debug.Log(damageReport.attackerBody.name);
                     }
@@ -146,7 +147,7 @@ namespace MoistureUpset
                 else if (damageReport.victimTeamIndex == TeamIndex.Monster)
                 {
                     //DebugClass.Log($"{damageReport.attackerMaster.GetBody()}");
-                    if (damageReport.attackerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.attackerMaster.GetBody().IsSkin("THE_TF2_ENGINEER_SKIN"))
+                    if (damageReport.attackerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.attackerMaster.GetBody().IsSkin(TF2Engi.SkinName))
                     {
                         try
                         {
@@ -171,7 +172,7 @@ namespace MoistureUpset
                     }
                     else if (damageReport.attackerMaster.minionOwnership != null)
                     {
-                        if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().IsSkin("THE_TF2_ENGINEER_SKIN") && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
+                        if (damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().IsSkin(TF2Engi.SkinName) && damageReport.attackerMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)")
                         {
                             try
                             {
@@ -211,7 +212,7 @@ namespace MoistureUpset
 
                     try
                     {
-                        if (damageReport.victimBody.name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) < (damageReport.victim.fullHealth * .3f) && damageReport.victimBody.IsSkin("THE_TF2_ENGINEER_SKIN"))
+                        if (damageReport.victimBody.name == "EngiBody(Clone)" && (damageReport.victim.health - damageReport.damageDealt) < (damageReport.victim.fullHealth * .3f) && damageReport.victimBody.IsSkin(TF2Engi.SkinName))
                         {
                             try
                             {
@@ -224,7 +225,7 @@ namespace MoistureUpset
                         }
                         else if (damageReport.victimMaster.minionOwnership != null)
                         {
-                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().IsSkin("THE_TF2_ENGINEER_SKIN") && (( damageReport.victim.combinedHealth + 5 )- (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.combinedHealth > 0)
+                            if (damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().IsSkin(TF2Engi.SkinName) && (( damageReport.victim.combinedHealth + 5 )- (damageReport.damageDealt)) <= 0 && damageReport.victimMaster.minionOwnership.ownerMaster.GetBody().name == "EngiBody(Clone)" && damageReport.victim.combinedHealth > 0)
                             {
                                 try
                                 {

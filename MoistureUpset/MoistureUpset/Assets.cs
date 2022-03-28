@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using static R2API.SoundAPI;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace MoistureUpset
         private static readonly Dictionary<string, int> AssetIndices = new Dictionary<string, int>();
         private static readonly List<string> SoundBanksToLoad = new List<string>();
         private static readonly List<string> FoundSoundBanks = new List<string>();
+        private static readonly Dictionary<string, string> DisplayRuleSetOverrides = new Dictionary<string, string>();
 
         private static Material _prefab;
 
@@ -23,34 +25,23 @@ namespace MoistureUpset
             if (!_prefab)
                 _prefab = Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
 
-            Material newMat = Object.Instantiate<Material>(_prefab);
+            Material newMat = Object.Instantiate(_prefab);
 
-            newMat.mainTexture = Load<Texture>(texture);
+            newMat.SetTexture("_MainTex", Load<Texture>(texture));
 
             newMat.SetColor("_Color", Color.white);
             newMat.SetFloat("_EmPower", 0f);
             newMat.SetColor("_EmColor", Color.white);
             newMat.SetTexture("_EmTex", null);
             newMat.SetTexture("_FresnelRamp", null);
-            newMat.SetFloat("_NormalStrength", 0.5f);
+            newMat.SetFloat("_NormalStrength", 1f);
             newMat.SetTexture("_NormalTex", null);
-
-            newMat.name = texture;
-
-            // string[] keywords = newMat.shaderKeywords;
-            //
-            // List<string> newKeyWords = new List<string>();
-            //
-            // foreach (var keyword in keywords)
-            // {
-            //     if (!string.Equals(keyword, "print_cutoff", StringComparison.InvariantCultureIgnoreCase))
-            //         newKeyWords.Add(keyword);
-            // }
-            //
-            // newMat.shaderKeywords = newKeyWords.ToArray();
-            
             newMat.SetInt("_PrintOn", 0);
             newMat.SetInt("_LimbRemovalOn", 1);
+            newMat.SetFloat("_SpecularStrength", 0f);
+            
+            
+            newMat.name = texture;
 
             return newMat;
         }
@@ -113,12 +104,13 @@ namespace MoistureUpset
                     case ResourceType.SoundBank:
                         FoundSoundBanks.Add(resource);
                         break;
+                    case ResourceType.DisplayRuleSetOverride:
+                        DisplayRuleSetOverrides.Add(GetFileName(resource).Split('.')[0], resource);
+                        break;
                     case ResourceType.Other:
                         // DebugClass.Log($"Loading Other {resource}");
                         // The majority of this stuff is manually loaded as needed.
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -128,7 +120,7 @@ namespace MoistureUpset
             foreach (var soundBank in FoundSoundBanks)
             {
 
-                int index = SoundBanksToLoad.IndexOf(GetSoundBankName(soundBank));
+                int index = SoundBanksToLoad.IndexOf(GetFileName(soundBank));
                 if (index < 0)
                 {
                     //DebugClass.Log($"Not loading [{soundBank}] because rune is fat");
@@ -140,7 +132,7 @@ namespace MoistureUpset
             }
         }
 
-        private static string GetSoundBankName(string resource)
+        private static string GetFileName(string resource)
         {
             string[] split = resource.Split('.');
 
@@ -164,6 +156,9 @@ namespace MoistureUpset
             if (lastItem == "bnk")
                 return ResourceType.SoundBank;
 
+            if (lastItem == "drso")
+                return ResourceType.DisplayRuleSetOverride;
+
             if (Array.IndexOf(KnownExtensions, lastItem) >= 0)
                 return ResourceType.Other;
 
@@ -174,6 +169,7 @@ namespace MoistureUpset
         {
             AssetBundle,
             SoundBank,
+            DisplayRuleSetOverride,
             Other
         }
 
@@ -213,7 +209,7 @@ namespace MoistureUpset
             // Empty method because I don't want to go and remove stuff right now.
         }
 
-        public static T Load<T>(string assetName) where T : UnityEngine.Object
+        public static T Load<T>(string assetName) where T : Object
         {
             if (assetName.Contains(":"))
             {
@@ -224,7 +220,23 @@ namespace MoistureUpset
             if (assetName.StartsWith("assets/"))
                 assetName = assetName.Remove(0, "assets/".Length);
             int index = AssetIndices[assetName];
-            return AssetBundles[index].LoadAsset<T>($"assets/{assetName}");
+            
+            T asset = AssetBundles[index].LoadAsset<T>($"assets/{assetName}");
+
+            if (asset is Material material)
+            {
+                if (material.shader.name.StartsWith("MoistToolkit/StubbedShader"))
+                    material.shader = Addressables.LoadAssetAsync<Shader>($"RoR2/Base/Shaders/{material.shader.name.Substring(27)}.shader").WaitForCompletion();
+            }
+
+            return asset;
+        }
+
+        public static Stream LoadDisplayRuleSetOverride(string overrideName)
+        {
+            string path = DisplayRuleSetOverrides[overrideName];
+
+            return Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
         }
     }
 }

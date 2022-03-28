@@ -4747,7 +4747,7 @@ namespace MoistureUpset
                     if (Vector3.Distance(charPosition.position, obj2.transform.position) < 75f)
                     {
                         //var c = GameObject.FindObjectOfType<MusicController>();
-                        Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                        MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                         AkSoundEngine.PostEvent("BonziError", obj2);
                         AkSoundEngine.ExecuteActionOnEvent(3605238264, AkActionOnEventType.AkActionOnEventType_Stop);
                         AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
@@ -5521,7 +5521,7 @@ namespace MoistureUpset
                         a.SetBool("speaking", true);
                         speaking = true;
 
-                        AkAudioInputManager.PostAudioInputEvent("ttsInput", Moisture_Upset.musicController.gameObject, WavBufferToWwise, BeforePlayingAudio);
+                        AkAudioInputManager.PostAudioInputEvent("ttsInput", MoistureUpsetMod.musicController.gameObject, WavBufferToWwise, BeforePlayingAudio);
                     }
                 }
                 catch (Exception e)
