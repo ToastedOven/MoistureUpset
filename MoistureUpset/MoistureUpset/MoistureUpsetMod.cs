@@ -32,6 +32,7 @@ namespace MoistureUpset
         public void Awake()
         {
             Instance = this;
+            R2API.Utils.CommandHelper.AddToConsoleWhenReady();
             DebugClass.SetLogger(base.Logger);
             
             NetMessages.Register.Init();
@@ -52,8 +53,6 @@ namespace MoistureUpset
 
             NetworkAssistant.InitSNA();
             
-
-            R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");
             EnemyReplacements.LoadResource("moisture_bonzistatic");

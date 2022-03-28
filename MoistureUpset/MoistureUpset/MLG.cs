@@ -23,6 +23,8 @@ namespace MoistureUpset
     {
         public static MLG MemeMachine;
         GameObject memeEmitter = null;
+        GameObject hitmarker = null;
+        GameObject deatheffect = null;
         public GameObject slider = null;
         public GameObject UIAnimator = null;
         private ParticleSystem HitMarkerCreator = null;
@@ -69,6 +71,9 @@ namespace MoistureUpset
             AkSoundEngine.ExecuteActionOnEvent(2067785430, AkActionOnEventType.AkActionOnEventType_Stop);
             AkSoundEngine.ExecuteActionOnEvent(1576102486, AkActionOnEventType.AkActionOnEventType_Stop);
             AkSoundEngine.ExecuteActionOnEvent(1576102485, AkActionOnEventType.AkActionOnEventType_Stop);
+            AkSoundEngine.ExecuteActionOnEvent(3538089020, AkActionOnEventType.AkActionOnEventType_Stop);
+            AkSoundEngine.ExecuteActionOnEvent(55804592, AkActionOnEventType.AkActionOnEventType_Stop);
+            AkSoundEngine.ExecuteActionOnEvent(55804595, AkActionOnEventType.AkActionOnEventType_Stop);
             AkSoundEngine.SetRTPCValue("MLGActive", 0);
             ActiveTrack = UnityEngine.Random.Range(0, tracks.Count);
         }
@@ -85,78 +90,78 @@ namespace MoistureUpset
                 orig(self);
                 try
                 {
-
-                    if (self.outer.gameObject.GetComponent<HealthComponent>().lastHitAttacker.GetComponent<CharacterBody>() == localBody)
-                    {
-                        Vector3 pos = self.outer.gameObject.transform.position;
-                        timer += 1.25f;
-                        progress += .025f;
-                        if (stage1Timer > tracks[ActiveTrack].Stage1StartDuration)
+                    if (localBody)
+                        if (self.outer.gameObject.GetComponent<HealthComponent>().lastHitAttacker.GetComponent<CharacterBody>() == localBody)
                         {
-                            progress += .05f;
-                            timer -= .75f;
+                            Vector3 pos = self.outer.gameObject.transform.position;
+                            timer += 1.25f;
+                            progress += .025f;
+                            if (stage1Timer > tracks[ActiveTrack].Stage1StartDuration)
+                            {
+                                progress += .05f;
+                                timer -= .75f;
+                            }
+                            if (progress > 2)
+                            {
+                                if (!cam)
+                                {
+                                    cam = GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>();
+                                    //new Material(Assets.Load<Shader>("@MoistureUpset_2014:assets/2014/TutorialShader.shader"));
+                                }
+
+
+                                milkshake = localBody.gameObject.AddComponent<ShakeEmitter>();
+                                milkshake.wave = new Wave
+                                {
+                                    amplitude = 1f,
+                                    frequency = 180f,
+                                    cycleOffset = 0f
+                                };
+                                milkshake.duration = .15f;
+                                milkshake.radius = 400f;
+                                milkshake.amplitudeTimeDecay = false;
+                                if (origFOV == -1)
+                                {
+                                    //origFOV = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value;
+                                    origFOV = 60;
+                                }
+                                currFOV = 1;
+                                //CharacterCameraParamsData dat = new CharacterCameraParamsData();
+                                //dat.fov = 1;
+                                //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
+                                //{
+                                //    cameraParamsData = dat
+                                //}, 1);
+                                //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = 1;
+                                FOVtimer = .06f;
+
+
+                                if (Vector3.Distance(localBody.transform.position, self.outer.gameObject.transform.position) > 50)
+                                {
+                                    UIAnimator.GetComponent<Animator>().SetTrigger("QuickScope");
+                                    AkSoundEngine.PostEvent("FarEnemyKilled", localBody.gameObject);
+                                }
+
+
+                                DeathEffects.gameObject.transform.position = self.outer.gameObject.transform.position;
+                                pos = self.outer.gameObject.transform.position;
+                                pos.x += UnityEngine.Random.Range(-.5f, .5f);
+                                pos.y += UnityEngine.Random.Range(-.5f, .5f);
+                                pos.z += UnityEngine.Random.Range(-.5f, .5f);
+                                ParticleSystem.EmitParams emitParams = new ParticleSystem.EmitParams
+                                {
+                                    angularVelocity = 0,
+                                    position = pos,
+                                    velocity = Vector3.zero,
+                                    startLifetime = 2.5f
+                                };
+                                DeathEffects.Emit(emitParams, 1);
+                                DeathEffects.gameObject.transform.position = pos;
+                                AkSoundEngine.PostEvent("EnemyKillWhileMaxDank", DeathEffects.gameObject);
+
+                                rainbowTimer = .75f;
+                            }
                         }
-                        if (progress > 2)
-                        {
-                            if (!cam)
-                            {
-                                cam = GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>();
-                                //new Material(Assets.Load<Shader>("@MoistureUpset_2014:assets/2014/TutorialShader.shader"));
-                            }
-
-
-                            milkshake = localBody.gameObject.AddComponent<ShakeEmitter>();
-                            milkshake.wave = new Wave
-                            {
-                                amplitude = 1f,
-                                frequency = 180f,
-                                cycleOffset = 0f
-                            };
-                            milkshake.duration = .15f;
-                            milkshake.radius = 400f;
-                            milkshake.amplitudeTimeDecay = false;
-                            if (origFOV == -1)
-                            {
-                                //origFOV = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value;
-                                origFOV = 60;
-                            }
-                            currFOV = 1;
-                            //CharacterCameraParamsData dat = new CharacterCameraParamsData();
-                            //dat.fov = 1;
-                            //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
-                            //{
-                            //    cameraParamsData = dat
-                            //}, 1);
-                            //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = 1;
-                            FOVtimer = .06f;
-
-
-                            if (Vector3.Distance(localBody.transform.position, self.outer.gameObject.transform.position) > 50)
-                            {
-                                UIAnimator.GetComponent<Animator>().SetTrigger("QuickScope");
-                                AkSoundEngine.PostEvent("FarEnemyKilled", localBody.gameObject);
-                            }
-
-
-                            DeathEffects.gameObject.transform.position = self.outer.gameObject.transform.position;
-                            pos = self.outer.gameObject.transform.position;
-                            pos.x += UnityEngine.Random.Range(-.5f, .5f);
-                            pos.y += UnityEngine.Random.Range(-.5f, .5f);
-                            pos.z += UnityEngine.Random.Range(-.5f, .5f);
-                            ParticleSystem.EmitParams emitParams = new ParticleSystem.EmitParams
-                            {
-                                angularVelocity = 0,
-                                position = pos,
-                                velocity = Vector3.zero,
-                                startLifetime = 2.5f
-                            };
-                            DeathEffects.Emit(emitParams, 1);
-                            DeathEffects.gameObject.transform.position = pos;
-                            AkSoundEngine.PostEvent("EnemyKillWhileMaxDank", DeathEffects.gameObject);
-
-                            rainbowTimer = .75f;
-                        }
-                    }
                 }
                 catch (Exception)
                 {
@@ -167,7 +172,7 @@ namespace MoistureUpset
                 orig(message);
                 try
                 {
-                    if (/*message.victim && */message.attacker)
+                    if (localBody && /*message.victim && */message.attacker)
                     {
                         if (message.attacker.GetComponent<CharacterBody>() == localBody)
                         {
@@ -234,14 +239,9 @@ namespace MoistureUpset
                 return orig(self);
             };
         }
-        bool active = false;
         void Start()
         {
-            active = BigJank.getOptionValue(Settings.MLGMode);
-            if (active)
-            {
-                Hooks();
-            }
+            Hooks();
         }
         static internal bool bossOver = false;
         int prevStage = 0;
@@ -272,7 +272,7 @@ namespace MoistureUpset
                     ENABLE = 0;
                 }
             }
-            if (ENABLE == 1 && localBody && active)
+            if (ENABLE == 1 && localBody)
             {
                 if (bossOver)
                 {
@@ -482,7 +482,7 @@ namespace MoistureUpset
                 //slider.GetComponent<RectTransform>().localScale = new Vector3(.5f, .5f, .5f);
                 //slider.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width/2f, Screen.height/2f, 37);
             }
-            else if (NetworkUser.readOnlyLocalPlayersList.Count > 0 && active)
+            else if (NetworkUser.readOnlyLocalPlayersList.Count > 0 && BigJank.getOptionValue(Settings.MLGMode))
             {
                 localBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                 if (localBody)
@@ -501,7 +501,7 @@ namespace MoistureUpset
 
                     if (!HitMarkerCreator)
                     {
-                        GameObject hitmarker = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
+                        hitmarker = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/HitMarkerCreator.prefab"));
                         hitmarker.transform.SetParent(player.transform);
                         hitmarker.transform.localPosition = Vector3.zero;
                         HitMarkerCreator = hitmarker.GetComponent<ParticleSystem>();
@@ -509,7 +509,7 @@ namespace MoistureUpset
 
                     if (!DeathEffects)
                     {
-                        GameObject deatheffect = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
+                        deatheffect = GameObject.Instantiate<GameObject>(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/DeathEffectsCreator.prefab"));
                         DeathEffects = deatheffect.GetComponent<ParticleSystem>();
                     }
 
@@ -533,6 +533,32 @@ namespace MoistureUpset
                     MLG.MemeMachine.slider = slider;
                 }
             }
+        }
+        public static void TurnOff()
+        {
+            try
+            {
+                Destroy(MemeMachine.memeEmitter);
+                Destroy(MemeMachine.hitmarker);
+                Destroy(MemeMachine.deatheffect);
+                Destroy(MemeMachine.slider);
+            }
+            catch (Exception)
+            {
+            }
+            MemeMachine.HitMarkerCreator = null;
+            MemeMachine.DeathEffects = null;
+            if (MemeMachine.HUD != null)
+            {
+                foreach (var item in MemeMachine.HUD.GetComponentsInChildren<CanvasRenderer>())
+                {
+                    item.SetColor(Color.white);
+                }
+            }
+            MLG.progress = 0;
+            if (localBody)
+                AkSoundEngine.PostEvent("NoMLG", localBody.gameObject);
+            localBody = null;
         }
     }
 }

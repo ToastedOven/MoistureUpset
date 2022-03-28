@@ -26,6 +26,8 @@ namespace MoistureUpset.NetMessages
             NetworkingAPI.RegisterMessageType<RequestRoblox>();
             NetworkingAPI.RegisterMessageType<SendRoblox>();
             NetworkingAPI.RegisterMessageType<SyncFanFare>();
+            NetworkingAPI.RegisterMessageType<SendBlock>();
+            NetworkingAPI.RegisterMessageType<RequestBlock>();
         }
     }
 }

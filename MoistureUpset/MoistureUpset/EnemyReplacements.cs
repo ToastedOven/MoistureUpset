@@ -283,11 +283,11 @@ namespace MoistureUpset
             //     Moisture_Upset.Moisture_Asset_Bundles.Add($"@MoistureUpset_{resource}", MainAssetBundle);
             // }
         }
-        
+
         public static void LoadBNK(string bnk)
         {
             Assets.AddSoundBank($"{bnk}.bnk");
-            
+
             // string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
             // DebugClass.Log(s);
             // try
@@ -353,6 +353,8 @@ namespace MoistureUpset
                 GreaterWisp();
                 Collab();
                 Gnome();
+                Children();
+                NotChildren();
                 DQ();
                 //SneakyFontReplacement();
             }
@@ -364,7 +366,7 @@ namespace MoistureUpset
         public static void DEBUG()
         {
             //DebugClass.DebugBones("RoR2/Base/CritGlasses/DisplayGlasses.prefab");//gup
-            
+
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GeepBody.prefab");//geep
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GipBody.prefab");//gip
             //DebugClass.DebugBones("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab");//jailer
@@ -405,7 +407,6 @@ namespace MoistureUpset
             //ReplaceModel("RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/barnacle1.mesh");
             //ReplaceModel("RoR2/DLC1/Vermin/VerminBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/vermin1.mesh");
             //ReplaceModel("RoR2/Base/LunarExploder/LunarExploderBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/exploder1.mesh");
-            //ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/minor1.mesh");
             //ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/mega.mesh");
             ////ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/mega2.mesh", 1);
             //ReplaceModel("RoR2/DLC1/ClayGrenadier/ClayGrenadierBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/clay2.mesh", 1);
@@ -1229,11 +1230,8 @@ namespace MoistureUpset
             LoadBNK("comedy");
             LoadResource("jelly");
             ReplaceModel("RoR2/Base/Jellyfish/JellyfishBody.prefab", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
-            On.EntityStates.JellyfishMonster.SpawnState.OnEnter += (orig, self) =>
-            {
-                orig(self);
-                self.outer.commonComponents.sfxLocator.deathSound = "ComedyDeath";
-            };
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Jellyfish/JellyfishBody.prefab").WaitForCompletion();
+            fab.GetComponentInChildren<SfxLocator>().deathSound = "ComedyDeath";
             On.EntityStates.JellyfishMonster.JellyNova.Detonate += (orig, self) =>
             {
                 SoundAssets.PlaySound("JellyDetonate", self.outer.gameObject);
@@ -1487,6 +1485,7 @@ namespace MoistureUpset
             LoadResource("ghast");
             ReplaceModel("RoR2/Base/GreaterWisp/GreaterWispBody.prefab", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion();
+            fab.GetComponentInChildren<SfxLocator>().barkSound = "GhastIdle";
             fab.GetComponentInChildren<FlickerLight>().enabled = false;
             var fixer = fab.AddComponent<GhastFixerButTheGhastNotTheFireballs>();
             var components = fab.GetComponentsInChildren<Component>();
@@ -2758,7 +2757,7 @@ namespace MoistureUpset
         {
             if (!BigJank.getOptionValue(Settings.Gnome))
                 return;
-            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_moisture_cactuar:assets/cactuar/cactuar.mesh", "@MoistureUpset_moisture_cactuar:assets/cactuar/cactuar.png", 1);
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_cactuar:assets/cactuar/cactuar.png", 1);
             ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 0);
             ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 2);
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab").WaitForCompletion();
@@ -2767,11 +2766,86 @@ namespace MoistureUpset
             //fab.GetComponent<SfxLocator>().landingSound = "Play_UI_menuClick";
             fab.GetComponent<SfxLocator>().aliveLoopStart = "Play_gnome_aliveloop";
             fab.GetComponent<SfxLocator>().aliveLoopStop = "Stop_gnome_aliveloop";
+            var gnome = Assets.Load<GameObject>("@MoistureUpset_moisture_cactuar:assets/cactuar/Gnome.prefab");
+            gnome.transform.parent = fab.transform;
+            gnome.transform.localScale = Vector3.one;
+            gnome.transform.localPosition = Vector3.zero;
             On.EntityStates.VoidInfestor.Spawn.OnEnter += (orig, self) =>
             {
                 orig(self);
                 EntityStates.VoidInfestor.Infest.enterSoundString = "Play_gnome_attack";
             };
+            fab.transform.Find("ModelBase").Find("mdlVoidInfestor").Find("VoidAffixArmature").Find("ROOT").Find("ThoraxUpper1").Find("ThoraxUpper2").Find("VoidInfestorVX").Find("Point Light").gameObject.SetActive(false);
+            fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab").WaitForCompletion();
+            gnome = Assets.Load<GameObject>("@MoistureUpset_moisture_cactuar:assets/cactuar/GnomeAffix.prefab");
+            gnome.transform.parent = fab.transform;
+            gnome.transform.localScale = Vector3.one;
+            gnome.transform.localPosition = new Vector3(0, 1.1f, 0);
+            ReplaceMeshFilter("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab", "@MoistureUpset_na:assets/na1.mesh");
+            ReplaceMeshFilter("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceMeshFilter("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab", "@MoistureUpset_na:assets/na1.mesh", 2);
+            fab.GetComponentInChildren<Light>().gameObject.SetActive(false);
+        }
+        private static void Children()
+        {
+            if (!BigJank.getOptionValue(Settings.ChildrenBlocks))
+                return;
+            LoadBNK("Block");
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_youcanquoteme:assets/woodencube/blok.mesh", "@MoistureUpset_moisture_testing:assets/woodencube/bblok.png", 1);
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 2);
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 3);
+
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/bblok.png"));
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/gblok.png"));
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/rblok.png"));
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/yblok.png"));
+            Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab").WaitForCompletion().AddComponent<BlockRandomizer>();
+
+            for (int i = 1; i < 38; i++)
+            {
+                if (i < 10)
+                {
+                    BlockRandomizer.meshes.Add(Assets.Load<Mesh>($"@MoistureUpset_moisture_youcanquoteme:assets/woodencube/Face.00{i}.mesh"));
+                }
+                else
+                {
+                    BlockRandomizer.meshes.Add(Assets.Load<Mesh>($"@MoistureUpset_moisture_youcanquoteme:assets/woodencube/Face.0{i}.mesh"));
+                }
+            }
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructProjectileGhost.prefab").WaitForCompletion();
+            fab.GetComponentsInChildren<ParticleSystemRenderer>()[1].mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
+            var nuts = Assets.Load<GameObject>("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/marble.prefab");
+            nuts.GetComponent<MeshRenderer>().sharedMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/bazaar/matBazaarWater.mat").WaitForCompletion();
+            nuts.transform.parent = fab.transform;
+            nuts.transform.localScale = Vector3.one;
+            nuts.transform.localPosition = Vector3.zero;
+            nuts.AddComponent<MarbleSpinner>();
+
+
+
+            //fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab").WaitForCompletion();
+            //On.EntityStates.MinorConstruct.NoCastSpawn.OnEnter += (orig, self) =>
+            //{
+            //    DebugClass.Log($"nocast----------{self.enterSoundString}");
+            //    self.enterSoundString = "";
+            //    orig(self);
+            //};
+            //On.EntityStates.MinorConstruct.Weapon.ChargeConstructBeam.OnEnter += (orig, self) =>
+            //{
+            //    DebugClass.Log($"chgargea----------{self.enterSoundString}");
+            //    DebugClass.Log($"chgargea----------{self.exitSoundString}");
+            //    self.enterSoundString = "";
+            //    self.exitSoundString = "";
+            //    orig(self);
+            //};
+
+            //fab.GetComponentInChildren<ParticleSystemRenderer>().SetMeshes(new Mesh[] { Assets.Load<Mesh>("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/mar.mesh"), Assets.Load<Mesh>("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/ble.mesh") });
+        }
+        private static void NotChildren()
+        {
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.mesh", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.png", 0);
+            ReplaceMeshFilter("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
         }
 
         private static void Collab()
