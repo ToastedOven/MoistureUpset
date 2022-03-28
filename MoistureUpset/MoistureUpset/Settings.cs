@@ -54,6 +54,8 @@ namespace MoistureUpset
         public static ConfigEntry<bool> Cereal;
         public static ConfigEntry<bool> DQ;
         public static ConfigEntry<bool> Gnome;
+        public static ConfigEntry<bool> ChildrenBlocks;
+        public static ConfigEntry<bool> AdultBlocks;
 
         public static ConfigEntry<bool> Interactables;
         public static ConfigEntry<bool> CurrencyChanges;
@@ -161,7 +163,8 @@ namespace MoistureUpset
             Cereal = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Cereal", true, "EAT EM UP EAT EM UP EAT EM UP!");
             DQ = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "DQ Lips", true, "Incase you didn't get enough marketing from the brass contraptions");
             Gnome = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Gnome", true, "I'm gnot a gvoid-infestor, I'm a gnome");
-
+            ChildrenBlocks = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Children Blocks", true, "Replaces Alpha Constructs with wooden blocks");
+            AdultBlocks = Moisture_Upset.instance.Config.Bind<bool>("Enemy Skins", "Adult Blocks", true, "Replaces Xi Constructs with wooden blocks");
 
             Interactables = Moisture_Upset.instance.Config.Bind<bool>("Interactables", "Interactables", true, "Replaces chests and barrels with minecraft items");
             CurrencyChanges = Moisture_Upset.instance.Config.Bind<bool>("UI Changes", "Currency Changes", true, "Replaces currency types with robux and tix");
@@ -193,11 +196,18 @@ namespace MoistureUpset
             BonziBuddyBool = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Top Secret Setting", true, "You'll probably know it when you see it");
             AccurateTTS = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Accurate REDACTED TTS", false, "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.");
             MLGMode = Moisture_Upset.instance.Config.Bind<bool>("Misc", "MLG Mode", false, "What year is it");
+            MLGMode.SettingChanged += MLGMode_SettingChanged;
 
             BonziBuddyBool.SettingChanged += BonziBuddyBool_SettingChanged; ;
             AccurateTTS.SettingChanged += AccurateTTS_SettingChanged; ;
 
             ReplaceItems = Moisture_Upset.instance.Config.Bind<bool>("Misc", "Replace Items", true, "Replace all items with memes");
+        }
+
+        private static void MLGMode_SettingChanged(object sender, EventArgs e)
+        {
+            if (!MLGMode.Value)
+                MLG.TurnOff();
         }
 
         private static void AccurateTTS_SettingChanged(object sender, EventArgs e)
@@ -284,6 +294,8 @@ namespace MoistureUpset
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Cereal, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.DQ, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Gnome, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.ChildrenBlocks, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.AdultBlocks, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Interactables, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.CurrencyChanges, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
@@ -310,13 +322,13 @@ namespace MoistureUpset
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.ShrineChanges, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.MiscOptions, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.CreativeVoidZone, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.EndOfGameMusic, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.EndOfGameMusic, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = false }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.RespawnSFX, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.ReplaceIntroScene, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.BonziBuddyBool, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = false }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.AccurateTTS, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = false }));
-            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MLGMode, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.MLGMode, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = false }));
 
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.ReplaceItems, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
         }
