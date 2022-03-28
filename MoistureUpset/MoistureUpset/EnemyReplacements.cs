@@ -2586,7 +2586,7 @@ namespace MoistureUpset
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
-                    AkSoundEngine.PostEvent("StopFanFare", Moisture_Upset.musicController.gameObject);
+                    AkSoundEngine.PostEvent("StopFanFare", MoistureUpsetMod.musicController.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
                     if (BigJank.getOptionValue(Settings.Fanfare) && NetworkServer.active)
                         new SyncFanFare(UnityEngine.Random.Range(0, SyncFanFare.songs.Length)).Send(R2API.Networking.NetworkDestination.Clients);

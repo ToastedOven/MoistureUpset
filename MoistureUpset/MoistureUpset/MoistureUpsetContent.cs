@@ -40,6 +40,6 @@ namespace MoistureUpset
             yield break;
         }
 
-        public string identifier => Moisture_Upset.Guid;
+        public string identifier => MoistureUpsetMod.Guid;
     }
 }

@@ -414,7 +414,7 @@ namespace MoistureUpset
                             break;
                         case 1:
                             slider.transform.Find("Image").gameObject.GetComponent<Image>().sprite = stage1;
-                            Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                            MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                             AkSoundEngine.SetRTPCValue("MLGActive", 1);
                             if (prevStage == 0)
                             {
@@ -428,7 +428,7 @@ namespace MoistureUpset
                             break;
                         case 2:
                             slider.transform.Find("Image").gameObject.GetComponent<Image>().sprite = stage2;
-                            Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                            MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                             AkSoundEngine.SetRTPCValue("MLGActive", 1);
                             AkSoundEngine.PostEvent(tracks[ActiveTrack].Stage2, localBody.gameObject);
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using HG;
+using MoistureUpset.Skins.ItemDisplayRules;
 using R2API.Utils;
 using RoR2.ContentManagement;
 using UnityEngine;
@@ -27,16 +28,9 @@ namespace MoistureUpset.Skins
             ContentManager.onContentPacksAssigned += FinalizeSkins;
         }
 
-        private static void ExtractItems(GameObject[] bodyPrefabs)
-        {
-            var engiBody = bodyPrefabs.GetBodyPrefab("EngiBody");
-
-            ItemDisplayRuleOverrides.ExportRuleSet(engiBody);
-        }
-
         private static void FinalizeSkins(ReadOnlyArray<ReadOnlyContentPack> obj)
         {
-            //ExtractItems(ContentManager._bodyPrefabs);
+            ExtractItems(ContentManager._bodyPrefabs);
             AddSkinsToBodyPrefabs(ContentManager._bodyPrefabs);
         }
 
@@ -64,9 +58,13 @@ namespace MoistureUpset.Skins
             
             foreach (var bodyName in skinDelegates.Keys)
             {
-                DebugClass.Log($"Loading skins for {bodyPrefabs.GetBodyPrefab(bodyName).name}");
+                GameObject bodyPrefab = bodyPrefabs.GetBodyPrefab(bodyName);
+                
+                DebugClass.Log($"Loading skins for {bodyPrefab.name}");
 
-                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(bodyPrefabs.GetBodyPrefab(bodyName));
+                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(bodyPrefab);
+                
+                ItemDisplayRuleOverrides.GenerateDisplayRuleOverride(bodyName, bodyPrefab);
 
                 bodyPrefabs[bodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
 
@@ -78,8 +76,13 @@ namespace MoistureUpset.Skins
             
             DebugClass.Log($"Finished Loading skins!");
         }
+        
+        private static void ExtractItems(GameObject[] bodyPrefabs)
+        {
+            var engiBody = bodyPrefabs.GetBodyPrefab("EngiBody");
 
-
+            ItemDisplayRuleOverrides.ExportRuleSet(engiBody);
+        }
 
         // Add component SkinReloader to all survivors
         private static void AddSkinReloader(On.RoR2.SurvivorCatalog.orig_Init orig)

@@ -23,15 +23,15 @@ namespace MoistureUpset
     [BepInPlugin(Guid, "Moisture Upset", Version)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
-    public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
+    public class MoistureUpsetMod : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
-        public static Moisture_Upset instance;
+        public static MoistureUpsetMod Instance;
         public const string Version = "1.5.1";
         public const string Guid = "com.gemumoddo.MoistureUpset";
         
         public void Awake()
         {
-            instance = this;
+            Instance = this;
             DebugClass.SetLogger(base.Logger);
             
             NetMessages.Register.Init();
