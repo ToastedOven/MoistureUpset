@@ -39,17 +39,15 @@ namespace MoistureUpset.Skins
             AddToPrefab();
 
             //On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
-            //On.RoR2.CharacterMaster.OnBodyDamaged += mostRecentAttacker;
+            //On.RoR2.CharacterMaster.OnBodyDamaged += MostRecentAttacker;
         }
         
-        private static void mostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
+        private static void MostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
         {
             orig(self, damageReport);
 
             if (damageReport.victimBody.IsSkin(SkinName))
-            {
-                damageReport.victimBody.GetComponent<EngiKillCam>().attacker = damageReport.attackerBody;
-            }
+                damageReport.victimBody.GetComponent<EngiKillCamController>().attacker = damageReport.attackerBody;
         }
 
         private static void KillCamTest(On.RoR2.CharacterMaster.orig_OnBodyDeath orig, CharacterMaster self, CharacterBody body)
@@ -58,11 +56,14 @@ namespace MoistureUpset.Skins
             
             if (body.IsSkin(SkinName))
             {
-                if (!self.preventGameOver)
+                if (self.preventGameOver)
+                    return;
+                
+                DebugClass.Log("The Engi is Dead");
+                    
+                if (NetworkUser.readOnlyLocalPlayersList[0].master.GetBody() == body)
                 {
-                    DebugClass.Log($"The Engi is Dead");
-
-                    body.GetComponent<EngiKillCam>().DoKillCam();
+                    body.GetComponent<EngiKillCamController>().DoKillCam();
                 }
             }
         }
@@ -388,7 +389,7 @@ namespace MoistureUpset.Skins
             GameObject engiBody = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion(); // load engibody prefab
             engiBody.AddComponent<AddMedicIcon>();
             engiBody.AddComponent<EngiHurt>();
-            engiBody.AddComponent<EngiKillCam>();
+            //engiBody.AddComponent<EngiKillCamController>();
         }
     }
 }
