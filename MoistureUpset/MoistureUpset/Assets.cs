@@ -22,25 +22,9 @@ namespace MoistureUpset
 
         public static Material LoadMaterial(string texture)
         {
-            if (!_prefab)
-                _prefab = Object.Instantiate<Material>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().material);
-
-            Material newMat = Object.Instantiate(_prefab);
+            Material newMat = Object.Instantiate(Load<Material>("general/basehgstandard.mat"));
 
             newMat.SetTexture("_MainTex", Load<Texture>(texture));
-
-            newMat.SetColor("_Color", Color.white);
-            newMat.SetFloat("_EmPower", 0f);
-            newMat.SetColor("_EmColor", Color.white);
-            newMat.SetTexture("_EmTex", null);
-            newMat.SetTexture("_FresnelRamp", null);
-            newMat.SetFloat("_NormalStrength", 1f);
-            newMat.SetTexture("_NormalTex", null);
-            newMat.SetInt("_PrintOn", 0);
-            newMat.SetInt("_LimbRemovalOn", 1);
-            newMat.SetFloat("_SpecularStrength", 0f);
-            
-            
             newMat.name = texture;
 
             return newMat;

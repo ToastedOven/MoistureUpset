@@ -28,5 +28,11 @@ namespace MoistureUpset
             RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item AlienHead 100");
             RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
         }
+        [ConCommand(commandName = "endme", flags = ConVarFlags.None, helpText = "Does the ending of you")]
+        public static void EndMe(ConCommandArgs args)
+        {
+            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
+            RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "spawn_ai GolemMaster 10");
+        }
     }
 }
