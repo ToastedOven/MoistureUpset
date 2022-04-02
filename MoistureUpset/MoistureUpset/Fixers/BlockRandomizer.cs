@@ -30,7 +30,7 @@ namespace MoistureUpset.Fixers
             }
             else
             {
-                new RequestRoblox(gameObject.GetComponent<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Server);
+                new RequestBlock(gameObject.GetComponent<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Server);
             }
         }
         internal void Setup()
