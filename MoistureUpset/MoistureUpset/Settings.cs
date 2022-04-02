@@ -163,8 +163,8 @@ namespace MoistureUpset
             Cereal = MoistureUpsetMod.Instance.Config.Bind<bool>("Enemy Skins", "Cereal", true, "EAT EM UP EAT EM UP EAT EM UP!");
             DQ = MoistureUpsetMod.Instance.Config.Bind<bool>("Enemy Skins", "DQ Lips", true, "Incase you didn't get enough marketing from the brass contraptions");
             Gnome = MoistureUpsetMod.Instance.Config.Bind<bool>("Enemy Skins", "Gnome", true, "I'm gnot a gvoid-infestor, I'm a gnome");
-			ChildrenBlocks = Moisture_Upset.Instance.Config.Bind<bool>("Enemy Skins", "Children Blocks", true, "Replaces Alpha Constructs with wooden blocks");
-            AdultBlocks = Moisture_Upset.Instance.Config.Bind<bool>("Enemy Skins", "Adult Blocks", true, "Replaces Xi Constructs with wooden blocks");
+			ChildrenBlocks = MoistureUpsetMod.Instance.Config.Bind<bool>("Enemy Skins", "Children Blocks", true, "Replaces Alpha Constructs with wooden blocks");
+            AdultBlocks = MoistureUpsetMod.Instance.Config.Bind<bool>("Enemy Skins", "Adult Blocks", true, "Replaces Xi Constructs with wooden blocks");
 
             Interactables = MoistureUpsetMod.Instance.Config.Bind<bool>("Interactables", "Interactables", true, "Replaces chests and barrels with minecraft items");
             CurrencyChanges = MoistureUpsetMod.Instance.Config.Bind<bool>("UI Changes", "Currency Changes", true, "Replaces currency types with robux and tix");
@@ -194,9 +194,9 @@ namespace MoistureUpset
             ReplaceIntroScene = MoistureUpsetMod.Instance.Config.Bind<bool>("Misc", "Replace Intro Scene", true, "Replaces the default intro cutscene with one that UnsavedTrash made");
 
 
-            BonziBuddyBool = Moisture_Upset.Instance.Config.Bind<bool>("Misc", "Top Secret Setting", true, "You'll probably know it when you see it");
-            AccurateTTS = Moisture_Upset.Instance.Config.Bind<bool>("Misc", "Accurate REDACTED TTS", false, "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.");
-            MLGMode = Moisture_Upset.Instance.Config.Bind<bool>("Misc", "MLG Mode", false, "What year is it");
+            BonziBuddyBool = MoistureUpsetMod.Instance.Config.Bind<bool>("Misc", "Top Secret Setting", true, "You'll probably know it when you see it");
+            AccurateTTS = MoistureUpsetMod.Instance.Config.Bind<bool>("Misc", "Accurate REDACTED TTS", false, "Gives REDACTED REDACTED's original TTS voice. For 99% of users, the first time you turn this on it will require an install of SAPI4 and tv_enua(this is where REDACTED's voice is). If you do not feel safe doing this you can either leave this unchecked or manually download and install Speakonia from cfs-technologies on the web.");
+            MLGMode = MoistureUpsetMod.Instance.Config.Bind<bool>("Misc", "MLG Mode", false, "What year is it");
             MLGMode.SettingChanged += MLGMode_SettingChanged;
 
             BonziBuddyBool.SettingChanged += BonziBuddyBool_SettingChanged; ;
