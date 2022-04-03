@@ -52,6 +52,7 @@ namespace MoistureUpset.Skins
             CustomEmotesAPI.AddNonAnimatingEmote("debug time");
             CustomEmotesAPI.AddNonAnimatingEmote("kill stuff");
             CustomEmotesAPI.AddNonAnimatingEmote("end me");
+            CustomEmotesAPI.AddNonAnimatingEmote("50 golems");
 
 
             CustomEmotesAPI.animChanged += CustomEmotesAPI_animChanged;
@@ -97,6 +98,18 @@ namespace MoistureUpset.Skins
             {
                 RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
                 RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "spawn_ai GolemMaster 10");
+            }
+            else if (newAnimation == "50 golems")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "spawn_ai GolemMaster 50");
+            }
+            else if (newAnimation == "noclip")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+            }
+            else if (newAnimation == "god")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
             }
             //DebugClass.Log($"[{newAnimation}]----------[{mapper.gameObject/*can get netid from this if you need it*/}]");//works btw
         }
