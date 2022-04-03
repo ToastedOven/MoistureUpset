@@ -49,6 +49,9 @@ namespace MoistureUpset.Skins
 
 
             CustomEmotesAPI.AddNonAnimatingEmote("firework");
+            CustomEmotesAPI.AddNonAnimatingEmote("debug time");
+            CustomEmotesAPI.AddNonAnimatingEmote("kill stuff");
+            CustomEmotesAPI.AddNonAnimatingEmote("end me");
 
 
             CustomEmotesAPI.animChanged += CustomEmotesAPI_animChanged;
@@ -70,6 +73,30 @@ namespace MoistureUpset.Skins
             if (newAnimation == "firework")
             {
                 EffectManager.instance.LaunchFirework();
+            }
+            else if (newAnimation == "debug time")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "no_enemies");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "kill_all");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_money 1000000");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item AlienHead 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
+            }
+            else if (newAnimation == "kill stuff")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item AlienHead 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
+            }
+            else if (newAnimation == "end me")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "spawn_ai GolemMaster 10");
             }
             //DebugClass.Log($"[{newAnimation}]----------[{mapper.gameObject/*can get netid from this if you need it*/}]");//works btw
         }
