@@ -81,8 +81,6 @@ namespace MoistureUpset
         float FOVtimer = 0;
 
         ShakeEmitter milkshake;
-        float origFOV = -1;
-        float currFOV = 60;
         private void Hooks()
         {
             On.EntityStates.GenericCharacterDeath.OnEnter += (orig, self) =>
@@ -120,12 +118,12 @@ namespace MoistureUpset
                                 milkshake.duration = .15f;
                                 milkshake.radius = 400f;
                                 milkshake.amplitudeTimeDecay = false;
-                                if (origFOV == -1)
+                                if (netFovChange > -20f)
                                 {
-                                    //origFOV = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value;
-                                    origFOV = 60;
+                                    netFovChange -= 30f;
+                                    DebugClass.Log($"--------setting fov to [{localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value - 30f}]   -prev -[{localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value}]");
+                                    localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value - 30f;
                                 }
-                                currFOV = 1;
                                 //CharacterCameraParamsData dat = new CharacterCameraParamsData();
                                 //dat.fov = 1;
                                 //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
@@ -133,7 +131,7 @@ namespace MoistureUpset
                                 //    cameraParamsData = dat
                                 //}, 1);
                                 //localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = 1;
-                                FOVtimer = .06f;
+                                FOVtimer = .05f;
 
 
                                 if (Vector3.Distance(localBody.transform.position, self.outer.gameObject.transform.position) > 50)
@@ -259,6 +257,7 @@ namespace MoistureUpset
         bool runLock = false;
         bool stage1Active = false;
         float stage1Timer = 0;
+        float netFovChange = 0;
         void FixedUpdate()
         {
             if (ENABLE == -1)
@@ -311,10 +310,11 @@ namespace MoistureUpset
                         destColor = Color.red;
                     }
                 }
-                if (localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value != currFOV)
-                {
-                    localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = Mathf.Lerp(localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value, currFOV, Time.deltaTime);
-                }
+                //if (localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value != currFOV)
+                //{
+                //    DebugClass.Log($"----------{localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value}");
+                //    localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = Mathf.Lerp(localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value, currFOV, Time.deltaTime);
+                //}
                 if (FOVtimer >= 0)
                 {
                     FOVtimer -= /*Time.deltaTime*/ .01f;
@@ -328,9 +328,21 @@ namespace MoistureUpset
                         //comp.material = Assets.Load<Material>("@MoistureUpset_2014:assets/2014/MLGCameraMaterial.mat");
                         //comp.material.shader = Assets.Load<Shader>("@MoistureUpset_2014:assets/2014/TutorialShader.shader");
                     }
-                    if (origFOV != -1)
+                    if (netFovChange != 0)
                     {
-                        currFOV = origFOV;
+                        if (netFovChange > -.05f)
+                        {
+                            DebugClass.Log($"----------done");
+                            localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value - netFovChange;
+                            netFovChange = 0;
+                        }
+                        else
+                        {
+                            DebugClass.Log($"[{netFovChange}]----------[{localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value}]");
+                            float num = netFovChange * Time.deltaTime;
+                            netFovChange -= num;
+                            localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov = localBody.GetComponentInChildren<EntityStateMachine>().commonComponents.cameraTargetParams.cameraParams.data.fov.value - num;
+                        }
                     }
                 }
                 if (rainbowTimer > 0)
