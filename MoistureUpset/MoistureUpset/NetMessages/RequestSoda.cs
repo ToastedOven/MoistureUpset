@@ -11,16 +11,16 @@ using UnityEngine.Networking;
 
 namespace MoistureUpset.NetMessages
 {
-    public class RequestBlock : INetMessage
+    public class RequestSoda : INetMessage
     {
         NetworkInstanceId netId;
 
-        public RequestBlock()
+        public RequestSoda()
         {
 
         }
 
-        public RequestBlock(NetworkInstanceId netId)
+        public RequestSoda(NetworkInstanceId netId)
         {
             this.netId = netId;
         }
@@ -35,8 +35,8 @@ namespace MoistureUpset.NetMessages
         public void OnReceived()
         {
             GameObject g = Util.FindNetworkObject(netId);
-            var randomizer = g.GetComponent<BlockRandomizer>();
-            new SendBlock(netId, randomizer.num, randomizer.matNum).Send(R2API.Networking.NetworkDestination.Clients);
+            var randomizer = g.GetComponent<RandomizeSoda>();
+            new SendSoda(netId, randomizer.currentTexture).Send(R2API.Networking.NetworkDestination.Clients);
         }
 
         public void Serialize(NetworkWriter writer)

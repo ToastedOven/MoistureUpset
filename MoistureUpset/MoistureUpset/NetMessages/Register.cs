@@ -22,7 +22,8 @@ namespace MoistureUpset.NetMessages
             NetworkingAPI.RegisterMessageType<SyncBroke>();
             NetworkingAPI.RegisterMessageType<SyncBonziApproach>();
             NetworkingAPI.RegisterMessageType<SyncLunarReRoll>();
-            NetworkingAPI.RegisterMessageType<SyncSoda>();
+            NetworkingAPI.RegisterMessageType<SendSoda>();
+            NetworkingAPI.RegisterMessageType<RequestSoda>();
             NetworkingAPI.RegisterMessageType<RequestRoblox>();
             NetworkingAPI.RegisterMessageType<SendRoblox>();
             NetworkingAPI.RegisterMessageType<SyncFanFare>();

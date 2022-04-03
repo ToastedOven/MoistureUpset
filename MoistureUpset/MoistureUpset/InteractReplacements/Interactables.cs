@@ -94,6 +94,7 @@ namespace MoistureUpset.InteractReplacements
                     spritzPrefab.transform.SetParent(cUm.transform);
                     spritzPrefab.transform.localPosition = new Vector3(0, 1.2f, -0.4f);
                 }
+                RandomizeSoda.textures = new Texture[]{ Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/cokacoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/drcoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/mtncoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/pepcoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/hicoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/spritecoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/fantacoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/watercoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/lioncoon.png") };
 
                 cUm.GetComponentInChildren<SfxLocator>().openSound = "Soda";
                 cUm.AddComponent<NewSplatSystemRemover>();
