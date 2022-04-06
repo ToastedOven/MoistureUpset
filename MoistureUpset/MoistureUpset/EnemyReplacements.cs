@@ -416,6 +416,55 @@ namespace MoistureUpset
 
             //ReplaceModel("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase1.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/raidcrab.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
 
+            //muFULLSong18 is golem plains
+            //On.RoR2.MusicTrackDef.Play += (orig, self) =>
+            //{
+            //    orig(self);
+
+            //    //foreach (var item in self.states)
+            //    //{
+            //    //    //DebugClass.Log($"----------setting state [{item.Name}]    [{item.GroupId}]          [{item.Id}]");
+            //    //    if (item.Id == 3547722878)
+            //    //    {
+            //    //        item.SetPropertyValue<uint>("Id", 3978303460);
+            //    //        item.SetPropertyValue<string>("Name", "gameplaySongChoice / TestState");
+            //    //        DebugClass.Log($"----------what the fuck     {item.Name}   {item.Id}");
+            //    //    }
+            //    //}
+            //    //AkSoundEngine.SetState(1741660947, 3978303460);
+            //};
+            //On.RoR2.MusicController.Start += (orig, self) =>
+            //{
+            //    orig(self);
+            //    AkSoundEngine.PostEvent("Play_Meme_System", MoistureUpsetMod.Instance.gameObject);
+            //};
+            //On.RoR2.MusicTrackDef.Stop += (orig, self) =>
+            //{
+            //    orig(self);
+            //};
+            //On.RoR2.MusicTrackCatalog.SetEntries += (orig, newDefs) =>
+            //{
+            //    DebugClass.Log($"----------{newDefs[0].states[0].Id}");
+            //    DebugClass.Log($"----------{newDefs[0].cachedName}");
+            //    for (int i = 0; i < newDefs.Length; i++)
+            //    {
+            //        if (newDefs[i].cachedName == "muFULLSong18")
+            //        {
+            //            ////newDefs[i].states[0] = new AK.Wwise.State(); //this breaks it. work from here probably?
+            //            //DebugClass.Log($"----------{newDefs[i].states[0].Id}");
+            //            newDefs[i].states[0].SetPropertyValue<uint>("Id", 3978303460);
+            //            //newDefs[i].states[1].SetPropertyValue<uint>("Id", newDefs[1].states[1].Id);
+            //            //newDefs[i] = newDefs[5];
+            //        }
+            //        DebugClass.Log($"[{newDefs[i].soundBank.Name}]=[{newDefs[i].soundBank}]=[{newDefs[i].comment}]=[{newDefs[i].states.Length}]=[{newDefs[i].cachedName}]");
+            //        foreach (var state in newDefs[i].states)
+            //        {
+            //            DebugClass.Log($"----------[{state}]");
+            //        }
+            //        DebugClass.Log($"");
+            //    }
+            //    orig(newDefs);
+            //};
         }
         private static void Icons()
         {
