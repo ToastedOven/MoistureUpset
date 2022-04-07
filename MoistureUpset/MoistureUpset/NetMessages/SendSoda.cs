@@ -10,17 +10,17 @@ using UnityEngine.Networking;
 
 namespace MoistureUpset.NetMessages
 {
-    public class SyncSoda : INetMessage
+    public class SendSoda : INetMessage
     {
         NetworkInstanceId netId;
         Int32 position;
 
-        public SyncSoda()
+        public SendSoda()
         {
 
         }
 
-        public SyncSoda(NetworkInstanceId netId, int pos)
+        public SendSoda(NetworkInstanceId netId, int pos)
         {
             this.netId = netId;
             position = pos;
@@ -39,7 +39,7 @@ namespace MoistureUpset.NetMessages
             GameObject g = Util.FindNetworkObject(netId);
             var soda = g.GetComponent<RandomizeSoda>();
             soda.currentTexture = position;
-            g.GetComponentInChildren<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = soda.textures[soda.currentTexture];
+            g.GetComponentInChildren<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = RandomizeSoda.textures[soda.currentTexture];
         }
 
         public void Serialize(NetworkWriter writer)

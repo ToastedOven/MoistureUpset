@@ -416,8 +416,6 @@ namespace MoistureUpset
 
             //ReplaceModel("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase1.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/raidcrab.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
 
-
-
         }
         private static void Icons()
         {

@@ -3103,7 +3103,7 @@ namespace MoistureUpset
                     new SyncBonziApproach((int)num, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             }
-            Run.instance.fixedTime -= Time.deltaTime * dist;
+            Run.instance.fixedTime -= Time.unscaledDeltaTime * dist;
         }
         float dist = 0;
         public void BonziApproach(int distance)
@@ -4121,10 +4121,6 @@ namespace MoistureUpset
                             }
                             break;//Lost Seer's Lenses
                         case "ITEM_EXPLODEONDEATHVOID_NAME":
-                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.ExplodeOnDeathVoid) == 1)
-                            {
-                                ShouldSpeak("It's the best purple item, you can't change my mind", true);
-                            }
                             break;//Voidsent Flame
                         case "ITEM_BLEEDONHITVOID_NAME":
                             break;//Needletick
@@ -4172,6 +4168,10 @@ namespace MoistureUpset
                             }
                             break;//Tentabauble
                         case "ITEM_CHAINLIGHTNINGVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.ChainLightningVoid) == 1)
+                            {
+                                ShouldSpeak("It's the best purple item, you can't change my mind", true);
+                            }
                             break;//Polylute
                         case "ITEM_EQUIPMENTMAGAZINEVOID_NAME":
                             if (inventory.GetItemCount(RoR2.DLC1Content.Items.EquipmentMagazineVoid) == 1 && SurvivorCatalog.FindSurvivorDefFromBody(g.GetComponentInChildren<CharacterBody>().gameObject) == RoR2Content.Survivors.Engi)
@@ -4553,10 +4553,10 @@ namespace MoistureUpset
         const int speed = 2;
         void Update()
         {
-            emergencyTimer += Time.deltaTime;
+            emergencyTimer += Time.unscaledDeltaTime;
             if (casinoTimer > 0)
             {
-                casinoTimer -= Time.deltaTime;
+                casinoTimer -= Time.unscaledDeltaTime;
                 if (!(casinoTimer > 0))
                 {
                     cheated = false;
@@ -4564,7 +4564,7 @@ namespace MoistureUpset
             }
             if (dontSpeak > 0)
             {
-                dontSpeak -= Time.deltaTime;
+                dontSpeak -= Time.unscaledDeltaTime;
             }
             if (charPosition != null)
             {
@@ -4657,7 +4657,7 @@ namespace MoistureUpset
             {
                 if (bloodShrineTimer > 0)
                 {
-                    bloodShrineTimer -= Time.deltaTime;
+                    bloodShrineTimer -= Time.unscaledDeltaTime;
                 }
                 Vector2 temp = RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position);
                 screenPos = new Vector2(temp.x / (float)Screen.width, temp.y / (float)Screen.height);
@@ -4676,7 +4676,7 @@ namespace MoistureUpset
                         moveRight = true;
                         if (currentClip == "flyright")
                         {
-                            transform.position += new Vector3(speed * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position += new Vector3(speed * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
                         }
                     }
                     else if (dest.x < screenPos.x && !equalX)
@@ -4684,7 +4684,7 @@ namespace MoistureUpset
                         moveLeft = true;
                         if (currentClip == "flyleft")
                         {
-                            transform.position -= new Vector3(speed * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position -= new Vector3(speed * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
 
                         }
                     }
@@ -4693,7 +4693,7 @@ namespace MoistureUpset
                         moveUp = true;
                         if (currentClip == "flyup")
                         {
-                            transform.position += new Vector3(0, speed * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position += new Vector3(0, speed * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
@@ -4702,7 +4702,7 @@ namespace MoistureUpset
                         moveDown = true;
                         if (currentClip == "flydown")
                         {
-                            transform.position -= new Vector3(0, speed * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position -= new Vector3(0, speed * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
@@ -4889,7 +4889,7 @@ namespace MoistureUpset
         {
             if (currentClip == "idle")
             {
-                timer -= Time.deltaTime;
+                timer -= Time.unscaledDeltaTime;
                 if (timer < 0)
                 {
                     timer = UnityEngine.Random.Range(20, 41);
@@ -5027,25 +5027,25 @@ namespace MoistureUpset
             {
                 moveUp = true;
                 //if (currentClip == "flyup")
-                transform.position += new Vector3(0, 1 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                transform.position += new Vector3(0, 1 * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
             }
             if (Input.GetKey(KeyCode.J))
             {
                 moveLeft = true;
                 //if (currentClip == "flyleft")
-                transform.position -= new Vector3(1 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                transform.position -= new Vector3(1 * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
             }
             if (Input.GetKey(KeyCode.K))
             {
                 moveDown = true;
                 //if (currentClip == "flydown")
-                transform.position -= new Vector3(0, 1 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                transform.position -= new Vector3(0, 1 * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
             }
             if (Input.GetKey(KeyCode.L))
             {
                 moveRight = true;
                 //if (currentClip == "flyright")
-                transform.position += new Vector3(1 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                transform.position += new Vector3(1 * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
             }
             if (Input.GetKeyDown(KeyCode.O))
             {
