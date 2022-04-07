@@ -12,41 +12,13 @@ namespace MoistureUpset.Skins.Engi
     {
         public CharacterBody attacker;
 
-        private CameraRigController _cameraRig;
-        private Camera _camera;
-        private EngiKillCam _killCam;
         private Texture2D _screenTex;
         private Material _screenMat;
-        private bool _lookAt;
 
-        private void Start()
+        public void Start()
         {
             _screenTex = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
             _screenMat = new Material(Addressables.LoadAssetAsync<Shader>($"RoR2/Base/Shaders/HGStandard.shader").WaitForCompletion());
-        }
-
-        private void Update()
-        {
-            if (_lookAt)
-            {
-                //GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>().target = attacker.gameObject;
-                _camera.transform.LookAt(attacker.transform);
-            }
-        }
-
-        private void OnPostRenderCallback(Camera cam)
-        {
-            if (cam != _camera)
-                return;
-            
-            _screenTex.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0, false);
-            _screenTex.Apply();
-            _screenMat.mainTexture = _screenTex;
-
-            Camera.onPostRender -= OnPostRenderCallback;
-
-            _killCam.freezeFrameMat = _screenMat;
-            _killCam.showFreezeFrame = true;
         }
 
         public void DoKillCam()
@@ -57,25 +29,16 @@ namespace MoistureUpset.Skins.Engi
                 return;
             }
             
-            _cameraRig = GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>();
-            _camera = _cameraRig.sceneCam;
-            _killCam = _camera.gameObject.AddComponent<EngiKillCam>();
+            var cameraRig = GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>();
+            var camera = cameraRig.sceneCam;
+            
+            var killCam = camera.gameObject.AddComponent<EngiKillCam>();
+            killCam.rigController = cameraRig;
+            killCam.attacker = attacker;
+            killCam.screenTexture = _screenTex;
+            killCam.freezeFrameMaterial = _screenMat;
 
-            _cameraRig.enabled = false;
-
-            _lookAt = true;
-
-            StartCoroutine(FreezeFrame());
-        }
-
-        private IEnumerator FreezeFrame()
-        {
-            yield return new WaitForSeconds(2);
-
-            Camera.onPostRender += OnPostRenderCallback;
-
-            yield return new WaitForSeconds(3);
-            _killCam.showFreezeFrame = false;
+            cameraRig.enabled = false;
         }
     }
 }

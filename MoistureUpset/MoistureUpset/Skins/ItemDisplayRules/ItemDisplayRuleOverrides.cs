@@ -7,6 +7,7 @@ using RoR2;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Console = RoR2.Console;
 
 namespace MoistureUpset.Skins.ItemDisplayRules
 {
@@ -78,6 +79,15 @@ namespace MoistureUpset.Skins.ItemDisplayRules
 
             foreach (var keyAsset in model.itemDisplayRuleSet.keyAssetRuleGroups)
             {
+                rootJson[keyAsset.keyAsset.name]["localizedName"] = keyAsset.keyAsset switch
+                {
+                    ItemDef itemDef => Language.GetString(itemDef.nameToken),
+                    EquipmentDef equipmentDef => Language.GetString(equipmentDef.nameToken),
+                    _ => throw new Exception($"{keyAsset.keyAsset.GetType()} is not a valid keyAsset type!")
+                };
+
+                var jsonArray = new JSONArray();
+                
                 foreach (var rule in keyAsset.displayRuleGroup.rules)
                 {
                     if (rule.ruleType == ItemDisplayRuleType.ParentedPrefab)
@@ -90,14 +100,16 @@ namespace MoistureUpset.Skins.ItemDisplayRules
                             ["rotation"] = rule.localAngles.Serialize(),
                             ["scale"] = rule.localScale.Serialize()
                         };
-
-                        rootJson[keyAsset.keyAsset.name] = jsonObject;
+                        
+                        jsonArray.Add(jsonObject);
                     }
                     else if (rule.ruleType == ItemDisplayRuleType.LimbMask)
                     {
                         rootJson[keyAsset.keyAsset.name]["mask"] = (int)rule.limbMask;
                     }
                 }
+
+                rootJson[keyAsset.keyAsset.name]["displays"] = jsonArray;
             }
             
             File.WriteAllText($"{Directory.GetCurrentDirectory()}\\{bodyPrefab.name}.json", rootJson.ToString());

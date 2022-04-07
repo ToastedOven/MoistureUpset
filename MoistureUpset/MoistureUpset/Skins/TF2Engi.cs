@@ -38,8 +38,8 @@ namespace MoistureUpset.Skins
             EngiDisplayFix();
             AddToPrefab();
 
-            //On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
-            //On.RoR2.CharacterMaster.OnBodyDamaged += MostRecentAttacker;
+            On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
+            On.RoR2.CharacterMaster.OnBodyDamaged += MostRecentAttacker;
         }
         
         private static void MostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
@@ -176,8 +176,8 @@ namespace MoistureUpset.Skins
 
             var mdl = skinController.gameObject;
 
-            var engiTurretSkinDef = SkinManager.skins["EngiTurretBody"];
-            var engiWalkerTurretSkinDef = SkinManager.skins["EngiWalkerTurretBody"];
+            var engiTurretSkinDef = SkinManager.Skins["EngiTurretBody"];
+            var engiWalkerTurretSkinDef = SkinManager.Skins["EngiWalkerTurretBody"];
             
             var engiGrenadePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion();
             var engiBubblePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBubbleShield.prefab").WaitForCompletion();
@@ -389,7 +389,7 @@ namespace MoistureUpset.Skins
             GameObject engiBody = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion(); // load engibody prefab
             engiBody.AddComponent<AddMedicIcon>();
             engiBody.AddComponent<EngiHurt>();
-            //engiBody.AddComponent<EngiKillCamController>();
+            engiBody.AddComponent<EngiKillCamController>();
         }
     }
 }

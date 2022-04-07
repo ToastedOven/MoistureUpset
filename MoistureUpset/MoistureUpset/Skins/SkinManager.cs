@@ -17,28 +17,28 @@ namespace MoistureUpset.Skins
     {
         public delegate SkinDef[] CreateSkin(GameObject bodyPrefab);
 
-        internal static Dictionary<string, SkinDef> skins;
+        internal static Dictionary<string, SkinDef> Skins;
 
-        private static Dictionary<string, CreateSkin> skinDelegates;
+        private static Dictionary<string, CreateSkin> _skinDelegates;
 
         internal static void Init()
         {
             LoadAllSkins();
             
             ContentManager.onContentPacksAssigned += FinalizeSkins;
+            // RoR2Application.onLoad += () => ExtractItems(ContentManager._bodyPrefabs);
         }
 
         private static void FinalizeSkins(ReadOnlyArray<ReadOnlyContentPack> obj)
         {
-            ExtractItems(ContentManager._bodyPrefabs);
             AddSkinsToBodyPrefabs(ContentManager._bodyPrefabs);
         }
 
         // Add all the skins to load here
         private static void LoadAllSkins()
         {
-            skins = new Dictionary<string, SkinDef>();
-            skinDelegates = new Dictionary<string, CreateSkin>();
+            Skins = new Dictionary<string, SkinDef>();
+            _skinDelegates = new Dictionary<string, CreateSkin>();
 
 
             //CommandoTest.Init();
@@ -56,23 +56,23 @@ namespace MoistureUpset.Skins
         {
             DebugClass.Log($"Loading skins...");
             
-            foreach (var bodyName in skinDelegates.Keys)
+            foreach (var bodyName in _skinDelegates.Keys)
             {
                 GameObject bodyPrefab = bodyPrefabs.GetBodyPrefab(bodyName);
                 
                 DebugClass.Log($"Loading skins for {bodyPrefab.name}");
 
-                SkinDef[] skinDefs = skinDelegates[bodyName].Invoke(bodyPrefab);
+                SkinDef[] skinDefs = _skinDelegates[bodyName].Invoke(bodyPrefab);
                 
                 ItemDisplayRuleOverrides.GenerateDisplayRuleOverride(bodyName, bodyPrefab);
 
                 bodyPrefabs[bodyPrefabs.GetBodyIndex(bodyName)].GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>().skins = skinDefs;
 
-                skins.Add(bodyName, skinDefs[skinDefs.Length - 1]);
+                Skins.Add(bodyName, skinDefs[skinDefs.Length - 1]);
             }
             
-            skins.Clear();
-            skinDelegates.Clear();
+            Skins.Clear();
+            _skinDelegates.Clear();
             
             DebugClass.Log($"Finished Loading skins!");
         }
@@ -97,7 +97,7 @@ namespace MoistureUpset.Skins
 
         internal static void AddSkin(string bodyName, CreateSkin del)
         {
-            skinDelegates.Add(bodyName, del);
+            _skinDelegates.Add(bodyName, del);
         }
 
         //private static void AddSkinsToBodyPrefabs(ContentManager.orig_SetContentPacks orig, List<ReadOnlyContentPack> newContentPacks)
