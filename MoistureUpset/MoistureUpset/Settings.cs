@@ -89,6 +89,7 @@ namespace MoistureUpset
         public static ConfigEntry<bool> BonziBuddyBool;
         public static ConfigEntry<bool> AccurateTTS;
         public static ConfigEntry<bool> MLGMode;
+        public static ConfigEntry<bool> noDMCA;
 
         public static ConfigEntry<bool> ReplaceItems;
         public static void RunAll()
@@ -191,6 +192,7 @@ namespace MoistureUpset
             CreativeVoidZone = MoistureUpsetMod.Instance.Config.Bind<bool>("Audio", "Creative Void Zone", true, "Adds some entertainment value to the Void Zone");
             EndOfGameMusic = MoistureUpsetMod.Instance.Config.Bind<bool>("Audio", "End of game music", true, "Defeat theme");
             RespawnSFX = MoistureUpsetMod.Instance.Config.Bind<bool>("Audio", "Respawn SFX", true, "Yeah");
+            noDMCA = MoistureUpsetMod.Instance.Config.Bind<bool>("Audio", "No DMCA audio", false, "We took out everything we think you can get DMCA'd for (fuck you btw Sony, 009 sound system used to be fine) MLG mode is unaffected");
             ReplaceIntroScene = MoistureUpsetMod.Instance.Config.Bind<bool>("Misc", "Replace Intro Scene", true, "Replaces the default intro cutscene with one that UnsavedTrash made");
 
 
@@ -259,6 +261,7 @@ namespace MoistureUpset
             ModSettingsManager.AddOption(new SliderOption(Settings.ModdedMusicVolume, new SliderConfig() { checkIfDisabled = CheckOnlySurvivorSkins }));
             ModSettingsManager.AddOption(new SliderOption(Settings.ModdedSFXVolume, new SliderConfig() { checkIfDisabled = CheckOnlySurvivorSkins }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.ScaleHitMarkerWithCrit, new CheckBoxConfig() { checkIfDisabled = CheckCritMarkerScaler }));
+            ModSettingsManager.AddOption(new CheckBoxOption(Settings.noDMCA, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
 
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Dogplane, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));
             ModSettingsManager.AddOption(new CheckBoxOption(Settings.Comedy, new CheckBoxConfig() { checkIfDisabled = CheckOnlySurvivorSkins, restartRequired = true }));

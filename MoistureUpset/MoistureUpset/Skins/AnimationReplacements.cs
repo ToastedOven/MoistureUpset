@@ -46,13 +46,15 @@ namespace MoistureUpset.Skins
             CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsUp.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
             CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsDown.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
 
-
-
             CustomEmotesAPI.AddNonAnimatingEmote("firework");
             CustomEmotesAPI.AddNonAnimatingEmote("debug time");
             CustomEmotesAPI.AddNonAnimatingEmote("kill stuff");
             CustomEmotesAPI.AddNonAnimatingEmote("end me");
             CustomEmotesAPI.AddNonAnimatingEmote("50 golems");
+            CustomEmotesAPI.AddNonAnimatingEmote("getSongName");
+            CustomEmotesAPI.AddNonAnimatingEmote("god");
+            CustomEmotesAPI.AddNonAnimatingEmote("noclip");
+            CustomEmotesAPI.AddNonAnimatingEmote("golemPlains");
 
 
             CustomEmotesAPI.animChanged += CustomEmotesAPI_animChanged;
@@ -63,14 +65,14 @@ namespace MoistureUpset.Skins
         {
             bonemap = mapper;
             EffectManager.instance.mapper = bonemap;
-            if (newAnimation == "Default Dance")
-            {
-                EffectManager.instance.DefaultClap();
-            }
-            else
-            {
-                EffectManager.instance.StopDefaultClap();
-            }
+            //if (newAnimation == "Default Dance")
+            //{
+            //    EffectManager.instance.DefaultClap();
+            //}
+            //else
+            //{
+            //    EffectManager.instance.StopDefaultClap();
+            //}
             if (newAnimation == "firework")
             {
                 EffectManager.instance.LaunchFirework();
@@ -111,7 +113,14 @@ namespace MoistureUpset.Skins
             {
                 RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
             }
-            //DebugClass.Log($"[{newAnimation}]----------[{mapper.gameObject/*can get netid from this if you need it*/}]");//works btw
+            else if (newAnimation == "getSongName")
+            {
+                DebugClass.Log($"song name: {MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName}");
+            }
+            else if (newAnimation == "golemPlains")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "next_stage golemplains");
+            }
         }
     }
     public class EffectManager : MonoBehaviour
