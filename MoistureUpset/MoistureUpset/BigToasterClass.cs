@@ -186,6 +186,8 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                if (MoistureUpsetMod.musicController && oldS.name != newS.name)
+                    AkSoundEngine.PostEvent("Play_Meme_System", MoistureUpsetMod.musicController.gameObject);
                 BigToasterClass.HitMarker(BigJank.getOptionValue(Settings.HitMarkerVolume));
                 BigToasterClass.Modded_MSX(BigJank.getOptionValue(Settings.ModdedMusicVolume));
                 BigToasterClass.Modded_SFX(BigJank.getOptionValue(Settings.ModdedSFXVolume));
@@ -480,20 +482,20 @@ namespace MoistureUpset
                 AkSoundEngine.ExecuteActionOnEvent(item, AkActionOnEventType.AkActionOnEventType_Stop);
             }
         }
-            static int brother = 0;
+        static int brother = 0;
         public static void BossMusicAndFanFare()
         {
             On.EntityStates.Missions.BrotherEncounter.PreEncounter.OnEnter += (orig, self) =>
             {
                 orig(self);
-                if (!(BigJank.getOptionValue(Settings.Thanos)))
+                if (!(BigJank.getOptionValue(Settings.Thanos)) || Settings.noDMCA.Value)
                     return;
                 StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                 //var c = GameObject.FindObjectOfType<MusicController>();
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref MoistureUpsetMod.musicController, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);//FIX WHEN PULL
+                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
@@ -541,11 +543,10 @@ namespace MoistureUpset
                     }
                     else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME") || self.baseNameToken == "LUNAREXPLODER_BODY_NAME")
                     {
-                        if ((BigJank.getOptionValue(Settings.Thanos)))
+                        if ((BigJank.getOptionValue(Settings.Thanos)) && !Settings.noDMCA.Value)
                         {
                             resetThanos = false;
                             brother++;
-                            DebugClass.Log($"----------{brother}");
                             MusicAPI.StopSong(ref MoistureUpsetMod.musicController, "muSong25");
                             switch (brother)
                             {
@@ -606,7 +607,7 @@ namespace MoistureUpset
                         AkSoundEngine.PostEvent("PlayNoodle", mainBody.gameObject);
                         stop = true;
                     }
-                    else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue(Settings.RobloxTitan)))
+                    else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue(Settings.RobloxTitan)) && !Settings.noDMCA.Value)
                     {
                         AkSoundEngine.PostEvent("RobloxMusic", mainBody.gameObject);
                         stop = true;
