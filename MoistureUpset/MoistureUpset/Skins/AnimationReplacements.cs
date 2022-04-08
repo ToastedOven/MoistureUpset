@@ -46,8 +46,6 @@ namespace MoistureUpset.Skins
             CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsUp.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
             CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsDown.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
 
-
-
             CustomEmotesAPI.AddNonAnimatingEmote("firework");
             CustomEmotesAPI.AddNonAnimatingEmote("debug time");
             CustomEmotesAPI.AddNonAnimatingEmote("kill stuff");
@@ -67,14 +65,14 @@ namespace MoistureUpset.Skins
         {
             bonemap = mapper;
             EffectManager.instance.mapper = bonemap;
-            if (newAnimation == "Default Dance")
-            {
-                EffectManager.instance.DefaultClap();
-            }
-            else
-            {
-                EffectManager.instance.StopDefaultClap();
-            }
+            //if (newAnimation == "Default Dance")
+            //{
+            //    EffectManager.instance.DefaultClap();
+            //}
+            //else
+            //{
+            //    EffectManager.instance.StopDefaultClap();
+            //}
             if (newAnimation == "firework")
             {
                 EffectManager.instance.LaunchFirework();
