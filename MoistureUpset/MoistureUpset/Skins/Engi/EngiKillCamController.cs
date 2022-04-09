@@ -23,12 +23,10 @@ namespace MoistureUpset.Skins.Engi
 
         public void DoKillCam()
         {
-            if (!attacker) //  maybe it was suicide, I'm not sure.
-            {
-                DebugClass.Log($"No attacker?");
-                return;
-            }
+            if (!attacker) 
+                return; // No attacker? no problem.
             
+            // Todo find a way to do this without using GameObject.Find as it's not very performant.
             var cameraRig = GameObject.Find("Main Camera(Clone)").GetComponent<CameraRigController>();
             var camera = cameraRig.sceneCam;
             

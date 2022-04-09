@@ -46,6 +46,9 @@ namespace MoistureUpset.Skins
         {
             orig(self, damageReport);
 
+            if (!damageReport.victimBody)
+                return;
+
             if (damageReport.victimBody.IsSkin(SkinName))
                 damageReport.victimBody.GetComponent<EngiKillCamController>().attacker = damageReport.attackerBody;
         }

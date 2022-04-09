@@ -3,6 +3,9 @@ using System.Collections;
 using RoR2;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Console = System.Console;
+using Object = UnityEngine.Object;
+using PauseManager = On.RoR2.PauseManager;
 
 namespace MoistureUpset.Skins.Engi
 {
@@ -21,6 +24,8 @@ namespace MoistureUpset.Skins.Engi
         
         private bool _showFreezeFrame;
         private Camera _camera;
+        private IEnumerator _cameraAnimation;
+        private float _sfxVolume = -1;
 
         public void Start()
         {
@@ -32,8 +37,38 @@ namespace MoistureUpset.Skins.Engi
             transitionCurve = AnimationCurve.EaseInOut(0, 0, transitionTime, 1);
 
             _camera = GetComponent<Camera>();
+            
+            int inOut = (int)AkQueryRTPCValue.RTPCValue_Global;
+            AkSoundEngine.GetRTPCValue("Volume_SFX", null, 0, out _sfxVolume, ref inOut);
+            
+            PauseManager.CCTogglePause += PauseManagerOnCCTogglePause;
 
-            StartCoroutine(DoKillCam());
+            _cameraAnimation = DoKillCam();
+            StartCoroutine(_cameraAnimation);
+        }
+
+        private void PauseManagerOnCCTogglePause(PauseManager.orig_CCTogglePause orig, ConCommandArgs args)
+        {
+            try
+            {
+                if (_cameraAnimation != null)
+                {
+                    StopCoroutine(_cameraAnimation);
+                    _showFreezeFrame = false;
+                    rigController.enabled = true;
+
+                    if (_sfxVolume >= 0)
+                        AkSoundEngine.SetRTPCValue("Volume_SFX", _sfxVolume);
+                }
+            }
+            catch
+            {
+                // Don't Care + L + Ratio
+            }
+            finally
+            {
+                orig(args);
+            }
         }
 
         public void OnRenderImage(RenderTexture src, RenderTexture dest)
@@ -59,11 +94,16 @@ namespace MoistureUpset.Skins.Engi
             Camera.onPostRender -= OnPostRenderCallback;
             
             _showFreezeFrame = true;
+
+            AkSoundEngine.SetRTPCValue("Volume_Temp_SFX", _sfxVolume);
+            AkSoundEngine.SetRTPCValue("Volume_SFX", 0);
             AkSoundEngine.PostEvent("DeathFreezeFrame", gameObject);
         }
         
         private IEnumerator DoKillCam()
         {
+            var killTagCanvasOperation = Assets.LoadAsync<GameObject>("tf2engi/deathcam/killtagcanvas.prefab");
+
             var camTransform = _camera.transform;
             
             var startPos = camTransform.position;
@@ -91,8 +131,11 @@ namespace MoistureUpset.Skins.Engi
                 camTransform.LookAt(Vector3.Slerp(relStartLook, relEndLook, percent) + camTransform.position);
 
                 yield return new WaitForEndOfFrame();
-            } while (percent != 1 && curveDeltaTime < transitionTime + 4f);
-
+            } while (percent != 1 || curveDeltaTime < transitionTime + 1f || !killTagCanvasOperation.isDone);
+            
+            GameObject killTagCanvas = Instantiate((GameObject)killTagCanvasOperation.asset);
+            var killTagController = killTagCanvas.AddComponent<KillTagController>();
+            
             // Zoom camera to attacker.
             startPos = camTransform.position;
             curveDeltaTime = 0;
@@ -100,22 +143,29 @@ namespace MoistureUpset.Skins.Engi
             {
                 var direction = (startPos - AttackerPosition).normalized;
                 var endPos = AttackerPosition + direction * 7f;
-                
+
                 curveDeltaTime += Time.deltaTime;
                 percent = zoomCurve.Evaluate(curveDeltaTime);
-                
+
                 camTransform.position = Vector3.Lerp(startPos, endPos, percent);
 
                 yield return new WaitForEndOfFrame();
             } while (percent != 1);
+
+            killTagCanvas.SetActive(true);
+            killTagController.SetAttacker(attacker);
 
             // Do a freeze frame and wait 5 seconds.
             Camera.onPostRender += OnPostRenderCallback;
             yield return new WaitForSeconds(5);
             
             // Return everything back to normal.
+            DestroyImmediate(killTagCanvas);
             _showFreezeFrame = false;
             rigController.enabled = true;
+            
+            if (_sfxVolume >= 0)
+                AkSoundEngine.SetRTPCValue("Volume_SFX", _sfxVolume);
         }
 
         private Vector3 _lastKnownAttacker = Vector3.zero;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using static R2API.SoundAPI;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -214,6 +215,21 @@ namespace MoistureUpset
             }
 
             return asset;
+        }
+
+        public static AssetBundleRequest LoadAsync<T>(string assetName) where T : Object
+        {
+            if (assetName.Contains(":"))
+            {
+                string[] path = assetName.Split(':');
+
+                assetName = path[1].ToLower();
+            }
+            if (assetName.StartsWith("assets/"))
+                assetName = assetName.Remove(0, "assets/".Length);
+            int index = AssetIndices[assetName];
+            
+            return AssetBundles[index].LoadAssetAsync<T>($"assets/{assetName}");
         }
 
         public static Stream LoadDisplayRuleSetOverride(string overrideName)
