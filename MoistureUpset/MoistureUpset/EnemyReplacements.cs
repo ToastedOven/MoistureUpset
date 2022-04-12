@@ -2625,7 +2625,7 @@ namespace MoistureUpset
                 orig(self);
             };
             On.RoR2.ArtifactTrialMissionController.CombatState.OnExit += (orig, self) =>
-            {
+            { 
                 try
                 {
                     //var c = GameObject.FindObjectOfType<MusicController>();
