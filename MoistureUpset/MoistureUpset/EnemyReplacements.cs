@@ -365,9 +365,16 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+            //DebugClass.DebugBones("RoR2/Base/Beetle/BeetleBody.prefab");
             //DebugClass.DebugBones("RoR2/Base/CritGlasses/DisplayGlasses.prefab");//gup
-
-            //DebugClass.DebugBones("RoR2/DLC1/Gup/GeepBody.prefab");//geep
+            //On.RoR2.SurvivorCatalog.Init += (orig) =>
+            //{
+            //    orig();
+            //    foreach (var item in SurvivorCatalog.allSurvivorDefs)
+            //    {
+            //        DebugClass.DebugBones(item.bodyPrefab);
+            //    }
+            //};
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GipBody.prefab");//gip
             //DebugClass.DebugBones("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab");//jailer
             //DebugClass.DebugBones("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab");//sonic
@@ -2625,7 +2632,7 @@ namespace MoistureUpset
                 orig(self);
             };
             On.RoR2.ArtifactTrialMissionController.CombatState.OnExit += (orig, self) =>
-            { 
+            {
                 try
                 {
                     //var c = GameObject.FindObjectOfType<MusicController>();
