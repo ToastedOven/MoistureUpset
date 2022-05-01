@@ -24,7 +24,7 @@ namespace MoistureUpset.Skins
     {
         public static void RunAll()
         {
-            EnemyReplacements.LoadResource("moisture_animationreplacements");
+            //EnemyReplacements.LoadResource("moisture_animationreplacements");
             ChangeAnims();
             On.RoR2.UI.HUD.Awake += (orig, self) =>
             {
