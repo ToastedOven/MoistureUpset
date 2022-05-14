@@ -129,26 +129,32 @@ namespace MoistureUpset
                 On.RoR2.UI.HUD.Awake += (orig, self) =>
                 {
                     orig(self);
-                    var image = self.moneyText.gameObject.AddComponent<UnityEngine.UI.Image>();
-                    image.sprite = Assets.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/tixSprite.png");
-                    image.preserveAspect = true;
-                    foreach (var item in self.moneyText.gameObject.GetComponentsInChildren<RoR2.UI.HGTextMeshProUGUI>())
+                    try
                     {
-                        if (item.name == "DollarSign")
+                        var image = self.moneyText.gameObject.AddComponent<UnityEngine.UI.Image>();
+                        image.sprite = Assets.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/tixSprite.png");
+                        image.preserveAspect = true;
+                        foreach (var item in self.moneyText.gameObject.GetComponentsInChildren<RoR2.UI.HGTextMeshProUGUI>())
                         {
-                            item.text = "";
+                            if (item.name == "DollarSign")
+                            {
+                                item.text = "";
+                            }
                         }
-                    }
-                    g = new GameObject();
-                    //g.tag = "gamepass";
-                    g.transform.parent = self.mainContainer.transform;
-                    g.transform.localPosition = new Vector3(0, 1000, 0);
-                    image = g.AddComponent<UnityEngine.UI.Image>();
-                    image.sprite = Assets.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/gamepass.png");
-                    image.preserveAspect = true;
-                    g.transform.localScale = new Vector3(3, 3, 3);
+                        g = new GameObject();
+                        //g.tag = "gamepass";
+                        g.transform.parent = self.mainContainer.transform;
+                        g.transform.localPosition = new Vector3(0, 1000, 0);
+                        image = g.AddComponent<UnityEngine.UI.Image>();
+                        image.sprite = Assets.Load<Sprite>("@MoistureUpset_moisture_pungas:assets/pungas/gamepass.png");
+                        image.preserveAspect = true;
+                        g.transform.localScale = new Vector3(3, 3, 3);
 
-                    context = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("RightCluster").Find("ContextNotification").Find("ContextDisplay").gameObject;
+                        context = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("RightCluster").Find("ContextNotification").Find("ContextDisplay").gameObject;
+                    }
+                    catch (Exception)
+                    {
+                    }
                 };
 
                 On.RoR2.PurchaseInteraction.GetContextString += (orig, self, i) =>
@@ -169,18 +175,18 @@ namespace MoistureUpset
                 On.RoR2.UI.HUD.Update += (orig, self) =>
                 {
                     orig(self);
-                    if (!context.activeSelf)
+                    try
                     {
-                        try
+                        if (!context.activeSelf)
                         {
                             if (g.transform.localPosition.y != 1000)
                             {
                                 g.transform.localPosition = new Vector3(0, 1000, 0);
                             }
                         }
-                        catch (Exception)
-                        {
-                        }
+                    }
+                    catch (Exception)
+                    {
                     }
                 };
 

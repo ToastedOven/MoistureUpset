@@ -26,36 +26,36 @@ namespace MoistureUpset.Skins
         {
             //EnemyReplacements.LoadResource("moisture_animationreplacements");
             ChangeAnims();
-            On.RoR2.UI.HUD.Awake += (orig, self) =>
-            {
-                orig(self);
-                //self.mainContainer.transform.Find("MainUIArea")
+            //On.RoR2.UI.HUD.Awake += (orig, self) =>
+            //{
+            //    orig(self);
+            //    //self.mainContainer.transform.Find("MainUIArea")
 
 
 
-                GameObject g = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/emotewheel/emotewheel.prefab"));
-                foreach (var item in g.GetComponentsInChildren<TextMeshProUGUI>())
-                {
-                    item.font = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().font;
-                    item.fontMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontMaterial;
-                    item.fontSharedMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontSharedMaterial;
-                }
-                g.transform.SetParent(self.mainContainer.transform);
-                g.transform.localPosition = new Vector3(0, 0, 0);
-                //g.transform.localScale = new Vector3(self.GetComponent<CanvasScaler>().referenceResolution.x / Screen.width, self.GetComponent<CanvasScaler>().referenceResolution.y / Screen.height, 1);
-                var s = g.AddComponent<mousechecker>();
-                foreach (var item in g.GetComponentsInChildren<Transform>())
-                {
-                    if (item.gameObject.name.StartsWith("Emote"))
-                    {
-                        s.gameObjects.Add(item.gameObject);
-                    }
-                    if (item.gameObject.name.StartsWith("MousePos"))
-                    {
-                        s.text = item.gameObject;
-                    }
-                }
-            };
+            //    GameObject g = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/emotewheel/emotewheel.prefab"));
+            //    foreach (var item in g.GetComponentsInChildren<TextMeshProUGUI>())
+            //    {
+            //        item.font = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().font;
+            //        item.fontMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontMaterial;
+            //        item.fontSharedMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontSharedMaterial;
+            //    }
+            //    g.transform.SetParent(self.mainContainer.transform);
+            //    g.transform.localPosition = new Vector3(0, 0, 0);
+            //    //g.transform.localScale = new Vector3(self.GetComponent<CanvasScaler>().referenceResolution.x / Screen.width, self.GetComponent<CanvasScaler>().referenceResolution.y / Screen.height, 1);
+            //    var s = g.AddComponent<mousechecker>();
+            //    foreach (var item in g.GetComponentsInChildren<Transform>())
+            //    {
+            //        if (item.gameObject.name.StartsWith("Emote"))
+            //        {
+            //            s.gameObjects.Add(item.gameObject);
+            //        }
+            //        if (item.gameObject.name.StartsWith("MousePos"))
+            //        {
+            //            s.text = item.gameObject;
+            //        }
+            //    }
+            //};
         }
         public static bool setup = false;
         public static void ChangeAnims(/*SurvivorDef index, string resource*/)
