@@ -128,7 +128,7 @@ namespace MoistureUpset.Skins
         //{
         //    for (int i = 0; i < tempSurvivorDefs.Length; i++)
         //    {
-        //        if (tempSurvivorDefs[i].displayPrefab.name.ToLower() == PrefabName.ToLower())
+        //        if (tempSurvivorDefs[i].displayPrefab.name.ToLowerInvariant() == PrefabName.ToLowerInvariant())
         //        {
         //            return tempSurvivorDefs[i].displayPrefab;
         //        }

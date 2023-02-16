@@ -25,7 +25,7 @@ namespace MoistureUpset
     public class Moisture_Upset : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public static Moisture_Upset instance;
-        public const string Version = "1.5.4";
+        public const string Version = "1.5.5";
         public const string Guid = "com.gemumoddo.MoistureUpset";
         
         public void Awake()
