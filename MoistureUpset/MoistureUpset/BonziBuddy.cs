@@ -464,7 +464,7 @@ namespace MoistureUpset
                         {
                             v.temp = .65f;
                         }
-                        else
+                        else //check  for engi
                         {
                             v.temp = .3f;
                         }
@@ -3207,7 +3207,7 @@ namespace MoistureUpset
                 ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)], quotes[UnityEngine.Random.Range(0, quotes.Count)]);
             }
         }
-        string[] ratio = new string[] { "ratio", "wrong", "get a job", "unfunny", "cope", "don't care", "didn't ask", "owned", "ur a toddler", "who asked", "dead game", "seethe", "ur a coward", "stay mad", "ok", "cry about it", "L", "skill issue", "triggered", "ok and?", "cringe", "touch grass", "not based", "you're white", "grammar issue", "go outside", "get good", "reported", "you're gay", "you're straight", "ur mom", "not funny didn't laugh", "fatherless", "ur BF ugly", "you fell off", "no life", "counter ratio", "STFU", "no social credit", "lol", "irrelevant", "hoes mad", "cope harder", "log off", "rejected", "screenshotted", "pound salt", "ur a minor", "k.", "any askers", "copium", "ok boomer", "no bitches", "muted", "go tell reddit", "simp", "get stick bugged", "talk nonsense", "you're a full time discord mod", "get clapped", "ratio again", "cancelled", "freer than air", "screencapped your bio", "NFT owner", "dog water", "you don't know 2 + 2", "try again", "you failed kindergarten", "you have an anime profile picture", "orphan", "go to bed", "furry", "dream stan" };
+        string[] ratio = new string[] { "ratio", "wrong", "get a job", "unfunny", "cope", "don't care", "didn't ask", "owned", "ur a toddler", "who asked", "dead game", "seethe", "ur a coward", "stay mad", "ok", "cry about it", "L", "skill issue", "triggered", "ok and?", "cringe", "touch grass", "not based", "you're white", "grammar issue", "go outside", "get good", "reported", "you're gay", "you're straight", "ur mom", "not funny didn't laugh", "fatherless", "ur BF ugly", "you fell off", "no life", "counter ratio", "STFU", "no social credit", "lol", "irrelevant", "hoes mad", "cope harder", "log off", "rejected", "screenshotted", "pound salt", "ur a minor", "k.", "any askers", "copium", "ok boomer", "no bitches", "muted", "go tell reddit", "simp", "get stick bugged", "talk nonsense", "you're a full time discord mod", "get clapped", "ratio again", "cancelled", "freer than air", "screencapped your bio", "NFT owner", "dog water", "you don't know 2 + 2", "try again", "you failed kindergarten", "you have an anime profile picture", "orphan", "go to bed", "furry", "dream stan", "no maidens" };
         List<string> usedWords = new List<string>();
         public void Chance(bool number1VictoryRoyale)
         {
@@ -4266,6 +4266,8 @@ namespace MoistureUpset
                         {
                             ShouldSpeak("T t t triple kill"
                                 , "Oh baby a triple!");
+                            dioHeld -= 1;
+                            dioUsed += 1;
                             return;
                         }
                         else if (dioUsed == 3)

@@ -365,7 +365,7 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
-            //DebugClass.DebugBones("RoR2/Base/Beetle/BeetleBody.prefab");
+            DebugClass.DebugBones("RoR2/Base/Heretic/HereticBody.prefab", 3);
             //DebugClass.DebugBones("RoR2/Base/CritGlasses/DisplayGlasses.prefab");//gup
             //On.RoR2.SurvivorCatalog.Init += (orig) =>
             //{

@@ -140,25 +140,25 @@ namespace MoistureUpset
             }
             Log($"------------------------------------------");
         }
-        public static void DebugBones(string resource)
+        public static void DebugBones(string resource, int pos = 0)
         {
             StringBuilder sb = new StringBuilder();
             var fab = Addressables.LoadAssetAsync<GameObject>(resource).WaitForCompletion();
             sb.Append($"{fab.ToString()}\n");
             var meshes = fab.GetComponentsInChildren<SkinnedMeshRenderer>();
-            sb.Append($"rendererererer: {meshes[0]}\n");
-            sb.Append($"bone count: {meshes[0].bones.Length}\n");
+            sb.Append($"rendererererer: {meshes[pos]}\n");
+            sb.Append($"bone count: {meshes[pos].bones.Length}\n");
             sb.Append($"mesh count: {meshes.Length}\n");
-            sb.Append($"root bone: {meshes[0].rootBone.name}\n");
+            sb.Append($"root bone: {meshes[pos].rootBone.name}\n");
             sb.Append($"{resource}:\n");
-            if (meshes[0].bones.Length == 0)
+            if (meshes[pos].bones.Length == 0)
             {
                 sb.Append("No bones");
             }
             else
             {
                 sb.Append("[");
-                foreach (var bone in meshes[0].bones)
+                foreach (var bone in meshes[pos].bones)
                 {
                     sb.Append($"'{bone.name}', ");
                 }
