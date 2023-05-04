@@ -4,9 +4,18 @@ from math import radians
 from mathutils import Vector
 
 
-bonesOrder = ['base', 'chest', 'Head', 'HeadbuttHitbox', 'upper_arm.r', 'lower_arm.r', 'HandR', 'upper_arm.l', 'lower_arm.l', 'HandL', 'hip', 'thigh.r', 'calf.r', 'FootR', 'thigh.l', 'calf.l', 'FootL']
+bonesOrder = ['ROOT', 'PotBase', 'PotLidTop', 'PotLidBottom', 'Foot.001', 'Foot.002', 'Foot.003', 'Foot.004', 'Foot.005', 'Foot.006', 'Foot.007', 'Foot.008']
+
+
+
+
+
+
+
+
+
 srcArmName = 'Armature'
-srcMeshName = 'Mesh'
+srcMeshName = 'ClayBossMesh'
 
 meshOffset = None # Vector((1, 1, 1))
 meshSpecificOffset = None # {'TestMesh'=Vector((1, 1, 1))}
@@ -32,8 +41,6 @@ def CopyEditBones(bones, editBones, offset = None):
     for bone in bones:
         boneCopy = editBones[bone.name]
         boneCopy.bbone_curveinx = bone.bbone_curveinx
-        boneCopy.bbone_curveinz = bone.bbone_curveinz
-        boneCopy.bbone_curveoutx = bone.bbone_curveoutx
         boneCopy.bbone_curveoutz = bone.bbone_curveoutz
         if bone.bbone_custom_handle_start is not None:
             boneCopy.bbone_custom_handle_start = editBones.get(bone.bbone_custom_handle_start.name, None)
@@ -131,7 +138,7 @@ def PrepareBones(bonesOrder, srcArmName):
     
     srcEditBones = srcArm.data.edit_bones
     
-    offset = Vector(srcEditBones.get('base').parent.head) if srcEditBones.get('base').parent is not None else None
+    offset = Vector(srcEditBones.get('ROOT').parent.head) if srcEditBones.get('ROOT').parent is not None else None
     
     bones = []
     for key in bonesOrder:
