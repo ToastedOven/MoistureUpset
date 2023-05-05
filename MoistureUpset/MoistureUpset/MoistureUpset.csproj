@@ -7,7 +7,7 @@
   <PropertyGroup>
     <RoR2Dir Condition="Exists('D:\SteamLibrary\steamapps\common\Risk of Rain 2')">D:\SteamLibrary\steamapps\common\Risk of Rain 2</RoR2Dir>
 	<RoR2Dir Condition="Exists('E:\David\SteamGames\steamapps\common\Risk of Rain 2')">E:\David\SteamGames\steamapps\common\Risk of Rain 2</RoR2Dir>
-    <RoR2Dir Condition="Exists('..\..\..\..\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2')">..\..\..\..\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2</RoR2Dir>
+    <RoR2Dir Condition="Exists('J:\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2')">J:\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2</RoR2Dir>
     <RoR2Dir Condition="Exists('$(MSBuildProgramFiles32)\Steam\steamapps\common\Risk of Rain 2')">$(MSBuildProgramFiles32)\Steam\steamapps\common\Risk of Rain 2</RoR2Dir>
 
     <ManagedDir>$(RoR2Dir)\Risk of Rain 2_Data\Managed\</ManagedDir>
@@ -19,7 +19,12 @@
   <ItemGroup>
     <Dependencies Include="$(PluginsDir)**\CustomEmotesAPI.dll" InProject="false" />
     <Dependencies Include="$(PluginsDir)**\RiskOfOptions.dll" InProject="false" />
-    <Dependencies Include="$(PluginsDir)**\R2API.dll" InProject="false" />
+    <Dependencies Include="$(PluginsDir)**\R2API.Core\R2API.Core.dll" InProject="false" />
+    <Dependencies Include="$(PluginsDir)**\R2API.Sound\R2API.Sound.dll" InProject="false" />
+    <Dependencies Include="$(PluginsDir)**\R2API.Networking\R2API.Networking.dll" InProject="false" />
+    <Dependencies Include="$(PluginsDir)**\R2API.Language\R2API.Language.dll" InProject="false" />
+    <Dependencies Include="$(PluginsDir)**\R2API.Loadout\R2API.Loadout.dll" InProject="false" />
+    <Dependencies Include="$(PluginsDir)**\R2API.CommandHelper\R2API.CommandHelper.dll" InProject="false" />
     <Dependencies Include="$(PluginsDir)**\MMHOOK_RoR2.dll" InProject="false" />
     
     <ExcludedAssemblyFiles Include="$(ManagedDir)netstandard.dll;$(ManagedDir)System.*" InProject="false" />
