@@ -49,5 +49,6 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!-- Copies dll and pdb to plugins folder -->
     <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(RoR2Dir)\BepInEx\plugins" />
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="C:\Users\Bigma Male\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Default\BepInEx\plugins\MetrosexualFruitcake-MoistureUpset" />
   </Target>
 </Project>

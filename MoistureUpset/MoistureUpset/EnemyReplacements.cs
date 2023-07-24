@@ -354,7 +354,6 @@ namespace MoistureUpset
                 Collab();
                 Gnome();
                 Children();
-                NotChildren();
                 DQ();
                 //SneakyFontReplacement();
             }
@@ -2844,6 +2843,7 @@ namespace MoistureUpset
         {
             if (!BigJank.getOptionValue(Settings.ChildrenBlocks))
                 return;
+            NotChildren();
             LoadBNK("Block");
             ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
             ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_youcanquoteme:assets/woodencube/blok.mesh", "@MoistureUpset_moisture_testing:assets/woodencube/bblok.png", 1);
@@ -2898,6 +2898,7 @@ namespace MoistureUpset
         }
         private static void NotChildren()
         {
+            LoadBNK("babyblocks");
             ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.mesh", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.png", 0);
             ReplaceMeshFilter("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
         }

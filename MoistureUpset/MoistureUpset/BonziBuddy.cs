@@ -186,6 +186,13 @@ namespace MoistureUpset
                 Interval = "KyotoInterval",
                 Stage1StartDuration = 46.626f,
             });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "BeastmodeStage1",
+                Stage2 = "BeastmodeStage2",
+                Interval = "BeastmodeInterval",
+                Stage1StartDuration = 70.880f,
+            });
             MLG.MemeMachine.ActiveTrack = UnityEngine.Random.Range(0, MLG.MemeMachine.tracks.Count);
 
 
