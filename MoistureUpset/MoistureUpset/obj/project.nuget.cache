@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Jgpp0cQt49xoqJ9e8NonC9dKi8+1uDIbiz9raGkux33JO5XJvgRhAtacsBjOi9V0B31yUkeh+zD4vZQ6/YSA+g==",
+  "success": true,
+  "projectFilePath": "J:\\Wet Danger\\WetDanger\\MoistureUpset\\MoistureUpset\\MoistureUpset.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Bigma Male\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Bigma Male\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
