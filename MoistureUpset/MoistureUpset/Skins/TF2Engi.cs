@@ -41,7 +41,6 @@ namespace MoistureUpset.Skins
             //On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
             //On.RoR2.CharacterMaster.OnBodyDamaged += MostRecentAttacker;
         }
-        
         private static void MostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
         {
             orig(self, damageReport);
@@ -258,7 +257,6 @@ namespace MoistureUpset.Skins
         {
             var engiGrenadeGhost = Assets.Load<GameObject>("tf2engi/engigrenadeghostskintf2.prefab");
             engiGrenadeGhost.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("tf2engi/demopill.png");
-            
             AddProjectileComponents(engiGrenadeGhost);
 
             return engiGrenadeGhost;
@@ -268,7 +266,6 @@ namespace MoistureUpset.Skins
         {
             var engiBubbleGhost = Assets.Load<GameObject>("tf2engi/engibubbleshieldghostskintf2.prefab");
             engiBubbleGhost.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("tf2engi/dispenser.png");
-            
             AddProjectileComponents(engiBubbleGhost);
 
             return engiBubbleGhost;
@@ -282,7 +279,6 @@ namespace MoistureUpset.Skins
 
             return engiRocket;
         }
-
         private static void AddProjectileComponents(GameObject projectile)
         {
             projectile.AddComponent<ProjectileGhostController>();
@@ -314,27 +310,27 @@ namespace MoistureUpset.Skins
 
                 if (self.owner.name != "EngiBody(Clone)" || !cb.IsSkin(SkinName))
                     return;
-                
+
                 switch (self.ghost.name)
                 { 
                     case "SpiderMineGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
 
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/spidermine.mesh");
+                            meshes[0].sharedMesh = Assets.Load<Mesh>("assets/spidermine.mesh");
 
-                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
-                        break;
-                    }
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
+                            break;
+                        }
                     case "EngiMineGhost(Clone)":
-                    {
-                        var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                        {
+                            var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
 
-                        meshes[0].sharedMesh = Assets.Load<Mesh>("assets/harpoon.mesh");
+                            meshes[0].sharedMesh = Assets.Load<Mesh>("assets/harpoon.mesh");
 
-                        self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
-                        break;
-                    }
+                            self.ghost.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material = Assets.LoadMaterial("assets/mines.png");
+                            break;
+                        }
                 }
             }
             catch (Exception)

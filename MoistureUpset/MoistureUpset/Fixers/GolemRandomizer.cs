@@ -1,4 +1,4 @@
-﻿using MoistureUpset.NetMessages;
+using MoistureUpset.NetMessages;
 using R2API.Networking.Interfaces;
 using R2API.Utils;
 using RoR2;

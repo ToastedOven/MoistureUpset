@@ -226,7 +226,6 @@ namespace MoistureUpset
             //    dialog.AddCancelButton("ok");
             //}
         }
-
         private void IntroFinished(VideoPlayer source)
         {
             RoR2.Console.instance.SubmitCmd((NetworkUser)null, "set_scene title");

@@ -53,7 +53,7 @@ namespace MoistureUpset.Skins.Jotaro
             foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 //DebugClass.Log($"Token: {JotaroCaptain.NameToken}, name: {SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken]}, name2: {smr.material.mainTexture.name}");
-                if (smr.material.mainTexture.name.ToLower() == SkinHelper.SkinNameToSkinMeshName[JotaroCaptain.NameToken].ToLower())
+                if (smr.material.mainTexture.name.ToLowerInvariant() == SkinHelper.SkinNameToSkinMeshName[JotaroCaptain.NameToken].ToLowerInvariant())
                 {
                     isJotaroSkin = true;
                 }

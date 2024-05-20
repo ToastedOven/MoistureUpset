@@ -1757,7 +1757,6 @@ namespace MoistureUpset
             {
                 try
                 {
-
                     EntityStates.GolemMonster.ClapState.attackSoundString = "GolemMelee";
                 }
                 catch (Exception)
@@ -1765,7 +1764,6 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
             On.EntityStates.GolemMonster.SpawnState.OnEnter += (orig, self) =>
             {
                 Transform transform = self.outer.gameObject.GetComponentInChildren<ModelLocator>().modelTransform;
@@ -1776,7 +1774,7 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            //ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
+            ReplaceModel("RoR2/Base/Golem/GolemBody.prefab", "@MoistureUpset_noob:assets/N00b.mesh", "@MoistureUpset_noob:assets/Noob1Tex.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Golem/GolemBody.prefab").WaitForCompletion();
             GolemRandomizer randomizer = fab.AddComponent<GolemRandomizer>();
             foreach (var item in fab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject.GetComponentInChildren<CharacterModel>().GetComponentsInChildren<RoR2.ModelSkinController>())
