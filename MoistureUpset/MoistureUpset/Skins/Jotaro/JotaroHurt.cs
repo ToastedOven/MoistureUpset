@@ -28,11 +28,11 @@ namespace MoistureUpset.Skins.Jotaro
                     foreach (var item in GetComponentInChildren<ModelLocator>().modelTransform.GetComponentsInChildren<SkinnedMeshRenderer>())
                     {
                         //DebugClass.Log($"{item.sharedMaterial.name}, {SkinHelper.skinNametoskinMeshName[JotaroCaptain.NameToken]}");
-                        if (item.sharedMaterial.mainTexture.name.ToLower() == SkinHelper.SkinNameToSkinMeshName[JotaroCaptain.NameToken].ToLower())
+                        if (item.sharedMaterial.mainTexture.name.ToLowerInvariant() == SkinHelper.SkinNameToSkinMeshName[JotaroCaptain.NameToken].ToLowerInvariant())
                         {
                             smr = item;
                         }
-                        else if (item.sharedMaterial.mainTexture.name.ToLower() == $"{SkinHelper.SkinNameToSkinMeshName[JotaroCaptain.NameToken]}hurt".ToLower())
+                        else if (item.sharedMaterial.mainTexture.name.ToLowerInvariant() == $"{SkinHelper.SkinNameToSkinMeshName[JotaroCaptain.NameToken]}hurt".ToLowerInvariant())
                         {
                             hurtsmr = item;
                         }

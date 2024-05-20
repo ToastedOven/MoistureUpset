@@ -20,30 +20,30 @@ namespace MoistureUpset.Collabs
 {
     public static class Direseeker
     {
-        public static void Run()
-        {
-            //EnemyReplacements.LoadResource("moisture_direseeker");
-            //DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = Assets.Load<Material>("@MoistureUpset_moisture_direseeker:assets/collab/giggabowser.mat");
-            //DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial.shader = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LemurianBruiser/LemurianBruiserBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.shader;
-            //DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
-            //DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
-            //EnemyReplacements.ReplaceModel(DireseekerMod.Modules.Prefabs.bodyPrefab, "@MoistureUpset_moisture_direseeker:assets/collab/giggabowser.mesh");
+        //public static void Run()
+        //{
+        //    EnemyReplacements.LoadResource("moisture_direseeker");
+        //    DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial = Assets.Load<Material>("@MoistureUpset_moisture_direseeker:assets/collab/giggabowser.mat");
+        //    DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial.shader = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LemurianBruiser/LemurianBruiserBody.prefab").WaitForCompletion().GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial.shader;
+        //    DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[0].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
+        //    DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentsInChildren<MeshFilter>()[1].sharedMesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
+        //    EnemyReplacements.ReplaceModel(DireseekerMod.Modules.Prefabs.bodyPrefab, "@MoistureUpset_moisture_direseeker:assets/collab/giggabowser.mesh");
 
-            //var skills = DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<RoR2.SkillLocator>();
-            //skills.gameObject.AddComponent<DireSeekerTest>();
+        //    var skills = DireseekerMod.Modules.Prefabs.bodyPrefab.GetComponentInChildren<RoR2.SkillLocator>();
+        //    skills.gameObject.AddComponent<DireSeekerTest>();
 
 
-            //LanguageAPI.Add("DIRESEEKER_BOSS_BODY_NAME", "Giga Bowser");
-            //LanguageAPI.Add("DIRESEEKER_BOSS_BODY_SUBTITLE", "Rawr! x3");
-            //LanguageAPI.Add("DIRESEEKER_BOSS_BODY_LORE", "Giga Bowser\n\nGiga Bowser is a giant Elder Lemurian that acts as a boss in the Stage 4 area Magma Barracks. Upon defeating it, the player will unlock the Miner character for future playthroughs. The path leading to Giga Bowser's location only appears in one of the three variants of the level, and even then Giga Bowser may or may not spawn with random chance. Completing the teleporter event will also prevent it from spawning.\nNote that in online co-op the boss may spawn for the Host, but not others, although they can still damage it.\nActivating the Artifact of Kin does not prevent it from appearing.\n\nCategories: Enemies | Bosses | Unlisted Enemies\n\nLanguages: Español");
-            //LanguageAPI.Add("DIRESEEKER_BOSS_BODY_OUTRO_FLAVOR", "Go to horny jail. B O N K");
-            //LanguageAPI.Add("DIRESEEKER_SPAWN_WARNING", "<style=cWorldEvent>You hear a distant uwuing..</style>");
-            //LanguageAPI.Add("DIRESEEKER_SPAWN_BEGIN", "<style=cWorldEvent>The uwuing grows loud.</style>");
+        //    LanguageAPI.Add("DIRESEEKER_BOSS_BODY_NAME", "Giga Bowser");
+        //    LanguageAPI.Add("DIRESEEKER_BOSS_BODY_SUBTITLE", "Rawr! x3");
+        //    LanguageAPI.Add("DIRESEEKER_BOSS_BODY_LORE", "Giga Bowser\n\nGiga Bowser is a giant Elder Lemurian that acts as a boss in the Stage 4 area Magma Barracks. Upon defeating it, the player will unlock the Miner character for future playthroughs. The path leading to Giga Bowser's location only appears in one of the three variants of the level, and even then Giga Bowser may or may not spawn with random chance. Completing the teleporter event will also prevent it from spawning.\nNote that in online co-op the boss may spawn for the Host, but not others, although they can still damage it.\nActivating the Artifact of Kin does not prevent it from appearing.\n\nCategories: Enemies | Bosses | Unlisted Enemies\n\nLanguages: Español");
+        //    LanguageAPI.Add("DIRESEEKER_BOSS_BODY_OUTRO_FLAVOR", "Go to horny jail. B O N K");
+        //    LanguageAPI.Add("DIRESEEKER_SPAWN_WARNING", "<style=cWorldEvent>You hear a distant uwuing..</style>");
+        //    LanguageAPI.Add("DIRESEEKER_SPAWN_BEGIN", "<style=cWorldEvent>The uwuing grows loud.</style>");
 
-            //var fab = DireseekerMod.Modules.Assets.bossPortrait;
-            //byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.gigabowser.png");
-            //((Texture2D)fab).LoadImage(bytes);
-        }
+        //    var fab = DireseekerMod.Modules.Assets.bossPortrait;
+        //    byte[] bytes = ByteReader.readbytes("MoistureUpset.Resources.gigabowser.png");
+        //    ((Texture2D)fab).LoadImage(bytes);
+        //}
     }
     public class DireSeekerTest : MonoBehaviour
     {

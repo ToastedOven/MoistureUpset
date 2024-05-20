@@ -3065,10 +3065,10 @@ namespace MoistureUpset
         }
         IEnumerator DropletCoroutine(Vector3 v)
         {
-            PickupDropletController.onDropletHitGroundServer += OnDropletHitGroundServer;
+            //PickupDropletController.onDropletHitGroundServer += OnDropletHitGroundServer; //TODO idk, make this work and not shit
             PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(RoR2Content.Items.LunarBadLuck.itemIndex), v, new Vector3(0, 0, 0));
             yield return new WaitForSeconds(1);
-            PickupDropletController.onDropletHitGroundServer -= OnDropletHitGroundServer;
+            //PickupDropletController.onDropletHitGroundServer -= OnDropletHitGroundServer;
             Lock = false;
         }
 
@@ -4607,7 +4607,6 @@ namespace MoistureUpset
                 {
                     if (Vector3.Distance(charPosition.position, obj2.transform.position) < 75f)
                     {
-                        //var c = GameObject.FindObjectOfType<MusicController>();
                         MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                         AkSoundEngine.PostEvent("BonziError", obj2);
                         AkSoundEngine.ExecuteActionOnEvent(3605238264, AkActionOnEventType.AkActionOnEventType_Stop);
