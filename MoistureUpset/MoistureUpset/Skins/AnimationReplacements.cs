@@ -29,22 +29,6 @@ namespace MoistureUpset.Skins
             GameObject manager = new GameObject();
             manager.AddComponent<EffectManager>();
             UnityEngine.Object.DontDestroyOnLoad(manager);
-            HumanBodyBones[] upperLegs = new HumanBodyBones[] { HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightUpperLeg };
-            HumanBodyBones[] Facepalm = new HumanBodyBones[] { HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightUpperLeg, HumanBodyBones.LeftUpperArm };
-            HumanBodyBones[] hips = new HumanBodyBones[] { HumanBodyBones.Hips };
-            EnemyReplacements.LoadResource("moisture_animationreplacements");
-            EnemyReplacements.LoadBNK("Emotes");
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Loser.anim"), true, "Loser", "LoserStop", dimWhenClose: true);
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/HeadSpin.anim"), false, secondaryAnimation: Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinloop.anim"));
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Dab.anim"), false, "Dab", "DabStop", upperLegs, hips);
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Floss.anim"), true, "Floss", "FlossStop", dimWhenClose: true);
-            var test = Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Default Dance.anim");
-            CustomEmotesAPI.AddCustomAnimation(test, false, "DefaultDance", "DefaultDanceStop", dimWhenClose: true);
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Facepalm.anim"), false, "", "", Facepalm, hips);
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Orange Justice.anim"), true, "OrangeJustice", "OrangeJusticeStop", dimWhenClose: true);
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/nobones.anim"), true);
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsUp.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
-            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsDown.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
 
             CustomEmotesAPI.AddNonAnimatingEmote("firework");
             CustomEmotesAPI.AddNonAnimatingEmote("debug time");

@@ -55,6 +55,7 @@
   
   <ItemGroup>
     <EmbeddedResource Include="Resources\**" />
+    <EmbeddedResource Remove="Resources\AssetBundles\moisture_animationreplacements" />
     
     <None Remove="Skins\Jotaro\jotaro" />
     <EmbeddedResource Include="Skins\Jotaro\jotaro" />
