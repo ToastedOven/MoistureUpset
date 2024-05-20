@@ -182,9 +182,6 @@ namespace MoistureUpset.Skins
             var engiBubblePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBubbleShield.prefab").WaitForCompletion();
             var engiHarpoonPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiHarpoon.prefab").WaitForCompletion();
 
-            var engiGrenadePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion();
-            var engiBubblePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBubbleShield.prefab").WaitForCompletion();
-
             var skin = new LoadoutAPI.SkinDefInfo
             {
                 Icon = Assets.Load<Sprite>("assets/tf2_engineer_icon.png"),

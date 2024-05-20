@@ -298,13 +298,13 @@ namespace MoistureUpset
             {
                 //muMenu
                 orig(self);
-                if (!Moisture_Upset.musicController)
+                if (!MoistureUpsetMod.musicController)
                 {
-                    Moisture_Upset.musicController = self;
+                    MoistureUpsetMod.musicController = self;
                 }
                 if (BigJank.getOptionValue(Settings.ReplaceIntroScene))
                 {
-                    MusicAPI.StopSong(ref Moisture_Upset.musicController, "muIntroCutscene");
+                    MusicAPI.StopSong(ref MoistureUpsetMod.musicController, "muIntroCutscene");
                 }
                 //if (BigJank.getOptionValue(Settings.Logo))
                 //    UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png"); //bitch mode
@@ -375,7 +375,7 @@ namespace MoistureUpset
                         {
                             AkSoundEngine.PostEvent("ScavVictory", c.gameObject);
                         }
-                    Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                    MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                 }
                 catch (Exception)
                 {
@@ -387,7 +387,7 @@ namespace MoistureUpset
                 orig(self);
                 try
                 {
-                    MusicAPI.StopCustomSong(ref Moisture_Upset.musicController, "StopShopMusic");
+                    MusicAPI.StopCustomSong(ref MoistureUpsetMod.musicController, "StopShopMusic");
                 }
                 catch (Exception)
                 {
@@ -489,7 +489,7 @@ namespace MoistureUpset
                     return;
                 StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                 var mainBody = GameObject.FindObjectOfType<Transform>();
-                MusicAPI.StopSong(ref Moisture_Upset.musicController, "muSong25");
+                MusicAPI.StopSong(ref MoistureUpsetMod.musicController, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
                 AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);
             };
@@ -543,7 +543,7 @@ namespace MoistureUpset
                         {
                             resetThanos = false;
                             brother++;
-                            MusicAPI.StopSong(ref Moisture_Upset.musicController, "muSong25");
+                            MusicAPI.StopSong(ref MoistureUpsetMod.musicController, "muSong25");
                             switch (brother)
                             {
                                 case 1:
@@ -630,11 +630,11 @@ namespace MoistureUpset
                             //MusicAPI.StopSong(ref c, "muSong05");
                             //MusicAPI.StopSong(ref c, "muSong23");
                             //MusicAPI.StopSong(ref c, "muSong13");
-                            MusicAPI.StopSong(ref Moisture_Upset.musicController, Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName);
+                            MusicAPI.StopSong(ref MoistureUpsetMod.musicController, MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName);
                             //MusicAPI.GetCurrentSong(ref c);
                             //AkSoundEngine.exec
                             AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                            MusicAPI.StopCustomSong(ref Moisture_Upset.musicController, "StopLevelMusic");
+                            MusicAPI.StopCustomSong(ref MoistureUpsetMod.musicController, "StopLevelMusic");
                         }
                     }
                     catch (Exception)
@@ -799,7 +799,7 @@ namespace MoistureUpset
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
                     if (BigJank.getOptionValue(Settings.Fanfare) && NetworkServer.active)
                         new SyncFanFare(UnityEngine.Random.Range(0, SyncFanFare.songs.Length)).Send(R2API.Networking.NetworkDestination.Clients);
-                    //AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
+                    //AkSoundEngine.PostEvent("PlayFanFare", MoistureUpsetMod.musicController.gameObject);
                     MLG.bossOver = true;
                 }
                 catch (Exception)

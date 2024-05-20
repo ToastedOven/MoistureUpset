@@ -4598,7 +4598,7 @@ namespace MoistureUpset
                 {
                     if (Vector3.Distance(charPosition.position, obj2.transform.position) < 75f)
                     {
-                        Moisture_Upset.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
+                        MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                         AkSoundEngine.PostEvent("BonziError", obj2);
                         AkSoundEngine.ExecuteActionOnEvent(3605238264, AkActionOnEventType.AkActionOnEventType_Stop);
                         AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);

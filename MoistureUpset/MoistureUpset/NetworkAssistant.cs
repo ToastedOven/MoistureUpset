@@ -28,7 +28,7 @@ namespace MoistureUpset
 
             tempObject.AddComponent<NetworkIdentity>();
 
-            CentralNetworkObject = tempObject.InstantiateClone("MoistUpset Network Sound Manager");
+            //CentralNetworkObject = tempObject.InstantiateClone("MoistUpset Network Sound Manager");
 
             GameObject.Destroy(tempObject);
 
