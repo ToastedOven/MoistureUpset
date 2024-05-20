@@ -17,6 +17,8 @@ using TMPro;
 using R2API.Networking.Interfaces;
 using UnityEngine.Animations;
 using UnityEngine.UI;
+using EmotesAPI;
+using System.Collections;
 
 namespace MoistureUpset.Skins
 {
@@ -24,344 +26,168 @@ namespace MoistureUpset.Skins
     {
         public static void RunAll()
         {
-            //EnemyReplacements.LoadResource("moisture_animationreplacements");
-            ChangeAnims();
-            //On.RoR2.UI.HUD.Awake += (orig, self) =>
+            GameObject manager = new GameObject();
+            manager.AddComponent<EffectManager>();
+            UnityEngine.Object.DontDestroyOnLoad(manager);
+            HumanBodyBones[] upperLegs = new HumanBodyBones[] { HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightUpperLeg };
+            HumanBodyBones[] Facepalm = new HumanBodyBones[] { HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightUpperLeg, HumanBodyBones.LeftUpperArm };
+            HumanBodyBones[] hips = new HumanBodyBones[] { HumanBodyBones.Hips };
+            EnemyReplacements.LoadResource("moisture_animationreplacements");
+            EnemyReplacements.LoadBNK("Emotes");
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Loser.anim"), true, "Loser", "LoserStop", dimWhenClose: true);
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/HeadSpin.anim"), false, secondaryAnimation: Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/headspinloop.anim"));
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Dab.anim"), false, "Dab", "DabStop", upperLegs, hips);
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Floss.anim"), true, "Floss", "FlossStop", dimWhenClose: true);
+            var test = Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Default Dance.anim");
+            CustomEmotesAPI.AddCustomAnimation(test, false, "DefaultDance", "DefaultDanceStop", dimWhenClose: true);
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Facepalm.anim"), false, "", "", Facepalm, hips);
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/Orange Justice.anim"), true, "OrangeJustice", "OrangeJusticeStop", dimWhenClose: true);
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/nobones.anim"), true);
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsUp.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/ThumbsDown.anim"), false, rootBonesToIgnore: upperLegs, soloBonesToIgnore: hips);
+
+            CustomEmotesAPI.AddNonAnimatingEmote("firework");
+            CustomEmotesAPI.AddNonAnimatingEmote("debug time");
+            CustomEmotesAPI.AddNonAnimatingEmote("kill stuff");
+            CustomEmotesAPI.AddNonAnimatingEmote("end me");
+            CustomEmotesAPI.AddNonAnimatingEmote("50 golems");
+            CustomEmotesAPI.AddNonAnimatingEmote("getSongName");
+            CustomEmotesAPI.AddNonAnimatingEmote("god");
+            CustomEmotesAPI.AddNonAnimatingEmote("noclip");
+            CustomEmotesAPI.AddNonAnimatingEmote("golemPlains");
+
+
+            CustomEmotesAPI.animChanged += CustomEmotesAPI_animChanged;
+        }
+        static BoneMapper bonemap;
+
+        private static void CustomEmotesAPI_animChanged(string newAnimation, BoneMapper mapper)
+        {
+            bonemap = mapper;
+            EffectManager.instance.mapper = bonemap;
+            //if (newAnimation == "Default Dance")
             //{
-            //    orig(self);
-            //    //self.mainContainer.transform.Find("MainUIArea")
-
-
-
-            //    GameObject g = GameObject.Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/emotewheel/emotewheel.prefab"));
-            //    foreach (var item in g.GetComponentsInChildren<TextMeshProUGUI>())
-            //    {
-            //        item.font = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().font;
-            //        item.fontMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontMaterial;
-            //        item.fontSharedMaterial = self.mainContainer.transform.Find("MainUIArea").Find("SpringCanvas").Find("UpperLeftCluster").Find("MoneyRoot").Find("ValueText").GetComponent<TextMeshProUGUI>().fontSharedMaterial;
-            //    }
-            //    g.transform.SetParent(self.mainContainer.transform);
-            //    g.transform.localPosition = new Vector3(0, 0, 0);
-            //    //g.transform.localScale = new Vector3(self.GetComponent<CanvasScaler>().referenceResolution.x / Screen.width, self.GetComponent<CanvasScaler>().referenceResolution.y / Screen.height, 1);
-            //    var s = g.AddComponent<mousechecker>();
-            //    foreach (var item in g.GetComponentsInChildren<Transform>())
-            //    {
-            //        if (item.gameObject.name.StartsWith("Emote"))
-            //        {
-            //            s.gameObjects.Add(item.gameObject);
-            //        }
-            //        if (item.gameObject.name.StartsWith("MousePos"))
-            //        {
-            //            s.text = item.gameObject;
-            //        }
-            //    }
-            //};
-        }
-        public static bool setup = false;
-        public static void ChangeAnims(/*SurvivorDef index, string resource*/)
-        {
-            On.RoR2.SurvivorCatalog.Init += (orig) =>
+            //    EffectManager.instance.DefaultClap();
+            //}
+            //else
+            //{
+            //    EffectManager.instance.StopDefaultClap();
+            //}
+            if (newAnimation == "firework")
             {
-                orig();
-                if (!setup)
-                {
-                    setup = true;
-                    ApplyAnimationStuff(RoR2Content.Survivors.Croco, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/acrid.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Mage, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/artificer.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Captain, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/captain.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Engi, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/engi.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Loader, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/loader.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Merc, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/merc.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Toolbot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/mult.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Treebot, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/rex.prefab");
-                    ApplyAnimationStuff(RoR2Content.Survivors.Commando, "@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/commando.prefab");
-                }
-
-                //bodyPrefab = survivorDef.displayPrefab;
-                //animcontroller = Assets.Load<GameObject>(resource);
-                //animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
-                //animcontroller.transform.localPosition = Vector3.zero;
-                //animcontroller.transform.localEulerAngles = Vector3.zero;
-                //smr1 = animcontroller.GetComponentInChildren<SkinnedMeshRenderer>();
-                //smr2 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>();
-                //test = animcontroller.AddComponent<BoneMapper>();
-                //test.smr1 = smr1;
-                //test.smr2 = smr2;
-                //test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
-                //test.a2 = animcontroller.GetComponentInChildren<Animator>();
-                //test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
-            };
-        }
-        private static void ApplyAnimationStuff(SurvivorDef index, string resource)
-        {
-            var survivorDef = index;
-            var bodyPrefab = survivorDef.bodyPrefab;
-            GameObject animcontroller = Assets.Load<GameObject>(resource);
-            animcontroller.transform.parent = bodyPrefab.GetComponent<ModelLocator>().modelTransform;
-            animcontroller.transform.localPosition = Vector3.zero;
-            animcontroller.transform.localEulerAngles = Vector3.zero;
-            animcontroller.transform.localScale = Vector3.one;
-            SkinnedMeshRenderer smr1 = animcontroller.GetComponentInChildren<SkinnedMeshRenderer>();
-            SkinnedMeshRenderer smr2 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<SkinnedMeshRenderer>();
-            var test = animcontroller.AddComponent<BoneMapper>();
-            test.smr1 = smr1;
-            test.smr2 = smr2;
-            test.a1 = bodyPrefab.GetComponent<ModelLocator>().modelTransform.GetComponentInChildren<Animator>();
-            test.a2 = animcontroller.GetComponentInChildren<Animator>();
-            test.h = bodyPrefab.GetComponentInChildren<HealthComponent>();
-            test.model = bodyPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+                EffectManager.instance.LaunchFirework();
+            }
+            else if (newAnimation == "debug time")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "no_enemies");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "kill_all");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_money 1000000");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item AlienHead 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
+            }
+            else if (newAnimation == "kill stuff")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item SoldiersSyringe 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item AlienHead 100");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
+            }
+            else if (newAnimation == "end me")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "give_item ShapedGlass 10");
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "spawn_ai GolemMaster 10");
+            }
+            else if (newAnimation == "50 golems")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "spawn_ai GolemMaster 50");
+            }
+            else if (newAnimation == "noclip")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "noclip");
+            }
+            else if (newAnimation == "god")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "god");
+            }
+            else if (newAnimation == "getSongName")
+            {
+                DebugClass.Log($"song name: {MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName}");
+            }
+            else if (newAnimation == "golemPlains")
+            {
+                RoR2.Console.instance.SubmitCmd(NetworkUser.readOnlyLocalPlayersList[0], "next_stage golemplains");
+            }
         }
     }
-    public class BoneMapper : MonoBehaviour
+    public class EffectManager : MonoBehaviour
     {
-        public SkinnedMeshRenderer smr1, smr2;
-        public Animator a1, a2;
-        public HealthComponent h;
-        public List<BonePair> pairs = new List<BonePair>();
-        public float timer = 0;
-        public static float caramellCount = 0;
-        public static float caramellTimer = 0;
-        public GameObject model;
-        List<string> ignore = new List<string>();
-        bool twopart = false;
-
-        public void PlayAnim(string s)
+        public static EffectManager instance;
+        internal BoneMapper mapper;
+        internal IEnumerator clapRoutine = null;
+        public EffectManager()
         {
-            a2.enabled = true;
-            if (s == "Caramelldansen")
-            {
-                AkSoundEngine.PostEvent("StopEmotes", gameObject);
-                AkSoundEngine.PostEvent("PlayCaramell", gameObject);
-                if (a2.GetCurrentAnimatorStateInfo(0).IsName("Caramelldansen"))
-                {
-                    return;
-                }
-                caramellCount++;
-                for (int i = 0; i < smr2.bones.Length; i++)
-                {
-                    try
-                    {
-                        if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
-                        {
-                            smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = true;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-                a2.PlayInFixedTime(s, -1, caramellTimer);
-                twopart = false;
-                return;
-            }
-            else
-            {
-                AkSoundEngine.PostEvent("StopCaramell", gameObject);
-                AkSoundEngine.PostEvent("StopEmotes", gameObject);
-                AkSoundEngine.PostEvent(s.Replace(" ", ""), gameObject);
-                if (a2.GetCurrentAnimatorStateInfo(0).IsName("Caramelldansen"))
-                {
-                    caramellCount--;
-                    if (caramellCount == 0)
-                    {
-                        caramellTimer = 0;
-                    }
-                }
-            }
-            for (int i = 0; i < smr2.bones.Length; i++)
-            {
-                try
-                {
-                    if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
-                    {
-                        smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = true;
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
-            a2.Play(s, -1, 0f);
-            twopart = false;
+            instance = this;
         }
-        void AddIgnore(DynamicBone dynbone, Transform t)
+        public void DefaultClap()
         {
-            for (int i = 0; i < t.childCount; i++)
+            StopDefaultClap();
+            clapRoutine = DefaultClapFX();
+            StartCoroutine(clapRoutine);
+        }
+        public void StopDefaultClap()
+        {
+            if (clapRoutine != null)
             {
-                if (!dynbone.m_Exclusions.Contains(t.GetChild(i)))
-                {
-                    ignore.Add(t.GetChild(i).name);
-                    AddIgnore(dynbone, t.GetChild(i));
-                }
+                StopCoroutine(clapRoutine);
             }
         }
-        void Start()
+        public IEnumerator DefaultClapFX()
         {
-            foreach (var item in model.GetComponents<DynamicBone>())
-            {
-                try
-                {
-                    if (!item.m_Exclusions.Contains(item.m_Root))
-                    {
-                        ignore.Add(item.m_Root.name);
-                    }
-                    AddIgnore(item, item.m_Root);
-                }
-                catch (Exception)
-                {
-                }
-            }
-            if (model.name.StartsWith("mdlLoader"))
-            {
-                Transform LClav = model.transform, RClav = model.transform;
-                foreach (var item in model.GetComponentsInChildren<Transform>())
-                {
-                    if (item.name == "clavicle.l")
-                    {
-                        LClav = item;
-                        ignore.Add(LClav.name);
-                    }
-                    if (item.name == "clavicle.r")
-                    {
-                        RClav = item;
-                        ignore.Add(RClav.name);
-                    }
-                }
-                foreach (var item in LClav.GetComponentsInChildren<Transform>())
-                {
-                    ignore.Add(item.name);
-                }
-                foreach (var item in RClav.GetComponentsInChildren<Transform>())
-                {
-                    ignore.Add(item.name);
-                }
-            }
-            for (int i = 0; i < smr2.bones.Length; i++)
-            {
-                try
-                {
-                    if (!ignore.Contains(smr2.bones[i].name))
-                    {
-                        var s = new ConstraintSource();
-                        s.sourceTransform = smr1.bones[i];
-                        s.weight = 1;
-                        smr2.bones[i].gameObject.AddComponent<ParentConstraint>().AddSource(s);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
+            yield return new WaitForSeconds(.3f);
+            var trans = mapper.a2.GetBoneTransform(HumanBodyBones.LeftHand);
+            var obj = Assets.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/testeffects/clap.prefab");
+            obj.transform.position = trans.position;
+            GameObject.Instantiate(obj);
+            yield return new WaitForSeconds(2.06666f);
+            obj = Assets.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/testeffects/clap.prefab");
+            obj.transform.position = trans.position;
+            GameObject.Instantiate(obj);
         }
+        public void LaunchFirework()
+        {
+            var obj = Assets.Load<GameObject>("@MoistureUpset_moisture_animationreplacements:assets/animationreplacements/testeffects/firework.prefab");
+            var trans = mapper.gameObject.transform;
+            obj.transform.position = trans.position;
+            if (!obj.GetComponent<Firework>())
+            {
+                obj.AddComponent<Firework>();
+            }
+            GameObject.Instantiate(obj);
+        }
+    }
+    public class Firework : MonoBehaviour
+    {
+        float timer = 0;
         void Update()
         {
-            if (caramellCount != 0)
+            timer += Time.deltaTime;
+            if (timer > 6)
             {
-                caramellTimer += Time.deltaTime / caramellCount;
+                Destroy(gameObject);
             }
-            if (Input.GetKeyDown(KeyCode.Y))
+            else if (timer > 2)
             {
-                a2.Play("none");
-            }
-            if (a2.GetCurrentAnimatorStateInfo(0).IsName("none"))
-            {
-                if (!twopart)
-                {
-                    twopart = true;
-                }
-                else
-                {
-                    if (a2.enabled)
-                    {
-                        AkSoundEngine.PostEvent("StopEmotes", gameObject);
-                        AkSoundEngine.PostEvent("StopCaramell", gameObject);
-                        for (int i = 0; i < smr2.bones.Length; i++)
-                        {
-                            try
-                            {
-                                if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
-                                {
-                                    smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = false;
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    a1.enabled = true;
-                    a2.enabled = false;
-                }
+                gameObject.transform.Find("flares").gameObject.SetActive(false);
+                gameObject.transform.Find("joy").gameObject.SetActive(true);
             }
             else
             {
-                a1.enabled = false;
-                twopart = false;
+                gameObject.transform.position += new Vector3(0, 70 * Time.deltaTime, 0);
             }
-            if (h.health <= 0)
-            {
-                AkSoundEngine.PostEvent("StopEmotes", gameObject);
-                AkSoundEngine.PostEvent("StopCaramell", gameObject);
-                for (int i = 0; i < smr2.bones.Length; i++)
-                {
-                    try
-                    {
-                        if (smr2.bones[i].gameObject.GetComponent<ParentConstraint>())
-                        {
-                            smr2.bones[i].gameObject.GetComponent<ParentConstraint>().constraintActive = false;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        break;
-                    }
-                }
-                GameObject.Destroy(gameObject);
-            }
-        }
-    }
-    public class BonePair
-    {
-        public Transform original, newiginal;
-        public BonePair(Transform n, Transform o)
-        {
-            newiginal = n;
-            original = o;
-        }
-
-        public void test()
-        {
-
-        }
-    }
-
-    public static class Pain
-    {
-        public static Transform FindBone(SkinnedMeshRenderer mr, string name)
-        {
-            foreach (var item in mr.bones)
-            {
-                if (item.name == name)
-                {
-                    return item;
-                }
-            }
-            DebugClass.Log($"couldnt find bone [{name}]");
-            return mr.bones[0];
-        }
-
-        public static Transform FindBone(List<Transform> bones, string name)
-        {
-            foreach (var item in bones)
-            {
-                if (item.name == name)
-                {
-                    return item;
-                }
-            }
-            DebugClass.Log($"couldnt find bone [{name}]");
-            return bones[0];
         }
     }
 }

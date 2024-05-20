@@ -44,6 +44,10 @@ namespace MoistureUpset.NetMessages
             GameObject g = Util.FindNetworkObject(netId);
             if (g)
             {
+                if ((ShrineType)type == ShrineType.mountain)
+                {
+                    BonziBuddy.buddy.activeMountainShrine = true;
+                }
                 if (g.GetComponentInChildren<CharacterBody>() == NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody())
                 {
                     BonziBuddy.buddy.GenericShrine((ShrineType)type);

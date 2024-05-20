@@ -15,42 +15,43 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
 
 namespace MoistureUpset
 {
-    public class BonziUnlocked : ModdedUnlockable
-    {
-        public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
-        public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
-        public override string PrerequisiteUnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_PREREQ_ID";
-        public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
-        public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
-        public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
+    //public class BonziUnlocked : ModdedUnlockable
+    //{
+    //    public override string AchievementIdentifier { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID";
+    //    public override string UnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_REWARD_ID";
+    //    public override string PrerequisiteUnlockableIdentifier { get; } = "MOISTURE_BONZIBUDDY_PREREQ_ID";
+    //    public override string AchievementNameToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_NAME";
+    //    public override string AchievementDescToken { get; } = "MOISTURE_BONZIBUDDY_ACHIEVEMENT_DESC";
+    //    public override string UnlockableNameToken { get; } = "MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME";
 
-        public override Sprite Sprite { get; } = Assets.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
-        public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
-        {
-            orig(self);
-            if (BonziBuddy.buddy.foundMe)
-            {
-                base.Grant();
-            }
-        }
-        public override void OnInstall()
-        {
-            base.OnInstall();
-            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update += ClearCheck;
-        }
+    //    public override Sprite Sprite { get; } = Assets.Load<Sprite>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/BonziIcon.png");
+    //    public void ClearCheck(On.RoR2.EscapeSequenceController.EscapeSequenceMainState.orig_Update orig, RoR2.EscapeSequenceController.EscapeSequenceMainState self)
+    //    {
+    //        orig(self);
+    //        if (BonziBuddy.buddy.foundMe)
+    //        {
+    //            base.Grant();
+    //        }
+    //    }
+    //    public override void OnInstall()
+    //    {
+    //        base.OnInstall();
+    //        On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update += ClearCheck;
+    //    }
 
-        public override void OnUninstall()
-        {
-            base.OnUninstall();
-            On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
-        }
+    //    public override void OnUninstall()
+    //    {
+    //        base.OnUninstall();
+    //        On.RoR2.EscapeSequenceController.EscapeSequenceMainState.Update -= ClearCheck;
+    //    }
 
-        public override Func<string> GetHowToUnlock { get; } = new Func<string>(() => "lig");
-        public override Func<string> GetUnlocked { get; } = new Func<string>(() => "ball");
-    }
+    //    public override Func<string> GetHowToUnlock { get; } = new Func<string>(() => "lig");
+    //    public override Func<string> GetUnlocked { get; } = new Func<string>(() => "ball");
+    //}
     public class BonziBuddy : MonoBehaviour
     {
         #region defined positions
@@ -86,13 +87,19 @@ namespace MoistureUpset
         List<int> lastIdle = new List<int>();
         bool idling = false;
         int failCount = 0;
-        bool activeMountainShrine = false;
+        public bool activeMountainShrine = false;
         int mountainShrineItems = 0, mountainShrineCount = 0;
         float bloodShrineTimer = 0;
         Transform charPosition = null;
         GameObject obj1, obj2, obj3, obj4, obj5, obj6;
         GameObject preloaded = Assets.Load<GameObject>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/bonzistatic.prefab");
         public float dontSpeak = 0;
+        public static bool doHooks = true;
+        int dioUsed = 0, dioHeld = 0;
+        float casinoTimer = 0;
+        bool cheated = false;
+        bool daniel = false, sapi4 = false;
+        bool dank = false;
 
         bool bonziActive = false;
         void Start()
@@ -111,22 +118,2007 @@ namespace MoistureUpset
             preloaded.GetComponent<ParticleSystemRenderer>().material.mainTexture = Assets.Load<Texture>("@MoistureUpset_moisture_bonzistatic:assets/bonzibuddy/frames.png");
             Hooks();
             SetupBalcon();
+            string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+            if (File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi"))
+            {
+                daniel = true;
+            }
+            if (File.Exists(s + "\\Speech\\speech.dll") && File.Exists(s + "\\lhsp\\help\\tv_enua.hlp"))
+            {
+                sapi4 = true;
+            }
+        }
+
+        internal static void SetupGameObjects()
+        {
+            GameObject bonzi = Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+            DontDestroyOnLoad(bonzi);
+            bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+            bonzi.SetActive(true);
+            bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+            bonzi.layer = 5;
+            BonziBuddy.buddy = bonzi.AddComponent<BonziBuddy>();
+
+            GameObject Gamer = Instantiate(new GameObject());
+            DontDestroyOnLoad(Gamer);
+            Gamer.SetActive(true);
+            MLG.MemeMachine = Gamer.AddComponent<MLG>();
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "HopeWillDieStage1",
+                Stage2 = "HopeWillDieStage2",
+                Interval = "HopeWillDieInterval",
+                Stage1StartDuration = 47.18f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "BangStage1",
+                Stage2 = "BangStage2",
+                Interval = "BangInterval",
+                Stage1StartDuration = 17.584f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "BignisStage1",
+                Stage2 = "BignisStage2",
+                Interval = "BignisInterval",
+                Stage1StartDuration = 33.133f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "TooLoudStage1",
+                Stage2 = "TooLoudStage2",
+                Interval = "TooLoudInterval",
+                Stage1StartDuration = 55.622f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "FireStage1",
+                Stage2 = "FireStage2",
+                Interval = "FireInterval",
+                Stage1StartDuration = 18.345f,
+            });
+            MLG.MemeMachine.tracks.Add(new MLG.AudioTrack
+            {
+                Stage1 = "KyotoStage1",
+                Stage2 = "KyotoStage2",
+                Interval = "KyotoInterval",
+                Stage1StartDuration = 46.626f,
+            });
+            MLG.MemeMachine.ActiveTrack = UnityEngine.Random.Range(0, MLG.MemeMachine.tracks.Count);
+
+
+            GameObject ScreenStuff = Instantiate(Assets.Load<GameObject>("@MoistureUpset_2014:assets/2014/Sniper/MLGScreenStuff.prefab"));
+            DontDestroyOnLoad(ScreenStuff);
+            ScreenStuff.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+            ScreenStuff.SetActive(true);
+            ScreenStuff.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+            ScreenStuff.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+            ScreenStuff.layer = 5;
+            //ScreenStuff.GetComponent<RectTransform>().localScale = new Vector3(4, 4, 4);
+            //ScreenStuff.GetComponent<RectTransform>().localPosition = new Vector3(0, -300, 0);
+            MLG.MemeMachine.UIAnimator = ScreenStuff;
+        }
+        struct ItemsValue
+        {
+            public float value;
+            public int bestItem/* = -1*/;
+            public float bestValue;
+            public float averageValue;
+            public float temp/* = 69420*/;
+            public bool daisy/* = false*/;
+            public int squidCount/* = false*/;
+        }
+        private ItemsValue CalcItemValues(string[] nameTokens)
+        {
+            ItemsValue v = new ItemsValue();
+            v.value = 0;
+            v.bestItem = -1;
+            v.bestValue = 0;
+            v.averageValue = 0;
+            v.temp = 69420;
+            v.daisy = false;
+            v.squidCount = 0;
+            CharacterBody body = RoR2.NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
+            Inventory inventory = body.inventory;
+            int luck = inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck);
+
+            for (int i = 0; i < nameTokens.Length; i++)
+            {
+                switch (nameTokens[i])
+                {
+                    case "ITEM_CLOVER_NAME":
+                        if (luck == -1)
+                        {
+                            v.temp = .75f;
+                        }
+                        else if (luck > -1)
+                        {
+                            v.temp = 1;
+
+                        }
+                        else
+                        {
+                            v.temp = .4f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//57 Leaf Clover
+                    case "ITEM_SYRINGE_NAME":
+                        v.temp = .75f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Soldier's Syringe
+                    case "ITEM_BEAR_NAME":
+                        v.temp = .5f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Tougher Times
+                    case "ITEM_BEHEMOTH_NAME":
+                        v.temp = .95f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Brilliant Behemoth
+                    case "ITEM_MISSILE_NAME":
+                        if (luck < 0 && inventory.GetItemCount(RoR2.DLC1Content.Items.MissileVoid) == 0)
+                        {
+                            v.temp = .2f;
+                        }
+                        else if (inventory.GetItemCount(RoR2.DLC1Content.Items.MissileVoid) != 0)
+                        {
+                            v.temp = .7f;
+                        }
+                        else if (luck > 0 && inventory.GetItemCount(RoR2.DLC1Content.Items.MissileVoid) == 0)
+                        {
+                            v.temp = .95f;
+                        }
+                        else
+                        {
+                            v.temp = .85f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//AtG Missile Mk. 1
+                    case "ITEM_EXPLODEONDEATH_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.ExplodeOnDeathVoid) != 0)
+                        {
+                            v.temp = .8f;
+                        }
+                        else
+                        {
+                            v.temp = .65f;
+                        }
+                        if (inventory.GetItemCount(RoR2Content.Items.ExplodeOnDeath) > 5)
+                        {
+                            v.temp += .175f;
+                        }
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.ExplodeOnDeathVoid) > 5)
+                        {
+                            v.temp += .1f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Will-o'-the-wisp
+                    case "ITEM_DAGGER_NAME":
+                        v.temp = .95f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Ceremonial Dagger
+                    case "ITEM_TOOTH_NAME":
+                        v.temp = .2f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Monster Tooth
+                    case "ITEM_CRITGLASSES_NAME":
+                        if (body.crit >= 100)
+                        {
+                            v.temp = .1f;
+                        }
+                        else
+                        {
+                            v.temp = .75f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Lens-Maker's Glasses
+                    case "ITEM_HOOF_NAME":
+                        if (body.moveSpeed > body.baseMoveSpeed * 3)
+                        {
+                            v.temp = .2f;
+                        }
+                        else
+                        {
+                            v.temp = .5f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Paul's Goat Hoof
+                    case "ITEM_FEATHER_NAME":
+                        if (body.maxJumpCount > 5 || body.baseNameToken == "MERC_BODY_NAME" || body.baseNameToken == "CROCO_BODY_NAME")
+                        {
+                            v.temp = .22f;
+                        }
+                        else
+                        {
+                            v.temp = .55f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Hopoo Feather
+                    case "ITEM_CHAINLIGHTNING_NAME":
+                        if (luck == -1)
+                        {
+                            v.temp = .5f;
+                        }
+                        else if (luck < -1)
+                        {
+                            v.temp = .1f;
+                        }
+                        else
+                        {
+                            v.temp = .85f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Ukulele
+                    case "ITEM_SEED_NAME":
+                        if (body.crit > 70 && body.critHeal > 0)
+                        {
+                            v.temp = .1f;
+                        }
+                        else
+                        {
+                            v.temp = .2f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Leeching Seed
+                    case "ITEM_ICICLE_NAME":
+                        if (inventory.GetEquipment(0).equipmentDef != RoR2Content.Equipment.DeathProjectile)
+                        {
+                            v.temp = .6f;
+                        }
+                        else
+                        {
+                            v.temp = .8f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Frost Relic
+                    case "ITEM_GHOSTONKILL_NAME":
+                        if (luck < 0)
+                        {
+                            v.temp = 0f;
+                        }
+                        else
+                        {
+                            v.temp = .3f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Happiest Mask
+                    case "ITEM_MUSHROOM_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.MushroomVoid) != 0)
+                        {
+                            v.temp = .65f;
+                        }
+                        else
+                        {
+                            v.temp = .3f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Bustling Fungus
+                    case "ITEM_CROWBAR_NAME":
+                        v.temp = .7f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Crowbar
+                    case "ITEM_ATTACKSPEEDONCRIT_NAME":
+                        if (luck < 0 && body.crit < 50)
+                        {
+                            v.temp = .35f;
+                        }
+                        else
+                        {
+                            v.temp = .8f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Predatory Instincts
+                    case "ITEM_BLEEDONHIT_NAME":
+                        if (body.bleedChance > 99 || body.baseNameToken == "LOADER_BODY_NAME")
+                        {
+                            v.temp = .15f;
+                        }
+                        else
+                        {
+                            v.temp = .75f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Tri-Tip Dagger
+                    case "ITEM_SPRINTOUTOFCOMBAT_NAME":
+                        if (body.moveSpeed > body.moveSpeed * 3)
+                        {
+                            v.temp = .2f;
+                        }
+                        else
+                        {
+                            v.temp = .5f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Red Whip
+                    case "ITEM_FALLBOOTS_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.FallBoots) != 0 || body.baseNameToken == "LOADER_BODY_NAME")
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .2f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//H3AD-5T v2
+                    case "ITEM_COOLDOWNONCRIT_NAME":
+                        break;//Wicked Ring
+                    case "ITEM_WARDONLEVEL_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.WardOnLevel) != 0)
+                        {
+                            v.temp = .1f;
+                        }
+                        else
+                        {
+
+                            v.temp = .2f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Warbanner
+                    case "ITEM_WARCRYONMULTIKILL_NAME":
+                        v.temp = .1f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Berzerker's Pauldron
+                    case "ITEM_PHASING_NAME":
+                        v.temp = 0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Old War Stealthkit
+                    case "ITEM_HEALONCRIT_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) != 0)
+                        {
+                            v.temp = .15f;
+                        }
+                        else
+                        {
+                            v.temp = .65f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Harvester's Scythe
+                    case "ITEM_HEALWHILESAFE_NAME":
+                        if (RoR2.Run.instance.stageClearCount > 4)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .3f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Cautious Slug
+                    case "ITEM_JUMPBOOST_NAME":
+                        v.temp = .4f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Wax Quail
+                    case "ITEM_PERSONALSHIELD_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) != 0)
+                        {
+                            v.temp = .5f;
+                        }
+                        else
+                        {
+                            v.temp = .15f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Personal Shield Generator
+                    case "ITEM_NOVAONHEAL_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) != 0)
+                        {
+                            v.temp = .1f;
+                        }
+                        else
+                        {
+                            v.temp = .65f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//N'kuhana's Opinion
+                    case "ITEM_MEDKIT_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) != 0)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .35f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Medkit
+                    case "ITEM_EQUIPMENTMAGAZINE_NAME":
+                        v.temp = .7f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Fuel Cell
+                    case "ITEM_INFUSION_NAME":
+                        v.temp = .4f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Infusion
+                    case "ITEM_SHOCKNEARBY_NAME":
+                        v.temp = .9f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Unstable Tesla Coil
+                    case "ITEM_IGNITEONKILL_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.StrengthenBurn) != 0)
+                        {
+                            v.temp = .7f;
+                        }
+                        else
+                        {
+                            v.temp = .55f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Gasoline
+                    case "ITEM_BOUNCENEARBY_NAME":
+                        if (luck == -1)
+                        {
+                            v.temp = .5f;
+                        }
+                        else if (luck < -1)
+                        {
+                            v.temp = .15f;
+                        }
+                        else
+                        {
+                            v.temp = 1f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Sentient Meat Hook
+                    case "ITEM_FIREWORK_NAME":
+                        v.temp = .1f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Bundle of Fireworks
+                    case "ITEM_BANDOLIER_NAME":
+                        if (luck < 0)
+                        {
+                            v.temp = 0f;
+                        }
+                        else
+                        {
+                            v.temp = .1f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Bandolier
+                    case "ITEM_STUNCHANCEONHIT_NAME":
+                        if (luck < 0)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .25f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Stun Grenade
+                    case "ITEM_LUNARDAGGER_NAME":
+                        v.temp = .05f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Shaped Glass
+                    case "ITEM_GOLDONHIT_NAME":
+                        if (luck < 0)
+                        {
+                            v.temp = .1f;
+                        }
+                        else
+                        {
+                            v.temp = .6f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Brittle Crown
+                              //😂😂😂😂 WHO DID THIS???? 😂😂😂😂
+                              //https://cdn.discordapp.com/attachments/404338516336574477/956328549663518810/revengeance_status_12.mp4
+                    case "ITEM_SHIELDONLY_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) != 0)
+                        {
+                            v.temp = .75f;
+                        }
+                        else
+                        {
+                            v.temp = .4f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Transcendence
+                    case "ITEM_ALIENHEAD_NAME":
+                        v.temp = .85f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Alien Head
+                    case "ITEM_TALISMAN_NAME":
+                        if (inventory.GetEquipment(0).equipmentDef != RoR2Content.Equipment.DeathProjectile)
+                        {
+                            v.temp = 1f;
+                        }
+                        else
+                        {
+                            v.temp = .75f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Soulbound Catalyst
+                    case "ITEM_KNURL_NAME":
+                        v.temp = .5f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Titanic Knurl
+                    case "ITEM_BEETLEGLAND_NAME":
+                        v.temp = .3f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Queen's Gland
+                    case "ITEM_SPRINTBONUS_NAME":
+                        v.temp = .45f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Energy Drink
+                    case "ITEM_SECONDARYSKILLMAGAZINE_NAME":
+                        if (body.baseNameToken == "CAPTAIN_BODY_NAME")
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .4f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Backup Magazine
+                    case "ITEM_STICKYBOMB_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.StickyBomb) > 20)
+                        {
+                            v.temp = .15f;
+                        }
+                        else
+                        {
+                            v.temp = .75f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Sticky Bomb
+                    case "ITEM_TREASURECACHE_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.TreasureCacheVoid) != 0)
+                        {
+                            v.temp = .6f;
+                        }
+                        else
+                        {
+                            v.temp = .3f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Rusted Key
+                    case "ITEM_BOSSDAMAGEBONUS_NAME":
+                        v.temp = .6f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Armor-Piercing Rounds
+                    case "ITEM_SPRINTARMOR_NAME":
+                        v.temp = .05f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Rose Buckler
+                    case "ITEM_ELEMENTALRINGS_NAME":
+                        break;//Kjaro and Runald's Bands
+                    case "ITEM_ICERING_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.ElementalRingVoid) != 0)
+                        {
+                            v.temp = .6f;
+                        }
+                        else
+                        {
+                            v.temp = .8f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Runald's Band
+                    case "ITEM_FIRERING_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.ElementalRingVoid) != 0)
+                        {
+                            v.temp = .6f;
+                        }
+                        else
+                        {
+                            v.temp = .7f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Kjaro's Band
+                    case "ITEM_SLOWONHIT_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.SlowOnHitVoid) != 0)
+                        {
+                            v.temp = .55f;
+                        }
+                        else
+                        {
+                            v.temp = .35f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Chronobauble
+                    case "ITEM_EXTRALIFE_NAME":
+                        if (body.baseNameToken == "ENGI_BODY_NAME")
+                        {
+                            v.temp = 1f;
+                        }
+                        else if (inventory.GetItemCount(RoR2.DLC1Content.Items.ExtraLifeVoid) != 0)
+                        {
+                            v.temp = .9f;
+                        }
+                        else
+                        {
+                            v.temp = .6f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Dio's Best Friend
+                    case "ITEM_EXTRALIFECONSUMED_NAME":
+                        break;//Dio's Best Friend (Consumed)
+                    case "ITEM_UTILITYSKILLMAGAZINE_NAME":
+                        v.temp = .8f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Hardlight Afterburner
+                    case "ITEM_HEADHUNTER_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) != 0)
+                        {
+                            v.temp = .8f;
+                        }
+                        else
+                        {
+                            v.temp = .25f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Wake of Vultures
+                    case "ITEM_KILLELITEFRENZY_NAME":
+                        v.temp = .7f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Brainstalks
+                    case "ITEM_INCREASEHEALING_NAME":
+                        v.temp = .7f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Rejuvenation Rack
+                    case "ITEM_REPEATHEAL_NAME":
+                        v.temp = .0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Corpsebloom
+                    case "ITEM_AUTOCASTEQUIPMENT_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) != 0)
+                        {
+                            v.temp = .7f;
+                        }
+                        else
+                        {
+                            v.temp = .85f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Gesture of the Drowned
+                    case "ITEM_EXECUTELOWHEALTHELITE_NAME":
+                        v.temp = .65f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Old Guillotine
+                    case "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.EnergizedOnEquipmentUse) != 0)
+                        {
+                            v.temp = .25f;
+                        }
+                        else
+                        {
+                            v.temp = .45f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//War Horn
+                    case "ITEM_BARRIERONOVERHEAL_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.BarrierOnOverHeal) > 1)
+                        {
+                            v.temp = .4f;
+                        }
+                        else
+                        {
+                            v.temp = .8f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Aegis
+                    case "ITEM_TONICAFFLICTION_NAME":
+                        break;//Tonic Affliction
+                    case "ITEM_TITANGOLDDURINGTP_NAME":
+                        v.temp = .5f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Halcyon Seed
+                    case "ITEM_SPRINTWISP_NAME":
+                        v.temp = .7f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Little Disciple
+                    case "ITEM_BARRIERONKILL_NAME":
+                        v.temp = .3f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Topaz Brooch
+                    case "ITEM_ARMORREDUCTIONONHIT_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ArmorReductionOnHit) != 0)
+                        {
+                            v.temp = .2f;
+                        }
+                        else
+                        {
+                            v.temp = .85f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Shattering Justice
+                    case "ITEM_TPHEALINGNOVA_NAME":
+                        v.daisy = true;
+                        break;//Lepton Daisy
+                    case "ITEM_NEARBYDAMAGEBONUS_NAME":
+                        if (body.baseNameToken == "MERC_BODY_NAME" || body.baseNameToken == "LOADER_BODY_NAME" || body.baseNameToken == "VOIDSURVIVOR_BODY_NAME")
+                        {
+                            v.temp = .85f;
+                        }
+                        else
+                        {
+                            v.temp = .7f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Focus Crystal
+                    case "ITEM_LUNARSKILLREPLACEMENTS_NAME":
+                        break;//Heresy Set
+                    case "ITEM_LUNARUTILITYREPLACEMENT_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.LunarUtilityReplacement) != 0)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .15f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Strides of Heresy
+                    case "ITEM_PROTECTIONPOTION_NAME":
+                        v.temp = .25f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Tix Flask
+                    case "ITEM_THORNS_NAME":
+                        if (inventory.GetEquipment(0).equipmentDef != RoR2Content.Equipment.BurnNearby)
+                        {
+                            v.temp = .6f;
+                        }
+                        else
+                        {
+                            v.temp = .85f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Razorwire
+                    case "ITEM_FLATHEALTH_NAME":
+                        v.temp = .2f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Bison Steak
+                    case "ITEM_PEARL_NAME":
+                        v.temp = .6f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Pearl
+                    case "ITEM_SHINYPEARL_NAME":
+                        v.temp = .9f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Irradiant Pearl
+                    case "ITEM_BONUSGOLDPACKONKILL_NAME":
+                        if (RoR2.Run.instance.stageClearCount > 5)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .35f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Ghor's Tome
+                    case "ITEM_LASERTURBINE_NAME":
+                        v.temp = .6f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Resonance Disc
+                    case "ITEM_LUNARPRIMARYREPLACEMENT_NAME":
+                        v.temp = .1f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Visions of Heresy
+                    case "ITEM_NOVAONLOWHEALTH_NAME":
+                        if (body.baseNameToken == "ENGI_BODY_NAME")
+                        {
+                            v.temp = .75f;
+                        }
+                        else
+                        {
+                            v.temp = .25f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Genesis Loop
+                    case "ITEM_LUNARTRINKET_NAME":
+                        v.temp = .0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Beads of Fealty
+                    case "ITEM_REPULSIONARMORPLATE_NAME":
+                        v.temp = .4f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Repulsion Armor Plate
+                    case "ITEM_SQUIDTURRET_NAME":
+                        v.temp = .05f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        v.squidCount++;
+                        break;//Squid Polyp
+                    case "ITEM_DEATHMARK_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.DeathMark) == 0)
+                        {
+                            v.temp = .25f;
+                        }
+                        else
+                        {
+                            v.temp = .0f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Death Mark
+                    case "ITEM_INTERSTELLARDESKPLANT_NAME":
+                        v.temp = .5f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Interstellar Desk Plant
+                    case "ITEM_ANCESTRALINCUBATOR_NAME":
+                        break;//Ancestral Incubator
+                    case "ITEM_FOCUSEDCONVERGENCE_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.FocusConvergence) > 2)
+                        {
+                            v.temp = .0f;
+                        }
+                        else
+                        {
+                            v.temp = .15f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Focused Convergence
+                    case "ITEM_FIREBALLSONHIT_NAME":
+                        if (luck == -1)
+                        {
+                            v.temp = .25f;
+                        }
+                        else if (luck < -1)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .8f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Molten Perforator
+                    case "ITEM_LIGHTNINGSTRIKEONHIT_NAME":
+                        if (luck == -1)
+                        {
+                            v.temp = .3f;
+                        }
+                        else if (luck < -1)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .9f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Charged Perforator
+                    case "ITEM_BLEEDONHITANDEXPLODE_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.BleedOnHitAndExplode) != 0)
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .8f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Shatterspleen
+                    case "ITEM_SIPHONONLOWHEALTH_NAME":
+                        v.temp = .55f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Mired Urn
+                    case "ITEM_MONSTERSONSHRINEUSE_NAME":
+                        v.temp = .0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Defiant Gouge
+                    case "ITEM_RANDOMDAMAGEZONE_NAME":
+                        v.temp = .15f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Mercurial Rachis
+                    case "ITEM_ARTIFACTKEY_NAME":
+                        break;//Artifact Key
+                    case "ITEM_CAPTAINDEFENSEMATRIX_NAME":
+                        v.temp = 1.0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Defensive Microbots
+                    case "ITEM_SCRAPWHITE_NAME":
+                        break;//Item Scrap, White
+                    case "ITEM_SCRAPGREEN_NAME":
+                        break;//Item Scrap, Green
+                    case "ITEM_SCRAPRED_NAME":
+                        break;//Item Scrap, Red
+                    case "ITEM_SCRAPYELLOW_NAME":
+                        break;//Item Scrap, Yellow
+                    case "ITEM_LUNARBADLUCK_NAME":
+                        if (luck < 0)
+                        {
+                            v.temp = .55f;
+                        }
+                        else
+                        {
+                            v.temp = .3f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Purity
+                    case "ITEM_LUNARSECONDARYREPLACEMENT_NAME":
+                        v.temp = .15f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Hooks of Heresy
+                    case "ITEM_ATTACKSPEEDANDMOVESPEED_NAME":
+                        v.temp = .7f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Mocha
+                    case "ITEM_PRIMARYSKILLSHURIKEN_NAME":
+                        if (body.baseNameToken == "RAILGUNNER_BODY_NAME")
+                        {
+                            v.temp = .05f;
+                        }
+                        else
+                        {
+                            v.temp = .7f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Shuriken
+                    case "ITEM_CRITDAMAGE_NAME":
+                        v.temp = 1f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Laser Scope
+                    case "ITEM_DRONEWEAPONS_NAME":
+                        v.temp = .6f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Spare Drone Parts
+                    case "ITEM_MOVESPEEDONKILL_NAME":
+                        v.temp = .35f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Hunter's Harpoon
+                    case "ITEM_STRENGTHENBURN_NAME":
+                        if (body.baseNameToken == "MAGE_BODY_NAME")
+                        {
+                            v.temp = .85f;
+                        }
+                        else if (inventory.GetItemCount(RoR2Content.Items.IgniteOnKill) != 0)
+                        {
+                            v.temp = .8f;
+                        }
+                        else
+                        {
+                            v.temp = .7f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Ignition Tank
+                    case "ITEM_HEALINGPOTION_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.FragileDamageBonus) != 0 || body.baseNameToken == "ENGI_BODY_NAME")
+                        {
+                            v.temp = .65f;
+                        }
+                        else
+                        {
+                            v.temp = .25f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Power Elixir
+                    case "ITEM_HEALINGPOTIONCONSUMED_NAME":
+                        break;//Empty Bottle
+                    case "ITEM_PERMANENTDEBUFFONHIT_NAME":
+                        v.temp = .85f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Symbiotic Scorpion
+                    case "ITEM_MOREMISSILE_NAME":
+                        v.temp = 1.0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Pocket I.C.B.M.
+                    case "ITEM_SKULLCOUNTER_NAME":
+                        break;//Skull Token
+                    case "ITEM_ROBOBALLBUDDY_NAME":
+                        v.temp = .6f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Empathy Cores
+                    case "ITEM_PARENTEGG_NAME":
+                        if (RoR2.Run.instance.stageClearCount > 5)
+                        {
+                            v.temp = .35f;
+                        }
+                        else
+                        {
+                            v.temp = .6f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Planula
+                    case "ITEM_LUNARSPECIALREPLACEMENT_NAME":
+                        v.temp = .15f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Essence of Heresy
+                    case "ITEM_HALFSPEEDDOUBLEHEALTH_NAME":
+                        if (body.moveSpeed > body.baseMoveSpeed * 2.5f)
+                        {
+                            v.temp = .65f;
+                        }
+                        else
+                        {
+                            v.temp = .4f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Stone Flux Pauldron
+                    case "ITEM_HALFATTACKSPEEDHALFCOOLDOWNS_NAME":
+                        if (body.attackSpeed > body.baseAttackSpeed * 5f)
+                        {
+                            v.temp = .65f;
+                        }
+                        else if (body.attackSpeed > body.baseAttackSpeed * 2.5f)
+                        {
+                            v.temp = .45f;
+                        }
+                        else
+                        {
+                            v.temp = .35f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Light Flux Pauldron
+                    case "ITEM_LUNARWINGS_NAME":
+                        break;//Blessings of Terafirmae
+                    case "ITEM_RANDOMLYLUNAR_NAME":
+                        v.temp = .0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Eulogy Zero
+                    case "ITEM_IMMUNETODEBUFF_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.ImmuneToDebuff) != 0)
+                        {
+                            v.temp = .45f;
+                        }
+                        else
+                        {
+                            v.temp = 1f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Ben's Raincoat
+                    case "ITEM_REGENERATINGSCRAP_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.RegeneratingScrap) % 5 == 4)
+                        {
+                            v.temp = .9f;
+                        }
+                        else
+                        {
+                            v.temp = .75f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Regenerating Scrap
+                    case "ITEM_REGENERATINGSCRAPCONSUMED_NAME":
+                        break;//Regenerating Scrap (Consumed)
+                    case "ITEM_CRITGLASSESVOID_NAME":
+                        if (luck < 0)
+                        {
+                            v.temp = .1f;
+                        }
+                        else if (luck > 0)
+                        {
+                            v.temp = .7f;
+                        }
+                        else
+                        {
+                            v.temp = .55f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Lost Seer's Lenses
+                    case "ITEM_EXPLODEONDEATHVOID_NAME":
+                        v.temp = .8f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Voidsent Flame
+                    case "ITEM_BLEEDONHITVOID_NAME":
+                        if (body.baseNameToken == "LOADER_BODY_NAME" || body.baseNameToken == "MAGE_BODY_NAME")
+                        {
+                            v.temp = .7f;
+                        }
+                        else if (inventory.GetItemCount(RoR2.DLC1Content.Items.BleedOnHitVoid) > 9)
+                        {
+                            v.temp = .1f;
+                        }
+                        else
+                        {
+                            v.temp = .35f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Needletick
+                    case "ITEM_TREASURECACHEVOID_NAME":
+                        v.temp = .8f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Encrusted Key
+                    case "ITEM_BEARVOID_NAME":
+                        v.temp = .5f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Safer Spaces
+                    case "ITEM_CLOVERVOID_NAME":
+                        v.temp = 1.0f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Benthic Bloom
+                    case "ITEM_MISSILEVOID_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.MissileVoid) == 0 && luck > 0)
+                        {
+                            v.temp = .15f;
+                        }
+                        else
+                        {
+                            v.temp = .7f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Plasma Shrimp
+                    case "ITEM_MUSHROOMVOID_NAME":
+                        if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) != 0)
+                        {
+                            v.temp = .2f;
+                        }
+                        else
+                        {
+                            v.temp = .65f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Weeping Fungus
+                    case "ITEM_SLOWONHITVOID_NAME":
+                        if (luck < 0)
+                        {
+                            v.temp = .2f;
+                        }
+                        else
+                        {
+                            v.temp = .55f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Tentabauble
+                    case "ITEM_CHAINLIGHTNINGVOID_NAME":
+                        if (luck < -1)
+                        {
+                            v.temp = .15f;
+                        }
+                        else
+                        {
+                            v.temp = .95f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Polylute
+                    case "ITEM_EQUIPMENTMAGAZINEVOID_NAME":
+                        v.temp = .55f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Lysate Cell
+                    case "ITEM_EXTRALIFEVOID_NAME":
+                        v.temp = .9f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Pluripotent Larva
+                    case "ITEM_EXTRALIFEVOIDCONSUMED_NAME":
+                        break;//Pluripotent Larva (Consumed)
+                    case "ITEM_FRAGILEDAMAGEBONUS_NAME":
+                        if (inventory.GetItemCount(RoR2.DLC1Content.Items.HealingPotion) != 0)
+                        {
+                            v.temp = .7f;
+                        }
+                        else
+                        {
+                            v.temp = .5f;
+                        }
+
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Delicate Watch
+                    case "ITEM_FRAGILEDAMAGEBONUSCONSUMED_NAME":
+                        break;//Delicate Watch (Broken)
+                    case "ITEM_OUTOFCOMBATARMOR_NAME":
+                        v.temp = .5f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Oddly-shaped Opal
+                    case "ITEM_SCRAPWHITESUPPRESSED_NAME":
+                        break;//Strange Scrap, White
+                    case "ITEM_SCRAPGREENSUPPRESSED_NAME":
+                        break;//Strange Scrap, Green
+                    case "ITEM_SCRAPREDSUPPRESSED_NAME":
+                        break;//Strange Scrap, Red
+                    case "ITEM_GOLDONHURT_NAME":
+                        if (RoR2.Run.instance.stageClearCount > 4)
+                        {
+                            v.temp = .1f;
+                        }
+                        else if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length != 1)
+                        {
+                            v.temp = .6f;
+                        }
+                        else
+                        {
+                            v.temp = .4f;
+                        }
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Roll of Pennies
+                    case "ITEM_RANDOMEQUIPMENTTRIGGER_NAME":
+                        v.temp = .55f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Bottled Chaos
+                    case "ITEM_FREECHEST_NAME":
+                        v.temp = .75f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Shipping Request Form
+                    case "ITEM_ELEMENTALRINGVOID_NAME":
+                        v.temp = .6f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Singularity Band
+                    case "ITEM_LUNARSUN_NAME":
+                        v.temp = .55f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Egocentrism
+                    case "ITEM_MINORCONSTRUCTONKILL_NAME":
+                        v.temp = .3f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Defense Nucleus
+                    case "ITEM_VOIDMEGACRABITEM_NAME":
+                        v.temp = .9f;
+                        if (v.bestValue < v.temp)
+                        {
+                            v.bestValue = v.temp;
+                            v.bestItem = i;
+                        }
+                        v.averageValue += v.temp / (float)nameTokens.Length;
+                        break;//Newly Hatched Zoea
+
+                    default:
+                        break;
+                }
+            }
+
+            return v;
         }
         private void Hooks()
         {
-            //On.RoR2.EscapeSequenceController.EscapeSequenceMainState.OnEnter += (orig, self) =>
+            if (!doHooks)
+                return;
+            DebugClass.Log($"Why the fuck does this only work if I leave the debug log in???????");
+            doHooks = false;
+            //On.RoR2.Interactor.AttemptInteraction += (orig, self, g) =>
             //{
-            //    orig(self);
-            //    DebugClass.Log($"----------{self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("t")}");
-            //    self.GetFieldValue<Run.FixedTimeStamp>("endTime").GetFieldValue<float>("tNow") = 5;
+            //    //LunarRecycler
+            //    //SeerStation
+            //    //CasinoChest
+            //    //DebugClass.Log($"----------{g.name}");
+            //    //ShouldSpeak(g.name);
+            //    orig(self, g);
             //};
+            On.RoR2.UI.PauseScreenController.OnEnable += (orig, self) =>
+            {
+                orig(self);
+                if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length < 2 && RoR2.UI.PauseScreenController.instancesList.Count == 1 && casinoTimer > 0)
+                {
+                    casinoTimer = 10;
+                    cheated = true;
+                }
+            };
+            On.RoR2.PurchaseInteraction.OnInteractionBegin += (orig, self, i) =>
+            {
+                orig(self, i);
+                if (self.CanBeAffordedByInteractor(i))
+                {
+                    try
+                    {
+                        if (self.gameObject.ToString().StartsWith("LunarRecycler"))
+                        {
+                            if (self.cost == 128)
+                            {
+                                ShouldSpeak("You do realise that you could just play on command right?"
+                                    , "Just use command M9");
+                            }
+                            else if (self.cost == 2048)
+                            {
+                                ShouldSpeak("I don't think you heard me the first time, so let me reiterate. The command artifact lets you choose your items instead of being stuck rerolling here."
+                                    , "What the fuck did I just say to you?");
+                            }
+                            else if (self.cost == 2097152)
+                            {
+                                ShouldSpeak("Ok so let me just put this over there, you can choose to use it or not."
+                                    , "Bro, just take this item");
+                                if (bonziActive)
+                                    new SyncLunarReRoll(new Vector3(-94, -25, -47)).Send(R2API.Networking.NetworkDestination.Server);
+                            }
+                            else if (self.cost == 536870912)
+                            {
+                                if (Settings.CurrencyChanges.Value)
+                                    ShouldSpeak("I'm just going to do this before you overflow your robux into the negatives"
+                                    , "I'm just going to do this before you overflow your robux into the negatives");
+                                else
+                                    ShouldSpeak("I'm just going to do this before you overflow your coins into the negatives"
+                                    , "I'm just going to do this before you overflow your coins into the negatives");
+
+                                if (bonziActive)
+                                    StartCoroutine(RestOfDroplets());
+                            }
+                        }
+                        else if (self.gameObject.ToString().StartsWith("CasinoChest"))
+                        {
+                            casinoTimer = 10;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            };
+            On.EntityStates.Missions.BrotherEncounter.Phase4.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                dontSpeak = 86400; //yeah if you wait a whole day in phase 4 you can break this, eat me.
+            };
             On.EntityStates.BrotherMonster.TrueDeathState.OnEnter += (orig, self) =>
             {
                 orig(self);
+                dontSpeak = 5;
                 //Main Camera(Clone)
                 //MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID
-                if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID"))//achievement not unlocked
+                if (!!LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"))//achievement not unlocked
                 {
+                    On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
+                    On.RoR2.HoldoutZoneController.FixedUpdate += HoldoutZoneController_FixedUpdate;
                     Chat.AddMessage($"<style=cWorldEvent>You hear a rumbling coming from the teleporter...</style>");
                     foreach (var item in Camera.allCameras)
                     {
@@ -175,11 +2167,14 @@ namespace MoistureUpset
             On.RoR2.Run.OnClientGameOver += (orig, self, report) =>
             {
                 orig(self, report);
+                dioUsed = 0;
+                dioHeld = 0;
                 try
                 {
                     if (report.gameEnding.endingTextToken == "GAME_RESULT_UNKNOWN")
                     {
-                        ShouldSpeak("Kind of a cop-out isn't it?");
+                        ShouldSpeak("Kind of a cop-out isn't it?"
+                            , "What a bitch");
                     }
                     GoTo(DEATH);
                 }
@@ -191,6 +2186,8 @@ namespace MoistureUpset
             {
                 try
                 {
+                    feelsGood = true;
+                    sceneChange = true;
                     AkSoundEngine.SetRTPCValue("DistanceToBonzi", 800);
                     resetRun = false;
                     oncePerStage = true;
@@ -201,10 +2198,10 @@ namespace MoistureUpset
                             GoTo(LOGBOOK);
                             break;
                         case "title":
-                            //if (BigJank.getOptionValue("Top Secret Setting") /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/ && !bonziActive)
-                            //{
-                            //    Activate();
-                            //}
+                            if (BigJank.getOptionValue(Settings.BonziBuddyBool) /*&& LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/ && !bonziActive)
+                            {
+                                Activate();
+                            }
                             GoTo(MAINMENU);
                             break;
                         case "lobby":
@@ -218,7 +2215,6 @@ namespace MoistureUpset
                             break;
                         case "moon2":
                             //frogge 
-                            On.RoR2.Run.FixedUpdate += Run_FixedUpdate;
                             break;
                         default:
                             GoTo(M1);
@@ -230,10 +2226,13 @@ namespace MoistureUpset
                     }
                     if (newS.name != "moon2")
                     {
+                        On.RoR2.HoldoutZoneController.FixedUpdate -= HoldoutZoneController_FixedUpdate;
                         On.RoR2.Run.FixedUpdate -= Run_FixedUpdate;
                     }
                     charPosition = null;
                     AkSoundEngine.ExecuteActionOnEvent(1901251578, AkActionOnEventType.AkActionOnEventType_Stop);
+                    SyncBonziApproach.netIds.Clear();
+                    SyncBonziApproach.distances.Clear();
                 }
                 catch (Exception)
                 {
@@ -268,7 +2267,8 @@ namespace MoistureUpset
                     }
                     else if (resetRun && (self.inputField.text.ToUpper() == "NO" || self.inputField.text.ToUpper() == "N"))
                     {
-                        ShouldSpeak("Fine, that's your loss");
+                        ShouldSpeak("Fine, that's your loss"
+                            , "Swag");
                         resetRun = false;
                     }
                 }
@@ -277,19 +2277,21 @@ namespace MoistureUpset
                 }
                 orig(self);
             };
-            //On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>//FIX WHEN PULL
-            //{
-            //    float yes = self.GetFieldValue<int>("successfulPurchaseCount");
-            //    orig(self, activator);
-            //    if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
-            //    {
-            //        new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
-            //    }
-            //    else
-            //    {
-            //        new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
-            //    }
-            //};
+            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
+            {
+                float yes = self.GetFieldValue<int>("successfulPurchaseCount");
+                orig(self, activator);
+
+
+                if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+                else
+                {
+                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
+                }
+            };
             On.RoR2.ShrineBloodBehavior.AddShrineStack += (orig, self, activator) =>
             {
                 orig(self, activator);
@@ -364,174 +2366,849 @@ namespace MoistureUpset
                     new SyncMountain(index, mountainShrineCount).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             };
+            On.RoR2.CharacterMasterNotificationQueue.PushItemTransformNotification += (orig, master, oldI, newI, type) =>
+            {
+                orig(master, oldI, newI, type);
+                if (type == CharacterMasterNotificationQueue.TransformationType.LunarSun)
+                {
+                    ItemDef oldDef = ItemCatalog.GetItemDef(oldI);
+                    switch (oldDef.nameToken)
+                    {
+                        case "ITEM_CLOVER_NAME":
+                            ShouldSpeak("Oooooh, that sucks", "Are you fucking serious m8?");
+                            break;//57 Leaf Clover
+                        case "ITEM_SYRINGE_NAME":
+                            break;//Soldier's Syringe
+                        case "ITEM_BEAR_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("Oof, there goes your block chance", "Block chance is for pussies anyway");
+                            }
+                            break;//Tougher Times
+                        case "ITEM_BEHEMOTH_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("Rocket Launcher doesn't go boom :(", true);
+                            }
+                            break;//Brilliant Behemoth
+                        case "ITEM_MISSILE_NAME":
+                            break;//AtG Missile Mk. 1
+                        case "ITEM_EXPLODEONDEATH_NAME":
+                            break;//Will-o'-the-wisp
+                        case "ITEM_DAGGER_NAME":
+                            break;//Ceremonial Dagger
+                        case "ITEM_TOOTH_NAME":
+                            break;//Monster Tooth
+                        case "ITEM_CRITGLASSES_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 8)
+                            {
+                                ShouldSpeak("Oh, no. What will you do without max crit?", true);
+                            }
+                            break;//Lens-Maker's Glasses
+                        case "ITEM_HOOF_NAME":
+                            break;//Paul's Goat Hoof
+                        case "ITEM_FEATHER_NAME":
+                            break;//Hopoo Feather
+                        case "ITEM_CHAINLIGHTNING_NAME":
+                            break;//Ukulele
+                        case "ITEM_SEED_NAME":
+                            break;//Leeching Seed
+                        case "ITEM_ICICLE_NAME":
+                            break;//Frost Relic
+                        case "ITEM_GHOSTONKILL_NAME":
+                            ShouldSpeak("Hahaha yes, die trash", true);
+                            break;//Happiest Mask
+                        case "ITEM_MUSHROOM_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("No Bungus?", true);
+                            }
+                            break;//Bustling Fungus
+                        case "ITEM_CROWBAR_NAME":
+                            break;//Crowbar
+                        case "ITEM_ATTACKSPEEDONCRIT_NAME":
+                            break;//Predatory Instincts
+                        case "ITEM_BLEEDONHIT_NAME":
+                            break;//Tri-Tip Dagger
+                        case "ITEM_SPRINTOUTOFCOMBAT_NAME":
+                            break;//Red Whip
+                        case "ITEM_FALLBOOTS_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak($"I sure hope you don't have {RoR2.Language.GetString(RoR2Content.Artifacts.weakAssKneesArtifactDef.nameToken)} enabled", true);
+                            }
+                            break;//H3AD-5T v2
+                        case "ITEM_COOLDOWNONCRIT_NAME":
+                            break;//Wicked Ring
+                        case "ITEM_WARDONLEVEL_NAME":
+                            break;//Warbanner
+                        case "ITEM_WARCRYONMULTIKILL_NAME":
+                            break;//Berzerker's Pauldron
+                        case "ITEM_PHASING_NAME":
+                            break;//Old War Stealthkit
+                        case "ITEM_HEALONCRIT_NAME":
+                            break;//Harvester's Scythe
+                        case "ITEM_HEALWHILESAFE_NAME":
+                            break;//Cautious Slug
+                        case "ITEM_JUMPBOOST_NAME":
+                            break;//Wax Quail
+                        case "ITEM_PERSONALSHIELD_NAME":
+                            break;//Personal Shield Generator
+                        case "ITEM_NOVAONHEAL_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("Maybe try using N'kuhana's Fact next time", true);
+                            }
+                            break;//N'kuhana's Opinion
+                        case "ITEM_MEDKIT_NAME":
+                            break;//Medkit
+                        case "ITEM_EQUIPMENTMAGAZINE_NAME":
+                            break;//Fuel Cell
+                        case "ITEM_INFUSION_NAME":
+                            break;//Infusion
+                        case "ITEM_SHOCKNEARBY_NAME":
+                            break;//Unstable Tesla Coil
+                        case "ITEM_IGNITEONKILL_NAME":
+                            break;//Gasoline
+                        case "ITEM_BOUNCENEARBY_NAME":
+                            break;//Sentient Meat Hook
+                        case "ITEM_FIREWORK_NAME":
+                            break;//Bundle of Fireworks
+                        case "ITEM_BANDOLIER_NAME":
+                            break;//Bandolier
+                        case "ITEM_STUNCHANCEONHIT_NAME":
+                            break;//Stun Grenade
+                        case "ITEM_LUNARDAGGER_NAME":
+                            ShouldSpeak("You should actually be glad to lose that", true);
+                            break;//Shaped Glass
+                        case "ITEM_GOLDONHIT_NAME":
+                            break;//Brittle Crown
+                        case "ITEM_SHIELDONLY_NAME":
+                            break;//Transcendence
+                        case "ITEM_ALIENHEAD_NAME":
+                            break;//Alien Head
+                        case "ITEM_TALISMAN_NAME":
+                            break;//Soulbound Catalyst
+                        case "ITEM_KNURL_NAME":
+                            break;//Titanic Knurl
+                        case "ITEM_BEETLEGLAND_NAME":
+                            if (BigJank.getOptionValue(Settings.Winston))
+                            {
+                                ShouldSpeak("Winston swapped...", true);
+                            }
+                            break;//Queen's Gland
+                        case "ITEM_SPRINTBONUS_NAME":
+                            break;//Energy Drink
+                        case "ITEM_SECONDARYSKILLMAGAZINE_NAME":
+                            break;//Backup Magazine
+                        case "ITEM_STICKYBOMB_NAME":
+                            break;//Sticky Bomb
+                        case "ITEM_TREASURECACHE_NAME":
+                            break;//Rusted Key
+                        case "ITEM_BOSSDAMAGEBONUS_NAME":
+                            break;//Armor-Piercing Rounds
+                        case "ITEM_SPRINTARMOR_NAME":
+                            break;//Rose Buckler
+                        case "ITEM_ELEMENTALRINGS_NAME":
+                            break;//Kjaro and Runald's Bands
+                        case "ITEM_ICERING_NAME":
+                            break;//Runald's Band
+                        case "ITEM_FIRERING_NAME":
+                            break;//Kjaro's Band
+                        case "ITEM_SLOWONHIT_NAME":
+                            break;//Chronobauble
+                        case "ITEM_EXTRALIFE_NAME":
+                            break;//Dio's Best Friend
+                        case "ITEM_EXTRALIFECONSUMED_NAME":
+                            break;//Dio's Best Friend (Consumed)
+                        case "ITEM_UTILITYSKILLMAGAZINE_NAME":
+                            break;//Hardlight Afterburner
+                        case "ITEM_HEADHUNTER_NAME":
+                            ShouldSpeak("On a normal day it would be sad losing a red. This is not a normal day.", $"{Language.GetString(RoR2Content.Items.HeadHunter.nameToken)} is a shit item anyway");
+                            break;//Wake of Vultures
+                        case "ITEM_KILLELITEFRENZY_NAME":
+                            break;//Brainstalks
+                        case "ITEM_INCREASEHEALING_NAME":
+                            break;//Rejuvenation Rack
+                        case "ITEM_REPEATHEAL_NAME":
+                            ShouldSpeak($"You probably didn't mean to grab {Language.GetString(RoR2Content.Items.RepeatHeal.nameToken)} anyway", true);
+                            break;//Corpsebloom
+                        case "ITEM_AUTOCASTEQUIPMENT_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("*dies*", true);
+                            }
+                            break;//Gesture of the Drowned
+                        case "ITEM_EXECUTELOWHEALTHELITE_NAME":
+                            break;//Old Guillotine
+                        case "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME":
+                            break;//War Horn
+                        case "ITEM_BARRIERONOVERHEAL_NAME":
+                            break;//Aegis
+                        case "ITEM_TONICAFFLICTION_NAME":
+                            break;//Tonic Affliction
+                        case "ITEM_TITANGOLDDURINGTP_NAME":
+                            if (BigJank.getOptionValue(Settings.AlexJones))
+                            {
+                                if (master.inventory.GetItemCount(oldDef) == 0)
+                                {
+                                    ShouldSpeak("Finally, inner peace", true);
+                                }
+                            }
+                            break;//Halcyon Seed
+                        case "ITEM_SPRINTWISP_NAME":
+                            break;//Little Disciple
+                        case "ITEM_BARRIERONKILL_NAME":
+                            break;//Topaz Brooch
+                        case "ITEM_ARMORREDUCTIONONHIT_NAME":
+                            break;//Shattering Justice
+                        case "ITEM_TPHEALINGNOVA_NAME":
+                            break;//Lepton Daisy
+                        case "ITEM_NEARBYDAMAGEBONUS_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("All my crystals argon", true);
+                            }
+                            break;//Focus Crystal
+                        case "ITEM_LUNARSKILLREPLACEMENTS_NAME":
+                            break;//Heresy Set
+                        case "ITEM_LUNARUTILITYREPLACEMENT_NAME":
+                            break;//Strides of Heresy
+                        case "ITEM_PROTECTIONPOTION_NAME":
+                            break;//Tix Flask
+                        case "ITEM_THORNS_NAME":
+                            break;//Razorwire
+                        case "ITEM_FLATHEALTH_NAME":
+                            break;//Bison Steak
+                        case "ITEM_PEARL_NAME":
+                            break;//Pearl
+                        case "ITEM_SHINYPEARL_NAME":
+                            ShouldSpeak("Nahooooo your stats", true);
+                            break;//Irradiant Pearl
+                        case "ITEM_BONUSGOLDPACKONKILL_NAME":
+                            break;//Ghor's Tome
+                        case "ITEM_LASERTURBINE_NAME":
+                            break;//Resonance Disc
+                        case "ITEM_LUNARPRIMARYREPLACEMENT_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0 && Language.GetString(oldDef.nameToken).ToUpper().Contains("VISIONS"))
+                            {
+                                ShouldSpeak("I see, said the blind man", true);
+                            }
+                            break;//Visions of Heresy
+                        case "ITEM_NOVAONLOWHEALTH_NAME":
+                            break;//Genesis Loop
+                        case "ITEM_LUNARTRINKET_NAME":
+                            break;//Beads of Fealty
+                        case "ITEM_REPULSIONARMORPLATE_NAME":
+                            break;//Repulsion Armor Plate
+                        case "ITEM_SQUIDTURRET_NAME":
+                            ShouldSpeak("Squid friend :(", true);
+                            break;//Squid Polyp
+                        case "ITEM_DEATHMARK_NAME":
+                            if (master.inventory.GetItemCount(oldDef) != 0)
+                            {
+                                ShouldSpeak("That's ok, extras didn't really do anything", true);
+                            }
+                            break;//Death Mark
+                        case "ITEM_INTERSTELLARDESKPLANT_NAME":
+                            break;//Interstellar Desk Plant
+                        case "ITEM_ANCESTRALINCUBATOR_NAME":
+                            break;//Ancestral Incubator
+                        case "ITEM_FOCUSEDCONVERGENCE_NAME":
+                            if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length == 2)
+                            {
+                                ShouldSpeak("Your teammate will thank you", true);
+                            }
+                            else if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 2)
+                            {
+                                ShouldSpeak("Your teammates will thank you", true);
+                            }
+                            break;//Focused Convergence
+                        case "ITEM_FIREBALLSONHIT_NAME":
+                            break;//Molten Perforator
+                        case "ITEM_LIGHTNINGSTRIKEONHIT_NAME":
+                            break;//Charged Perforator
+                        case "ITEM_BLEEDONHITANDEXPLODE_NAME":
+                            break;//Shatterspleen
+                        case "ITEM_SIPHONONLOWHEALTH_NAME":
+                            break;//Mired Urn
+                        case "ITEM_MONSTERSONSHRINEUSE_NAME":
+                            break;//Defiant Gouge
+                        case "ITEM_RANDOMDAMAGEZONE_NAME":
+                            break;//Mercurial Rachis
+                        case "ITEM_ARTIFACTKEY_NAME":
+                            ShouldSpeak("Oh yeah, it's big brain time", true);
+                            break;//Artifact Key
+                        case "ITEM_CAPTAINDEFENSEMATRIX_NAME":
+                            ShouldSpeak("This is so sad, can we hit children?", true);
+                            break;//Defensive Microbots
+                        case "ITEM_SCRAPWHITE_NAME":
+                            break;//Item Scrap, White
+                        case "ITEM_SCRAPGREEN_NAME":
+                            break;//Item Scrap, Green
+                        case "ITEM_SCRAPRED_NAME":
+                            break;//Item Scrap, Red
+                        case "ITEM_SCRAPYELLOW_NAME":
+                            break;//Item Scrap, Yellow
+                        case "ITEM_LUNARBADLUCK_NAME":
+                            break;//Purity
+                        case "ITEM_LUNARSECONDARYREPLACEMENT_NAME":
+                            break;//Hooks of Heresy
+                        case "ITEM_ATTACKSPEEDANDMOVESPEED_NAME":
+                            break;//Mocha
+                        case "ITEM_PRIMARYSKILLSHURIKEN_NAME":
+                            break;//Shuriken
+                        case "ITEM_CRITDAMAGE_NAME":
+                            break;//Laser Scope
+                        case "ITEM_DRONEWEAPONS_NAME":
+                            break;//Spare Drone Parts
+                        case "ITEM_MOVESPEEDONKILL_NAME":
+                            break;//Hunter's Harpoon
+                        case "ITEM_STRENGTHENBURN_NAME":
+                            break;//Ignition Tank
+                        case "ITEM_HEALINGPOTION_NAME":
+                            break;//Power Elixir
+                        case "ITEM_HEALINGPOTIONCONSUMED_NAME":
+                            break;//Empty Bottle
+                        case "ITEM_PERMANENTDEBUFFONHIT_NAME":
+                            break;//Symbiotic Scorpion
+                        case "ITEM_MOREMISSILE_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0 && master.inventory.GetItemCount(RoR2Content.Items.Missile) != 0)
+                            {
+                                ShouldSpeak("Say goodbye to your triple a.t.g. chucklenuts", true);
+                            }
+                            break;//Pocket I.C.B.M.
+                        case "ITEM_SKULLCOUNTER_NAME":
+                            break;//Skull Token
+                        case "ITEM_ROBOBALLBUDDY_NAME":
+                            break;//Empathy Cores
+                        case "ITEM_PARENTEGG_NAME":
+                            break;//Planula
+                        case "ITEM_LUNARSPECIALREPLACEMENT_NAME":
+                            break;//Essence of Heresy
+                        case "ITEM_HALFSPEEDDOUBLEHEALTH_NAME":
+                            ShouldSpeak("Ahhh, it feels like taking shackles off", true);
+                            break;//Stone Flux Pauldron
+                        case "ITEM_HALFATTACKSPEEDHALFCOOLDOWNS_NAME":
+                            break;//Light Flux Pauldron
+                        case "ITEM_LUNARWINGS_NAME":
+                            break;//Blessings of Terafirmae
+                        case "ITEM_RANDOMLYLUNAR_NAME":
+                            break;//Eulogy Zero
+                        case "ITEM_IMMUNETODEBUFF_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("Now we're both naked :)", true);
+                            }
+                            break;//Ben's Raincoat
+                        case "ITEM_REGENERATINGSCRAP_NAME":
+                            ShouldSpeak("It was nice while it lasted", true);
+                            break;//Regenerating Scrap
+                        case "ITEM_REGENERATINGSCRAPCONSUMED_NAME":
+                            break;//Regenerating Scrap (Consumed)
+                        case "ITEM_CRITGLASSESVOID_NAME":
+                            break;//Lost Seer's Lenses
+                        case "ITEM_EXPLODEONDEATHVOID_NAME":
+                            break;//Voidsent Flame
+                        case "ITEM_BLEEDONHITVOID_NAME":
+                            break;//Needletick
+                        case "ITEM_TREASURECACHEVOID_NAME":
+                            break;//Encrusted Key
+                        case "ITEM_BEARVOID_NAME":
+                            break;//Safer Spaces
+                        case "ITEM_CLOVERVOID_NAME":
+                            break;//Benthic Bloom
+                        case "ITEM_MISSILEVOID_NAME":
+                            break;//Plasma Shrimp
+                        case "ITEM_MUSHROOMVOID_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("No Wungus?", true);
+                            }
+                            break;//Weeping Fungus
+                        case "ITEM_SLOWONHITVOID_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak($"Ah crap, now you have to use {Language.GetString(RoR2Content.Items.SlowOnHit.nameToken)}s", true);
+                            }
+                            break;//Tentabauble
+                        case "ITEM_CHAINLIGHTNINGVOID_NAME":
+                            break;//Polylute
+                        case "ITEM_EQUIPMENTMAGAZINEVOID_NAME":
+                            break;//Lysate Cell
+                        case "ITEM_EXTRALIFEVOID_NAME":
+                            break;//Pluripotent Larva
+                        case "ITEM_EXTRALIFEVOIDCONSUMED_NAME":
+                            break;//Pluripotent Larva (Consumed)
+                        case "ITEM_FRAGILEDAMAGEBONUS_NAME":
+                            ShouldSpeak("It's better than it breaking", true);
+                            break;//Delicate Watch
+                        case "ITEM_FRAGILEDAMAGEBONUSCONSUMED_NAME":
+                            break;//Delicate Watch (Broken)
+                        case "ITEM_OUTOFCOMBATARMOR_NAME":
+                            break;//Oddly-shaped Opal
+                        case "ITEM_SCRAPWHITESUPPRESSED_NAME":
+                            break;//Strange Scrap, White
+                        case "ITEM_SCRAPGREENSUPPRESSED_NAME":
+                            break;//Strange Scrap, Green
+                        case "ITEM_SCRAPREDSUPPRESSED_NAME":
+                            break;//Strange Scrap, Red
+                        case "ITEM_GOLDONHURT_NAME":
+                            break;//Roll of Pennies
+                        case "ITEM_RANDOMEQUIPMENTTRIGGER_NAME":
+                            break;//Bottled Chaos
+                        case "ITEM_FREECHEST_NAME":
+                            if (master.inventory.GetItemCount(oldDef) == 0)
+                            {
+                                ShouldSpeak("Free items? More like... Um... no items. Ha, gottem", true);
+                            }
+                            break;//Shipping Request Form
+                        case "ITEM_ELEMENTALRINGVOID_NAME":
+                            break;//Singularity Band
+                        case "ITEM_LUNARSUN_NAME":
+                            break;//Egocentrism
+                        case "ITEM_MINORCONSTRUCTONKILL_NAME":
+                            break;//Defense Nucleus
+                        case "ITEM_VOIDMEGACRABITEM_NAME":
+                            break;//Newly Hatched Zoea
+
+                        default:
+                            break;
+                    }
+                }
+            };
+            On.RoR2.PickupPickerController.OnDisplayBegin += (orig, self, promptcontroller, localUser, rigcontroller) =>
+            {
+                orig(self, promptcontroller, localUser, rigcontroller);
+                try
+                {
+                    var options = self.GetFieldValue<PickupPickerController.Option[]>("options");
+                    if (options.Length == 3)
+                    {
+                        List<string> nameTokens = new List<string>();
+                        foreach (var item in options)
+                        {
+                            nameTokens.Add(PickupCatalog.GetPickupDef(item.pickupIndex).nameToken);
+                        }
+                        ItemsValue items = CalcItemValues(nameTokens.ToArray());
+                        List<string> quotes = new List<string>();
+                        if (items.bestValue < .15f)
+                        {
+                            quotes.Add("Well this sucks");
+                            quotes.Add("I expected nothing and I'm still dissapointed");
+                            quotes.Add("You know, basically anything else looks really good right now");
+                        }
+                        else if (items.bestValue < .2f)
+                        {
+                            quotes.Add("At least it technically could have been worse");
+                            quotes.Add("I mean it could have been worse, but not really");
+                        }
+                        else if (items.bestValue < .25f)
+                        {
+                            if (items.averageValue < .2f)
+                            {
+                                quotes.Add("Not everything here is total garbage, just mostly garbage");
+                            }
+                            quotes.Add("Good items, please and thanks");
+                            quotes.Add("A crumb of good items please");
+                        }
+                        else if (items.bestValue < .3f)
+                        {
+                            if (items.averageValue < .15f)
+                            {
+                                quotes.Add("Well at least not everything here is absolutely terrible");
+                                quotes.Add($"Is {Language.GetString(PickupCatalog.GetPickupDef(options[items.bestItem].pickupIndex).nameToken)} really the best the game has to offer?");
+                            }
+                            else if (items.averageValue < .25f)
+                            {
+                                quotes.Add("Mediocre at best");
+                            }
+                            quotes.Add("I don't know, just pick something I guess");
+                        }
+                        else if (items.bestValue < .35f)
+                        {
+                            if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length == 2)
+                            {
+                                quotes.Add("Maybe you should trade with your teammate");
+                            }
+                            else if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 2)
+                            {
+                                quotes.Add("Maybe trade with one of your teammates");
+                            }
+                            if (items.averageValue > .275f)
+                            {
+                                quotes.Add("I present to you, the epitomy of mediocrity");
+                            }
+                            else
+                            {
+                                quotes.Add("Well it's not all mediocre, some of it is worse!");
+                            }
+                            quotes.Add("Well at least some of this is acceptable");
+                            quotes.Add("Well, at least it's something I guess");
+                        }
+                        else if (items.bestValue < .4f)
+                        {
+                            if (items.averageValue > .3f)
+                            {
+                                quotes.Add("Well, I think we can work with these at least");
+                            }
+                            else if (items.averageValue < .25f)
+                            {
+                                quotes.Add("Well it's not all trash");
+                            }
+                            quotes.Add("Could've been better, but it could've been worse");
+                        }
+                        else if (items.bestValue < .45f)
+                        {
+                            if (items.averageValue < .35f)
+                            {
+                                quotes.Add("Alright we can work with that");
+                            }
+                            else
+                            {
+                                quotes.Add("Alright we can work with these");
+                            }
+                        }
+                        else if (items.bestValue < .5f)
+                        {
+                            if (items.averageValue == .5f)
+                            {
+                                quotes.Add("Ahh, perfectly average, just as all things should be");
+                            }
+                            quotes.Add("It's ok");
+                        }
+                        else if (items.bestValue < .55f)
+                        {
+                            if (items.averageValue > .45f)
+                            {
+                                quotes.Add("Above average? technically");
+                            }
+                            quotes.Add("Now this... this isn't actually anything special but it's ok I guess");
+                        }
+                        else if (items.bestValue < .6f)
+                        {
+                            if (items.averageValue < .3f)
+                            {
+                                quotes.Add("Well at least you found a good item");
+                            }
+                            quotes.Add("Good stuff");
+                        }
+                        else if (items.bestValue < .65f)
+                        {
+                            if (items.averageValue > .6f)
+                            {
+                                quotes.Add("An actual hard choice for which item to choose? unbelievable");
+                            }
+                            quotes.Add("Not bad");
+                            quotes.Add("Don't think too hard now");
+                        }
+                        else if (items.bestValue < .7f)
+                        {
+                            if (items.averageValue > .6f)
+                            {
+                                quotes.Add("Thanks game, but like actually tho");
+                            }
+                            else if (items.averageValue < .3f)
+                            {
+                                quotes.Add("Well there's just no contest here");
+                            }
+                            quotes.Add("Pretty good selection you got there");
+                        }
+                        else if (items.bestValue < .75f)
+                        {
+                            if (items.averageValue < .65f)
+                            {
+                                quotes.Add("Not too hard of a choice I hope");
+                            }
+                            else if (items.averageValue > .65f)
+                            {
+                                quotes.Add("What a nice selection");
+                            }
+                            quotes.Add("Looks good to me chief");
+                        }
+                        else if (items.bestValue < .8f)
+                        {
+                            if (items.averageValue > .75f)
+                            {
+                                quotes.Add("There really is no bad option here");
+                                quotes.Add($"I'm partial to {Language.GetString(PickupCatalog.GetPickupDef(options[UnityEngine.Random.Range(0, options.Length)].pickupIndex).nameToken)}");
+                            }
+                            else if (items.averageValue < .5f)
+                            {
+                                quotes.Add($"{Language.GetString(PickupCatalog.GetPickupDef(options[items.bestItem].pickupIndex).nameToken)} is really carrying this batch");
+                            }
+                            quotes.Add("Ahhhhh, these will do nicely");
+                        }
+                        else if (items.bestValue < .85f)
+                        {
+                            quotes.Add("Can't ask for much better than this");
+                        }
+                        else if (items.bestValue < .9f)
+                        {
+                            if (items.averageValue < .4f)
+                            {
+                                quotes.Add($"This would have been terrible if not for {Language.GetString(PickupCatalog.GetPickupDef(options[items.bestItem].pickupIndex).nameToken)}");
+                            }
+                            else if (items.averageValue < .6f)
+                            {
+                                quotes.Add($"They really tried to drag down {Language.GetString(PickupCatalog.GetPickupDef(options[items.bestItem].pickupIndex).nameToken)}");
+                            }
+                            else if (items.averageValue > .8f)
+                            {
+                                quotes.Add("So many choices...");
+                            }
+                            quotes.Add("It's a good day to get items");
+                        }
+                        else if (items.bestValue < .95f)
+                        {
+                            if (items.averageValue > .875f)
+                            {
+                                quotes.Add("Well I think you just used up all your luck for the run");
+                            }
+                            else if (items.averageValue > .85f)
+                            {
+                                quotes.Add("If only the game would let you pick two items");
+                            }
+                            quotes.Add("Now this is what I'm talking about");
+                        }
+                        else if (items.bestValue < 1.0f)
+                        {
+                            if (items.averageValue < .7f)
+                            {
+                                quotes.Add("I mean, I only see one option here");
+                            }
+                            else if (items.averageValue > .9f)
+                            {
+                                quotes.Add("Why do you make us chose game? You can be cruel sometimes");
+                            }
+                            quotes.Add("Poggers!");
+                            quotes.Add("Let's gooooooo");
+                        }
+                        else
+                        {
+                            if (items.averageValue < .45)
+                            {
+                                quotes.Add("Wow, trash, trash, and the best item ever");
+                            }
+                            else if (items.averageValue > .9f)
+                            {
+                                quotes.Add("I'm almost angry it gave you so many good items when you can only pick one... almost");
+                            }
+                            else if (items.averageValue > .8f)
+                            {
+                                quotes.Add($"I mean, yeah, they're all neat, but {Language.GetString(PickupCatalog.GetPickupDef(options[items.bestItem].pickupIndex).nameToken)} takes the cake");
+                            }
+                            quotes.Add("WOO, YEAH BABY! THAT'S WHAT I'VE BEEN WAITING FOR! THAT'S WHAT IT'S ALL ABOUT!");
+                            quotes.Add("Ok ok ok ok, keep calm");
+                            quotes.Add("It's that easy");
+                        }
+                        if (items.daisy)
+                        {
+                            ShouldSpeak($"Yooooo, {Language.GetString("ITEM_TPHEALINGNOVA_NAME")}", true);
+                        }
+                        else if (options.Length != 0)
+                        {
+                            ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)], true);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    DebugClass.Log($"----------{e}");
+                }
+            };
+        }
+        public void FreeCommand(Vector3 v)
+        {
+            GameObject table = GameObject.Find("HOLDER: Store").transform.Find("LunarShop").Find("LunarTable").gameObject;
+            foreach (var item in table.GetComponentsInChildren<PurchaseInteraction>())
+            {
+                if (item.Networkavailable)
+                {
+                    item.Networkavailable = false;
+                    item.available = false;
+                    item.gameObject.transform.Find("Display").Find("mdlBazaarBabyFlower").Find("PickupDisplay").gameObject.SetActive(false);
+                    StartCoroutine(DropletCoroutine(v));
+                    return;
+                }
+            }
+        }
+        bool Lock = false;
+        bool sceneChange = false;
+        IEnumerator RestOfDroplets()
+        {
+            sceneChange = false;
+            yield return new WaitUntil(() => !Lock || sceneChange);
+            Lock = true;
+            if (!sceneChange)
+                new SyncLunarReRoll(new Vector3(-98, -16, -43)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock || sceneChange);
+            Lock = true;
+            if (!sceneChange)
+                new SyncLunarReRoll(new Vector3(-97, -13, -36)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock || sceneChange);
+            Lock = true;
+            if (!sceneChange)
+                new SyncLunarReRoll(new Vector3(-93, -10, -31)).Send(R2API.Networking.NetworkDestination.Server);
+            yield return new WaitUntil(() => !Lock || sceneChange);
+            Lock = true;
+            if (!sceneChange)
+                new SyncLunarReRoll(new Vector3(-94, -7, -28)).Send(R2API.Networking.NetworkDestination.Server);
+            sceneChange = false;
+        }
+        IEnumerator DropletCoroutine(Vector3 v)
+        {
+            PickupDropletController.onDropletHitGroundServer += OnDropletHitGroundServer;
+            PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(RoR2Content.Items.LunarBadLuck.itemIndex), v, new Vector3(0, 0, 0));
+            yield return new WaitForSeconds(1);
+            PickupDropletController.onDropletHitGroundServer -= OnDropletHitGroundServer;
+            Lock = false;
         }
 
+        private static void OnDropletHitGroundServer(ref GenericPickupController.CreatePickupInfo createPickupInfo, ref bool shouldSpawn)
+        {
+            PickupIndex pickupIndex = createPickupInfo.pickupIndex;
+            PickupDef pickupDef = PickupCatalog.GetPickupDef(pickupIndex);
+            if (pickupDef == null || (pickupDef.itemIndex == ItemIndex.None && pickupDef.equipmentIndex == EquipmentIndex.None))
+            {
+                return;
+            }
+            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Command/CommandCube.prefab").WaitForCompletion(), createPickupInfo.position, createPickupInfo.rotation);
+            gameObject.GetComponent<PickupIndexNetworker>().NetworkpickupIndex = pickupIndex;
+            gameObject.GetComponent<PickupPickerController>().SetOptionsFromPickupForCommandArtifact(pickupIndex);
+            NetworkServer.Spawn(gameObject);
+            shouldSpawn = false;
+        }
+        private void HoldoutZoneController_FixedUpdate(On.RoR2.HoldoutZoneController.orig_FixedUpdate orig, HoldoutZoneController self)
+        {
+            float num = Time.fixedDeltaTime * dist;
+            if (NetworkServer.active)
+            {
+                Time.fixedDeltaTime -= num;
+            }
+            orig(self);
+            if (NetworkServer.active)
+            {
+                Time.fixedDeltaTime += num;
+            }
+        }
         private void Run_FixedUpdate(On.RoR2.Run.orig_FixedUpdate orig, Run self)
         {
             orig(self);
             if (charPosition != null)
             {
                 float num = Vector3.Distance(charPosition.position, obj2.transform.position) - 75f;
-                if (num < 800)
+                if (num >= 0)
                 {
-                    num = 1f - (num / 800f) + .2f;
-                    if (num > 1)
-                    {
-                        num = 1;
-                    }
-                    Run.instance.fixedTime -= Time.deltaTime * num;
+                    new SyncBonziApproach((int)num, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                 }
             }
+            Run.instance.fixedTime -= Time.unscaledDeltaTime * dist;
+        }
+        float dist = 0;
+        public void BonziApproach(int distance)
+        {
+            if (distance < 800)
+            {
+                float distance2;
+                distance2 = ((1f - ((float)distance / 800f)) * .6f) + .4f;
+                if (distance2 > 1)
+                {
+                    distance2 = 1;
+                }
+                dist = distance2;
+                return;
+            }
+            dist = 0f;
         }
 
         public void Mountain(List<PickupIndex> pickups)
         {
-            int squidCount = 0;
-            float goodPercent = 0;
+            List<string> nameTokens = new List<string>();
             foreach (var item in pickups)
             {
-                switch (PickupCatalog.GetPickupDef(item).nameToken)
-                {
-                    case "ITEM_MISSILE_NAME":
-                        goodPercent += 1.0f / (float)pickups.Count;
-                        break;
-                    case "ITEM_EXPLODEONDEATH_NAME":
-                        goodPercent += 0.7f / (float)pickups.Count;
-                        break;
-                    case "ITEM_FEATHER_NAME":
-                        goodPercent += 0.7f / (float)pickups.Count;
-                        break;
-                    case "ITEM_CHAINLIGHTNING_NAME":
-                        goodPercent += 0.9f / (float)pickups.Count;
-                        break;
-                    case "ITEM_SEED_NAME":
-                        goodPercent += 0.6f / (float)pickups.Count;
-                        break;
-                    case "ITEM_ATTACKSPEEDONCRIT_NAME":
-                        goodPercent += 0.85f / (float)pickups.Count;
-                        break;
-                    case "ITEM_SPRINTOUTOFCOMBAT_NAME":
-                        goodPercent += 0.5f / (float)pickups.Count;
-                        break;
-                    case "ITEM_PHASING_NAME":
-                        goodPercent += 0.35f / (float)pickups.Count;
-                        break;
-                    case "ITEM_HEALONCRIT_NAME":
-                        goodPercent += 0.85f / (float)pickups.Count;
-                        break;
-                    case "ITEM_EQUIPMENTMAGAZINE_NAME":
-                        goodPercent += 0.9f / (float)pickups.Count;
-                        break;
-                    case "ITEM_INFUSION_NAME":
-                        goodPercent += 0.3f / (float)pickups.Count;
-                        break;
-                    case "ITEM_BANDOLIER_NAME":
-                        goodPercent += 0.1f / (float)pickups.Count;
-                        break;
-                    case "ITEM_WARCRYONMULTIKILL_NAME":
-                        goodPercent += 0.5f / (float)pickups.Count;
-                        break;
-                    case "ITEM_KNURL_NAME":
-                        goodPercent += 0.8f / (float)pickups.Count;
-                        break;
-                    case "ITEM_BEETLEGLAND_NAME":
-                        goodPercent += 0.5f / (float)pickups.Count;
-                        break;
-                    case "ITEM_SPRINTARMOR_NAME":
-                        goodPercent += 0.25f / (float)pickups.Count;
-                        break;
-                    case "ITEM_ICERING_NAME":
-                        goodPercent += 0.85f / (float)pickups.Count;
-                        break;
-                    case "ITEM_FIRERING_NAME":
-                        goodPercent += 0.8f / (float)pickups.Count;
-                        break;
-                    case "ITEM_SLOWONHIT_NAME":
-                        goodPercent += 0.35f / (float)pickups.Count;
-                        break;
-                    case "ITEM_JUMPBOOST_NAME":
-                        goodPercent += 0.5f / (float)pickups.Count;
-                        break;
-                    case "ITEM_EXECUTELOWHEALTHELITE_NAME":
-                        goodPercent += 0.95f / (float)pickups.Count;
-                        break;
-                    case "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME":
-                        goodPercent += 0.45f / (float)pickups.Count;
-                        break;
-                    case "ITEM_SPRINTWISP_NAME":
-                        goodPercent += 0.75f / (float)pickups.Count;
-                        break;
-                    case "ITEM_TPHEALINGNOVA_NAME":
-                        //no
-                        break;
-                    case "ITEM_THORNS_NAME":
-                        goodPercent += 0.65f / (float)pickups.Count;
-                        break;
-                    case "ITEM_BONUSGOLDPACKONKILL_NAME":
-                        goodPercent += 0.4f / (float)pickups.Count;
-                        break;
-                    case "ITEM_NOVAONLOWHEALTH_NAME":
-                        goodPercent += 0.4f / (float)pickups.Count;
-                        break;
-                    case "ITEM_SQUID_NAME":
-                        squidCount++;
-                        break;
-                    case "ITEM_DEATHMARK_NAME":
-                        goodPercent += 0.4f / (float)pickups.Count;
-                        break;
-                    case "ITEM_INCUBATOR_NAME":
-                        break;
-                    case "ITEM_FIREBALLSONHIT_NAME":
-                        goodPercent += 0.85f / (float)pickups.Count;
-                        break;
-                    case "ITEM_BLEEDONHITANDEXPLODE_NAME":
-                        goodPercent += 1.0f / (float)pickups.Count;
-                        break;
-                    case "ITEM_SIPHONONLOWHEALTH_NAME":
-                        goodPercent += 0.45f / (float)pickups.Count;
-                        break;
-                    default:
-                        goodPercent += 0.8f / (float)pickups.Count;
-                        break;
-                }
+                nameTokens.Add(PickupCatalog.GetPickupDef(item).nameToken);
             }
-            if (squidCount != 0)
+            ItemsValue items = CalcItemValues(nameTokens.ToArray());
+            if (items.squidCount != 0)
             {
-                ShouldSpeak($"You got {squidCount} {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}s, nothing else matters");
+                if (items.squidCount > 1)
+                {
+                    ShouldSpeak($"You got {items.squidCount} {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}s, nothing else matters"
+    , $"You got {items.squidCount} {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}s, nothing else matters");
+                }
+                else
+                {
+                    ShouldSpeak($"You got a {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}, nothing else matters"
+, $"You got a {RoR2.Language.GetString("ITEM_SQUIDTURRET_NAME")}, nothing else matters");
+                }
             }
             else
             {
                 List<string> quotes = new List<string>();
-                if (goodPercent > .95f)
+                if (daniel && (int)MLG.progress > 0)
                 {
-                    quotes.Add("It can't get any better than this");
-                    quotes.Add("Just like the simulations");
-                }
-                else if (goodPercent > .75f)
-                {
-                    quotes.Add("Hey... that's pretty good");
-                    quotes.Add("Not too shabby");
-                }
-                else if (goodPercent > .55f)
-                {
-                    quotes.Add("I'll allow it");
-                    quotes.Add("Could have been worse");
-                }
-                else if (goodPercent > .35f)
-                {
-                    quotes.Add("Gee... thanks");
-                    quotes.Add("This is why people don't do mountain shrines");
+                    if (items.averageValue > .95f)
+                    {
+                        quotes.Add("Holy shit M8");
+                        quotes.Add("Damn bro that's some nice loot");
+                    }
+                    else if (items.averageValue > .75f)
+                    {
+                        quotes.Add("I could quickscope you with these items");
+                        quotes.Add("Not too shabby");
+                    }
+                    else if (items.averageValue > .55f)
+                    {
+                        quotes.Add("I'll allow it");
+                        quotes.Add("It could have been worse M9");
+                    }
+                    else if (items.averageValue > .35f)
+                    {
+                        quotes.Add("Gee... thanks");
+                        quotes.Add("Why would anyone do a mountain shrine for this");
+                    }
+                    else
+                    {
+                        quotes.Add("What the fuck");
+                        quotes.Add("Wow, it's nothing");
+                    }
                 }
                 else
                 {
-                    quotes.Add("I expected nothing and I'm still dissapointed");
-                    quotes.Add("Wow, it's nothing");
-                    quotes.Add("My disappointment is immeasurable and my day is ruined");
-                    quotes.Add("This has been the worst trade deal in the history of trade deals, maybe ever");
+                    if (items.averageValue > .95f)
+                    {
+                        quotes.Add("It can't get any better than this");
+                        quotes.Add("Just like the simulations");
+                    }
+                    else if (items.averageValue > .75f)
+                    {
+                        quotes.Add("Hey... that's pretty good");
+                        quotes.Add("Not too shabby");
+                    }
+                    else if (items.averageValue > .55f)
+                    {
+                        quotes.Add("I'll allow it");
+                        quotes.Add("Could have been worse");
+                    }
+                    else if (items.averageValue > .35f)
+                    {
+                        quotes.Add("Gee... thanks");
+                        quotes.Add("This is why people don't do mountain shrines");
+                    }
+                    else
+                    {
+                        quotes.Add("I expected nothing and I'm still dissapointed");
+                        quotes.Add("Wow, it's nothing");
+                        quotes.Add("My disappointment is immeasurable and my day is ruined");
+                        quotes.Add("This has been the worst trade deal in the history of trade deals, maybe ever");
+                    }
                 }
-                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)]);
+                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)], quotes[UnityEngine.Random.Range(0, quotes.Count)]);
             }
         }
+        string[] ratio = new string[] { "ratio", "wrong", "get a job", "unfunny", "cope", "don't care", "didn't ask", "owned", "ur a toddler", "who asked", "dead game", "seethe", "ur a coward", "stay mad", "ok", "cry about it", "L", "skill issue", "triggered", "ok and?", "cringe", "touch grass", "not based", "you're white", "grammar issue", "go outside", "get good", "reported", "you're gay", "you're straight", "ur mom", "not funny didn't laugh", "fatherless", "ur BF ugly", "you fell off", "no life", "counter ratio", "STFU", "no social credit", "lol", "irrelevant", "hoes mad", "cope harder", "log off", "rejected", "screenshotted", "pound salt", "ur a minor", "k.", "any askers", "copium", "ok boomer", "no bitches", "muted", "go tell reddit", "simp", "get stick bugged", "talk nonsense", "you're a full time discord mod", "get clapped", "ratio again", "cancelled", "freer than air", "screencapped your bio", "NFT owner", "dog water", "you don't know 2 + 2", "try again", "you failed kindergarten", "you have an anime profile picture", "orphan", "go to bed", "furry", "dream stan" };
+        List<string> usedWords = new List<string>();
         public void Chance(bool number1VictoryRoyale)
         {
             if (number1VictoryRoyale)
@@ -546,28 +3223,26 @@ namespace MoistureUpset
                     case 1:
                         break;
                     case 2:
-                        ShouldSpeak("Wow");
-                        break;
-                    case 3:
-                        ShouldSpeak("Really?");
-                        break;
-                    case 4:
-                        ShouldSpeak("This has to be rigged... right?");
-                        break;
-                    case 5:
-                        ShouldSpeak("Yeah it's rigged");
-                        break;
-                    case 6:
-                        ShouldSpeak("What did you do to deserve this?");
-                        break;
-                    case 7:
-                        ShouldSpeak("I didn't really think that you would ever make it this far so I kinda ran out of things to say");
-                        break;
-                    case 8:
-                        ShouldSpeak("Maybe I'll just start counting how many times you fail in a row");
+                        ShouldSpeak("L", true);
                         break;
                     default:
-                        ShouldSpeak($"That's {failCount}");
+                        string cum;
+                        int counter = 0;
+                        while (counter < 20)
+                        {
+                            counter++;
+                            cum = ratio[UnityEngine.Random.Range(0, ratio.Length)];
+                            if (!usedWords.Contains(cum))
+                            {
+                                usedWords.Add(cum);
+                                if (usedWords.Count > 20)
+                                {
+                                    usedWords.RemoveAt(0);
+                                }
+                                break;
+                            }
+                        }
+                        ShouldSpeak($"+ {usedWords[usedWords.Count - 1]}", true);
                         break;
                 }
             }
@@ -579,7 +3254,7 @@ namespace MoistureUpset
             switch (type)
             {
                 case ShrineType.blood:
-                    if (inventory.GetItemCount(RoR2Content.Items.Mushroom) == 0 && inventory.GetItemCount(RoR2Content.Items.HealWhileSafe) == 0 && inventory.GetItemCount(RoR2Content.Items.Medkit) == 0 && inventory.GetItemCount(RoR2Content.Items.Tooth) == 0 && inventory.GetItemCount(RoR2Content.Items.PersonalShield) < 5 && inventory.GetItemCount(RoR2Content.Items.HealOnCrit) == 0 && inventory.GetItemCount(RoR2Content.Items.Seed) == 0 && inventory.GetItemCount(RoR2Content.Items.Plant) == 0 && inventory.GetItemCount(RoR2Content.Items.Knurl) == 0 && inventory.GetItemCount(RoR2Content.Items.ShieldOnly) == 0 && inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 0)
+                    if (inventory.GetItemCount(RoR2Content.Items.Mushroom) == 0 && inventory.GetItemCount(RoR2Content.Items.HealWhileSafe) == 0 && inventory.GetItemCount(RoR2Content.Items.Medkit) == 0 && inventory.GetItemCount(RoR2Content.Items.Tooth) == 0 && inventory.GetItemCount(RoR2Content.Items.PersonalShield) < 5 && inventory.GetItemCount(RoR2Content.Items.HealOnCrit) == 0 && inventory.GetItemCount(RoR2Content.Items.Seed) == 0 && inventory.GetItemCount(RoR2Content.Items.Plant) == 0 && inventory.GetItemCount(RoR2Content.Items.Knurl) == 0 && inventory.GetItemCount(RoR2Content.Items.ShieldOnly) == 0 && inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 0 && inventory.GetItemCount(RoR2.DLC1Content.Items.MushroomVoid) == 0 && inventory.GetItemCount(RoR2.DLC1Content.Items.HealingPotion) == 0 && inventory.GetItemCount(RoR2.DLC1Content.Items.ExtraLifeVoid) == 0 && inventory.GetItemCount(RoR2Content.Items.ParentEgg) == 0)
                     {
                         quotes.Add("I hope you have some plan to heal this off");
                         bloodShrineTimer = 15f;
@@ -590,7 +3265,6 @@ namespace MoistureUpset
                     }
                     break;
                 case ShrineType.mountain:
-                    activeMountainShrine = true;
                     quotes.Add("Is there really any reason to not hit these?");
                     quotes.Add($"I can't wait to get some extra {RoR2.Language.GetString(RoR2Content.Items.TPHealingNova.nameToken)}s");
                     quotes.Add("It's free real estate");
@@ -637,6 +3311,7 @@ namespace MoistureUpset
                     {
                         quotes.Add("Too much crit! Too much crit!");
                     }
+                    dioHeld = inventory.GetItemCount(RoR2Content.Items.ExtraLife);
                     if (inventory.GetItemCount(RoR2Content.Items.Bear) != 0)
                     {
                         quotes.Add("You can now block attacks almost as hard as I get blocked on twitter");
@@ -680,7 +3355,7 @@ namespace MoistureUpset
                     {
                         quotes.Add("I don't know if you really needed more than one Behemoth");
                     }
-                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) > 1)
+                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) + inventory.GetItemCount(RoR2.DLC1Content.Items.ExtraLifeVoid) > 1)
                     {
                         quotes.Add("At least you won't be able to lose for a while");
                     }
@@ -700,7 +3375,43 @@ namespace MoistureUpset
                     {
                         quotes.Add("Become the shield");
                     }
-
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.HealingPotion) > 1)
+                    {
+                        quotes.Add("This is just discount dios");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.AttackSpeedAndMoveSpeed) > 1)
+                    {
+                        quotes.Add("Can you overdose on caffine?");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.CloverVoid) > 1)
+                    {
+                        quotes.Add("So what you are telling me, is that starting next level all your items will be red");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.StrengthenBurn) > 1 && SurvivorCatalog.FindSurvivorDefFromBody(NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody().gameObject) == RoR2Content.Survivors.Mage)
+                    {
+                        quotes.Add("I hope you brought your burn moves");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.RegeneratingScrap) > 4)
+                    {
+                        quotes.Add("Did someone say free reds every stage?");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.CritGlassesVoid) > 10)
+                    {
+                        quotes.Add("Well if it isn't a boss, it might as well be dead");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.ChainLightningVoid) > 4)
+                    {
+                        quotes.Add("Single target damage status: through the roof");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.FragileDamageBonus) > 1)
+                    {
+                        quotes.Add("You're really going to regret this once you fall to low health");
+                    }
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.HalfSpeedDoubleHealth) > 1)
+                    {
+                        quotes.Add("Movement speed? Where we're going we don't need movement speed");
+                    }
+                    //new items here
 
                     if (quotes.Count == 0)
                     {
@@ -713,7 +3424,7 @@ namespace MoistureUpset
                     break;
             }
             if (quotes.Count != 0)
-                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)]);
+                ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Count)], true);
         }
         public void NotEnoughMoney()
         {
@@ -722,7 +3433,7 @@ namespace MoistureUpset
                 if (UnityEngine.Random.Range(0, 5) == 0)
                 {
                     string[] quotes = { "Woah there buddy, you don't have enough money for that one.", $"Sorry {username}, I can't give credit. Come back when you're a little hmmmmm, richer.", "hmmmmmmmmmm, no" };
-                    ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Length)]);
+                    ShouldSpeak(quotes[UnityEngine.Random.Range(0, quotes.Length)], true);
                 }
             }
         }
@@ -731,35 +3442,71 @@ namespace MoistureUpset
         {
             StartCoroutine(Items(inventory, index, count, g, false));
         }
+        bool usedGreenRegenScrap = true;
+        bool feelsGood = true;
         public IEnumerator Items(RoR2.Inventory inventory, ItemIndex index, int count, GameObject g, bool yeet)
         {
             yield return new WaitForSeconds(.1f);
+            bool temp = true;
+            try
+            {
+                if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
+                }
+                else
+                {
+                    AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
+                }
+            }
+            catch (Exception)
+            {
+            }
             if (dontSpeak <= 0)
             {
                 string itemToken = ItemCatalog.GetItemDef(index).nameToken;
                 if (inventory.GetTotalItemCountOfTier(ItemTier.Tier3) == 1 && itemToken == RoR2Content.Items.Plant.nameToken)
                 {
-                    ShouldSpeak($"I see that you have received {RoR2.Language.GetString(itemToken)} as your first red item, would you like me to end the run now? yes or no?");
+                    ShouldSpeak($"I see that you have received {RoR2.Language.GetString(itemToken)} as your first red item, would you like me to end the run now? yes or no."
+                            , "Ah I see you received this fucking garbage as your first red item, would you like to end your suffering now? yes or no.");
                     resetRun = true;
                 }
                 else
                 {
+                    int luck = -1 * inventory.GetItemCount(RoR2Content.Items.LunarBadLuck);
+                    if (inventory.GetItemCount(RoR2.DLC1Content.Items.CloverVoid) == 0)
+                    {
+                        luck += inventory.GetItemCount(RoR2Content.Items.Clover);
+                    }
                     switch (itemToken)
                     {
                         case "ITEM_SYRINGE_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.Syringe) == 11)
+                            if (inventory.GetItemCount(RoR2Content.Items.Syringe) > 10 && casinoTimer > 0 && cheated)
                             {
-                                ShouldSpeak("Don't you think you have enough attack speed?");
+                                ShouldSpeak("Did you really need to pause buffer to get more attack speed?"
+                            , "I saw you cheating M8");
+                            }
+                            else if (inventory.GetItemCount(RoR2Content.Items.Syringe) == 11)
+                            {
+                                ShouldSpeak("Don't you think you have enough attack speed?"
+                                    , "Don't you think you have enough attack speed?");
                             }
                             break;
                         case "ITEM_BEAR_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Bear) == 50)
+                            {
+                                ShouldSpeak("I don't know if you really need any more block chance"
+                                    , "Still not enough chance to block my quickscopes");
+                            }
                             if (inventory.GetItemCount(RoR2Content.Items.Bear) == 101)
                             {
-                                ShouldSpeak("You know stacking them further is almost pointless...");
+                                ShouldSpeak("You know stacking them further is almost pointless..."
+                                    , "No no, keep stacking block chance, I'm sure it's a great use of your time");
                             }
                             break;
                         case "ITEM_BEHEMOTH_NAME":
-                            ShouldSpeak("Haha rocket launcher go boom");
+                            ShouldSpeak("Haha rocket launcher go boom"
+                                    , "Tactical nuke incoming!");
                             break;
                         case "ITEM_MISSILE_NAME":
                             //ShouldSpeak("This really pogs my champ");
@@ -769,17 +3516,30 @@ namespace MoistureUpset
                             break;
                         case "ITEM_DAGGER_NAME":
                             //red dagger
-
-                            ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!");
+                            if (inventory.GetItemCount(RoR2Content.Items.Dagger) == 1)
+                            {
+                                ShouldSpeak("muda muda muda muda mudamudamudamudamuda MUDAAAAA!"
+                                    , "Have jojo references gone too far?!");
+                            }
                             break;
                         case "ITEM_TOOTH_NAME":
                             //monster tooth
                             break;
                         case "ITEM_CRITGLASSES_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.CritGlasses) > 10 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot"
+                                    , "You really suck at this cheating don't you");
+                            }
                             break;
                         case "ITEM_HOOF_NAME":
                             break;
                         case "ITEM_FEATHER_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.Feather) > 8 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Bro you have too many jumps already, why did you cheese the game to get more?"
+                                    , "noclip hax enabled");
+                            }
                             break;
                         case "ITEM_AACANNON_NAME":
                             //not used
@@ -794,22 +3554,26 @@ namespace MoistureUpset
                             //leeching
                             break;
                         case "ITEM_ICICLE_NAME":
-                            ShouldSpeak("Wow gee thanks");
+                            ShouldSpeak("At least they buffed it"
+                                    , "At least they buffed it");
                             //frost relic
                             break;
                         case "ITEM_GHOSTONKILL_NAME":
-                            ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2Content.Items.Plant.nameToken)}");
+                            ShouldSpeak($"At least it's not {RoR2.Language.GetString(RoR2Content.Items.Plant.nameToken)}"
+                                    , "Well that fucking sucks");
                             break;
                         case "ITEM_MUSHROOM_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.Mushroom) == 1)
+                            if (inventory.GetItemCount(RoR2Content.Items.Mushroom) == 1 && inventory.GetItemCount(RoR2.DLC1Content.Items.MushroomVoid) == 0)
                             {
                                 if (SurvivorCatalog.FindSurvivorDefFromBody(g.GetComponentInChildren<CharacterBody>().gameObject) == RoR2Content.Survivors.Engi)
                                 {
-                                    ShouldSpeak("Oh yeah, it's all coming together");
+                                    ShouldSpeak("Oh yeah, it's all coming together"
+                                    , "Oh yeah, it's all coming together");
                                 }
                                 else
                                 {
-                                    ShouldSpeak("BUNGUS");
+                                    ShouldSpeak("BUNGUS"
+                                    , "BUNGUS");
                                 }
                             }
                             //bungus
@@ -822,9 +3586,15 @@ namespace MoistureUpset
                         case "ITEM_ATTACKSPEEDONCRIT_NAME":
                             break;
                         case "ITEM_BLEEDONHIT_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 7)
+                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) > 10 && casinoTimer > 0 && cheated)
                             {
-                                ShouldSpeak("Oh yeah, it's gamer time.");
+                                ShouldSpeak("Hahahaha you idiot"
+                                    , "You fucking dipshit");
+                            }
+                            if (inventory.GetItemCount(RoR2Content.Items.BleedOnHit) == 10)
+                            {
+                                ShouldSpeak("Oh yeah, it's gamer time."
+                                    , "I'm enabling Windows G");
                             }
                             break;
                         case "ITEM_SPRINTOUTOFCOMBAT_NAME":
@@ -866,25 +3636,41 @@ namespace MoistureUpset
                             //not used
                             break;
                         case "ITEM_CLOVER_NAME":
-                            if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 0)
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.CloverVoid) == 0)
                             {
-                                if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
+                                if (casinoTimer > 0 && cheated)
                                 {
-                                    ShouldSpeak("run = won");
+                                    ShouldSpeak("I would normally congratualte you but you cheated so ehhhh"
+                                        , "Cheating is just part of the game");
                                 }
-                            }
-                            else if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 1)
-                            {
-                                ShouldSpeak("I bet you are regretting that purity now aren't ya?");
-                            }
-                            else
-                            {
-                                ShouldSpeak("I bet you are regretting those purities now aren't ya?");
+                                if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 0)
+                                {
+                                    if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
+                                    {
+                                        ShouldSpeak("run = won"
+                                        , "Oh fuck yeah M9");
+                                    }
+                                }
+                                else if (inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) == 1)
+                                {
+                                    ShouldSpeak("I bet you are regretting that purity now aren't ya?"
+                                        , "I bet you are regretting that purity now aren't ya?");
+                                }
+                                else
+                                {
+                                    ShouldSpeak("I bet you are regretting those purities now aren't ya?"
+                                        , "I bet you are regretting those purities now aren't ya?");
+                                }
                             }
                             break;
                         case "ITEM_MEDKIT_NAME":
                             break;
                         case "ITEM_BANDOLIER_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("You could have pause buffered for litterally any other item"
+                                    , "Why the fuck would you cheat just to get this trash");
+                            }
                             break;
                         case "ITEM_BOUNCENEARBY_NAME":
                             //meat hook
@@ -898,26 +3684,35 @@ namespace MoistureUpset
                         case "ITEM_STUNCHANCEONHIT_NAME":
                             break;
                         case "ITEM_FIREWORK_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("You know, I actually don't blame you for buffering to get this item"
+                                    , "You kinda suck at this cheating thing don't you");
+                            }
                             break;
                         case "ITEM_LUNARDAGGER_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 1)
                             {
                                 if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length == 2)
                                 {
-                                    ShouldSpeak("At least you have your teammate to pickup the slack when you inevitably die");
+                                    ShouldSpeak("At least you have your teammate to pickup the slack when you inevitably die"
+                                        , "At least you have your teammate to pickup the slack when you inevitably die");
                                 }
                                 else if (Facepunch.Steamworks.Client.Instance.Lobby.GetMemberIDs().Length > 2)
                                 {
-                                    ShouldSpeak("At least you have your teammates to pickup the slack when you inevitably die");
+                                    ShouldSpeak("At least you have your teammates to pickup the slack when you inevitably die"
+                                        , "At least you have your teammates to pickup the slack when you inevitably die");
                                 }
                                 else
                                 {
-                                    ShouldSpeak("Should you really be doing this?");
+                                    ShouldSpeak("Should you really be doing this?"
+                                        , "This is absolutely the correct decision");
                                 }
                             }
-                            else
+                            else if (inventory.GetItemCount(RoR2Content.Items.LunarDagger) == 2)
                             {
-                                ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(RoR2Content.Items.LunarDagger) - 1} of them, how much could one more hurt?");
+                                ShouldSpeak($"Ah whatever, you already have {inventory.GetItemCount(RoR2Content.Items.LunarDagger) - 1} of them, how much could one more hurt?"
+                                    , "Yes, obtain more damage");
                             }
                             break;
                         case "ITEM_GOLDONHIT_NAME":
@@ -936,7 +3731,11 @@ namespace MoistureUpset
                             //not used
                             break;
                         case "ITEM_SHIELDONLY_NAME":
-                            ShouldSpeak($"Ah I see you are a gamer of culture.");
+                            if (inventory.GetItemCount(RoR2Content.Items.ShieldOnly) == 1)
+                            {
+                                ShouldSpeak($"Ah I see you are a gamer of culture."
+                                            , "Health is for bitches anyway");
+                            }
                             //trans
                             break;
                         case "ITEM_ALIENHEAD_NAME":
@@ -949,7 +3748,8 @@ namespace MoistureUpset
                         case "ITEM_BEETLEGLAND_NAME":
                             if (BigJank.getOptionValue(Settings.Winston))
                             {
-                                ShouldSpeak("Winston please switch");
+                                ShouldSpeak("Winston please switch"
+                                    , "Ded game xd");
                             }
                             break;
                         case "ITEM_BURNNEARBY_NAME":
@@ -966,6 +3766,11 @@ namespace MoistureUpset
                         case "ITEM_SECONDARYSKILLMAGAZINE_NAME":
                             break;
                         case "ITEM_STICKYBOMB_NAME":
+                            if (inventory.GetItemCount(RoR2Content.Items.StickyBomb) > 20 && casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahahaha you idiot"
+                                    , "Nice going");
+                            }
                             break;
                         case "ITEM_TREASURECACHE_NAME":
                             //rusted key
@@ -981,6 +3786,12 @@ namespace MoistureUpset
                         case "ITEM_SLOWONHIT_NAME":
                             break;
                         case "ITEM_EXTRALIFE_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("I hope you lose it quickly"
+                                    , "I hope you lose it quickly");
+                            }
+                            dioHeld += count;
                             break;
                         case "ITEM_EXTRALIFECONSUMED_NAME":
                             break;
@@ -997,13 +3808,16 @@ namespace MoistureUpset
                             switch (UnityEngine.Random.Range(0, 2))
                             {
                                 case 0:
-                                    ShouldSpeak("That better have been an accident");
+                                    ShouldSpeak("That better have been an accident"
+                                        , "Why the fuck you would take this");
                                     break;
                                 case 1:
-                                    ShouldSpeak("Get a load of this idiot");
+                                    ShouldSpeak("Get a load of this idiot"
+                                        , "Get a load of this idiot");
                                     break;
                                 case 2:
-                                    ShouldSpeak("You're going to regret this later");
+                                    ShouldSpeak("You're going to regret this later"
+                                        , "I thought you were a real gamer");
                                     break;
                                 default:
                                     break;
@@ -1024,7 +3838,8 @@ namespace MoistureUpset
                                 && inventory.currentEquipmentState.equipmentDef.nameToken == "EQUIPMENT_TONIC_NAME"
                                 && inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) <= 0)
                             {
-                                ShouldSpeak("I hope you enjoy the tonic afflictions");
+                                ShouldSpeak("I hope you enjoy the tonic afflictions"
+                                        , "I hope you enjoy the tonic afflictions");
                             }
                             //gesture
                             break;
@@ -1040,7 +3855,8 @@ namespace MoistureUpset
                         case "ITEM_EXECUTELOWHEALTHELITE_NAME":
                             if (RoR2.Run.instance.stageClearCount + 1 > 5 && inventory.GetItemCount(RoR2Content.Items.ExecuteLowHealthElite) == 1)
                             {
-                                ShouldSpeak("Finally");
+                                ShouldSpeak("Finally"
+                                    , "Fucking finally");
                             }
                             break;
                         case "ITEM_ENERGIZEDONEQUIPMENTUSE_NAME":
@@ -1051,7 +3867,8 @@ namespace MoistureUpset
                         case "ITEM_TONICAFFLICTION_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) < 0)
                             {
-                                ShouldSpeak("What are you even thinking!?");
+                                ShouldSpeak("What are you even thinking!?"
+                                    , "What the fuck are were you thinking?!");
                             }
                             else if (inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) + inventory.GetItemCount(RoR2Content.Items.EquipmentMagazine) < 4
                                 && inventory.GetItemCount(RoR2Content.Items.Talisman) == 0
@@ -1059,11 +3876,13 @@ namespace MoistureUpset
                                 && inventory.GetItemCount(RoR2Content.Items.Clover) - inventory.GetItemCount(RoR2Content.Items.LunarBadLuck) <= 0
                                 && inventory.GetItemCount(RoR2Content.Items.AutoCastEquipment) > 0)
                             {
-                                ShouldSpeak("You deserve that one");
+                                ShouldSpeak("You deserve that one"
+                                    , "You deserve that on");
                             }
                             else
                             {
-                                ShouldSpeak("Maybe the tonic life shouldn't be for you?");
+                                ShouldSpeak("Maybe the tonic life shouldn't be for you?"
+                                    , "Maybe the tonic life shouldn't be for you?");
                             }
                             break;
                         case "ITEM_TITANGOLDDURINGTP_NAME":
@@ -1077,6 +3896,11 @@ namespace MoistureUpset
                         case "ITEM_ARMORREDUCTIONONHIT_NAME":
                             break;
                         case "ITEM_TPHEALINGNOVA_NAME":
+                            if (casinoTimer > 0 && cheated)
+                            {
+                                ShouldSpeak("Hahaha I bet you missed a great item to get this instead"
+                                    , "Smoke weed every day");
+                            }
                             //shiton daisy
                             break;
                         case "ITEM_NEARBYDAMAGEBONUS_NAME":
@@ -1097,7 +3921,11 @@ namespace MoistureUpset
                         case "ITEM_PEARL_NAME":
                             break;
                         case "ITEM_SHINYPEARL_NAME":
-                            ShouldSpeak("bruh");
+                            if (inventory.GetItemCount(RoR2Content.Items.ShinyPearl) == 1)
+                            {
+                                ShouldSpeak("bruh"
+                                        , "Ez Clap");
+                            }
                             break;
                         case "ITEM_BONUSGOLDPACKONKILL_NAME":
                             //ghor
@@ -1113,11 +3941,13 @@ namespace MoistureUpset
                         case "ITEM_LUNARTRINKET_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.LunarTrinket) == 1)
                             {
-                                ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later");
+                                ShouldSpeak("Ten bucks you only grabbed these to dump them into a pool later"
+                                    , "Ten bucks you only grabbed these to dump them into a pool later");
                             }
                             else if (inventory.GetItemCount(RoR2Content.Items.LunarTrinket) == 2)
                             {
-                                ShouldSpeak("I knew it");
+                                ShouldSpeak("I knew it"
+                                    , "I knew it");
                             }
                             //beads
                             break;
@@ -1136,12 +3966,18 @@ namespace MoistureUpset
                         case "ITEM_DEATHMARK_NAME":
                             if (inventory.GetItemCount(RoR2Content.Items.DeathMark) == 2)
                             {
-                                ShouldSpeak("You do realise stacking these does basically nothing right?");
+                                ShouldSpeak("You do realise stacking these does basically nothing right?"
+                                    , "Why would you ever grab more than one?");
                             }
                             break;
                         case "ITEM_PLANT_NAME":
                             //idp
-                            ShouldSpeak("Well well well, if it isn't the best item in the game");
+                            if (inventory.GetItemCount(RoR2Content.Items.Plant) == 1)
+                            {
+                                ShouldSpeak("Well well well, if it isn't the best item in the game"
+                                    , "Holy shit M8, the run has been won");
+
+                            }
                             break;
                         case "ITEM_INCUBATOR_NAME":
                             //not used
@@ -1174,7 +4010,12 @@ namespace MoistureUpset
                         case "ITEM_SCRAPGREEN_NAME":
                             break;
                         case "ITEM_SCRAPRED_NAME":
-                            ShouldSpeak("Good luck ever finding a printer for this");
+                            if (inventory.GetItemCount(RoR2Content.Items.ScrapRed) == 1)
+                            {
+                                ShouldSpeak("Good luck ever finding a printer for this"
+                                    , "Good luck ever finding a printer for this");
+
+                            }
                             break;
                         case "ITEM_SCRAPYELLOW_NAME":
                             break;
@@ -1183,15 +4024,18 @@ namespace MoistureUpset
                             {
                                 if (inventory.GetItemCount(RoR2Content.Items.Clover) == 1)
                                 {
-                                    ShouldSpeak("There goes your luck Sadge");
+                                    ShouldSpeak("There goes your luck Sadge"
+                                        , "Hippity Hoppity your luck is no longer your property");
                                 }
                                 else if (inventory.GetItemCount(RoR2Content.Items.Clover) > 1)
                                 {
-                                    ShouldSpeak("It's ok, you have some luck to spare");
+                                    ShouldSpeak("It's ok, you have some luck to spare"
+                                        , "At least you have some excess luck");
                                 }
                                 else
                                 {
-                                    ShouldSpeak("This is almost definitely a bad idea.");
+                                    ShouldSpeak("This is almost definitely a bad idea."
+                                        , "I have never seen a better idea");
                                 }
                             }
                             break;
@@ -1200,9 +4044,191 @@ namespace MoistureUpset
                             break;
                         case "ITEM_COUNT_NAME":
                             break;
+                        case "ITEM_ATTACKSPEEDANDMOVESPEED_NAME":
+                            break;//Mocha
+                        case "ITEM_PRIMARYSKILLSHURIKEN_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.PrimarySkillShuriken) == 1)
+                            {
+                                ShouldSpeak($"Imagine if they made {RoR2.Language.GetString(RoR2Content.Items.LunarPrimaryReplacement.nameToken)} into a good item... oh wait.", true);
+                            }
+                            break;//Shuriken
+                        case "ITEM_CRITDAMAGE_NAME":
+                            break;//Laser Scope
+                        case "ITEM_DRONEWEAPONS_NAME":
+                            break;//Spare Drone Parts
+                        case "ITEM_MOVESPEEDONKILL_NAME":
+                            break;//Hunter's Harpoon
+                        case "ITEM_STRENGTHENBURN_NAME":
+                            break;//Ignition Tank
+                        case "ITEM_HEALINGPOTION_NAME":
+                            break;//Power Elixir
+                        case "ITEM_HEALINGPOTIONCONSUMED_NAME":
+                            ShouldSpeak("mmm tasty health potion", true);
+                            break;//Empty Bottle
+                        case "ITEM_PERMANENTDEBUFFONHIT_NAME":
+                            break;//Symbiotic Scorpion
+                        case "ITEM_MOREMISSILE_NAME":
+                            break;//Pocket I.C.B.M.
+                        case "ITEM_SKULLCOUNTER_NAME":
+                            break;//Skull Token
+                        case "ITEM_ROBOBALLBUDDY_NAME":
+                            if (BigJank.getOptionValue(Settings.ObamaPrism))
+                            {
+                                ShouldSpeak("MR OBAMA GET DOWN", true);
+                            }
+                            break;//Empathy Cores
+                        case "ITEM_PARENTEGG_NAME":
+                            break;//Planula
+                        case "ITEM_LUNARSPECIALREPLACEMENT_NAME":
+                            break;//Essence of Heresy
+                        case "ITEM_HALFSPEEDDOUBLEHEALTH_NAME":
+                            break;//Stone Flux Pauldron
+                        case "ITEM_HALFATTACKSPEEDHALFCOOLDOWNS_NAME":
+                            break;//Light Flux Pauldron
+                        case "ITEM_LUNARWINGS_NAME":
+                            break;//Blessings of Terafirmae
+                        case "ITEM_RANDOMLYLUNAR_NAME":
+                            break;//Eulogy Zero
+                        case "ITEM_IMMUNETODEBUFF_NAME":
+                            ShouldSpeak("I wish I had clothes :(", "");
+                            break;//Ben's Raincoat
+                        case "ITEM_REGENERATINGSCRAP_NAME":
+                            if (usedGreenRegenScrap)
+                            {
+                                ShouldSpeak("I used the scrap to create the scrap", true);
+                            }
+                            else
+                            {
+                                ShouldSpeak("Oonga Boonga free items", true);
+                            }
+                            break;//Regenerating Scrap
+                        case "ITEM_REGENERATINGSCRAPCONSUMED_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.RegeneratingScrapConsumed) == 5 && feelsGood)
+                            {
+                                ShouldSpeak("Oh that feels good", true);
+                                feelsGood = false;
+                            }
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.RegeneratingScrapConsumed) == 1 || usedGreenRegenScrap)
+                            {
+                                usedGreenRegenScrap = true;
+                                temp = false;
+                            }
+                            break;//Regenerating Scrap (Consumed)
+                        case "ITEM_CRITGLASSESVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.CritGlassesVoid) == 200)
+                            {
+                                ShouldSpeak("What the fuck", true);
+                            }
+                            break;//Lost Seer's Lenses
+                        case "ITEM_EXPLODEONDEATHVOID_NAME":
+                            break;//Voidsent Flame
+                        case "ITEM_BLEEDONHITVOID_NAME":
+                            break;//Needletick
+                        case "ITEM_TREASURECACHEVOID_NAME":
+                            break;//Encrusted Key
+                        case "ITEM_BEARVOID_NAME":
+                            if (inventory.GetEquipment(0).equipmentDef != RoR2Content.Equipment.Cleanse && inventory.GetItemCount(RoR2.DLC1Content.Items.BearVoid) == 1)
+                            {
+                                ShouldSpeak($"Now just get blast shower", true);
+                            }
+                            break;//Safer Spaces
+                        case "ITEM_CLOVERVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.CloverVoid) == 1)
+                            {
+                                ShouldSpeak("Ooooooooh boy, here we go", true);
+                            }
+                            break;//Benthic Bloom
+                        case "ITEM_MISSILEVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.MissileVoid) == 1)
+                            {
+                                if (luck == 1)
+                                {
+                                    ShouldSpeak("Questionable move", true);
+                                }
+                                else if (luck == 2)
+                                {
+                                    ShouldSpeak("You do realize you have extremely high luck right?", true);
+                                }
+                                else if (luck > 2)
+                                {
+                                    ShouldSpeak("Why would you ever take that when your luck is so high?", "You fucking idiot");
+                                }
+                            }
+                            break;//Plasma Shrimp
+                        case "ITEM_MUSHROOMVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.MushroomVoid) == 1)
+                            {
+                                ShouldSpeak("WUNGUS", true);
+                            }
+                            break;//Weeping Fungus
+                        case "ITEM_SLOWONHITVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.SlowOnHitVoid) == 1)
+                            {
+                                ShouldSpeak($"{RoR2.Language.GetString("BROTHER_BODY_NAME")} is trembling", $"{RoR2.Language.GetString("BROTHER_BODY_NAME")} is fucked lmao xd");
+                            }
+                            break;//Tentabauble
+                        case "ITEM_CHAINLIGHTNINGVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.ChainLightningVoid) == 1)
+                            {
+                                ShouldSpeak("It's the best purple item, you can't change my mind", true);
+                            }
+                            break;//Polylute
+                        case "ITEM_EQUIPMENTMAGAZINEVOID_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.EquipmentMagazineVoid) == 1 && SurvivorCatalog.FindSurvivorDefFromBody(g.GetComponentInChildren<CharacterBody>().gameObject) == RoR2Content.Survivors.Engi)
+                            {
+                                ShouldSpeak("WOO, YEAH BABY! THAT'S WHAT I'VE BEEN WAITING FOR! THAT'S WHAT IT'S ALL ABOUT!", true);
+                            }
+                            break;//Lysate Cell
+                        case "ITEM_EXTRALIFEVOID_NAME":
+                            dioHeld++;
+                            break;//Pluripotent Larva
+                        case "ITEM_EXTRALIFEVOIDCONSUMED_NAME":
+                            break;//Pluripotent Larva (Consumed)
+                        case "ITEM_FRAGILEDAMAGEBONUS_NAME":
+                            break;//Delicate Watch
+                        case "ITEM_FRAGILEDAMAGEBONUSCONSUMED_NAME":
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.FragileDamageBonusConsumed) == 1)
+                            {
+                                ShouldSpeak("Yeaaaaaah... coulda seen that one coming", true);
+                            }
+                            break;//Delicate Watch (Broken)
+                        case "ITEM_OUTOFCOMBATARMOR_NAME":
+                            break;//Oddly-shaped Opal
+                        case "ITEM_SCRAPWHITESUPPRESSED_NAME":
+                            break;//Strange Scrap, White
+                        case "ITEM_SCRAPGREENSUPPRESSED_NAME":
+                            break;//Strange Scrap, Green
+                        case "ITEM_SCRAPREDSUPPRESSED_NAME":
+                            break;//Strange Scrap, Red
+                        case "ITEM_GOLDONHURT_NAME":
+                            break;//Roll of Pennies
+                        case "ITEM_RANDOMEQUIPMENTTRIGGER_NAME":
+                            break;//Bottled Chaos
+                        case "ITEM_FREECHEST_NAME":
+                            if (usedGreenRegenScrap)
+                            {
+                                ShouldSpeak("I used the free items to create the free items", true);
+                            }
+                            else
+                            {
+                                ShouldSpeak("Oonga Boonga free items", true);
+                            }
+                            break;//Shipping Request Form
+                        case "ITEM_ELEMENTALRINGVOID_NAME":
+                            break;//Singularity Band
+                        case "ITEM_LUNARSUN_NAME":
+                            break;//Egocentrism
+                        case "ITEM_MINORCONSTRUCTONKILL_NAME":
+                            break;//Defense Nucleus
+                        case "ITEM_VOIDMEGACRABITEM_NAME":
+                            break;//Newly Hatched Zoea
                         default:
                             break;
                     }
+                }
+                if (temp)
+                {
+                    usedGreenRegenScrap = false;
                 }
             }
         }
@@ -1225,60 +4251,71 @@ namespace MoistureUpset
                         deathQuotes.Add("Just blame your teammates 4Head");
                     }
                     RoR2.Inventory inventory = g.GetComponentInChildren<RoR2.CharacterBody>().inventory;
-                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
+                    if (dioHeld != 0)
                     {
                         deathQuotes.Clear();
-                        if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 0)
+                        if (dioUsed == 0)
                         {
                             deathQuotes.Add("Wait don't leave yet!");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 1)
+                        else if (dioUsed == 1)
                         {
                             deathQuotes.Add("You know, just because you have them, doesn't mean you have to use them...");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 2)
+                        else if (dioUsed == 2)
                         {
-                            ShouldSpeak("T t t triple kill");
+                            ShouldSpeak("T t t triple kill"
+                                , "Oh baby a triple!");
                             return;
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 3)
+                        else if (dioUsed == 3)
                         {
                             deathQuotes.Add("Really just chugging these down at this point yeah?");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 4)
+                        else if (dioUsed == 4)
                         {
                             deathQuotes.Add("That's 5 deaths now, how are you this bad at the game?");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 5)
+                        else if (dioUsed == 5)
                         {
-                            deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2Content.Items.ExtraLife.nameToken)}s. So thank you, for using them for me so I don't have to.");
+                            if (inventory.GetItemCount(RoR2.DLC1Content.Items.ExtraLifeVoid) != 0)
+                            {
+                                deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2.DLC1Content.Items.ExtraLifeVoid.nameToken)}s. So thank you, for using them for me so I don't have to.");
+                            }
+                            else
+                            {
+                                deathQuotes.Add($"You know, I was thinking to myself earlier and you know what I thought? We need to use more {RoR2.Language.GetString(RoR2Content.Items.ExtraLife.nameToken)}s. So thank you, for using them for me so I don't have to.");
+                            }
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 6)
+                        else if (dioUsed == 6)
                         {
                             deathQuotes.Add("So that was a bit of a hyperbole earlier. I don't actually think we should consume more of them, so if you could just stop that would be great.");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 7)
+                        else if (dioUsed == 7)
                         {
                             deathQuotes.Add("You know what? I give up, I hope you lose this run.");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 68)
+                        else if (dioUsed == 68)
                         {
                             deathQuotes.Add("nice.");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) == 419)
+                        else if (dioUsed == 419)
                         {
                             deathQuotes.Add("Blaze it");
                         }
-                        else if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
+                        else if (dioUsed > 7)
                         {
-                            deathQuotes.Add($"{inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) + 1}");
+                            deathQuotes.Add($"{dioUsed + 1}");
                         }
-                        ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)]);
+                        ShouldSpeak(deathQuotes[UnityEngine.Random.Range(0, deathQuotes.Count)], true);
+                        dioHeld -= 1;
+                        dioUsed += 1;
                         return;
                     }
-                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) > 7)
+                    if (inventory.GetItemCount(RoR2Content.Items.ExtraLifeConsumed) + inventory.GetItemCount(RoR2.DLC1Content.Items.ExtraLifeVoid) > 7)
                     {
-                        ShouldSpeak("good");
+                        ShouldSpeak("good"
+                            , "F");
                         return;
                     }
                     if (bloodShrineTimer > 0)
@@ -1335,7 +4372,7 @@ namespace MoistureUpset
                     {
                         lastQuotes.RemoveAt(0);
                     }
-                    ShouldSpeak(theQuote);
+                    ShouldSpeak(theQuote, true);
                 }
             }
             catch (Exception e)
@@ -1346,7 +4383,7 @@ namespace MoistureUpset
         public void AllyDeath(GameObject g, DamageType damageType)
         {
             string allyName = g.GetComponent<RoR2.CharacterBody>().GetUserName();
-            List<string> deathQuotes = new List<string> { $"That really was {allyName}'s fault.", $"{allyName} wants you to know that it's your fault" };
+            List<string> deathQuotes = new List<string> { $"That really was {allyName}'s fault.", $"{allyName} wants you to know that it's your fault", "Yikes" };
             if (UnityEngine.Random.Range(0, 50) == 0)
             {
                 deathQuotes.Add($"It's so sad that {allyName} died of ligma");
@@ -1358,7 +4395,7 @@ namespace MoistureUpset
             }
             else if (g.name.StartsWith("Engi"))
             {
-                if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
+                if (inventory.GetItemCount(RoR2Content.Items.ExtraLife) + inventory.GetItemCount(RoR2.DLC1Content.Items.ExtraLifeVoid) != 0)
                 {
                     deathQuotes.Add($"What a waste of a respawn");
                 }
@@ -1413,7 +4450,7 @@ namespace MoistureUpset
             {
                 lastQuotesAllyDeath.RemoveAt(0);
             }
-            ShouldSpeak(theQuote);
+            ShouldSpeak(theQuote, true);
             //if (inventory.GetItemCount(ItemIndex.ExtraLife) != 0)
             //{
             //    deathQuotes.Clear();
@@ -1513,17 +4550,48 @@ namespace MoistureUpset
         {
             return Math.Abs(a - b) <= threshold;
         }
+        const int speed = 2;
         void Update()
         {
+            emergencyTimer += Time.unscaledDeltaTime;
+            if (casinoTimer > 0)
+            {
+                casinoTimer -= Time.unscaledDeltaTime;
+                if (!(casinoTimer > 0))
+                {
+                    cheated = false;
+                }
+            }
             if (dontSpeak > 0)
             {
-                dontSpeak -= Time.deltaTime;
+                dontSpeak -= Time.unscaledDeltaTime;
             }
             if (charPosition != null)
             {
                 if (Vector3.Distance(charPosition.position, new Vector3(1105, -283, 1181)) < 35f)
                 {
+                    if (!Directory.Exists($"{documents}\\My Games"))
+                    {
+                        DebugClass.Log($"How do you not even have a \"My Games\" folder???? What happened");
+                        Directory.CreateDirectory($"{documents}\\My Games");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset"))
+                    {
+                        DebugClass.Log($"Creating Folder");
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data"))
+                    {
+                        DebugClass.Log($"Creating Folder");
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset\\data");
+                    }
+                    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                    {
+                        Directory.CreateDirectory($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked");
+                    }
+                    LocalUserManager.readOnlyLocalUsersList[0].userProfile.GrantUnlockable(UnlockableCatalog.GetUnlockableDef("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME"));
                     Activate();
+                    new SyncBonziApproach(9999, charPosition.gameObject.GetComponentInChildren<NetworkIdentity>().netId).Send(R2API.Networking.NetworkDestination.Clients);
                     charPosition = null;
                 }
                 if (obj2 && obj2.transform.position == new Vector3(1105, -283, 1181))
@@ -1552,7 +4620,7 @@ namespace MoistureUpset
                         {
                             num = 800;
                         }
-                        //AkSoundEngine.SetRTPCValue("DistanceToBonzi", num); FIX WHEN PULL
+                        AkSoundEngine.SetRTPCValue("DistanceToBonzi", num);
                         foreach (var item in Camera.allCameras)
                         {
                             var glitch = item.GetComponent<GlitchEffect>();
@@ -1588,7 +4656,7 @@ namespace MoistureUpset
             {
                 if (bloodShrineTimer > 0)
                 {
-                    bloodShrineTimer -= Time.deltaTime;
+                    bloodShrineTimer -= Time.unscaledDeltaTime;
                 }
                 Vector2 temp = RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position);
                 screenPos = new Vector2(temp.x / (float)Screen.width, temp.y / (float)Screen.height);
@@ -1596,9 +4664,8 @@ namespace MoistureUpset
                 {
                     currentClip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name;
                 }
-
-                bool equalX = AlmostEqual(dest.x, screenPos.x, .002f);
-                bool equalY = AlmostEqual(dest.y, screenPos.y, .002f);
+                bool equalX = AlmostEqual(dest.x, screenPos.x, .004f);
+                bool equalY = AlmostEqual(dest.y, screenPos.y, .004f);
                 atDest = equalX && equalY;
                 moveDown = moveUp = moveLeft = moveRight = false;
                 if (!atDest && currentClip != "entrance" && currentClip != "leave" && !debugging)
@@ -1608,7 +4675,7 @@ namespace MoistureUpset
                         moveRight = true;
                         if (currentClip == "flyright")
                         {
-                            transform.position += new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position += new Vector3(speed * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
                         }
                     }
                     else if (dest.x < screenPos.x && !equalX)
@@ -1616,7 +4683,7 @@ namespace MoistureUpset
                         moveLeft = true;
                         if (currentClip == "flyleft")
                         {
-                            transform.position -= new Vector3(2 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                            transform.position -= new Vector3(speed * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
 
                         }
                     }
@@ -1625,7 +4692,7 @@ namespace MoistureUpset
                         moveUp = true;
                         if (currentClip == "flyup")
                         {
-                            transform.position += new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position += new Vector3(0, speed * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
@@ -1634,14 +4701,13 @@ namespace MoistureUpset
                         moveDown = true;
                         if (currentClip == "flydown")
                         {
-                            transform.position -= new Vector3(0, 2 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                            transform.position -= new Vector3(0, speed * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
 
                         }
                     }
                 }
                 //DebugMovement();
                 IdleAnimation();
-
 
                 MovingAnimations();
             }
@@ -1688,13 +4754,13 @@ namespace MoistureUpset
                                 case "TITAN_BODY_NAME":
                                     if (BigJank.getOptionValue(Settings.RobloxTitan))
                                     {
-                                        ShouldSpeak($"ooooooooof");
+                                        ShouldSpeak($"ooooooooof", true);
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
                                     if (BigJank.getOptionValue(Settings.Twitch))
                                     {
-                                        ShouldSpeak($"Poggers");
+                                        ShouldSpeak($"Poggers", true);
                                     }
                                     break;
                                 default:
@@ -1716,7 +4782,7 @@ namespace MoistureUpset
                                 case "JELLYFISH_BODY_NAME":
                                     if (BigJank.getOptionValue(Settings.Comedy))
                                     {
-                                        ShouldSpeak($"I'm something of a comedian myself.");
+                                        ShouldSpeak($"I'm something of a comedian myself.", true);
                                     }
                                     break;
                                 case "BEETLE_BODY_NAME":
@@ -1737,13 +4803,13 @@ namespace MoistureUpset
                                 case "BELL_BODY_NAME":
                                     if (BigJank.getOptionValue(Settings.TacoBell))
                                     {
-                                        ShouldSpeak($"Now I'm feeling kind of hungry.");
+                                        ShouldSpeak($"Now I'm feeling kind of hungry.", true);
                                     }
                                     break;
                                 case "GOLEM_BODY_NAME":
                                     if (BigJank.getOptionValue(Settings.Robloxian))
                                     {
-                                        ShouldSpeak($"oof");
+                                        ShouldSpeak($"oof", true);
                                     }
                                     //ShouldSpeak($"{victimBody.GetDisplayName()}");
                                     break;
@@ -1768,13 +4834,13 @@ namespace MoistureUpset
                                 case "TITAN_BODY_NAME":
                                     if (BigJank.getOptionValue(Settings.RobloxTitan))
                                     {
-                                        ShouldSpeak($"ooooooooof");
+                                        ShouldSpeak($"ooooooooof", true);
                                     }
                                     break;
                                 case "GRAVEKEEPER_BODY_NAME":
                                     if (BigJank.getOptionValue(Settings.Twitch))
                                     {
-                                        ShouldSpeak($"Poggers");
+                                        ShouldSpeak($"Poggers", true);
                                     }
                                     break;
                                 case "BROTHER_BODY_NAME":
@@ -1805,7 +4871,7 @@ namespace MoistureUpset
                     }
                     else if (victimBody.baseNameToken == "SHOPKEEPER_BODY_NAME")
                     {
-                        ShouldSpeak("I see we are at that point in the game now");
+                        ShouldSpeak("I see we are at that point in the game now", true);
                     }
                 }
             }
@@ -1822,7 +4888,7 @@ namespace MoistureUpset
         {
             if (currentClip == "idle")
             {
-                timer -= Time.deltaTime;
+                timer -= Time.unscaledDeltaTime;
                 if (timer < 0)
                 {
                     timer = UnityEngine.Random.Range(20, 41);
@@ -1836,28 +4902,65 @@ namespace MoistureUpset
                     {
                         lastIdle.RemoveAt(0);
                     }
-                    //if (BigJank.getOptionValue("Original REDACTED TTS") != 1)
-                    //{
-                    //    if (UnityEngine.Random.Range(0, 150) == 0)
-                    //    {
-                    //        ShouldSpeak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!");
-                    //        idlenum = -1;
-                    //    }
-                    //}
+                    if (!Settings.AccurateTTS.Value)
+                    {
+                        if (UnityEngine.Random.Range(0, 150) == 0)
+                        {
+                            ShouldSpeak("Did you know that in Settings, Mod Settings, Moisture Upset, you can change my tts voice to be the authentic Bonzi Buddy voice!", true);
+                            idlenum = -1;
+                        }
+                    }
                     a.SetInteger("idle", idlenum);
                     switch (idlenum)
                     {
+                        //case 11:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            ,"Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("Did you know? Me neither...", true);
+                        //    break;
+                        //case 12:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            , "Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("We live in a society", true);
+                        //    break;
+                        //case 13:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            , "Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("Bottom Text", true);
+                        //    break;
+                        //case 14:
+                        //    if (!Directory.Exists($"{documents}\\My Games\\Moisture Upset\\data\\BonziUnlocked"))
+                        //        ShouldSpeak("You know it isn't that hard to unlock me properly right?"
+                        //            , "Imagine cheating in my achievement");
+                        //    else
+                        //        ShouldSpeak("Can I ask?........... Thanks that's all.", true);
+                        //    break;
+                        //default:
+                        //    break;
                         case 11:
-                            ShouldSpeak("Did you know? Me neither...");
+                            ShouldSpeak("Did you know? Me neither...", true);
                             break;
                         case 12:
-                            ShouldSpeak("We live in a society");
+                            ShouldSpeak("We live in a society", true);
                             break;
                         case 13:
-                            ShouldSpeak("Bottom Text");
+                            ShouldSpeak("Bottom Text", true);
                             break;
                         case 14:
-                            ShouldSpeak("Can I ask?........... Thanks that's all.");
+                            if (UnityEngine.Random.Range(0, 3000) == 69)
+                            {
+                                ShouldSpeak($"Wake up {Environment.UserName}", true);
+                            }
+                            else
+                            {
+                                ShouldSpeak("Can I ask?........... Thanks that's all.", true);
+                            }
                             break;
                         default:
                             break;
@@ -1923,25 +5026,25 @@ namespace MoistureUpset
             {
                 moveUp = true;
                 //if (currentClip == "flyup")
-                transform.position += new Vector3(0, 1 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                transform.position += new Vector3(0, 1 * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
             }
             if (Input.GetKey(KeyCode.J))
             {
                 moveLeft = true;
                 //if (currentClip == "flyleft")
-                transform.position -= new Vector3(1 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                transform.position -= new Vector3(1 * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
             }
             if (Input.GetKey(KeyCode.K))
             {
                 moveDown = true;
                 //if (currentClip == "flydown")
-                transform.position -= new Vector3(0, 1 * Time.deltaTime * (Screen.height / 1080.0f), 0);
+                transform.position -= new Vector3(0, 1 * Time.unscaledDeltaTime * (Screen.height / 1080.0f), 0);
             }
             if (Input.GetKey(KeyCode.L))
             {
                 moveRight = true;
                 //if (currentClip == "flyright")
-                transform.position += new Vector3(1 * Time.deltaTime * (Screen.width / 1920.0f), 0, 0);
+                transform.position += new Vector3(1 * Time.unscaledDeltaTime * (Screen.width / 1920.0f), 0, 0);
             }
             if (Input.GetKeyDown(KeyCode.O))
             {
@@ -1953,7 +5056,7 @@ namespace MoistureUpset
             }
             if (Input.GetKeyDown(KeyCode.M))
             {
-                ShouldSpeak("This is a test to see where my textbox will be.");
+                ShouldSpeak("This is a test to see where my textbox will be.", true);
             }
         }
         public static void GoTo(float x, float y)
@@ -1966,13 +5069,18 @@ namespace MoistureUpset
         }
         public static void SetActive(bool yeet)
         {
-            if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasAchievement("MOISTURE_BONZIBUDDY_ACHIEVEMENT_ID")*/true)
+            buddy.StartCoroutine(SetActive(yeet, 0));
+        }
+        public static IEnumerator SetActive(bool yeet, int yes)
+        {
+            yield return new WaitUntil(() => buddy.idling || buddy.bonziActive == false);
+            if (/*LocalUserManager.readOnlyLocalUsersList[0].userProfile.HasUnlockable("MOISTURE_BONZIBUDDY_UNLOCKABLE_NAME")*/true)
             {
-                if (!yeet && !buddy.bonziActive)
+                if (yeet && !buddy.bonziActive)
                 {
                     buddy.Activate();
                 }
-                else if (yeet && buddy.bonziActive)
+                else if (!yeet && buddy.bonziActive)
                 {
                     buddy.Deactivate();
                 }
@@ -2054,16 +5162,67 @@ namespace MoistureUpset
             }
         }
         bool twostep = true;
-        public void ShouldSpeak(string whatToSay)
+        //public static void ForceRestart(bool ISuck)
+        //{
+        //    Destroy(buddy.gameObject);
+
+        //    GameObject bonzi = Instantiate(Assets.Load<GameObject>("@MoistureUpset_moisture_bonzibuddy:assets/bonzibuddy/bonzibuddy.prefab"));
+        //    DontDestroyOnLoad(bonzi);
+        //    bonzi.GetComponent<RectTransform>().SetParent(RoR2Application.instance.mainCanvas.transform, false);
+        //    bonzi.SetActive(true);
+        //    bonzi.GetComponent<RectTransform>().anchorMin = Vector2.zero;
+        //    bonzi.GetComponent<RectTransform>().anchorMax = Vector2.zero;
+        //    bonzi.layer = 5;
+        //    buddy = bonzi.AddComponent<BonziBuddy>();
+
+        //    buddy.Activate();
+        //}
+        List<string> words = new List<string>();
+        bool sayingWords = false;
+        public void ShouldSpeak(string whatToSay, string whatToMLG)
         {
-            StartCoroutine(ShouldSpeak(whatToSay, false));
+            if (daniel && (int)MLG.progress > 0 && whatToMLG != "")
+            {
+                words.Add(whatToMLG);
+            }
+            else if (whatToSay != "")
+            {
+                words.Add(whatToSay);
+            }
+            if (!sayingWords)
+            {
+                sayingWords = true;
+                StartCoroutine(ShouldSpeak());
+            }
         }
-        public IEnumerator ShouldSpeak(string whatToSay, bool bigma)
+        public void ShouldSpeak(string whatToSay, bool same)
+        {
+            if (whatToSay != "")
+            {
+
+                words.Add(whatToSay);
+                if (!sayingWords)
+                {
+                    sayingWords = true;
+                    StartCoroutine(ShouldSpeak());
+                }
+            }
+        }
+        public IEnumerator ShouldSpeak()
         {
             if (bonziActive)
             {
-                yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
-                StartCoroutine(Speak(whatToSay));
+                while (words.Count > 0)
+                {
+                    if (!textBox.activeSelf && !speaking)
+                    {
+                        a.Play("idle");
+                    }
+                    yield return new WaitUntil(() => currentClip == "idle" && !textBox.activeSelf && !speaking);
+                    StartCoroutine(Speak(words[0]));
+                    words.RemoveAt(0);
+                }
+                sayingWords = false;
             }
         }
         public IEnumerator Speak(string whatToSay)
@@ -2114,63 +5273,116 @@ namespace MoistureUpset
             return false;
         }
         private static string documents = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+        float emergencyTimer = 0;
         public IEnumerator loadsong(string text)
         {
             if (!speaking)
             {
                 string balconPath = $"\"{documents}\\My Games\\Moisture Upset\\data\\balcon.exe\"";
                 string joemamaPath = $"\"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav\"";
-                System.Diagnostics.Process process;
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
                 System.Diagnostics.ProcessStartInfo startInfo;
-                if (File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"))
+                try
+                {
+                    if (File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"))
+                    {
+                        process = new System.Diagnostics.Process();
+                        startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.Arguments = $"/C del {joemamaPath}";
+                        process.StartInfo = startInfo;
+                        process.Start();
+                    }
+                }
+                catch (Exception e)
+                {
+                    DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
+                    yield break;
+                }
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => !File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav") || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
+                {
+                    yield break;
+                }
+                try
                 {
                     process = new System.Diagnostics.Process();
                     startInfo = new System.Diagnostics.ProcessStartInfo();
                     startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.Arguments = $"/C del {joemamaPath}";
+                    startInfo.FileName = balconPath;
+                    string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+                    if (File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi"))
+                    {
+                        daniel = true;
+                    }
+                    if (File.Exists(s + "\\Speech\\speech.dll") && File.Exists(s + "\\lhsp\\help\\tv_enua.hlp"))
+                    {
+                        sapi4 = true;
+                    }
+                    if (daniel && (int)MLG.progress > 0 && Settings.AccurateTTS.Value)
+                    {
+                        startInfo.Arguments = $"-n \"ScanSoft Daniel_Full_22kHz\" -t \"{text}\" -w {joemamaPath}";
+                    }
+                    else if (sapi4 && Settings.AccurateTTS.Value)
+                    {
+                        startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
+                    }
+                    else
+                    {
+                        startInfo.Arguments = $"-n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w {joemamaPath}";
+                    }
                     process.StartInfo = startInfo;
                     process.Start();
                 }
-                yield return new WaitUntil(() => !File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
-
-
-                process = new System.Diagnostics.Process();
-                startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = balconPath;
-                //if (BigJank.getOptionValue("Original REDACTED TTS"))
-                //{
-                //    startInfo.Arguments = $"-n Sidney -t \"{text}\" -p 60 -s 140 -w {joemamaPath}";
-                //}
-                //else
-                //{
-                //    startInfo.Arguments = $"-n \"Microsoft David Desktop\" -t \"{text}\" -p 10 -s \"-2\" -w {joemamaPath}";
-                //}
-                process.StartInfo = startInfo;
-                process.Start();
-
-                yield return new WaitUntil(() => process.HasExited);
-                //DebugClass.Log($"----------file is supposedly done");
-                yield return new WaitUntil(() => File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav"));
-                FileInfo file = new FileInfo($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav");
-                yield return new WaitUntil(() => !isLocked(file));
-
-                if (text == "stop")
+                catch (Exception e)
                 {
-                    speaking = false;
-                    a.SetBool("speaking", false);
-                    twostep = false;
-                    AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
-
+                    DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
+                    yield break;
                 }
-                else
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => process.HasExited || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
                 {
-                    a.Play("speaking");
-                    a.SetBool("speaking", true);
-                    speaking = true;
+                    yield break;
+                }
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav") || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
+                {
+                    yield break;
+                }
+                FileInfo file = new FileInfo($"{documents}\\My Games\\Moisture Upset\\data\\joemama.wav");
+                emergencyTimer = 0;
+                yield return new WaitUntil(() => !isLocked(file) || emergencyTimer > 10f);
+                if (emergencyTimer > 10f)
+                {
+                    yield break;
+                }
+                try
+                {
+                    if (text == "stop")
+                    {
+                        speaking = false;
+                        a.SetBool("speaking", false);
+                        twostep = false;
+                        AkSoundEngine.ExecuteActionOnEvent(3183910552, AkActionOnEventType.AkActionOnEventType_Stop);
 
-                    AkAudioInputManager.PostAudioInputEvent("ttsInput", GameObject.FindObjectOfType<GameObject>(), WavBufferToWwise, BeforePlayingAudio);
+                    }
+                    else
+                    {
+                        a.Play("speaking");
+                        a.SetBool("speaking", true);
+                        speaking = true;
+
+                        AkAudioInputManager.PostAudioInputEvent("ttsInput", MoistureUpsetMod.musicController.gameObject, WavBufferToWwise, BeforePlayingAudio);
+                    }
+                }
+                catch (Exception e)
+                {
+                    DebugClass.Log($"Bonzi Buddy failed to speak for reason: {e}");
+                    yield break;
                 }
             }
         }
@@ -2228,6 +5440,16 @@ namespace MoistureUpset
                     }
                 }
             }
+            if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\Daniel 22Khz MLG voice.exe"))
+            {
+                using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.Daniel 22Khz MLG voice.exe"))
+                {
+                    using (var file = new FileStream($"{documents}\\My Games\\Moisture Upset\\data\\Daniel 22Khz MLG voice.exe", FileMode.Create, FileAccess.Write))
+                    {
+                        resource.CopyTo(file);
+                    }
+                }
+            }
             if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\readme.txt"))
             {
                 using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("MoistureUpset.Resources.readme.txt"))
@@ -2249,10 +5471,9 @@ namespace MoistureUpset
                 }
             }
         }
-
         public static void FixTTS(bool yeet)
         {
-            if (!yeet)
+            if (yeet)
             {
                 string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
                 if ((!File.Exists(s + "\\Speech\\speech.dll") || !File.Exists(s + "\\lhsp\\help\\tv_enua.hlp")) && File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed"))
@@ -2265,6 +5486,17 @@ namespace MoistureUpset
                     File.Create($"{documents}\\My Games\\Moisture Upset\\data\\SAPI4_Installed");
                     System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\spchapi.exe");
                     System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\tv_enua.exe");
+                }
+
+                if (!File.Exists(s + "\\Downloaded Installations\\{952F792A-172C-4F2F-88F7-C002F916C583}\\NextUp-ScanSoft Daniel British Voice.msi") && File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed"))
+                {
+                    File.Delete($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed");
+                }
+                //string s = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Windows);
+                if (!File.Exists($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed"))
+                {
+                    File.Create($"{documents}\\My Games\\Moisture Upset\\data\\Daniel_Installed");
+                    System.Diagnostics.Process.Start($"{documents}\\My Games\\Moisture Upset\\data\\Daniel 22Khz MLG voice.exe");
                 }
             }
         }

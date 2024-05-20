@@ -15,7 +15,6 @@ namespace MoistureUpset
         {
             material = materials[UnityEngine.Random.Range(0, materials.Length)];
         }
-
         bool check = true;
         void Update()
         {

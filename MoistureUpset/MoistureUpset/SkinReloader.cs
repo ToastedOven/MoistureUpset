@@ -1,4 +1,6 @@
-﻿using RoR2;
+﻿using MoistureUpset.Skins;
+using MoistureUpset.Skins.ItemDisplayRules;
+using RoR2;
 using UnityEngine;
 
 namespace MoistureUpset
@@ -19,7 +21,7 @@ namespace MoistureUpset
                     skinIndex = (int)GetComponentInChildren<CharacterBody>().skinIndex;
                     skinController.ApplySkin(skinIndex);
                 }
-                else if (GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster.GetBody().IsSkin("THE_TF2_ENGINEER_SKIN"))
+                else if (GetComponentInChildren<CharacterBody>().master.minionOwnership.ownerMaster.GetBody().IsSkin(TF2Engi.SkinName))
                 {
                     if (SkinHelper.EngiTurretSkinIndex < 0)
                     {
@@ -40,9 +42,11 @@ namespace MoistureUpset
                     skinController.ApplySkin(skinIndex);
                 }
 
-                if (GetComponentInChildren<CharacterBody>().IsSkin("THE_TF2_ENGINEER_SKIN"))
+                if (GetComponentInChildren<CharacterBody>().IsSkin(TF2Engi.SkinName))
                 {
-                    GetComponentInChildren<CharacterModel>().itemDisplayRuleSet = ItemDisplayPositionFixer.TF2_Engi_IDRS; // We apply our own display rule set so that items look correct on our skin.
+                    var characterModel = GetComponentInChildren<CharacterModel>();
+                    
+                    characterModel.itemDisplayRuleSet = ItemDisplayRuleOverrides.GetItemDisplayRuleSet(TF2Engi.SkinName); // We apply our own display rule set so that items look correct on our skin.
                 }
             }
             catch (System.Exception)

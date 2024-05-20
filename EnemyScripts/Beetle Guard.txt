@@ -33,9 +33,9 @@ def CopyEditBones(bones, editBones, offset = None):
     for bone in bones:
         boneCopy = editBones[bone.name]
         boneCopy.bbone_curveinx = bone.bbone_curveinx
-        boneCopy.bbone_curveiny = bone.bbone_curveiny
+        boneCopy.bbone_curveinz = bone.bbone_curveinz
         boneCopy.bbone_curveoutx = bone.bbone_curveoutx
-        boneCopy.bbone_curveouty = bone.bbone_curveouty
+        boneCopy.bbone_curveoutz = bone.bbone_curveoutz
         if bone.bbone_custom_handle_start is not None:
             boneCopy.bbone_custom_handle_start = editBones.get(bone.bbone_custom_handle_start.name, None)
         if bone.bbone_custom_handle_end is not None:
@@ -46,10 +46,8 @@ def CopyEditBones(bones, editBones, offset = None):
         boneCopy.bbone_handle_type_start = bone.bbone_handle_type_start
         boneCopy.bbone_rollin = bone.bbone_rollin
         boneCopy.bbone_rollout = bone.bbone_rollout
-        boneCopy.bbone_scaleinx = bone.bbone_scaleinx
-        boneCopy.bbone_scaleiny = bone.bbone_scaleiny
-        boneCopy.bbone_scaleoutx = bone.bbone_scaleoutx
-        boneCopy.bbone_scaleouty = bone.bbone_scaleouty
+        boneCopy.bbone_scalein = bone.bbone_scalein
+        boneCopy.bbone_scaleout = bone.bbone_scaleout
         boneCopy.bbone_segments = bone.bbone_segments
         boneCopy.bbone_x = bone.bbone_x
         boneCopy.bbone_z = bone.bbone_z

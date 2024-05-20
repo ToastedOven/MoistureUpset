@@ -26,19 +26,6 @@ namespace MoistureUpset.InteractReplacements
         public static void Init()
         {
             Chests();
-            On.RoR2.ShrineChanceBehavior.AddShrineStack += (orig, self, activator) =>
-            {
-                float yes = self.GetFieldValue<int>("successfulPurchaseCount");
-                orig(self, activator);
-                if (self.GetFieldValue<int>("successfulPurchaseCount") == yes)
-                {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceFailure").Send(R2API.Networking.NetworkDestination.Clients);
-                }
-                else
-                {
-                    new SyncChance(activator.gameObject.GetComponentInChildren<RoR2.CharacterBody>().netId, self.GetFieldValue<int>("successfulPurchaseCount") != yes, "ChanceSuccess").Send(R2API.Networking.NetworkDestination.Clients);
-                }
-            };
         }
         public static GameObject particles;
         public static void ReloadChests()
@@ -107,6 +94,7 @@ namespace MoistureUpset.InteractReplacements
                     spritzPrefab.transform.SetParent(cUm.transform);
                     spritzPrefab.transform.localPosition = new Vector3(0, 1.2f, -0.4f);
                 }
+                RandomizeSoda.textures = new Texture[]{ Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/cokacoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/drcoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/mtncoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/pepcoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/hicoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/spritecoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/fantacoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/watercoon.png"), Assets.Load<Texture>("@MoistureUpset_InteractReplacements_SodaBarrel_sodaspritz:assets/sodafountain/lioncoon.png") };
 
                 cUm.GetComponentInChildren<SfxLocator>().openSound = "Soda";
                 cUm.AddComponent<NewSplatSystemRemover>();

@@ -283,24 +283,27 @@ namespace MoistureUpset
             //     Moisture_Upset.Moisture_Asset_Bundles.Add($"@MoistureUpset_{resource}", MainAssetBundle);
             // }
         }
+
         public static void LoadBNK(string bnk)
         {
-            string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
-            DebugClass.Log(s);
-            try
-            {
-                using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
-                {
-                    var bytes = new byte[bankStream.Length];
-                    bankStream.Read(bytes, 0, bytes.Length);
+            Assets.AddSoundBank($"{bnk}.bnk");
 
-                    SoundBanks.Add(bytes);
-                }
-            }
-            catch (Exception e)
-            {
-                DebugClass.Log(e);
-            }
+            // string s = $"MoistureUpset.bankfiles.{bnk}.bnk";
+            // DebugClass.Log(s);
+            // try
+            // {
+            //     using (var bankStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s))
+            //     {
+            //         var bytes = new byte[bankStream.Length];
+            //         bankStream.Read(bytes, 0, bytes.Length);
+            //
+            //         SoundBanks.Add(bytes);
+            //     }
+            // }
+            // catch (Exception e)
+            // {
+            //     DebugClass.Log(e);
+            // }
         }
         public static void RunAll()
         {
@@ -349,6 +352,10 @@ namespace MoistureUpset
                 Imposter();
                 GreaterWisp();
                 Collab();
+                Gnome();
+                Children();
+                NotChildren();
+                DQ();
                 //SneakyFontReplacement();
             }
             catch (Exception e)
@@ -358,6 +365,106 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+            //DebugClass.DebugBones("RoR2/Base/CritGlasses/DisplayGlasses.prefab");//gup
+
+            //DebugClass.DebugBones("RoR2/DLC1/Gup/GeepBody.prefab");//geep
+            //DebugClass.DebugBones("RoR2/DLC1/Gup/GipBody.prefab");//gip
+            //DebugClass.DebugBones("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab");//jailer
+            //DebugClass.DebugBones("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab");//sonic
+            //DebugClass.DebugBones("RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab");//barnicle
+            //DebugClass.DebugBones("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab");//blind pest
+            //DebugClass.DebugBones("RoR2/DLC1/Vermin/VerminBody.prefab");//rats rats we are the rats
+            //DebugClass.DebugBones("RoR2/Base/LunarExploder/LunarExploderBody.prefab");//lunar roller
+            //DebugClass.DebugBones("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab");//contructs???
+            //DebugClass.DebugBones("RoR2/DLC1/MajorAndMinorConstruct/MajorConstructBody.prefab");//contructs???
+            //DebugClass.DebugBones("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab");//contructs???
+            //DebugClass.DebugBones("RoR2/DLC1/ClayGrenadier/ClayGrenadierBody.prefab");//new clay guy
+            //DebugClass.DebugBones("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabBody.prefab");//pussy devastator
+            //DebugClass.DebugBones("RoR2/Base/Grandparent/GrandParentBody.prefab");//grandparent
+            //DebugClass.DebugBones("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab");//little shits that spawn when you get a void item
+            //DebugClass.DebugBones("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabBody.prefab");//voidling
+            ////DebugClass.DebugBones("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabJointBody.prefab");//voidling parts????
+
+            //LoadResource("moisture_sippi");
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_moisture_sippi:assets/sippi cup/cupbody.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 2);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_moisture_sippi:assets/sippi cup/gun.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 4);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_moisture_sippi:assets/sippi cup/backpack.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 0);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 1);
+            //ReplaceModel("RoR2/DLC1/Railgunner/RailgunnerBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_sippi:assets/sippi cup/sippi.png", 3);
+            //DebugClass.DebugBones("RoR2/DLC1/VoidSurvivor/VoidSurvivorBody.prefab");
+
+            //DebugClass.DebugBones("RoR2/DLC1/Railgunner/RailgunnerBody.prefab");
+
+            //LoadResource("moisture_diquesuckinglips");
+
+            //LoadResource("moisture_testing");
+            //ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
+            //ReplaceModel("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
+            //ReplaceModel("RoR2/DLC1/Gup/GupBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup.mesh");
+            //ReplaceModel("RoR2/DLC1/Gup/GeepBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup1.mesh");
+            //ReplaceModel("RoR2/DLC1/Gup/GipBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/gup1.mesh");
+            //ReplaceModel("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/jailer.mesh");
+            //ReplaceModel("RoR2/DLC1/VoidBarnacle/VoidBarnacleBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/barnacle1.mesh");
+            //ReplaceModel("RoR2/DLC1/Vermin/VerminBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/vermin1.mesh");
+            //ReplaceModel("RoR2/Base/LunarExploder/LunarExploderBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/exploder1.mesh");
+            //ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/mega.mesh");
+            ////ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/mega2.mesh", 1);
+            //ReplaceModel("RoR2/DLC1/ClayGrenadier/ClayGrenadierBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/clay2.mesh", 1);
+            //ReplaceModel("RoR2/DLC1/VoidMegaCrab/VoidMegaCrabBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/megacrab.mesh");
+            //ReplaceModel("RoR2/Base/Grandparent/GrandParentBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/grandparent.mesh");
+            //ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/infestor1.mesh");
+
+            //ReplaceModel("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase1.prefab", "@MoistureUpset_moisture_testing:assets/newenemies/raidcrab.mesh", "@MoistureUpset_moisture_testing:assets/newenemies/bigma.png");
+
+            //muFULLSong18 is golem plains
+            //On.RoR2.MusicTrackDef.Play += (orig, self) =>
+            //{
+            //    orig(self);
+
+            //    //foreach (var item in self.states)
+            //    //{
+            //    //    //DebugClass.Log($"----------setting state [{item.Name}]    [{item.GroupId}]          [{item.Id}]");
+            //    //    if (item.Id == 3547722878)
+            //    //    {
+            //    //        item.SetPropertyValue<uint>("Id", 3978303460);
+            //    //        item.SetPropertyValue<string>("Name", "gameplaySongChoice / TestState");
+            //    //        DebugClass.Log($"----------what the fuck     {item.Name}   {item.Id}");
+            //    //    }
+            //    //}
+            //    //AkSoundEngine.SetState(1741660947, 3978303460);
+            //};
+            //On.RoR2.MusicController.Start += (orig, self) =>
+            //{
+            //    orig(self);
+            //    AkSoundEngine.PostEvent("Play_Meme_System", MoistureUpsetMod.Instance.gameObject);
+            //};
+            //On.RoR2.MusicTrackDef.Stop += (orig, self) =>
+            //{
+            //    orig(self);
+            //};
+            //On.RoR2.MusicTrackCatalog.SetEntries += (orig, newDefs) =>
+            //{
+            //    DebugClass.Log($"----------{newDefs[0].states[0].Id}");
+            //    DebugClass.Log($"----------{newDefs[0].cachedName}");
+            //    for (int i = 0; i < newDefs.Length; i++)
+            //    {
+            //        if (newDefs[i].cachedName == "muFULLSong18")
+            //        {
+            //            ////newDefs[i].states[0] = new AK.Wwise.State(); //this breaks it. work from here probably?
+            //            //DebugClass.Log($"----------{newDefs[i].states[0].Id}");
+            //            newDefs[i].states[0].SetPropertyValue<uint>("Id", 3978303460);
+            //            //newDefs[i].states[1].SetPropertyValue<uint>("Id", newDefs[1].states[1].Id);
+            //            //newDefs[i] = newDefs[5];
+            //        }
+            //        DebugClass.Log($"[{newDefs[i].soundBank.Name}]=[{newDefs[i].soundBank}]=[{newDefs[i].comment}]=[{newDefs[i].states.Length}]=[{newDefs[i].cachedName}]");
+            //        foreach (var state in newDefs[i].states)
+            //        {
+            //            DebugClass.Log($"----------[{state}]");
+            //        }
+            //        DebugClass.Log($"");
+            //    }
+            //    orig(newDefs);
+            //};
         }
         private static void Icons()
         {
@@ -434,14 +541,20 @@ namespace MoistureUpset
         }
         private static void NonEnemyNames()
         {
-            //StringBuilder s = new StringBuilder();
-            //On.RoR2.Run.Start += (orig, self) =>
-            //{
-            //    File.WriteAllText("CandiceDickFitInYourMouth.txt", s.ToString());
-            //    orig(self);
-            //};
+            StringBuilder s = new StringBuilder();
+            On.RoR2.Run.Start += (orig, self) =>
+            {
+                File.WriteAllText("NewItemNamesOrSomething.txt", s.ToString());
+                orig(self);
+            };
             On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
             {
+                if (token.StartsWith("ITEM_") && token.EndsWith("_NAME"))
+                {
+                    s.Append($"case \"{token}\":\nbreak;//{st}\n");
+                    //case "ITEM_COUNT_NAME":
+                    //break;
+                }
                 //s.Append($"[{token}]    [{st}]" + '\n');
                 if (BigJank.getOptionValue(Settings.NSFW) && BigJank.getOptionValue(Settings.DifficultyNames))
                 {
@@ -962,125 +1075,125 @@ namespace MoistureUpset
         {
             if (BigJank.getOptionValue(Settings.Thanos))
                 On.RoR2.Language.SetStringByToken += (orig, self, token, st) =>
-            {
-                if (token == "BROTHER_SPAWN_PHASE1_1")
                 {
-                    st = "When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.";
-                }
-                else if (token == "BROTHER_SPAWN_PHASE1_2")
-                {
-                    st = "I will shred this universe down to it’s last atom and then, with the stones you’ve collected for me, create a new one. It is not what is lost but only what it is been given… a grateful universe.";
-                }
-                else if (token == "BROTHER_SPAWN_PHASE1_3")
-                {
-                    st = "Dread it. Run from it. Destiny still arrives. Or should I say, I have.";
-                }
-                else if (token == "BROTHER_SPAWN_PHASE1_4")
-                {
-                    st = "You couldn’t live with your own failure. Where did that bring you? Back to me.";
-                }
+                    if (token == "BROTHER_SPAWN_PHASE1_1")
+                    {
+                        st = "When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.";
+                    }
+                    else if (token == "BROTHER_SPAWN_PHASE1_2")
+                    {
+                        st = "I will shred this universe down to it’s last atom and then, with the stones you’ve collected for me, create a new one. It is not what is lost but only what it is been given… a grateful universe.";
+                    }
+                    else if (token == "BROTHER_SPAWN_PHASE1_3")
+                    {
+                        st = "Dread it. Run from it. Destiny still arrives. Or should I say, I have.";
+                    }
+                    else if (token == "BROTHER_SPAWN_PHASE1_4")
+                    {
+                        st = "You couldn’t live with your own failure. Where did that bring you? Back to me.";
+                    }
 
 
-                else if (token == "BROTHER_DAMAGEDEALT_1" || token == "BROTHERHURT_DAMAGEDEALT_1")
-                {
-                    st = "You’re strong. But I could snap my fingers, and you’d all cease to exist.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_2" || token == "BROTHERHURT_DAMAGEDEALT_2")
-                {
-                    st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_3" || token == "BROTHERHURT_DAMAGEDEALT_3")
-                {
-                    st = "I'm a survivor.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_4" || token == "BROTHERHURT_DAMAGEDEALT_4")
-                {
-                    st = "You're not the only one cursed with knowledge.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_5" || token == "BROTHERHURT_DAMAGEDEALT_5")
-                {
-                    st = "You should be grateful.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_6" || token == "BROTHERHURT_DAMAGEDEALT_6")
-                {
-                    st = "I don't even know who you are.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_7" || token == "BROTHERHURT_DAMAGEDEALT_7")
-                {
-                    st = "I am...inevitable.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_8" || token == "BROTHERHURT_DAMAGEDEALT_8")
-                {
-                    st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_9" || token == "BROTHERHURT_DAMAGEDEALT_9")
-                {
-                    st = "I am...inevitable.";
-                }
-                else if (token == "BROTHER_DAMAGEDEALT_10" || token == "BROTHERHURT_DAMAGEDEALT_10")
-                {
-                    st = "You should be grateful.";
-                }
+                    else if (token == "BROTHER_DAMAGEDEALT_1" || token == "BROTHERHURT_DAMAGEDEALT_1")
+                    {
+                        st = "You’re strong. But I could snap my fingers, and you’d all cease to exist.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_2" || token == "BROTHERHURT_DAMAGEDEALT_2")
+                    {
+                        st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_3" || token == "BROTHERHURT_DAMAGEDEALT_3")
+                    {
+                        st = "I'm a survivor.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_4" || token == "BROTHERHURT_DAMAGEDEALT_4")
+                    {
+                        st = "You're not the only one cursed with knowledge.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_5" || token == "BROTHERHURT_DAMAGEDEALT_5")
+                    {
+                        st = "You should be grateful.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_6" || token == "BROTHERHURT_DAMAGEDEALT_6")
+                    {
+                        st = "I don't even know who you are.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_7" || token == "BROTHERHURT_DAMAGEDEALT_7")
+                    {
+                        st = "I am...inevitable.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_8" || token == "BROTHERHURT_DAMAGEDEALT_8")
+                    {
+                        st = "Look. Pretty, isn’t it? Perfectly balanced. As all things should be.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_9" || token == "BROTHERHURT_DAMAGEDEALT_9")
+                    {
+                        st = "I am...inevitable.";
+                    }
+                    else if (token == "BROTHER_DAMAGEDEALT_10" || token == "BROTHERHURT_DAMAGEDEALT_10")
+                    {
+                        st = "You should be grateful.";
+                    }
 
 
-                else if (token == "BROTHER_KILL_1")
-                {
-                    st = "I know what it’s like to lose. To feel so desperately that you’re right, yet to fail nonetheless.";
-                }
-                else if (token == "BROTHER_KILL_2")
-                {
-                    st = "I ignored my destiny once, I can not do that again. Even for you. I’m sorry Little one.";
-                }
-                else if (token == "BROTHER_KILL_3")
-                {
-                    st = "The universe required correction.";
-                }
-                else if (token == "BROTHER_KILL_4")
-                {
-                    st = "I hope they remember you.";
-                }
-                else if (token == "BROTHER_KILL_5")
-                {
-                    st = "A small price to pay for salvation.";
-                }
+                    else if (token == "BROTHER_KILL_1")
+                    {
+                        st = "I know what it’s like to lose. To feel so desperately that you’re right, yet to fail nonetheless.";
+                    }
+                    else if (token == "BROTHER_KILL_2")
+                    {
+                        st = "I ignored my destiny once, I can not do that again. Even for you. I’m sorry Little one.";
+                    }
+                    else if (token == "BROTHER_KILL_3")
+                    {
+                        st = "The universe required correction.";
+                    }
+                    else if (token == "BROTHER_KILL_4")
+                    {
+                        st = "I hope they remember you.";
+                    }
+                    else if (token == "BROTHER_KILL_5")
+                    {
+                        st = "A small price to pay for salvation.";
+                    }
 
 
-                else if (token == "BROTHERHURT_KILL_1")
-                {
-                    st = "I... had... to.";
-                }
-                else if (token == "BROTHERHURT_KILL_2")
-                {
-                    st = "Rain fire!";
-                }
-                else if (token == "BROTHERHURT_KILL_3")
-                {
-                    st = "You should’ve gone for the head.";
-                }
-                else if (token == "BROTHERHURT_KILL_4")
-                {
-                    st = "Reality can be whatever I want.";
-                }
-                else if (token == "BROTHERHURT_KILL_5")
-                {
-                    st = "Your optimism is misplaced.";
-                }
+                    else if (token == "BROTHERHURT_KILL_1")
+                    {
+                        st = "I... had... to.";
+                    }
+                    else if (token == "BROTHERHURT_KILL_2")
+                    {
+                        st = "Rain fire!";
+                    }
+                    else if (token == "BROTHERHURT_KILL_3")
+                    {
+                        st = "You should’ve gone for the head.";
+                    }
+                    else if (token == "BROTHERHURT_KILL_4")
+                    {
+                        st = "Reality can be whatever I want.";
+                    }
+                    else if (token == "BROTHERHURT_KILL_5")
+                    {
+                        st = "Your optimism is misplaced.";
+                    }
 
 
-                else if (token == "BROTHERHURT_DEATH_4")
-                {
-                    st = "NO... NOT NOW...";
-                }
-                else if (token == "BROTHERHURT_DEATH_5")
-                {
-                    st = "WHY... WHY NOW...?";
-                }
-                else if (token == "BROTHERHURT_DEATH_6")
-                {
-                    st = "NO... NO...!";
-                }
-                orig(self, token, st);
-            };
+                    else if (token == "BROTHERHURT_DEATH_4")
+                    {
+                        st = "NO... NOT NOW...";
+                    }
+                    else if (token == "BROTHERHURT_DEATH_5")
+                    {
+                        st = "WHY... WHY NOW...?";
+                    }
+                    else if (token == "BROTHERHURT_DEATH_6")
+                    {
+                        st = "NO... NO...!";
+                    }
+                    orig(self, token, st);
+                };
         }
         private static void _UI()
         {
@@ -1107,7 +1220,7 @@ namespace MoistureUpset
             ReplaceModel("RoR2/Base/Shopkeeper/ShopkeeperBody.prefab", "@MoistureUpset_shop:assets/shop.mesh", "@MoistureUpset_shop:assets/shop.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Shopkeeper/ShopkeeperBody.prefab").WaitForCompletion();
             fab.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterial.shaderKeywords = null;
-           
+
 
         }
         private static void BeetleGuard()
@@ -1164,11 +1277,8 @@ namespace MoistureUpset
             LoadBNK("comedy");
             LoadResource("jelly");
             ReplaceModel("RoR2/Base/Jellyfish/JellyfishBody.prefab", "@MoistureUpset_jelly:assets/jelly.mesh", "@MoistureUpset_jelly:assets/jelly.png");
-            On.EntityStates.JellyfishMonster.SpawnState.OnEnter += (orig, self) =>
-            {
-                orig(self);
-                self.outer.commonComponents.sfxLocator.deathSound = "ComedyDeath";
-            };
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Jellyfish/JellyfishBody.prefab").WaitForCompletion();
+            fab.GetComponentInChildren<SfxLocator>().deathSound = "ComedyDeath";
             On.EntityStates.JellyfishMonster.JellyNova.Detonate += (orig, self) =>
             {
                 SoundAssets.PlaySound("JellyDetonate", self.outer.gameObject);
@@ -1422,6 +1532,7 @@ namespace MoistureUpset
             LoadResource("ghast");
             ReplaceModel("RoR2/Base/GreaterWisp/GreaterWispBody.prefab", "@MoistureUpset_ghast:assets/ghast.mesh", "@MoistureUpset_ghast:assets/ghast.png");
             var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/GreaterWisp/GreaterWispBody.prefab").WaitForCompletion();
+            fab.GetComponentInChildren<SfxLocator>().barkSound = "GhastIdle";
             fab.GetComponentInChildren<FlickerLight>().enabled = false;
             var fixer = fab.AddComponent<GhastFixerButTheGhastNotTheFireballs>();
             var components = fab.GetComponentsInChildren<Component>();
@@ -2515,12 +2626,15 @@ namespace MoistureUpset
             {
                 try
                 {
+                    //var c = GameObject.FindObjectOfType<MusicController>();
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
-                    AkSoundEngine.PostEvent("StopFanFare", Moisture_Upset.musicController.gameObject);
+                    AkSoundEngine.PostEvent("StopFanFare", MoistureUpsetMod.musicController.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
+                    if (BigJank.getOptionValue(Settings.Fanfare) && NetworkServer.active)
+                        new SyncFanFare(UnityEngine.Random.Range(0, SyncFanFare.songs.Length)).Send(R2API.Networking.NetworkDestination.Clients);
+                    //AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
                 }
                 catch (Exception)
                 {
@@ -2662,6 +2776,121 @@ namespace MoistureUpset
             ImposterChanger("ScavLunar4Body");
 
             ReplaceModel("RoR2/Base/ScavLunar/ScavLunarBackpack.prefab", "@MoistureUpset_scavenger:assets/bosses/Backpackonly.mesh", "@MoistureUpset_scavenger:assets/bosses/AmongusWhite.png");
+        }
+
+        private static void DQ()
+        {
+            if (!BigJank.getOptionValue(Settings.DQ))
+                return;
+            LoadBNK("diquesuckinglips");
+            ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png");
+            ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 1);
+            ReplaceModel("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 2);
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/FlyingVermin/FlyingVerminBody.prefab").WaitForCompletion();
+            foreach (var item in fab.GetComponentsInChildren<RoR2.ModelSkinController>())
+            {
+                for (int i = 0; i < item.skins.Length; i++)
+                {
+                    if (i != 0)
+                    {
+                        item.skins[i] = item.skins[0];
+                    }
+                }
+            }
+        }
+        private static void Gnome()
+        {
+            if (!BigJank.getOptionValue(Settings.Gnome))
+                return;
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_cactuar:assets/cactuar/cactuar.png", 1);
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 0);
+            ReplaceModel("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab", "@MoistureUpset_na:assets/na1.mesh", "@MoistureUpset_moisture_diquesuckinglips:assets/dq/diquesuckinglips.png", 2);
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab").WaitForCompletion();
+            fab.GetComponent<SfxLocator>().deathSound = "Play_gnome_death";
+            fab.GetComponent<SfxLocator>().barkSound = "";
+            //fab.GetComponent<SfxLocator>().landingSound = "Play_UI_menuClick";
+            fab.GetComponent<SfxLocator>().aliveLoopStart = "Play_gnome_aliveloop";
+            fab.GetComponent<SfxLocator>().aliveLoopStop = "Stop_gnome_aliveloop";
+            var gnome = Assets.Load<GameObject>("@MoistureUpset_moisture_cactuar:assets/cactuar/Gnome.prefab");
+            gnome.transform.parent = fab.transform;
+            gnome.transform.localScale = Vector3.one;
+            gnome.transform.localPosition = Vector3.zero;
+            On.EntityStates.VoidInfestor.Spawn.OnEnter += (orig, self) =>
+            {
+                orig(self);
+                EntityStates.VoidInfestor.Infest.enterSoundString = "Play_gnome_attack";
+            };
+            fab.transform.Find("ModelBase").Find("mdlVoidInfestor").Find("VoidAffixArmature").Find("ROOT").Find("ThoraxUpper1").Find("ThoraxUpper2").Find("VoidInfestorVX").Find("Point Light").gameObject.SetActive(false);
+            fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab").WaitForCompletion();
+            gnome = Assets.Load<GameObject>("@MoistureUpset_moisture_cactuar:assets/cactuar/GnomeAffix.prefab");
+            gnome.transform.parent = fab.transform;
+            gnome.transform.localScale = Vector3.one;
+            gnome.transform.localPosition = new Vector3(0, 1.1f, 0);
+            ReplaceMeshFilter("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab", "@MoistureUpset_na:assets/na1.mesh");
+            ReplaceMeshFilter("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab", "@MoistureUpset_na:assets/na1.mesh", 1);
+            ReplaceMeshFilter("RoR2/DLC1/EliteVoid/DisplayAffixVoid.prefab", "@MoistureUpset_na:assets/na1.mesh", 2);
+            fab.GetComponentInChildren<Light>().gameObject.SetActive(false);
+        }
+        private static void Children()
+        {
+            if (!BigJank.getOptionValue(Settings.ChildrenBlocks))
+                return;
+            LoadBNK("Block");
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_youcanquoteme:assets/woodencube/blok.mesh", "@MoistureUpset_moisture_testing:assets/woodencube/bblok.png", 1);
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 2);
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 3);
+
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/bblok.png"));
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/gblok.png"));
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/rblok.png"));
+            BlockRandomizer.materials.Add(Assets.LoadMaterial("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/yblok.png"));
+            Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab").WaitForCompletion().AddComponent<BlockRandomizer>();
+
+            for (int i = 1; i < 38; i++)
+            {
+                if (i < 10)
+                {
+                    BlockRandomizer.meshes.Add(Assets.Load<Mesh>($"@MoistureUpset_moisture_youcanquoteme:assets/woodencube/Face.00{i}.mesh"));
+                }
+                else
+                {
+                    BlockRandomizer.meshes.Add(Assets.Load<Mesh>($"@MoistureUpset_moisture_youcanquoteme:assets/woodencube/Face.0{i}.mesh"));
+                }
+            }
+            var fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructProjectileGhost.prefab").WaitForCompletion();
+            fab.GetComponentsInChildren<ParticleSystemRenderer>()[1].mesh = Assets.Load<Mesh>("@MoistureUpset_na:assets/na1.mesh");
+            var nuts = Assets.Load<GameObject>("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/marble.prefab");
+            nuts.GetComponent<MeshRenderer>().sharedMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/bazaar/matBazaarWater.mat").WaitForCompletion();
+            nuts.transform.parent = fab.transform;
+            nuts.transform.localScale = Vector3.one;
+            nuts.transform.localPosition = Vector3.zero;
+            nuts.AddComponent<MarbleSpinner>();
+
+
+
+            //fab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab").WaitForCompletion();
+            //On.EntityStates.MinorConstruct.NoCastSpawn.OnEnter += (orig, self) =>
+            //{
+            //    DebugClass.Log($"nocast----------{self.enterSoundString}");
+            //    self.enterSoundString = "";
+            //    orig(self);
+            //};
+            //On.EntityStates.MinorConstruct.Weapon.ChargeConstructBeam.OnEnter += (orig, self) =>
+            //{
+            //    DebugClass.Log($"chgargea----------{self.enterSoundString}");
+            //    DebugClass.Log($"chgargea----------{self.exitSoundString}");
+            //    self.enterSoundString = "";
+            //    self.exitSoundString = "";
+            //    orig(self);
+            //};
+
+            //fab.GetComponentInChildren<ParticleSystemRenderer>().SetMeshes(new Mesh[] { Assets.Load<Mesh>("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/mar.mesh"), Assets.Load<Mesh>("@MoistureUpset_moisture_youcanquoteme:assets/woodencube/ble.mesh") });
+        }
+        private static void NotChildren()
+        {
+            ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.mesh", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.png", 0);
+            ReplaceMeshFilter("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
         }
 
         private static void Collab()

@@ -61,7 +61,7 @@ namespace MoistureUpset.NetMessages
             DebugClass.Log(akMarker.strLabel);
             DebugClass.Log(body.name);
 
-            body.GetComponentInChildren<MoistureUpset.Skins.Jotaro.SubtitleController>().SetSubtitle(akMarker.strLabel, 4f);
+            body.GetComponentInChildren<Skins.Jotaro.SubtitleController>().SetSubtitle(akMarker.strLabel, 4f);
 
 
 

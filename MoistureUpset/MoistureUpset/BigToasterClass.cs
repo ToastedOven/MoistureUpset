@@ -179,24 +179,6 @@ namespace MoistureUpset
             //    orig(self);
             //    AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
             //};
-            On.RoR2.Inventory.HandleInventoryChanged += (orig, self) => //FIX WHEN PULL
-            {
-                orig(self);
-                try
-                {
-                    if (BigJank.getOptionValue(Settings.ScaleHitMarkerWithCrit))
-                    {
-                        AkSoundEngine.SetRTPCValue("AirhornAudio", 100 - (NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody()).crit);
-                    }
-                    else
-                    {
-                        AkSoundEngine.SetRTPCValue("AirhornAudio", 100);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            };
             On.RoR2.UI.CharacterSelectController.Awake += (orig, self) =>
             {
                 AkSoundEngine.SetRTPCValue("MainMenuMusic", 0);
@@ -204,6 +186,8 @@ namespace MoistureUpset
             };
             On.RoR2.SceneCatalog.OnActiveSceneChanged += (orig, oldS, newS) =>
             {
+                if (MoistureUpsetMod.musicController && oldS.name != newS.name)
+                    AkSoundEngine.PostEvent("Play_Meme_System", MoistureUpsetMod.musicController.gameObject);
                 BigToasterClass.HitMarker(BigJank.getOptionValue(Settings.HitMarkerVolume));
                 BigToasterClass.Modded_MSX(BigJank.getOptionValue(Settings.ModdedMusicVolume));
                 BigToasterClass.Modded_SFX(BigJank.getOptionValue(Settings.ModdedSFXVolume));
@@ -322,6 +306,13 @@ namespace MoistureUpset
                 {
                     MusicAPI.StopSong(ref Moisture_Upset.musicController, "muIntroCutscene");
                 }
+                //if (BigJank.getOptionValue(Settings.Logo))
+                //    UImods.ReplaceUIObject("LogoImage", "MoistureUpset.Resources.MoistureUpsetFinal.png"); //bitch mode
+                //if (BigJank.getOptionValue(Settings.RobloxCursor))
+                //{
+                //    UImods.ReplaceUIObject("MousePointer", "MoistureUpset.Resources.robloxhover.png"); //bitch mode
+                //    UImods.ReplaceUIObject("MouseHover", "MoistureUpset.Resources.roblox.png"); //bitch mode
+                //}
                 try
                 {
                     string song = self.GetPropertyValue<MusicTrackDef>("currentTrack").cachedName;
@@ -417,7 +408,7 @@ namespace MoistureUpset
                 orig(self);
                 UImods.ReplaceUIObject("Image", "MoistureUpset.Resources.MoistureUpsetFinal.png");
             };
-            On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) =>
+            On.RoR2.UI.MainMenu.MainMenuController.Update += (orig, self) => //optimize?
             {
                 orig(self);
                 if (BigJank.getOptionValue(Settings.Logo))
@@ -488,19 +479,19 @@ namespace MoistureUpset
                 AkSoundEngine.ExecuteActionOnEvent(item, AkActionOnEventType.AkActionOnEventType_Stop);
             }
         }
-            static int brother = 0;
+        static int brother = 0;
         public static void BossMusicAndFanFare()
         {
             On.EntityStates.Missions.BrotherEncounter.PreEncounter.OnEnter += (orig, self) =>
             {
                 orig(self);
-                if (!(BigJank.getOptionValue(Settings.Thanos)))
+                if (!(BigJank.getOptionValue(Settings.Thanos)) || Settings.noDMCA.Value)
                     return;
                 StopBossMusic(new UInt32[] { 3605238269, 3605238270, 3605238271, 3605238264, 3179516522, 4044558886, 2244734173, 2339617413, 3772119855, 2493198437, 291592398, 2857659536, 3163719647, 1581288698, 974987421, 2337675311, 696983880, 541788247 });
                 var mainBody = GameObject.FindObjectOfType<Transform>();
                 MusicAPI.StopSong(ref Moisture_Upset.musicController, "muSong25");
                 AkSoundEngine.SetRTPCValue("BossMusicActive", 1);
-                AkSoundEngine.PostEvent("Thanos1", mainBody.gameObject);//FIX WHEN PULL
+                AkSoundEngine.PostEvent("PlayThanos1", mainBody.gameObject);
             };
             On.RoR2.CharacterBody.GetSubtitle += (orig, self) =>
             {
@@ -548,11 +539,10 @@ namespace MoistureUpset
                     }
                     else if ((self.baseNameToken == "BROTHER_BODY_NAME" || self.baseNameToken == "LUNARGOLEM_BODY_NAME" || self.baseNameToken == "LUNARWISP_BODY_NAME") || self.baseNameToken == "LUNAREXPLODER_BODY_NAME")
                     {
-                        if ((BigJank.getOptionValue(Settings.Thanos)))
+                        if ((BigJank.getOptionValue(Settings.Thanos)) && !Settings.noDMCA.Value)
                         {
                             resetThanos = false;
                             brother++;
-                            DebugClass.Log($"----------{brother}");
                             MusicAPI.StopSong(ref Moisture_Upset.musicController, "muSong25");
                             switch (brother)
                             {
@@ -561,17 +551,17 @@ namespace MoistureUpset
                                 case 2:
                                     AkSoundEngine.ExecuteActionOnEvent(3605238269, AkActionOnEventType.AkActionOnEventType_Stop);
                                     AkSoundEngine.ExecuteActionOnEvent(2369706651, AkActionOnEventType.AkActionOnEventType_Stop);
-                                    AkSoundEngine.PostEvent("Thanos2", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("PlayThanos2", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 3:
                                     AkSoundEngine.ExecuteActionOnEvent(2369706648, AkActionOnEventType.AkActionOnEventType_Stop);
                                     //2369706648
-                                    AkSoundEngine.PostEvent("Thanos3", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("PlayThanos3", mainBody.gameObject);//FIX WHEN PULL
                                     break;
                                 case 4:
                                     AkSoundEngine.ExecuteActionOnEvent(2369706649, AkActionOnEventType.AkActionOnEventType_Stop);
                                     //2369706649
-                                    AkSoundEngine.PostEvent("Thanos4", mainBody.gameObject);//FIX WHEN PULL
+                                    AkSoundEngine.PostEvent("PlayThanos4", mainBody.gameObject);//FIX WHEN PULL
                                     //2369706651
                                     //2369706649
                                     //2369706648
@@ -613,7 +603,7 @@ namespace MoistureUpset
                         AkSoundEngine.PostEvent("PlayNoodle", mainBody.gameObject);
                         stop = true;
                     }
-                    else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue(Settings.RobloxTitan)))
+                    else if (self.baseNameToken == "TITAN_BODY_NAME" && (BigJank.getOptionValue(Settings.RobloxTitan)) && !Settings.noDMCA.Value)
                     {
                         AkSoundEngine.PostEvent("RobloxMusic", mainBody.gameObject);
                         stop = true;
@@ -805,10 +795,12 @@ namespace MoistureUpset
                     var mainBody = NetworkUser.readOnlyLocalPlayersList[0].master?.GetBody();
                     AkSoundEngine.ExecuteActionOnEvent(1462303513, AkActionOnEventType.AkActionOnEventType_Stop);
                     AkSoundEngine.SetRTPCValue("BossMusicActive", 0);
-                    AkSoundEngine.PostEvent("StopFanFare", Moisture_Upset.musicController.gameObject);
+                    AkSoundEngine.PostEvent("StopFanFare", MoistureUpsetMod.musicController.gameObject);
                     AkSoundEngine.SetRTPCValue("BossDead", 1f);
-                    if (BigJank.getOptionValue(Settings.Fanfare))
-                        AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
+                    if (BigJank.getOptionValue(Settings.Fanfare) && NetworkServer.active)
+                        new SyncFanFare(UnityEngine.Random.Range(0, SyncFanFare.songs.Length)).Send(R2API.Networking.NetworkDestination.Clients);
+                    //AkSoundEngine.PostEvent("PlayFanFare", Moisture_Upset.musicController.gameObject);
+                    MLG.bossOver = true;
                 }
                 catch (Exception)
                 {

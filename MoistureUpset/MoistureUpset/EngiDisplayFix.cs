@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MoistureUpset.Skins;
 using UnityEngine;
 using RoR2;
 
@@ -22,7 +23,7 @@ namespace MoistureUpset
 
             foreach (var smr in GetComponentsInChildren<SkinnedMeshRenderer>())
             {
-                if (smr.sharedMesh.name == SkinHelper.SkinNameToSkinMeshName["THE_TF2_ENGINEER_SKIN"])
+                if (smr.sharedMesh.name == SkinHelper.SkinNameToSkinMeshName[TF2Engi.SkinName])
                     isTf2Skin = true;
             }
 

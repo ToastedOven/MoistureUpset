@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using MoistureUpset.Skins.ItemDisplayRules;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
@@ -18,17 +19,18 @@ namespace MoistureUpset.Skins
 {
     public static class TF2Engi
     {
-        public static readonly string Name = "The Engineer";
-        public static readonly string NameToken = "MOISTURE_UPSET_TF2_ENGINEER_ENGI_SKIN";
+        public const string Name = "The Engineer";
+        public const string NameToken = "MOISTURE_UPSET_TF2_ENGINEER_ENGI_SKIN";
+        public const string SkinName = "THE_TF2_ENGINEER_SKIN";
 
         // Runs on Awake
         public static void Init()
         {
-            PopulateAssets();
-
             SkinManager.AddSkin("EngiTurretBody", EngiTurretSkin);
             SkinManager.AddSkin("EngiWalkerTurretBody", EngiWalkerTurretSkin);
             SkinManager.AddSkin("EngiBody", EngiSkin);
+            
+            ItemDisplayRuleOverrides.RegisterDisplayRuleOverride("EngiBody", SkinName, "tf2engi");
 
             On.RoR2.Projectile.ProjectileController.Start += ModifyProjectiles;
             On.EntityStates.Engi.EngiWeapon.PlaceTurret.OnEnter += ModifyTurretBlueprint;
@@ -37,46 +39,32 @@ namespace MoistureUpset.Skins
             AddToPrefab();
 
             //On.RoR2.CharacterMaster.OnBodyDeath += KillCamTest;
-            //On.RoR2.CharacterMaster.OnBodyDamaged += mostRecentAttacker;
+            //On.RoR2.CharacterMaster.OnBodyDamaged += MostRecentAttacker;
         }
-
-        private static void mostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
+        private static void MostRecentAttacker(On.RoR2.CharacterMaster.orig_OnBodyDamaged orig, CharacterMaster self, DamageReport damageReport)
         {
             orig(self, damageReport);
 
-            if (damageReport.victimBody.IsSkin("THE_TF2_ENGINEER_SKIN"))
-            {
-                damageReport.victimBody.GetComponent<EngiKillCam>().attacker = damageReport.attackerBody;
-            }
+            if (damageReport.victimBody.IsSkin(SkinName))
+                damageReport.victimBody.GetComponent<EngiKillCamController>().attacker = damageReport.attackerBody;
         }
 
         private static void KillCamTest(On.RoR2.CharacterMaster.orig_OnBodyDeath orig, CharacterMaster self, CharacterBody body)
         {
             orig(self, body);
-
-            if (body.IsSkin("THE_TF2_ENGINEER_SKIN"))
+            
+            if (body.IsSkin(SkinName))
             {
-                if (!self.preventGameOver)
+                if (self.preventGameOver)
+                    return;
+                
+                DebugClass.Log("The Engi is Dead");
+                    
+                if (NetworkUser.readOnlyLocalPlayersList[0].master.GetBody() == body)
                 {
-                    DebugClass.Log($"The Engi is Dead");
-
-                    body.GetComponent<EngiKillCam>().DoKillCam();
+                    body.GetComponent<EngiKillCamController>().DoKillCam();
                 }
             }
-        }
-
-        // Load assets here
-        private static void PopulateAssets()
-        {
-            Assets.AddBundle("engineer");
-            Assets.AddBundle("Resources.tf2_engineer_icon");
-            Assets.AddBundle("Models.engi_projectiles");
-            //Assets.AddBundle("Models.dispener");
-            Assets.AddBundle("Models.rocket");
-            Assets.AddBundle("Models.mines");
-            Assets.AddBundle("Models.oopsideletedtheoldresource");
-            Assets.AddBundle("unifiedturret");
-            Assets.AddBundle("Resources.medic");
         }
 
         private static SkinDef[] EngiTurretSkin(GameObject bodyPrefab)
@@ -189,6 +177,10 @@ namespace MoistureUpset.Skins
 
             var engiTurretSkinDef = SkinManager.skins["EngiTurretBody"];
             var engiWalkerTurretSkinDef = SkinManager.skins["EngiWalkerTurretBody"];
+            
+            var engiGrenadePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion();
+            var engiBubblePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBubbleShield.prefab").WaitForCompletion();
+            var engiHarpoonPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiHarpoon.prefab").WaitForCompletion();
 
             var engiGrenadePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiGrenadeProjectile.prefab").WaitForCompletion();
             var engiBubblePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBubbleShield.prefab").WaitForCompletion();
@@ -206,7 +198,7 @@ namespace MoistureUpset.Skins
                 {
                     new CharacterModel.RendererInfo
                     {
-                        defaultMaterial = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png"),
+                        defaultMaterial = Assets.Load<Material>("tf2engi/engimat.mat"),
                         defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                         ignoreOverlays = false,
                         renderer = renderers[0]
@@ -217,7 +209,7 @@ namespace MoistureUpset.Skins
                 {
                     new SkinDef.MeshReplacement
                     {
-                        mesh = Assets.Load<Mesh>("assets/engi.mesh"),
+                        mesh = Assets.Load<Mesh>("tf2engi/engi.mesh"),
                         renderer = renderers[0]
                     }
                 },
@@ -232,7 +224,11 @@ namespace MoistureUpset.Skins
                     {
                         projectilePrefab = engiBubblePrefab,
                         projectileGhostReplacementPrefab = EngiDispenser()
-
+                    },
+                    new SkinDef.ProjectileGhostReplacement
+                    {
+                        projectilePrefab = engiHarpoonPrefab,
+                        projectileGhostReplacementPrefab = EngiRocket()
                     }
                 },
                 MinionSkinReplacements = new[]
@@ -255,7 +251,7 @@ namespace MoistureUpset.Skins
 
             LanguageAPI.Add(NameToken, Name);
 
-            SkinHelper.RegisterSkin("THE_TF2_ENGINEER_SKIN", "Engi");
+            SkinHelper.RegisterSkin(SkinName, "Engi");
 
             return skinController.skins;
         }
@@ -264,7 +260,6 @@ namespace MoistureUpset.Skins
         {
             var engiGrenadeGhost = Assets.Load<GameObject>("tf2engi/engigrenadeghostskintf2.prefab");
             engiGrenadeGhost.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("tf2engi/demopill.png");
-
             AddProjectileComponents(engiGrenadeGhost);
 
             return engiGrenadeGhost;
@@ -274,12 +269,19 @@ namespace MoistureUpset.Skins
         {
             var engiBubbleGhost = Assets.Load<GameObject>("tf2engi/engibubbleshieldghostskintf2.prefab");
             engiBubbleGhost.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("tf2engi/dispenser.png");
-
             AddProjectileComponents(engiBubbleGhost);
 
             return engiBubbleGhost;
         }
 
+        private static GameObject EngiRocket()
+        {
+            var engiRocket = Assets.Load<GameObject>("tf2engi/harpoon.prefab");
+            
+            engiRocket.transform.Find("Mesh").gameObject.GetComponent<MeshRenderer>().material = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png");
+
+            return engiRocket;
+        }
         private static void AddProjectileComponents(GameObject projectile)
         {
             projectile.AddComponent<ProjectileGhostController>();
@@ -309,22 +311,11 @@ namespace MoistureUpset.Skins
                 if (!cb)
                     return;
 
-                if (self.owner.name != "EngiBody(Clone)" || !cb.IsSkin("THE_TF2_ENGINEER_SKIN"))
+                if (self.owner.name != "EngiBody(Clone)" || !cb.IsSkin(SkinName))
                     return;
 
                 switch (self.ghost.name)
-                {
-                    case "EngiHarpoonGhost(Clone)":
-                        {
-                            var meshes = self.ghost.gameObject.GetComponentsInChildren<MeshFilter>();
-
-                            meshes[0].sharedMesh = Assets.Load<Mesh>("assets/rocket.mesh");
-
-                            self.ghost.gameObject.GetComponentInChildren<MeshRenderer>().material = Assets.LoadMaterial("assets/models_player_engineer_engineer_red.png");
-
-                            meshes[0].transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                            break;
-                        }
+                { 
                     case "SpiderMineGhost(Clone)":
                         {
                             var meshes = self.ghost.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -347,6 +338,7 @@ namespace MoistureUpset.Skins
             }
             catch (Exception)
             {
+                // L
             }
         }
 
@@ -357,7 +349,7 @@ namespace MoistureUpset.Skins
 
             GameObject tempPrefab = (GameObject)null;
 
-            if (cb.IsSkin("THE_TF2_ENGINEER_SKIN"))
+            if (cb.IsSkin(SkinName))
             {
                 if (self.blueprintPrefab != null)
                 {
@@ -386,7 +378,7 @@ namespace MoistureUpset.Skins
 
             if (tempPrefab != null)
             {
-                GameObject.Destroy(tempPrefab);
+                Object.Destroy(tempPrefab);
             }
         }
 
@@ -396,7 +388,7 @@ namespace MoistureUpset.Skins
             GameObject engiBody = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion(); // load engibody prefab
             engiBody.AddComponent<AddMedicIcon>();
             engiBody.AddComponent<EngiHurt>();
-            engiBody.AddComponent<EngiKillCam>();
+            //engiBody.AddComponent<EngiKillCamController>();
         }
     }
 }
