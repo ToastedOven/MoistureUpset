@@ -355,7 +355,7 @@ namespace MoistureUpset
         }
         private static void Setup()
         {
-            ModSettingsManager.SetModDescription($"Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion {MoistureUpsetMod.Version}");
+            ModSettingsManager.SetModDescription($"Made by Rune#0001 Metrosexual Fruitcake#6969 & Unsaved Trash#0001\n\nVersion {PluginInfo.PLUGIN_VERSION}");
             EnemyReplacements.LoadResource("moisture_defaults");
             ModSettingsManager.SetModIcon(Assets.Load<Sprite>("@MoistureUpset_moisture_defaults:assets/newlogo.png"));
             //ModSettingsManager.setPanelTitle("Moisture Upset");

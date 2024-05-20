@@ -40,6 +40,6 @@ namespace MoistureUpset
             yield break;
         }
 
-        public string identifier => MoistureUpsetMod.Guid;
+        public string identifier => PluginInfo.PLUGIN_GUID;
     }
 }

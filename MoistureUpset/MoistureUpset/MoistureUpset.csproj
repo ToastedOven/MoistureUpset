@@ -1,32 +1,57 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>8</LangVersion>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <Authors>Gemumoddo</Authors>
+    <AssemblyName>MoistureUpset</AssemblyName>
+    <Product>MoistureUpset</Product>
+    <BepInExPluginGuid>com.gemumoddo.MoistureUpset</BepInExPluginGuid>
+    <BepInExPluginName>Moisture Upset</BepInExPluginName>
   </PropertyGroup>
 
+  <!-- MinVer -->
   <PropertyGroup>
-    <RoR2Dir Condition="Exists('D:\SteamLibrary\steamapps\common\Risk of Rain 2')">D:\SteamLibrary\steamapps\common\Risk of Rain 2</RoR2Dir>
-	<RoR2Dir Condition="Exists('E:\David\SteamGames\steamapps\common\Risk of Rain 2')">E:\David\SteamGames\steamapps\common\Risk of Rain 2</RoR2Dir>
-    <RoR2Dir Condition="Exists('..\..\..\..\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2')">..\..\..\..\Windows.old.000\Program Files (x86)\Steam\steamapps\common\Risk of Rain 2</RoR2Dir>
-    <RoR2Dir Condition="Exists('$(MSBuildProgramFiles32)\Steam\steamapps\common\Risk of Rain 2')">$(MSBuildProgramFiles32)\Steam\steamapps\common\Risk of Rain 2</RoR2Dir>
-
-    <ManagedDir>$(RoR2Dir)\Risk of Rain 2_Data\Managed\</ManagedDir>
-    <BepinexDir>$(RoR2Dir)\BepInEx\</BepinexDir>
-    <CoreDir>$(BepinexDir)core\</CoreDir>
-    <PluginsDir>$(BepinexDir)plugins\</PluginsDir>
+    <MinVerDefaultPreReleaseIdentifiers>dev</MinVerDefaultPreReleaseIdentifiers>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <Dependencies Include="$(PluginsDir)**\CustomEmotesAPI.dll" InProject="false" />
-    <Dependencies Include="$(PluginsDir)**\RiskOfOptions.dll" InProject="false" />
-    <Dependencies Include="$(PluginsDir)**\R2API.dll" InProject="false" />
-    <Dependencies Include="$(PluginsDir)**\MMHOOK_RoR2.dll" InProject="false" />
-    
-    <ExcludedAssemblyFiles Include="$(ManagedDir)netstandard.dll;$(ManagedDir)System.*" InProject="false" />
-    <AssemblyFiles Include="$(ManagedDir)*.dll;$(CoreDir)*.dll;@(Dependencies)" Exclude="@(ExcludedAssemblyFiles)" InProject="false" />
-
-    <Reference Include="@(AssemblyFiles)" />
+    <PackageReference Include="MetrosexualFruitcake-CustomEmotesAPI" Version="2.5.3" />
+    <PackageReference Include="MinVer" Version="5.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.0.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+    <PackageReference Include="MonoMod" Version="22.5.1.1" />
+    <PackageReference Include="R2API.CommandHelper" Version="1.0.1" />
+    <PackageReference Include="R2API.Language" Version="1.0.1" />
+    <PackageReference Include="R2API.Loadout" Version="1.0.2" />
+    <PackageReference Include="R2API.Networking" Version="1.0.2" />
+    <PackageReference Include="R2API.Sound" Version="1.0.2" />
+    <PackageReference Include="RiskOfRain2.GameLibs" Version="1.2.4-r.0" />
+    <PackageReference Include="Rune580.Mods.RiskOfRain2.RiskOfOptions" Version="2.8.0" />
+    <PackageReference Include="UnityEngine.Modules" Version="2019.4.26" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <StubbedLibs Include="../../Libs/*.dll" InProject="false" />
+    <Reference Include="@(StubbedLibs)" />
+  </ItemGroup>
+
+  <Target Name="SetPluginVersion" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
+    <PropertyGroup>
+      <PlainVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</PlainVersion>
+      <BepInExPluginVersion>$(PlainVersion)</BepInExPluginVersion>
+    </PropertyGroup>
+  </Target>
   
   <ItemGroup>
     <EmbeddedResource Include="Resources\**" />
@@ -36,13 +61,18 @@
     <None Remove="Skins\Jotaro\jotarosubtitle" />
     <EmbeddedResource Include="Skins\Jotaro\jotarosubtitle" />
   </ItemGroup>
+  
+  <Target Name="PackageThunderstoreArtifact" DependsOnTargets="SetPluginVersion" AfterTargets="PostBuildEvent" Condition="$(Configuration) == 'Release'">
+    <Exec Command="dotnet tcli build --config-path $(ProjectDir)../Thunderstore/thunderstore.toml --package-version $(PlainVersion)" />
 
-  <ItemGroup>
-    <OutputFiles Include="$(TargetPath);$(TargetDir)$(TargetName).pdb" InProject="false" />
-  </ItemGroup>
+    <ItemGroup>
+      <FilesToRename Include="$(ProjectDir)../dist/*-$(PlainVersion).zip" />
+    </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <!-- Copies dll and pdb to plugins folder -->
-    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(RoR2Dir)\BepInEx\plugins" />
+    <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PlainVersion), $(MinVerVersion)))" />
+  </Target>
+
+  <Target Name="PublishThunderstoreArtifact" DependsOnTargets="SetPluginVersion">
+    <Exec Command="dotnet tcli publish --config-path $(ProjectDir)../Thunderstore/thunderstore.toml --file $(ProjectDir)../*-$(MinVerVersion).zip" />
   </Target>
 </Project>
