@@ -36,6 +36,7 @@ namespace MoistureUpset
         Sprite stage0 = Assets.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage0.png");
         Sprite stage1 = Assets.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage1.png");
         Sprite stage2 = Assets.Load<Sprite>("@MoistureUpset_2014:assets/2014/Progress/Stage2Alt.png");
+
         GameObject sliderObject;
         int ENABLE = -1;
         public struct AudioTrack
@@ -74,6 +75,9 @@ namespace MoistureUpset
             AkSoundEngine.ExecuteActionOnEvent(3538089020, AkActionOnEventType.AkActionOnEventType_Stop);
             AkSoundEngine.ExecuteActionOnEvent(55804592, AkActionOnEventType.AkActionOnEventType_Stop);
             AkSoundEngine.ExecuteActionOnEvent(55804595, AkActionOnEventType.AkActionOnEventType_Stop);
+            AkSoundEngine.ExecuteActionOnEvent(1686818028, AkActionOnEventType.AkActionOnEventType_Stop);
+            AkSoundEngine.ExecuteActionOnEvent(1672542496, AkActionOnEventType.AkActionOnEventType_Stop);
+            AkSoundEngine.ExecuteActionOnEvent(1672542499, AkActionOnEventType.AkActionOnEventType_Stop);
             AkSoundEngine.SetRTPCValue("MLGActive", 0);
             ActiveTrack = UnityEngine.Random.Range(0, tracks.Count);
         }
@@ -364,15 +368,15 @@ namespace MoistureUpset
                 }
                 if (timer > 0)
                 {
-                    if (timer > 7)
+                    if (timer > 3)
                     {
-                        timer = 7;
+                        timer = 3;
                     }
                     if (stage1Timer > tracks[ActiveTrack].Stage1StartDuration)
                     {
-                        if (timer > 3)
+                        if (timer > 1)
                         {
-                            timer = 3;
+                            timer = 1;
                         }
                     }
                     timer -= /*Time.deltaTime*/ .013f;
@@ -380,10 +384,10 @@ namespace MoistureUpset
                 }
                 else
                 {
-                    increasingDecay += /*Time.deltaTime*/ .011f * .0015f * (int)progress;
+                    increasingDecay += /*Time.deltaTime*/ .013f * .0015f * (int)progress;
                     if (stage1Timer > tracks[ActiveTrack].Stage1StartDuration)
                     {
-                        increasingDecay += /*Time.deltaTime*/ .011f * .0015f * (int)progress * 2;
+                        increasingDecay += /*Time.deltaTime*/ .013f * .0015f * (int)progress * 2;
                     }
                 }
                 if (progress > 0 && timer <= 0)
@@ -405,6 +409,7 @@ namespace MoistureUpset
                     switch ((int)progress)
                     {
                         case 0:
+                            DebugClass.Log($"mlg case 0");
                             slider.transform.Find("Image").gameObject.GetComponent<Image>().sprite = stage0;
                             //controller.GetPropertyValue<MusicTrackDef>("currentTrack").Play();
                             AkSoundEngine.SetRTPCValue("MLGActive", 0);
@@ -412,30 +417,35 @@ namespace MoistureUpset
                             ActiveTrack = UnityEngine.Random.Range(0, tracks.Count);
                             break;
                         case 1:
+                            DebugClass.Log($"mlg case 1");
                             slider.transform.Find("Image").gameObject.GetComponent<Image>().sprite = stage1;
                             MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                             AkSoundEngine.SetRTPCValue("MLGActive", 1);
                             if (prevStage == 0)
                             {
                                 stage1Active = true;
+                                AkSoundEngine.PostEvent("NoMLG", localBody.gameObject);
                                 AkSoundEngine.PostEvent(tracks[ActiveTrack].Stage1, localBody.gameObject);
                             }
                             else if (prevStage == 2)
                             {
+                                AkSoundEngine.PostEvent("NoMLG", localBody.gameObject);
                                 AkSoundEngine.PostEvent(tracks[ActiveTrack].Interval, localBody.gameObject);
                             }
                             break;
                         case 2:
+                            DebugClass.Log($"mlg case 2");
                             slider.transform.Find("Image").gameObject.GetComponent<Image>().sprite = stage2;
                             MoistureUpsetMod.musicController.GetPropertyValue<MusicTrackDef>("currentTrack").Stop();
                             AkSoundEngine.SetRTPCValue("MLGActive", 1);
+                            AkSoundEngine.PostEvent("NoMLG", localBody.gameObject);
                             AkSoundEngine.PostEvent(tracks[ActiveTrack].Stage2, localBody.gameObject);
 
                             break;
                         default:
                             break;
                     }
-                    if ((int)progress > prevStage)
+                    if ((int)progress != prevStage)
                     {
                         progress = (int)progress + .25f;
                         if (progress > 2.9999f)

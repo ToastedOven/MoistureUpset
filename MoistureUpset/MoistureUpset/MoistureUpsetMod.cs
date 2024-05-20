@@ -41,7 +41,7 @@ namespace MoistureUpset
 
             SoundAssets.RegisterSoundEvents();
 
-            NetworkAssistant.InitSNA();
+            //NetworkAssistant.InitSNA();
             
 
             EnemyReplacements.LoadResource("moisture_bonzibuddy");

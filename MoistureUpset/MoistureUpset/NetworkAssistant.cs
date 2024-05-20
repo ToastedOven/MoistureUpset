@@ -28,6 +28,7 @@ namespace MoistureUpset
 
             tempObject.AddComponent<NetworkIdentity>();
 
+
             CentralNetworkObject = GameObject.Instantiate(tempObject); //what the actual fuck is happening here
 
             GameObject.Destroy(tempObject);

@@ -34,6 +34,7 @@ namespace MoistureUpset.Skins
             CustomEmotesAPI.AddNonAnimatingEmote("debug time");
             CustomEmotesAPI.AddNonAnimatingEmote("kill stuff");
             CustomEmotesAPI.AddNonAnimatingEmote("end me");
+
             CustomEmotesAPI.AddNonAnimatingEmote("50 golems");
             CustomEmotesAPI.AddNonAnimatingEmote("getSongName");
             CustomEmotesAPI.AddNonAnimatingEmote("god");
@@ -41,7 +42,20 @@ namespace MoistureUpset.Skins
             CustomEmotesAPI.AddNonAnimatingEmote("golemPlains");
 
 
+
+
+
+
+
+
+
+            EnemyReplacements.LoadResource("kazotskykick");
+            CustomEmotesAPI.AddCustomAnimation(Assets.Load<AnimationClip>("@MoistureUpset_kazotskykick:assets/kazotsky kick/Engineer Kazotsky Kick Start.anim"), false, secondaryAnimation: Assets.Load<AnimationClip>("@MoistureUpset_kazotskykick:assets/kazotsky kick/Engineer Kazotsky Kick Loop.anim"), syncAnim: true);
+            
+            
+            
             CustomEmotesAPI.animChanged += CustomEmotesAPI_animChanged;
+
         }
         static BoneMapper bonemap;
 

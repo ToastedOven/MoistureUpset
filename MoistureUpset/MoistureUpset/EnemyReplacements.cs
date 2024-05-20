@@ -354,7 +354,6 @@ namespace MoistureUpset
                 Collab();
                 Gnome();
                 Children();
-                NotChildren();
                 DQ();
                 //SneakyFontReplacement();
             }
@@ -365,9 +364,16 @@ namespace MoistureUpset
         }
         public static void DEBUG()
         {
+            DebugClass.DebugBones("RoR2/Base/Heretic/HereticBody.prefab", 3);
             //DebugClass.DebugBones("RoR2/Base/CritGlasses/DisplayGlasses.prefab");//gup
-
-            //DebugClass.DebugBones("RoR2/DLC1/Gup/GeepBody.prefab");//geep
+            //On.RoR2.SurvivorCatalog.Init += (orig) =>
+            //{
+            //    orig();
+            //    foreach (var item in SurvivorCatalog.allSurvivorDefs)
+            //    {
+            //        DebugClass.DebugBones(item.bodyPrefab);
+            //    }
+            //};
             //DebugClass.DebugBones("RoR2/DLC1/Gup/GipBody.prefab");//gip
             //DebugClass.DebugBones("RoR2/DLC1/VoidJailer/VoidJailerBody.prefab");//jailer
             //DebugClass.DebugBones("RoR2/DLC1/AcidLarva/AcidLarvaBody.prefab");//sonic
@@ -2835,6 +2841,7 @@ namespace MoistureUpset
         {
             if (!BigJank.getOptionValue(Settings.ChildrenBlocks))
                 return;
+            NotChildren();
             LoadBNK("Block");
             ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
             ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MinorConstructBody.prefab", "@MoistureUpset_moisture_youcanquoteme:assets/woodencube/blok.mesh", "@MoistureUpset_moisture_testing:assets/woodencube/bblok.png", 1);
@@ -2889,6 +2896,7 @@ namespace MoistureUpset
         }
         private static void NotChildren()
         {
+            LoadBNK("babyblocks");
             ReplaceModel("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.mesh", "@MoistureUpset_moisture_woodenxi:assets/babyconstruct/wood.png", 0);
             ReplaceMeshFilter("RoR2/DLC1/MajorAndMinorConstruct/MegaConstructBody.prefab", "@MoistureUpset_na:assets/na1.mesh", 0);
         }
