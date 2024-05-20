@@ -1,0 +1,1 @@
+This directory contains stubbed dlls required for compilation

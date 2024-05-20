@@ -2,37 +2,27 @@ using BepInEx;
 using R2API.Utils;
 using RoR2;
 using R2API;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-using RoR2.UI;
-using RiskOfOptions;
 using UnityEngine.Video;
 using UnityEngine.Rendering.PostProcessing;
 using LeTai.Asset.TranslucentImage;
 using MoistureUpset.NetMessages;
-using R2API.Networking;
-using System.IO;
-using System.Text;
 
 namespace MoistureUpset
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("com.rune580.riskofoptions")]
-    [BepInPlugin(Guid, "Moisture Upset", Version)]
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
-    [R2APISubmoduleDependency("SoundAPI", "PrefabAPI", "CommandHelper", "LoadoutAPI", "SurvivorAPI", "ResourcesAPI", "LanguageAPI", "NetworkingAPI", "UnlockAPI")]
+    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [NetworkCompatibility]
     public class MoistureUpsetMod : BaseUnityPlugin // Finally renamed this to actually represent our mod.
     {
         public static MoistureUpsetMod Instance;
-        public const string Version = "1.5.1";
-        public const string Guid = "com.gemumoddo.MoistureUpset";
         
         public void Awake()
         {
             Instance = this;
-            R2API.Utils.CommandHelper.AddToConsoleWhenReady();
+            CommandHelper.AddToConsoleWhenReady();
             DebugClass.SetLogger(base.Logger);
             
             NetMessages.Register.Init();
