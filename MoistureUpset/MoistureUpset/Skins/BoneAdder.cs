@@ -20,7 +20,7 @@ public static class BoneAdder //if you manage to find this class, feel free to u
 
     public static Transform[] AddToBoneList(string resource, string badBone = "", bool trimEnds = true) //just a helper function incase you have a resource that is just the bones
     {
-        var bones = Assets.Load<GameObject>(resource);
+        var bones = MoistureUpset.Assets.Load<GameObject>(resource);
         return AddToBoneList(bones.GetComponentsInChildren<Transform>(), badBone, trimEnds);
     }
 
